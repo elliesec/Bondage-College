@@ -2094,23 +2094,24 @@ var AssetFemale3DCG = [
 	
 ];
 
+/* eslint-disable */
 // 3D Custom Girl based pose
 var PoseFemale3DCG = [
 
 	{
 		Name: "Kneel",
-		Hide: ["ItemFeet"],
-		OverrideHeight: -250
+		OverrideHeight: -250,
+		Hide: ["ItemFeet"]
 	},
 	{
 		Name: "Horse",
-		Hide: ["ItemFeet"],
-		OverrideHeight: -75
+		OverrideHeight: -75,
+		Hide: ["ItemFeet"]
 	},
 	{
 		Name: "KneelingSpread",
-		Hide: ["ItemFeet"],
-		OverrideHeight: -250
+		OverrideHeight: -250,
+		Hide: ["ItemFeet"]
 	},
 	{
 		Name: "Yoked",
@@ -2118,25 +2119,25 @@ var PoseFemale3DCG = [
 	},
 	{
 		Name: "Hogtied",
+		OverrideHeight: -575,
 		Hide: ["BodyLower", "Hands", "ClothLower", "Wings", "TailStraps", "Gloves", "Panties", "Pussy", "ItemHands", "ItemPelvis", "ItemVulva", "ItemVulvaPiercings", "ItemButt", "ItemLegs", "ItemFeet", "SuitLower"],
-		MovePosition: [{ Group: "Socks", X: 0, Y: -400 }, { Group: "Shoes", X: 0, Y: -500 }, { Group: "ItemBoots", X: 0, Y: -500 }],
-		OverrideHeight: -575
+		MovePosition: [{ Group: "Socks", X: 0, Y: -400 }, { Group: "Shoes", X: 0, Y: -500 }, { Group: "ItemBoots", X: 0, Y: -500 }]
 	},
 	{
 		Name: "Suspension",
-		Hide: [],
-		OverrideHeight: 150
+		OverrideHeight: 150,
+		Hide: []
 	},
 	{
 		Name: "SuspensionHogtied",
-		Hide: ["BodyLower", "Hands", "ClothLower", "Wings", "TailStraps", "Gloves", "Panties", "Pussy", "ItemHands", "ItemPelvis", "ItemVulva", "ItemVulvaPiercings", "ItemButt", "ItemLegs", "ItemFeet", "SuitLower"],
-		OverrideHeight: 0
+		OverrideHeight: 0,
+		Hide: ["BodyLower", "Hands", "ClothLower", "Wings", "TailStraps", "Gloves", "Panties", "Pussy", "ItemHands", "ItemPelvis", "ItemVulva", "ItemVulvaPiercings", "ItemButt", "ItemLegs", "ItemFeet", "SuitLower"]
 	},
 	{
 		Name: "AllFours",
+		OverrideHeight: -560,
 		Hide: ["ItemFeet", "ClothLower", "SuitLower", "Nipples", "Pussy", "BodyLower", "Wings", "ItemPelvis", "ItemVulva", "ItemVulvaPiercings", "ItemLegs", "ItemBoots", "Suit", "Panties", "Bra"],
-		MovePosition: [{ Group: "TailStraps", X: 0, Y: -300 }, { Group: "ItemButt", X: 0, Y: -300 } ],
-		OverrideHeight: -560
+		MovePosition: [{ Group: "TailStraps", X: 0, Y: -300 }, { Group: "ItemButt", X: 0, Y: -300 } ]
 	}
 
 ];
@@ -2145,155 +2146,155 @@ var PoseFemale3DCG = [
 var ActivityFemale3DCG = [
 	{
 		Name: "Kiss",
-		Prerequisite: ["UseMouth"],
 		MaxProgress: 50,
-		TargetSelf: ["ItemHands", "ItemArms", "ItemBoots", "ItemBreast", "ItemNipples"]
+		TargetSelf: ["ItemHands", "ItemArms", "ItemBoots", "ItemBreast", "ItemNipples"],
+		Prerequisite: ["UseMouth"]
 	},
 	{
 		Name: "FrenchKiss",
-		Prerequisite: ["UseMouth", "ZoneNaked"],
-		MaxProgress: 70
+		MaxProgress: 70,
+		Prerequisite: ["UseMouth", "ZoneNaked"]
 	},
 	{
 		Name: "PoliteKiss",
-		Prerequisite: ["UseMouth"],
 		MaxProgress: 30,
-		TargetSelf: ["ItemHands", "ItemBoots"]
+		TargetSelf: ["ItemHands", "ItemBoots"],
+		Prerequisite: ["UseMouth"]
 	},
 	{
 		Name: "Lick",
-		Prerequisite: ["UseMouth", "ZoneNaked"],
 		MaxProgress: 80,
-		TargetSelf: ["ItemMouth", "ItemHands", "ItemArms", "ItemBoots", "ItemBreast", "ItemNipples"]
+		TargetSelf: ["ItemMouth", "ItemHands", "ItemArms", "ItemBoots", "ItemBreast", "ItemNipples"],
+		Prerequisite: ["UseMouth", "ZoneNaked"]
 	},
 	{
 		Name: "Suck",
-		Prerequisite: ["UseMouth", "ZoneNaked"],
 		MaxProgress: 60,
-		TargetSelf: ["ItemHands", "ItemArms", "ItemBoots", "ItemNipples"]
+		TargetSelf: ["ItemHands", "ItemArms", "ItemBoots", "ItemNipples"],
+		Prerequisite: ["UseMouth", "ZoneNaked"]
 	},
 	{
 		Name: "Nibble",
-		Prerequisite: ["UseMouth", "ZoneNaked"],
 		MaxProgress: 40,
-		TargetSelf: ["ItemMouth", "ItemHands", "ItemArms", "ItemBoots", "ItemNipples"]
+		TargetSelf: ["ItemMouth", "ItemHands", "ItemArms", "ItemBoots", "ItemNipples"],
+		Prerequisite: ["UseMouth", "ZoneNaked"]
 	},
 	{
 		Name: "Whisper",
-		Prerequisite: ["UseMouth"],
-		MaxProgress: 20
+		MaxProgress: 20,
+		Prerequisite: ["UseMouth"]
 	},
 	{
 		Name: "Tickle",
-		Prerequisite: ["UseHands"],
 		MaxProgress: 50,
-		TargetSelf: ["ItemTorso", "ItemPelvis", "ItemBreast", "ItemNipples", "ItemLegs", "ItemFeet", "ItemBoots", "ItemArms", "ItemHands"]
+		TargetSelf: ["ItemTorso", "ItemPelvis", "ItemBreast", "ItemNipples", "ItemLegs", "ItemFeet", "ItemBoots", "ItemArms", "ItemHands"],
+		Prerequisite: ["UseHands"]
 	},
 	{
 		Name: "Caress",
-		Prerequisite: ["UseHands"],
 		MaxProgress: 80,
-		TargetSelf: ["ItemTorso", "ItemPelvis", "ItemBreast", "ItemNipples", "ItemLegs", "ItemFeet", "ItemBoots", "ItemArms", "ItemHands", "ItemButt", "ItemVulva", "ItemHead", "ItemNeck", "ItemMouth", "ItemEars"]
+		TargetSelf: ["ItemTorso", "ItemPelvis", "ItemBreast", "ItemNipples", "ItemLegs", "ItemFeet", "ItemBoots", "ItemArms", "ItemHands", "ItemButt", "ItemVulva", "ItemHead", "ItemNeck", "ItemMouth", "ItemEars"],
+		Prerequisite: ["UseHands"]
 	},
 	{
 		Name: "Pet",
-		Prerequisite: ["UseHands"],
 		MaxProgress: 20,
-		TargetSelf: ["ItemHead"]
+		TargetSelf: ["ItemHead"],
+		Prerequisite: ["UseHands"]
 	},
 	{
 		Name: "Cuddle",
-		Prerequisite: [],
-		MaxProgress: 30
+		MaxProgress: 30,
+		Prerequisite: []
 	},
 	{
 		Name: "Rub",
-		Prerequisite: [],
-		MaxProgress: 60
+		MaxProgress: 60,
+		Prerequisite: []
 	},
 	{
 		Name: "TakeCare",
-		Prerequisite: ["UseHands", "ZoneNaked"],
 		MaxProgress: 10,
-		TargetSelf: ["ItemBoots", "ItemHands", "ItemHead"]
+		TargetSelf: ["ItemBoots", "ItemHands", "ItemHead"],
+		Prerequisite: ["UseHands", "ZoneNaked"]
 	},
 	{
 		Name: "MassageHands",
-		Prerequisite: ["UseHands"],
 		MaxProgress: 60,
-		TargetSelf: ["ItemTorso", "ItemPelvis", "ItemBreast", "ItemLegs", "ItemFeet", "ItemBoots", "ItemArms", "ItemHands", "ItemButt", "ItemVulva", "ItemHead", "ItemNeck"]
+		TargetSelf: ["ItemTorso", "ItemPelvis", "ItemBreast", "ItemLegs", "ItemFeet", "ItemBoots", "ItemArms", "ItemHands", "ItemButt", "ItemVulva", "ItemHead", "ItemNeck"],
+		Prerequisite: ["UseHands"]
 	},
 	{
 		Name: "MassageFeet",
-		Prerequisite: ["UseFeet"],
-		MaxProgress: 40
+		MaxProgress: 40,
+		Prerequisite: ["UseFeet"]
 	},
 	{
 		Name: "Grope",
-		Prerequisite: ["UseHands"],
 		MaxProgress: 50,
-		TargetSelf: ["ItemButt", "ItemBreast"]
+		TargetSelf: ["ItemButt", "ItemBreast"],
+		Prerequisite: ["UseHands"]
 	},
 	{
 		Name: "Pinch",
-		Prerequisite: ["UseHands"],
 		MaxProgress: 20,
-		TargetSelf: ["ItemNipples", "ItemEars", "ItemArms", "ItemPelvis"]
+		TargetSelf: ["ItemNipples", "ItemEars", "ItemArms", "ItemPelvis"],
+		Prerequisite: ["UseHands"]
 	},
 	{
 		Name: "Spank",
-		Prerequisite: ["UseHands"],
 		MaxProgress: 40,
-		TargetSelf: ["ItemButt", "ItemLegs", "ItemFeet", "ItemArms", "ItemHands", "ItemPelvis", "ItemTorso"]
+		TargetSelf: ["ItemButt", "ItemLegs", "ItemFeet", "ItemArms", "ItemHands", "ItemPelvis", "ItemTorso"],
+		Prerequisite: ["UseHands"]
 	},
 	{
 		Name: "SpankItem",
-		Prerequisite: [],
-		MaxProgress: 70
+		MaxProgress: 70,
+		Prerequisite: []
 	},
 	{
 		Name: "Slap",
-		Prerequisite: ["UseHands"],
 		MaxProgress: 30,
-		TargetSelf: ["ItemBreast", "ItemHead"]
+		TargetSelf: ["ItemBreast", "ItemHead"],
+		Prerequisite: ["UseHands"]
 	},
 	{
 		Name: "Pull",
-		Prerequisite: ["UseHands"],
 		MaxProgress: 30,
-		TargetSelf: ["ItemHead"]
+		TargetSelf: ["ItemHead"],
+		Prerequisite: ["UseHands"]
 	},
 	{
 		Name: "Choke",
-		Prerequisite: ["UseHands"],
 		MaxProgress: 50,
-		TargetSelf: ["ItemNeck"]
+		TargetSelf: ["ItemNeck"],
+		Prerequisite: ["UseHands"]
 	},
 	{
 		Name: "MasturbateTongue",
-		Prerequisite: ["UseMouth", "ZoneNaked"],
-		MaxProgress: 100
+		MaxProgress: 100,
+		Prerequisite: ["UseMouth", "ZoneNaked"]
 	},
 	{
 		Name: "MasturbateHand",
-		Prerequisite: ["UseHands", "ZoneNaked"],
+		TargetSelf: ["ItemBreast", "ItemVulva", "ItemButt"],
 		MaxProgress: 100,
-		TargetSelf: ["ItemBreast", "ItemVulva", "ItemButt"]
+		Prerequisite: ["UseHands", "ZoneNaked"]
 	},
 	{
 		Name: "MasturbateFist",
-		Prerequisite: ["UseHands", "ZoneNaked"],
-		MaxProgress: 100
+		MaxProgress: 100,
+		Prerequisite: ["UseHands", "ZoneNaked"]
 	},
 	{
 		Name: "MasturbateFoot",
-		Prerequisite: ["UseFeet", "ZoneNaked"],
-		MaxProgress: 100
+		MaxProgress: 100,
+		Prerequisite: ["UseFeet", "ZoneNaked"]
 	},
 	{
 		Name: "MasturbateItem",
-		Prerequisite: ["ZoneNaked"],
-		MaxProgress: 100
+		MaxProgress: 100,
+		Prerequisite: ["ZoneNaked"]
 	}
-	
-]
+];
+/* eslint-enable */
