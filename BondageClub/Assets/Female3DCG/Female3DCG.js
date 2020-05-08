@@ -1446,7 +1446,22 @@ var AssetFemale3DCG = [
 						{ Name: "Latex", AllowColorize: true, AllowTypes: [""], HasType: false },
 						{ Name: "UnZip", AllowColorize: true, AllowTypes: ["UnZip"], HasType: false }
 					]
-				},	
+				},
+            {
+                Name: "Web",
+                Value: 20,
+                Difficulty: 2,
+                Time: 5,
+                RemoveTime: 10,
+                Random: false,
+                Left: 0,
+                Top: 0,
+                Prerequisite: ["NotSuspended", "NotHogtied", "LegsOpen", "NotKneelingSpread", "NotMounted"],
+                AllowPose: ["Kneel"],
+                SetPose: ["LegsOpen"],
+                Effect: ["Block", "Freeze", "Prone"],
+                Block: ["ItemTorso", "ItemHands", "ItemLegs", "ItemFeet", "ItemBoots"]
+            },
 			AssetSpankingToys
 		],
 		Color: ["Default"]
