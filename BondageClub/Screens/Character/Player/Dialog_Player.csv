@@ -496,7 +496,7 @@ DuctTapeHeadTypeWrap,,,Wrap
 DuctTapeHeadSetDouble,,,SourceCharacter takes a piece of duct tape for TargetCharacter and place on her face.
 DuctTapeHeadSetWrap,,,SourceCharacter wraps some duct tape onto DestinationCharacter face.
 DuctTapeHeadTypeMummy,,,Mummy
-DuctTapeHeadSetMummy,,,SourceCharacter wraps DestinationCharacter head in tape with multiple layers. 
+DuctTapeHeadSetMummy,,,SourceCharacter wraps DestinationCharacter head in tape with multiple layers.
 SelectRopeBondage,,,Select the rope bondage
 RopeBondageBasic,,,Basic Tie
 RopeBondageMermaid,,,Mermaid Tie
@@ -738,7 +738,7 @@ AnalHookPoseHair,,,Hair
 AnalHookRestrainBase,,,SourceCharacter detaches DestinationCharacter anal hook.
 AnalHookRestrainChain,,,SourceCharacter attaches a chain to DestinationCharacter anal hook.
 AnalHookRestrainHair,,,SourceCharacter attaches DestinationCharacter anal hook to her hair.
-BeadsCount,,,Inserted Beads Count: 
+BeadsCount,,,Inserted Beads Count:
 InsertBead,,,Insert One
 RemoveBead,,,Remove One
 MinimumBeads,,,Remove All Except One
@@ -1060,3 +1060,12 @@ ChastityOpenBack,,,Open Back
 ChastityClosedBack,,,Closed Back
 ChastityBeltBackShieldOpenBack,,,SourceCharacter removes the shield from the back of DestinationCharacter's belt.
 ChastityBeltBackShieldClosedBack,,,SourceCharacter adds the shield to the back of DestinationCharacter's belt.
+WebBondageSelect,,,Select web type
+WebBondageTangled,,,Tangled
+WebBondageWrapped,,,Wrapped
+WebBondageCocooned,,,Cocooned
+ArmsWebSetTangled,,,SourceCharacter Action the webbing on TargetCharacter
+ArmsWebSetWrapped,,,SourceCharacter Action the webbing on TargetCharacter leaving them fully wrapped
+ArmsWebSetCocooned,,,SourceCharacter Action the webbing on TargetCharacter forming a cocoon
+tightens,,,tightens
+loosens,,,loosens
