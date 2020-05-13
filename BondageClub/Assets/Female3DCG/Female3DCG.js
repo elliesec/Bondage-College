@@ -1458,7 +1458,7 @@ var AssetFemale3DCG = [
 					Top: 0,
 					Prerequisite: ['NotSuspended', 'NotHogtied', 'NotKneelingSpread', 'NotMounted', 'NoFeetSpreader'],
 					AllowPose: ['Kneel'],
-					SetPose: ['LegsOpen'],
+					SetPose: ['LegsOpen', 'BackElbowTouch'],
 					Effect: ['Block', 'Freeze', 'Prone'],
 					AllowBlock: ['ItemVulva', 'ItemVulvaPiercings', 'ItemButt', 'ItemPelvis'],
 					AllowType: ['Wrapped', 'Cocooned'],

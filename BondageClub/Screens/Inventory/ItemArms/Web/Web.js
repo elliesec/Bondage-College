@@ -12,7 +12,7 @@ const WebArmsOptions = [
 			Difficulty: 2,
 			Prerequisite: ['NoFeetSpreader'],
 			AllowPose: ['Kneel'],
-			SetPose: ['LegsClosed'],
+			SetPose: ['LegsClosed', 'BackElbowTouch'],
 			Effect: ['Block', 'Freeze', 'Prone'],
 			Block: ['ItemTorso', 'ItemHands', 'ItemLegs', 'ItemFeet', 'ItemBoots'],
 		},
@@ -24,7 +24,7 @@ const WebArmsOptions = [
 			Difficulty: 5,
 			Prerequisite: ['NoFeetSpreader'],
 			AllowPose: ['Kneel'],
-			SetPose: ['LegsClosed'],
+			SetPose: ['LegsClosed', 'BackElbowTouch'],
 			Effect: ['Block', 'Freeze', 'Prone'],
 			Block: [
 				'ItemVulva',
