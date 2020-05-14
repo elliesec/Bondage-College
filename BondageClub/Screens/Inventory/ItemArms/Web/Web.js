@@ -1,12 +1,14 @@
 'use strict';
 
-const WebArmsOptions = [
+const InventoryItemArmsWebOptions = [
 	{
 		Name: 'Tangled',
 		Property: { Type: null, Difficulty: 0 },
 	},
 	{
 		Name: 'Wrapped',
+		BondageLevel: 0,
+		SelfBondageLevel: 4,
 		Property: {
 			Type: 'Wrapped',
 			Difficulty: 2,
@@ -19,6 +21,8 @@ const WebArmsOptions = [
 	},
 	{
 		Name: 'Cocooned',
+		BondageLevel: 1,
+		SelfBondageLevel: 5,
 		Property: {
 			Type: 'Cocooned',
 			Difficulty: 5,
@@ -41,18 +45,31 @@ const WebArmsOptions = [
 				'ItemBreast',
 			],
 		},
+	},/*
+	{
+		Name: 'Hogtied',
+		BondageLevel: 3,
+		SelfBondageLevel: 6,
+		Property: {},
 	},
+	{
+		Name: 'SuspensionHogtied',
+		BondageLevel: 5,
+		SelfBondageLevel: 9,
+		Property: {},
+	},*/
 ];
 
 // Loads the item extension properties
 function InventoryItemArmsWebLoad() {
 	if (DialogFocusItem.Property == null) {
-		DialogFocusItem.Property = WebArmsOptions[0].Property;
+		DialogFocusItem.Property = InventoryItemArmsWebOptions[0].Property;
 	}
 	DialogExtendedMessage = DialogFind(Player, 'WebBondageSelect');
 }
 
 function InventoryItemArmsWebDraw() {
+	var IsSelfBondage = CharacterGetCurrent().MemberNumber === Player.MemberNumber;
 	var Asset = DialogFocusItem.Asset;
 
 	// Draw the header and item
@@ -62,45 +79,74 @@ function InventoryItemArmsWebDraw() {
 	DrawTextFit(Asset.Description, 1500, 375, 221, 'black');
 	DrawText(DialogExtendedMessage, 1500, 475, 'white', 'gray');
 
-	// Draw the possible variants
-	for (var I = 0; I < WebArmsOptions.length; I++) {
+	// Draw the possible variants and their requirements
+	for (var I = 0; I < InventoryItemArmsWebOptions.length; I++) {
 		var X = 1050 + I * 337;
 		var Y = 550;
-		var Option = WebArmsOptions[I];
+		var Option = InventoryItemArmsWebOptions[I];
+		var FailSkillCheck = !!InventoryItemArmsWebRequirementCheckMessage(Option, IsSelfBondage);
 
-		DrawButton(X, Y, 225, 225, '', ((DialogFocusItem.Property.Type == Option.Property.Type)) ? '#888888' : 'White');
-		DrawImage('Screens/Inventory/' + Asset.Group.Name + '/' + Asset.Name + '/' + WebArmsOptions[I].Name + '.png', X, Y);
+		DrawButton(
+			X,
+			Y,
+			225,
+			225,
+			'',
+			((DialogFocusItem.Property.Type == Option.Property.Type)) ? '#888888' : FailSkillCheck ? 'Pink' : 'White',
+		);
+		DrawImage('Screens/Inventory/' + Asset.Group.Name + '/' + Asset.Name + '/' + InventoryItemArmsWebOptions[I].Name + '.png', X, Y);
 		DrawText(DialogFind(Player, 'WebBondage' + Option.Name), X + 113, Y + 250, 'white', 'gray');
 	}
 }
 
 function InventoryItemArmsWebClick() {
-
 	// Menu buttons
 	if ((MouseX >= 1885) && (MouseX <= 1975) && (MouseY >= 25) && (MouseY <= 110)) {
 		DialogFocusItem = null;
 	}
 
-	for (var I = 0; I < WebArmsOptions.length; I++) {
+	var IsSelfBondage = CharacterGetCurrent().MemberNumber === Player.MemberNumber;
+
+	for (var I = 0; I < InventoryItemArmsWebOptions.length; I++) {
 		var X = 1050 + I * 337;
 		var Y = 550;
-		if (MouseX >= X && MouseX <= X + 225 && MouseY >= Y && MouseY <= Y + 225 && DialogFocusItem.Property.Type !==
-			WebArmsOptions[I].Property.Type) {
-			InventoryItemArmsWebSetType(I);
+		var Option = InventoryItemArmsWebOptions[I];
+		if (
+			MouseX >= X
+			&& MouseX <= X + 225
+			&& MouseY >= Y
+			&& MouseY <= Y + 225
+			&& DialogFocusItem.Property.Type !== Option.Property.Type
+		) {
+			var requirementMessage = InventoryItemArmsWebRequirementCheckMessage(Option, IsSelfBondage);
+			if (requirementMessage) {
+				DialogExtendedMessage = requirementMessage;
+			} else {
+				InventoryItemArmsWebSetType(I);
+			}
 		}
 	}
 }
 
+function InventoryItemArmsWebRequirementCheckMessage(Type, IsSelfBondage) {
+	if (IsSelfBondage && SkillGetLevelReal(Player, 'SelfBondage') < Type.SelfBondageLevel) {
+		return DialogFind(Player, 'RequireSelfBondage' + Type.SelfBondageLevel);
+	} else if (SkillGetLevelReal(Player, 'Bondage') < Type.BondageLevel) {
+		return DialogFind(Player, 'RequireBondageLevel').replace('ReqLevel', Type.BondageLevel);
+	}
+	return null;
+}
+
 function InventoryItemArmsWebSetType(NewIndex) {
 	// Gets the current item and character
-	var C = (Player.FocusGroup != null) ? Player : CurrentCharacter;
+	var C = CharacterGetCurrent();
 	if (CurrentScreen == 'ChatRoom') {
 		DialogFocusItem = InventoryGet(C, C.FocusGroup.Name);
 		InventoryItemArmsWebLoad();
 	}
 
-	const NewType = WebArmsOptions[NewIndex];
-	const OldIndex = WebArmsOptions.findIndex(Option => Option.Property.Type === DialogFocusItem.Property.Type);
+	const NewType = InventoryItemArmsWebOptions[NewIndex];
+	const OldIndex = InventoryItemArmsWebOptions.findIndex(Option => Option.Property.Type === DialogFocusItem.Property.Type);
 
 	DialogFocusItem.Property = NewType.Property;
 	CharacterRefresh(C);
@@ -109,7 +155,6 @@ function InventoryItemArmsWebSetType(NewIndex) {
 		var msg = 'ArmsWebSet' + NewType.Name;
 		var Dictionary = [];
 		const ActionDialog = DialogFind(Player, NewIndex > OldIndex ? 'tightens' : 'loosens', 'ItemArms');
-		console.log(ActionDialog);
 		Dictionary.push({ Tag: 'SourceCharacter', Text: Player.Name, MemberNumber: Player.MemberNumber });
 		Dictionary.push({ Tag: 'TargetCharacter', Text: C.Name, MemberNumber: C.MemberNumber });
 		Dictionary.push({ Tag: 'Action', Text: ActionDialog });

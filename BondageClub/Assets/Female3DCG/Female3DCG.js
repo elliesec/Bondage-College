@@ -1451,6 +1451,7 @@ var AssetFemale3DCG = [
 					Name: 'Web',
 					Value: 20,
 					Difficulty: 2,
+					SelfBondage: 2,
 					Time: 5,
 					RemoveTime: 10,
 					Random: false,
