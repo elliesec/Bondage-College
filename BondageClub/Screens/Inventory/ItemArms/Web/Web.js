@@ -1,126 +1,126 @@
-'use strict';
+"use strict";
 
 const InventoryItemArmsWebOptions = [
 	{
-		Name: 'Tangled',
+		Name: "Tangled",
 		Property: { Type: null, Difficulty: 0 },
 	},
 	{
-		Name: 'Wrapped',
+		Name: "Wrapped",
 		BondageLevel: 0,
 		SelfBondageLevel: 4,
 		Property: {
-			Type: 'Wrapped',
+			Type: "Wrapped",
 			Difficulty: 2,
-			Prerequisite: ['NoFeetSpreader'],
-			AllowPose: ['Kneel'],
-			SetPose: ['LegsClosed', 'BackElbowTouch'],
-			Effect: ['Block', 'Freeze', 'Prone'],
-			Block: ['ItemTorso', 'ItemHands', 'ItemLegs', 'ItemFeet', 'ItemBoots'],
+			Prerequisite: ["NoFeetSpreader"],
+			AllowPose: ["Kneel"],
+			SetPose: ["LegsClosed", "BackElbowTouch"],
+			Effect: ["Block", "Freeze", "Prone"],
+			Block: ["ItemTorso", "ItemHands", "ItemLegs", "ItemFeet", "ItemBoots"],
 		},
 	},
 	{
-		Name: 'Cocooned',
+		Name: "Cocooned",
 		BondageLevel: 1,
 		SelfBondageLevel: 5,
 		Property: {
-			Type: 'Cocooned',
+			Type: "Cocooned",
 			Difficulty: 4,
-			Prerequisite: ['NoFeetSpreader'],
-			AllowPose: ['Kneel'],
-			SetPose: ['LegsClosed', 'BackElbowTouch'],
-			Effect: ['Block', 'Freeze', 'Prone'],
+			Prerequisite: ["NoFeetSpreader"],
+			AllowPose: ["Kneel"],
+			SetPose: ["LegsClosed", "BackElbowTouch"],
+			Effect: ["Block", "Freeze", "Prone"],
 			Block: [
-				'ItemVulva',
-				'ItemVulvaPiercings',
-				'ItemButt',
-				'ItemPelvis',
-				'ItemTorso',
-				'ItemHands',
-				'ItemLegs',
-				'ItemFeet',
-				'ItemBoots',
-				'ItemNipples',
-				'ItemNipplesPiercings',
-				'ItemBreast',
+				"ItemVulva",
+				"ItemVulvaPiercings",
+				"ItemButt",
+				"ItemPelvis",
+				"ItemTorso",
+				"ItemHands",
+				"ItemLegs",
+				"ItemFeet",
+				"ItemBoots",
+				"ItemNipples",
+				"ItemNipplesPiercings",
+				"ItemBreast",
 			],
 		},
 	},
 	{
-		Name: 'Hogtied',
+		Name: "Hogtied",
 		BondageLevel: 3,
 		SelfBondageLevel: 6,
 		Property: {
-			Type: 'Hogtied',
+			Type: "Hogtied",
 			Difficulty: 4,
-			Prerequisite: ['NoFeetSpreader'],
-			SetPose: ['Hogtied'],
-			Effect: ['Block', 'Freeze', 'Prone'],
+			Prerequisite: ["NoFeetSpreader"],
+			SetPose: ["Hogtied"],
+			Effect: ["Block", "Freeze", "Prone"],
 			Block: [
-				'ItemVulva',
-				'ItemVulvaPiercings',
-				'ItemButt',
-				'ItemPelvis',
-				'ItemTorso',
-				'ItemHands',
-				'ItemLegs',
-				'ItemFeet',
-				'ItemBoots',
-				'ItemNipples',
-				'ItemNipplesPiercings',
-				'ItemBreast',
+				"ItemVulva",
+				"ItemVulvaPiercings",
+				"ItemButt",
+				"ItemPelvis",
+				"ItemTorso",
+				"ItemHands",
+				"ItemLegs",
+				"ItemFeet",
+				"ItemBoots",
+				"ItemNipples",
+				"ItemNipplesPiercings",
+				"ItemBreast",
 			],
 		},
 	},
 	{
-		Name: 'Suspended',
+		Name: "Suspended",
 		BondageLevel: 4,
 		SelfBondageLevel: 8,
 		Property: {
-			Type: 'Suspended',
+			Type: "Suspended",
 			Difficulty: 6,
-			Prerequisite: ['NoFeetSpreader'],
-			SetPose: ['LegsClosed', 'BackElbowTouch', 'Suspension'],
-			Effect: ['Block', 'Freeze', 'Prone'],
+			Prerequisite: ["NoFeetSpreader"],
+			SetPose: ["LegsClosed", "BackElbowTouch", "Suspension"],
+			Effect: ["Block", "Freeze", "Prone"],
 			Block: [
-				'ItemVulva',
-				'ItemVulvaPiercings',
-				'ItemButt',
-				'ItemPelvis',
-				'ItemTorso',
-				'ItemHands',
-				'ItemLegs',
-				'ItemFeet',
-				'ItemBoots',
-				'ItemNipples',
-				'ItemNipplesPiercings',
-				'ItemBreast',
+				"ItemVulva",
+				"ItemVulvaPiercings",
+				"ItemButt",
+				"ItemPelvis",
+				"ItemTorso",
+				"ItemHands",
+				"ItemLegs",
+				"ItemFeet",
+				"ItemBoots",
+				"ItemNipples",
+				"ItemNipplesPiercings",
+				"ItemBreast",
 			],
 		},
 	},
 	{
-		Name: 'SuspensionHogtied',
+		Name: "SuspensionHogtied",
 		BondageLevel: 5,
 		SelfBondageLevel: 9,
 		Property: {
-			Type: 'SuspensionHogtied',
+			Type: "SuspensionHogtied",
 			Difficulty: 11,
-			Prerequisite: ['NoFeetSpreader'],
-			SetPose: ['Hogtied', 'SuspensionHogtied'],
-			Effect: ['Block', 'Freeze', 'Prone'],
+			Prerequisite: ["NoFeetSpreader"],
+			SetPose: ["Hogtied", "SuspensionHogtied"],
+			Effect: ["Block", "Freeze", "Prone"],
 			Block: [
-				'ItemVulva',
-				'ItemVulvaPiercings',
-				'ItemButt',
-				'ItemPelvis',
-				'ItemTorso',
-				'ItemHands',
-				'ItemLegs',
-				'ItemFeet',
-				'ItemBoots',
-				'ItemNipples',
-				'ItemNipplesPiercings',
-				'ItemBreast',
+				"ItemVulva",
+				"ItemVulvaPiercings",
+				"ItemButt",
+				"ItemPelvis",
+				"ItemTorso",
+				"ItemHands",
+				"ItemLegs",
+				"ItemFeet",
+				"ItemBoots",
+				"ItemNipples",
+				"ItemNipplesPiercings",
+				"ItemBreast",
 			],
 		},
 	},
@@ -133,7 +133,7 @@ function InventoryItemArmsWebLoad() {
 	if (!DialogFocusItem.Property) {
 		DialogFocusItem.Property = InventoryItemArmsWebOptions[0].Property;
 	}
-	DialogExtendedMessage = DialogFind(Player, 'WebBondageSelect');
+	DialogExtendedMessage = DialogFind(Player, "WebBondageSelect");
 }
 
 function InventoryItemArmsWebDraw() {
@@ -141,12 +141,12 @@ function InventoryItemArmsWebDraw() {
 	var Asset = DialogFocusItem.Asset;
 
 	// Draw the header and item
-	DrawButton(1775, 25, 90, 90, '', 'White', 'Icons/Next.png');
-	DrawRect(1387, 55, 225, 275, 'white');
-	DrawImageResize('Assets/' + Asset.Group.Family + '/' + Asset.Group.Name + '/Preview/' +
-					Asset.Name + '.png', 1389, 57, 221, 221);
-	DrawTextFit(Asset.Description, 1500, 310, 221, 'black');
-	DrawText(DialogExtendedMessage, 1500, 375, 'white', 'gray');
+	DrawButton(1775, 25, 90, 90, "", "White", "Icons/Next.png");
+	DrawRect(1387, 55, 225, 275, "white");
+	DrawImageResize("Assets/" + Asset.Group.Family + "/" + Asset.Group.Name + "/Preview/" +
+					Asset.Name + ".png", 1389, 57, 221, 221);
+	DrawTextFit(Asset.Description, 1500, 310, 221, "black");
+	DrawText(DialogExtendedMessage, 1500, 375, "white", "gray");
 
 	// Draw the possible variants and their requirements, 4 at a time in a 2x2 grid
 	for (var I = InventoryItemArmsWebOptionOffset; I < InventoryItemArmsWebOptions.length && I < InventoryItemArmsWebOptionOffset +
@@ -162,11 +162,11 @@ function InventoryItemArmsWebDraw() {
 			Y,
 			225,
 			225,
-			'',
-			((DialogFocusItem.Property.Type == Option.Property.Type)) ? '#888888' : FailSkillCheck ? 'Pink' : 'White',
+			"",
+			((DialogFocusItem.Property.Type == Option.Property.Type)) ? "#888888" : FailSkillCheck ? "Pink" : "White",
 		);
-		DrawImage('Screens/Inventory/' + Asset.Group.Name + '/' + Asset.Name + '/' + InventoryItemArmsWebOptions[I].Name + '.png', X, Y);
-		DrawText(DialogFind(Player, 'WebBondage' + Option.Name), X + 113, Y - 20, 'white', 'gray');
+		DrawImage("Screens/Inventory/" + Asset.Group.Name + "/" + Asset.Name + "/" + InventoryItemArmsWebOptions[I].Name + ".png", X, Y);
+		DrawText(DialogFind(Player, "WebBondage" + Option.Name), X + 113, Y - 20, "white", "gray");
 	}
 }
 
@@ -210,10 +210,10 @@ function InventoryItemArmsWebClick() {
 }
 
 function InventoryItemArmsWebRequirementCheckMessage(Type, IsSelfBondage) {
-	if (IsSelfBondage && SkillGetLevelReal(Player, 'SelfBondage') < Type.SelfBondageLevel) {
-		return DialogFind(Player, 'RequireSelfBondage' + Type.SelfBondageLevel);
-	} else if (SkillGetLevelReal(Player, 'Bondage') < Type.BondageLevel) {
-		return DialogFind(Player, 'RequireBondageLevel').replace('ReqLevel', Type.BondageLevel);
+	if (IsSelfBondage && SkillGetLevelReal(Player, "SelfBondage") < Type.SelfBondageLevel) {
+		return DialogFind(Player, "RequireSelfBondage" + Type.SelfBondageLevel);
+	} else if (SkillGetLevelReal(Player, "Bondage") < Type.BondageLevel) {
+		return DialogFind(Player, "RequireBondageLevel").replace("ReqLevel", Type.BondageLevel);
 	}
 	return null;
 }
@@ -221,7 +221,7 @@ function InventoryItemArmsWebRequirementCheckMessage(Type, IsSelfBondage) {
 function InventoryItemArmsWebSetType(NewType) {
 	// Gets the current item and character
 	var C = CharacterGetCurrent();
-	if (CurrentScreen == 'ChatRoom') {
+	if (CurrentScreen == "ChatRoom") {
 		DialogFocusItem = InventoryGet(C, C.FocusGroup.Name);
 		InventoryItemArmsWebLoad();
 	}
@@ -232,13 +232,13 @@ function InventoryItemArmsWebSetType(NewType) {
 	DialogFocusItem.Property = NewType.Property;
 	CharacterRefresh(C);
 
-	if (CurrentScreen == 'ChatRoom') {
-		var msg = 'ArmsWebSet' + NewType.Name;
-		var ActionDialog = DialogFind(Player, NewIndex > OldIndex ? 'tightens' : 'loosens', 'ItemArms');
+	if (CurrentScreen == "ChatRoom") {
+		var msg = "ArmsWebSet" + NewType.Name;
+		var ActionDialog = DialogFind(Player, NewIndex > OldIndex ? "tightens" : "loosens", "ItemArms");
 		var Dictionary = [
-			{ Tag: 'SourceCharacter', Text: Player.Name, MemberNumber: Player.MemberNumber },
-			{ Tag: 'TargetCharacter', Text: C.Name, MemberNumber: C.MemberNumber },
-			{ Tag: 'Action', Text: ActionDialog },
+			{ Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber },
+			{ Tag: "TargetCharacter", Text: C.Name, MemberNumber: C.MemberNumber },
+			{ Tag: "Action", Text: ActionDialog },
 		];
 		console.log(msg);
 		ChatRoomPublishCustomAction(msg, true, Dictionary);

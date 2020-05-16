@@ -1077,5 +1077,5 @@ ArmsWebSetSuspended,,,SourceCharacter fully wraps TargetCharacter in webbing and
 ArmsWebSetSuspensionHogtied,,,"SourceCharacter hogties TargetCharacter with the webbing and uses it to suspend her"
 tightens,,,tightens
 loosens,,,loosens
-HeadWebSetBlindfold,,,SourceCharacter creates a blindfold out of web on TargetCharacter's head
-HeadWebSetCocoon,,,SourceCharacter fully cocoons TargetCharacter's head in web
+HeadWebSetBlindfold,,,SourceCharacter creates a blindfold out of web for TargetCharacter
+HeadWebSetCocoon,,,SourceCharacter creates a cocoon out of web for TargetCharacter
