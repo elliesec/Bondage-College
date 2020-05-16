@@ -212,7 +212,7 @@ function InventoryItemArmsWebClick() {
 function InventoryItemArmsWebRequirementCheckMessage(Type, IsSelfBondage) {
 	if (IsSelfBondage && SkillGetLevelReal(Player, "SelfBondage") < Type.SelfBondageLevel) {
 		return DialogFind(Player, "RequireSelfBondage" + Type.SelfBondageLevel);
-	} else if (SkillGetLevelReal(Player, "Bondage") < Type.BondageLevel) {
+	} else if (!IsSelfBondage && SkillGetLevelReal(Player, "Bondage") < Type.BondageLevel) {
 		return DialogFind(Player, "RequireBondageLevel").replace("ReqLevel", Type.BondageLevel);
 	}
 	return null;
@@ -240,7 +240,6 @@ function InventoryItemArmsWebSetType(NewType) {
 			{ Tag: "TargetCharacter", Text: C.Name, MemberNumber: C.MemberNumber },
 			{ Tag: "Action", Text: ActionDialog },
 		];
-		console.log(msg);
 		ChatRoomPublishCustomAction(msg, true, Dictionary);
 	}
 
