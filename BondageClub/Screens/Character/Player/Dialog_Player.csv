@@ -1064,11 +1064,17 @@ WebBondageSelect,,,Select web type
 WebBondageTangled,,,Tangled
 WebBondageWrapped,,,Wrapped
 WebBondageCocooned,,,Cocooned
+WebBondageHogtied,,,Hogtied
+WebBondageSuspended,,,Suspended
+WebBondageSuspensionHogtied,,,Suspension Hogtied
 WebBondageBlindfold,,,Blindfold
 WebBondageCocoon,,,Cocoon
 ArmsWebSetTangled,,,SourceCharacter Action the webbing on TargetCharacter
-ArmsWebSetWrapped,,,SourceCharacter Action the webbing on TargetCharacter leaving them fully wrapped
-ArmsWebSetCocooned,,,SourceCharacter Action the webbing on TargetCharacter forming a cocoon
+ArmsWebSetWrapped,,,"SourceCharacter Action the webbing on TargetCharacter, leaving them fully wrapped"
+ArmsWebSetCocooned,,,"SourceCharacter Action the webbing on TargetCharacter, forming a cocoon"
+ArmsWebSetHogtied,,,"SourceCharacter wraps TargetCharacter in webbing, forming a hogtie"
+ArmsWebSetSuspended,,,SourceCharacter fully wraps TargetCharacter in webbing and uses it to suspend her
+ArmsWebSetSuspensionHogtied,,,"SourceCharacter hogties TargetCharacter with the webbing and uses it to suspend her"
 tightens,,,tightens
 loosens,,,loosens
 HeadWebSetBlindfold,,,SourceCharacter creates a blindfold out of web on TargetCharacter's head

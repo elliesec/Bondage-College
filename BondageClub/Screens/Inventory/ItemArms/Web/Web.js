@@ -45,25 +45,88 @@ const InventoryItemArmsWebOptions = [
 				'ItemBreast',
 			],
 		},
-	},/*
+	},
 	{
 		Name: 'Hogtied',
 		BondageLevel: 3,
-		SelfBondageLevel: 6
+		SelfBondageLevel: 6,
+		Property: {
+			Type: 'Hogtied',
+			Difficulty: 4,
+			Prerequisite: ['NoFeetSpreader'],
+			SetPose: ['Hogtied'],
+			Effect: ['Block', 'Freeze', 'Prone'],
+			Block: [
+				'ItemVulva',
+				'ItemVulvaPiercings',
+				'ItemButt',
+				'ItemPelvis',
+				'ItemTorso',
+				'ItemHands',
+				'ItemLegs',
+				'ItemFeet',
+				'ItemBoots',
+				'ItemNipples',
+				'ItemNipplesPiercings',
+				'ItemBreast',
+			],
+		},
 	},
 	{
 		Name: 'Suspended',
 		BondageLevel: 4,
 		SelfBondageLevel: 8,
-		Property: {},
+		Property: {
+			Type: 'Suspended',
+			Difficulty: 6,
+			Prerequisite: ['NoFeetSpreader'],
+			SetPose: ['LegsClosed', 'BackElbowTouch', 'Suspension'],
+			Effect: ['Block', 'Freeze', 'Prone'],
+			Block: [
+				'ItemVulva',
+				'ItemVulvaPiercings',
+				'ItemButt',
+				'ItemPelvis',
+				'ItemTorso',
+				'ItemHands',
+				'ItemLegs',
+				'ItemFeet',
+				'ItemBoots',
+				'ItemNipples',
+				'ItemNipplesPiercings',
+				'ItemBreast',
+			],
+		},
 	},
 	{
 		Name: 'SuspensionHogtied',
 		BondageLevel: 5,
 		SelfBondageLevel: 9,
-		Property: {},
-	},*/
+		Property: {
+			Type: 'SuspensionHogtied',
+			Difficulty: 11,
+			Prerequisite: ['NoFeetSpreader'],
+			SetPose: ['Hogtied', 'SuspensionHogtied'],
+			Effect: ['Block', 'Freeze', 'Prone'],
+			Block: [
+				'ItemVulva',
+				'ItemVulvaPiercings',
+				'ItemButt',
+				'ItemPelvis',
+				'ItemTorso',
+				'ItemHands',
+				'ItemLegs',
+				'ItemFeet',
+				'ItemBoots',
+				'ItemNipples',
+				'ItemNipplesPiercings',
+				'ItemBreast',
+			],
+		},
+	},
 ];
+
+var InventoryItemArmsWebOptionOffset = 0;
 
 // Loads the item extension properties
 function InventoryItemArmsWebLoad() {
@@ -78,16 +141,19 @@ function InventoryItemArmsWebDraw() {
 	var Asset = DialogFocusItem.Asset;
 
 	// Draw the header and item
-	DrawRect(1387, 125, 225, 275, 'white');
+	DrawButton(1775, 25, 90, 90, '', 'White', 'Icons/Next.png');
+	DrawRect(1387, 55, 225, 275, 'white');
 	DrawImageResize('Assets/' + Asset.Group.Family + '/' + Asset.Group.Name + '/Preview/' +
-					Asset.Name + '.png', 1389, 127, 221, 221);
-	DrawTextFit(Asset.Description, 1500, 375, 221, 'black');
-	DrawText(DialogExtendedMessage, 1500, 475, 'white', 'gray');
+					Asset.Name + '.png', 1389, 57, 221, 221);
+	DrawTextFit(Asset.Description, 1500, 310, 221, 'black');
+	DrawText(DialogExtendedMessage, 1500, 375, 'white', 'gray');
 
-	// Draw the possible variants and their requirements
-	for (var I = 0; I < InventoryItemArmsWebOptions.length; I++) {
-		var X = 1050 + I * 337;
-		var Y = 550;
+	// Draw the possible variants and their requirements, 4 at a time in a 2x2 grid
+	for (var I = InventoryItemArmsWebOptionOffset; I < InventoryItemArmsWebOptions.length && I < InventoryItemArmsWebOptionOffset +
+												   4; I++) {
+		const offset = I - InventoryItemArmsWebOptionOffset;
+		const X = 1200 + (offset % 2 * 387);
+		var Y = 450 + (Math.floor(offset / 2) * 300);
 		var Option = InventoryItemArmsWebOptions[I];
 		var FailSkillCheck = !!InventoryItemArmsWebRequirementCheckMessage(Option, IsSelfBondage);
 
@@ -100,21 +166,31 @@ function InventoryItemArmsWebDraw() {
 			((DialogFocusItem.Property.Type == Option.Property.Type)) ? '#888888' : FailSkillCheck ? 'Pink' : 'White',
 		);
 		DrawImage('Screens/Inventory/' + Asset.Group.Name + '/' + Asset.Name + '/' + InventoryItemArmsWebOptions[I].Name + '.png', X, Y);
-		DrawText(DialogFind(Player, 'WebBondage' + Option.Name), X + 113, Y + 250, 'white', 'gray');
+		DrawText(DialogFind(Player, 'WebBondage' + Option.Name), X + 113, Y - 20, 'white', 'gray');
 	}
 }
 
 function InventoryItemArmsWebClick() {
-	// Menu buttons
+	// Exit button
 	if ((MouseX >= 1885) && (MouseX <= 1975) && (MouseY >= 25) && (MouseY <= 110)) {
 		DialogFocusItem = null;
 	}
 
-	var IsSelfBondage = CharacterGetCurrent().MemberNumber === Player.MemberNumber;
+	// Pagination button
+	if ((MouseX >= 1775) && (MouseX <= 1865) && (MouseY >= 25) && (MouseY <= 110)) {
+		InventoryItemArmsWebOptionOffset += 4;
+		if (InventoryItemArmsWebOptionOffset >= InventoryItemArmsWebOptions.length) {
+			InventoryItemArmsWebOptionOffset = 0;
+		}
+	}
 
-	for (var I = 0; I < InventoryItemArmsWebOptions.length; I++) {
-		var X = 1050 + I * 337;
-		var Y = 550;
+	const IsSelfBondage = CharacterGetCurrent().MemberNumber === Player.MemberNumber;
+
+	for (var I = InventoryItemArmsWebOptionOffset; I < InventoryItemArmsWebOptions.length && I < InventoryItemArmsWebOptionOffset +
+												   4; I++) {
+		const offset = I - InventoryItemArmsWebOptionOffset;
+		const X = 1200 + (offset % 2 * 387);
+		var Y = 450 + (Math.floor(offset / 2) * 300);
 		var Option = InventoryItemArmsWebOptions[I];
 		if (
 			MouseX >= X
@@ -164,6 +240,7 @@ function InventoryItemArmsWebSetType(NewType) {
 			{ Tag: 'TargetCharacter', Text: C.Name, MemberNumber: C.MemberNumber },
 			{ Tag: 'Action', Text: ActionDialog },
 		];
+		console.log(msg);
 		ChatRoomPublishCustomAction(msg, true, Dictionary);
 	}
 
