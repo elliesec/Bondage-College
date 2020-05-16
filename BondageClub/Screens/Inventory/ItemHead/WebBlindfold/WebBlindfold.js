@@ -9,6 +9,7 @@ const InventoryItemHeadWebBlindfoldOptions = [
 			Type: "Cocoon",
 			Difficulty: 30,
 			Hide: ["HairFront", "HairBack", "Glasses", "HairAccessory1", "HairAccessory2", "Hat"],
+			Block: ["ItemMouth", "ItemMouth2", "ItemMouth3", "ItemEars"],
 			Effect: ["BlindHeavy", "Prone", "GagNormal"],
 		},
 	},
