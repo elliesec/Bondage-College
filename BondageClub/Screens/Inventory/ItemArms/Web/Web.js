@@ -30,20 +30,7 @@ const InventoryItemArmsWebOptions = [
 			AllowPose: ["Kneel"],
 			SetPose: ["LegsClosed", "BackElbowTouch"],
 			Effect: ["Block", "Freeze", "Prone"],
-			Block: [
-				"ItemVulva",
-				"ItemVulvaPiercings",
-				"ItemButt",
-				"ItemPelvis",
-				"ItemTorso",
-				"ItemHands",
-				"ItemLegs",
-				"ItemFeet",
-				"ItemBoots",
-				"ItemNipples",
-				"ItemNipplesPiercings",
-				"ItemBreast",
-			],
+			Block: ["ItemVulva", "ItemVulvaPiercings", "ItemButt", "ItemPelvis", "ItemTorso", "ItemHands", "ItemLegs", "ItemFeet", "ItemBoots", "ItemNipples", "ItemNipplesPiercings", "ItemBreast"],
 		},
 	},
 	{
@@ -56,20 +43,7 @@ const InventoryItemArmsWebOptions = [
 			Prerequisite: ["NoFeetSpreader"],
 			SetPose: ["Hogtied"],
 			Effect: ["Block", "Freeze", "Prone"],
-			Block: [
-				"ItemVulva",
-				"ItemVulvaPiercings",
-				"ItemButt",
-				"ItemPelvis",
-				"ItemTorso",
-				"ItemHands",
-				"ItemLegs",
-				"ItemFeet",
-				"ItemBoots",
-				"ItemNipples",
-				"ItemNipplesPiercings",
-				"ItemBreast",
-			],
+			Block: ["ItemVulva", "ItemVulvaPiercings", "ItemButt", "ItemPelvis", "ItemTorso", "ItemHands", "ItemLegs", "ItemFeet", "ItemBoots", "ItemNipples", "ItemNipplesPiercings", "ItemBreast"],
 		},
 	},
 	{
@@ -82,20 +56,7 @@ const InventoryItemArmsWebOptions = [
 			Prerequisite: ["NoFeetSpreader"],
 			SetPose: ["LegsClosed", "BackElbowTouch", "Suspension"],
 			Effect: ["Block", "Freeze", "Prone"],
-			Block: [
-				"ItemVulva",
-				"ItemVulvaPiercings",
-				"ItemButt",
-				"ItemPelvis",
-				"ItemTorso",
-				"ItemHands",
-				"ItemLegs",
-				"ItemFeet",
-				"ItemBoots",
-				"ItemNipples",
-				"ItemNipplesPiercings",
-				"ItemBreast",
-			],
+			Block: ["ItemVulva", "ItemVulvaPiercings", "ItemButt", "ItemPelvis", "ItemTorso", "ItemHands", "ItemLegs", "ItemFeet", "ItemBoots", "ItemNipples", "ItemNipplesPiercings", "ItemBreast"],
 		},
 	},
 	{
@@ -108,20 +69,7 @@ const InventoryItemArmsWebOptions = [
 			Prerequisite: ["NoFeetSpreader"],
 			SetPose: ["Hogtied", "SuspensionHogtied"],
 			Effect: ["Block", "Freeze", "Prone"],
-			Block: [
-				"ItemVulva",
-				"ItemVulvaPiercings",
-				"ItemButt",
-				"ItemPelvis",
-				"ItemTorso",
-				"ItemHands",
-				"ItemLegs",
-				"ItemFeet",
-				"ItemBoots",
-				"ItemNipples",
-				"ItemNipplesPiercings",
-				"ItemBreast",
-			],
+			Block: ["ItemVulva", "ItemVulvaPiercings", "ItemButt", "ItemPelvis", "ItemTorso", "ItemHands", "ItemLegs", "ItemFeet", "ItemBoots", "ItemNipples", "ItemNipplesPiercings", "ItemBreast"],
 		},
 	},
 ];
@@ -143,8 +91,7 @@ function InventoryItemArmsWebDraw() {
 	// Draw the header and item
 	DrawButton(1775, 25, 90, 90, "", "White", "Icons/Next.png");
 	DrawRect(1387, 55, 225, 275, "white");
-	DrawImageResize("Assets/" + Asset.Group.Family + "/" + Asset.Group.Name + "/Preview/" +
-					Asset.Name + ".png", 1389, 57, 221, 221);
+	DrawImageResize("Assets/" + Asset.Group.Family + "/" + Asset.Group.Name + "/Preview/" + Asset.Name + ".png", 1389, 57, 221, 221);
 	DrawTextFit(Asset.Description, 1500, 310, 221, "black");
 	DrawText(DialogExtendedMessage, 1500, 375, "white", "gray");
 
@@ -157,14 +104,7 @@ function InventoryItemArmsWebDraw() {
 		var Option = InventoryItemArmsWebOptions[I];
 		var FailSkillCheck = !!InventoryItemArmsWebRequirementCheckMessage(Option, IsSelfBondage);
 
-		DrawButton(
-			X,
-			Y,
-			225,
-			225,
-			"",
-			((DialogFocusItem.Property.Type == Option.Property.Type)) ? "#888888" : FailSkillCheck ? "Pink" : "White",
-		);
+		DrawButton(X, Y, 225, 225, "", ((DialogFocusItem.Property.Type == Option.Property.Type)) ? "#888888" : FailSkillCheck ? "Pink" : "White");
 		DrawImage("Screens/Inventory/" + Asset.Group.Name + "/" + Asset.Name + "/" + InventoryItemArmsWebOptions[I].Name + ".png", X, Y);
 		DrawText(DialogFind(Player, "WebBondage" + Option.Name), X + 113, Y - 20, "white", "gray");
 	}
@@ -192,13 +132,7 @@ function InventoryItemArmsWebClick() {
 		const X = 1200 + (offset % 2 * 387);
 		var Y = 450 + (Math.floor(offset / 2) * 300);
 		var Option = InventoryItemArmsWebOptions[I];
-		if (
-			MouseX >= X
-			&& MouseX <= X + 225
-			&& MouseY >= Y
-			&& MouseY <= Y + 225
-			&& DialogFocusItem.Property.Type !== Option.Property.Type
-		) {
+		if (MouseX >= X && MouseX <= X + 225 && MouseY >= Y && MouseY <= Y + 225 && DialogFocusItem.Property.Type !== Option.Property.Type) {
 			var requirementMessage = InventoryItemArmsWebRequirementCheckMessage(Option, IsSelfBondage);
 			if (requirementMessage) {
 				DialogExtendedMessage = requirementMessage;

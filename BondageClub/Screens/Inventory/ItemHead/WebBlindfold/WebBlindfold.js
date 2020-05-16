@@ -40,11 +40,7 @@ function InventoryItemHeadWebBlindfoldDraw() {
 		var Option = InventoryItemHeadWebBlindfoldOptions[I];
 
 		DrawButton(X, Y, 225, 225, "", ((DialogFocusItem.Property.Type == Option.Property.Type)) ? "#888888" : "White");
-		DrawImage(
-			"Screens/Inventory/" + Asset.Group.Name + "/" + Asset.Name + "/" + InventoryItemHeadWebBlindfoldOptions[I].Name + ".png",
-			X,
-			Y,
-		);
+		DrawImage("Screens/Inventory/" + Asset.Group.Name + "/" + Asset.Name + "/" + InventoryItemHeadWebBlindfoldOptions[I].Name + ".png", X, Y);
 		DrawText(DialogFind(Player, "WebBondage" + Option.Name), X + 113, Y + 250, "white", "gray");
 	}
 }
@@ -59,13 +55,7 @@ function InventoryItemHeadWebBlindfoldClick() {
 		var X = 1175 + I * 425;
 		var Y = 550;
 		var Option = InventoryItemHeadWebBlindfoldOptions[I];
-		if (
-			MouseX >= X
-			&& MouseX <= X + 225
-			&& MouseY >= Y
-			&& MouseY <= Y + 225
-			&& DialogFocusItem.Property.Type !== Option.Property.Type
-		) {
+		if (MouseX >= X && MouseX <= X + 225 && MouseY >= Y && MouseY <= Y + 225 && DialogFocusItem.Property.Type !== Option.Property.Type) {
 			InventoryItemHeadWebBlindfoldSetType(Option);
 		}
 	}
