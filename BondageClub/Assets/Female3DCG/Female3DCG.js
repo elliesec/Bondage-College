@@ -1450,7 +1450,7 @@ var AssetFemale3DCG = [
 				{
 					Name: 'Web',
 					Value: 20,
-					Difficulty: 2,
+					Difficulty: 4,
 					SelfBondage: 2,
 					Time: 5,
 					RemoveTime: 10,
@@ -2072,7 +2072,7 @@ var AssetFemale3DCG = [
 			{ Name: "FoxyMask", Value: 50, Difficulty: 2, Time: 15, Random: false, AllowLock: true, Effect: ["GagLight"], Block: ["ItemMouth", "ItemMouth2", "ItemMouth3"] },
 			{ Name: "SleepMask", Value: 5, Time: 5, Hide: ["Glasses"], Effect: ["BlindLight", "Prone"] },
 			{ Name: "BlackoutLenses", Value: 60, Difficulty: 10, Random: false, DefaultColor: "#333333", Hide: ["Glasses", "Eyes"], Effect: ["BlindHeavy", "Prone"] },
-			{ Name: "WebBlindfold", Value: 10, Difficulty: 5, Time: 10, RemoveTime: 5, Hide: ["Glasses"], Effect: [ "BlindLight", "Prone" ] },
+			{ Name: 'WebBlindfold', Value: 10, Difficulty: 5, Time: 10, RemoveTime: 5, Hide: ['Glasses'], Effect: ['BlindLight', 'Prone'], AllowType: ['Cocoon'], Extended: true },
 			AssetSpankingToys
 		],
 		Color: ["Default"]

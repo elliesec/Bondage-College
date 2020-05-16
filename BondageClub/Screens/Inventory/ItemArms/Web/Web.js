@@ -25,7 +25,7 @@ const InventoryItemArmsWebOptions = [
 		SelfBondageLevel: 5,
 		Property: {
 			Type: 'Cocooned',
-			Difficulty: 5,
+			Difficulty: 4,
 			Prerequisite: ['NoFeetSpreader'],
 			AllowPose: ['Kneel'],
 			SetPose: ['LegsClosed', 'BackElbowTouch'],
@@ -49,7 +49,12 @@ const InventoryItemArmsWebOptions = [
 	{
 		Name: 'Hogtied',
 		BondageLevel: 3,
-		SelfBondageLevel: 6,
+		SelfBondageLevel: 6
+	},
+	{
+		Name: 'Suspended',
+		BondageLevel: 4,
+		SelfBondageLevel: 8,
 		Property: {},
 	},
 	{
@@ -62,7 +67,7 @@ const InventoryItemArmsWebOptions = [
 
 // Loads the item extension properties
 function InventoryItemArmsWebLoad() {
-	if (DialogFocusItem.Property == null) {
+	if (!DialogFocusItem.Property) {
 		DialogFocusItem.Property = InventoryItemArmsWebOptions[0].Property;
 	}
 	DialogExtendedMessage = DialogFind(Player, 'WebBondageSelect');
@@ -122,7 +127,7 @@ function InventoryItemArmsWebClick() {
 			if (requirementMessage) {
 				DialogExtendedMessage = requirementMessage;
 			} else {
-				InventoryItemArmsWebSetType(I);
+				InventoryItemArmsWebSetType(Option);
 			}
 		}
 	}
@@ -137,7 +142,7 @@ function InventoryItemArmsWebRequirementCheckMessage(Type, IsSelfBondage) {
 	return null;
 }
 
-function InventoryItemArmsWebSetType(NewIndex) {
+function InventoryItemArmsWebSetType(NewType) {
 	// Gets the current item and character
 	var C = CharacterGetCurrent();
 	if (CurrentScreen == 'ChatRoom') {
@@ -145,7 +150,7 @@ function InventoryItemArmsWebSetType(NewIndex) {
 		InventoryItemArmsWebLoad();
 	}
 
-	const NewType = InventoryItemArmsWebOptions[NewIndex];
+	const NewIndex = InventoryItemArmsWebOptions.indexOf(NewType);
 	const OldIndex = InventoryItemArmsWebOptions.findIndex(Option => Option.Property.Type === DialogFocusItem.Property.Type);
 
 	DialogFocusItem.Property = NewType.Property;
@@ -153,19 +158,17 @@ function InventoryItemArmsWebSetType(NewIndex) {
 
 	if (CurrentScreen == 'ChatRoom') {
 		var msg = 'ArmsWebSet' + NewType.Name;
-		var Dictionary = [];
-		const ActionDialog = DialogFind(Player, NewIndex > OldIndex ? 'tightens' : 'loosens', 'ItemArms');
-		Dictionary.push({ Tag: 'SourceCharacter', Text: Player.Name, MemberNumber: Player.MemberNumber });
-		Dictionary.push({ Tag: 'TargetCharacter', Text: C.Name, MemberNumber: C.MemberNumber });
-		Dictionary.push({ Tag: 'Action', Text: ActionDialog });
+		var ActionDialog = DialogFind(Player, NewIndex > OldIndex ? 'tightens' : 'loosens', 'ItemArms');
+		var Dictionary = [
+			{ Tag: 'SourceCharacter', Text: Player.Name, MemberNumber: Player.MemberNumber },
+			{ Tag: 'TargetCharacter', Text: C.Name, MemberNumber: C.MemberNumber },
+			{ Tag: 'Action', Text: ActionDialog },
+		];
 		ChatRoomPublishCustomAction(msg, true, Dictionary);
-	} else {
+	}
+
+	if (DialogInventory) {
 		DialogFocusItem = null;
-		if (C.ID == 0) {
-			DialogMenuButtonBuild(C);
-		} else {
-			C.CurrentDialog = DialogFind(C, 'RopeBondage' + NewType.Name, 'ItemArms');
-			C.FocusGroup = null;
-		}
+		DialogMenuButtonBuild(C);
 	}
 }

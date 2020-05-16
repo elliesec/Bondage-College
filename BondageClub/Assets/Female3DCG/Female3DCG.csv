@@ -756,7 +756,7 @@ ItemMouth,SteelMuzzleGag,Steel Muzzle Gag
 ItemMouth,StitchedMuzzleGag,Stitched Muzzle Gag
 ItemMouth,LatexBallMuzzleGag,Latex Ball Muzzle Gag
 ItemMouth,SockStuffing,Sock Stuffing
-ItemMouth,WebGag,Web Gag
+ItemMouth,WebGag,Web
 ItemMouth2,,Mouth
 ItemMouth2,ClothGag,Cloth Gag
 ItemMouth2,WiffleGag,Wiffle Ball Gag
@@ -850,7 +850,7 @@ ItemHead,DogHood,Dog Hood
 ItemHead,FoxyMask,Foxy Mask
 ItemHead,SleepMask,Sleep Mask
 ItemHead,BlackoutLenses,Blackout Lenses
-ItemHead,WebBlindfold,Web Blindfold
+ItemHead,WebBlindfold,Web
 ItemEars,,Ears
 ItemEars,LightDutyEarPlugs,Light Duty Ear Plugs
 ItemEars,HeavyDutyEarPlugs,Heavy Duty Ear Plugs
