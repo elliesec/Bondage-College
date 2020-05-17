@@ -37,6 +37,7 @@ const InventoryItemArmsWebOptions = [
 		Name: "Hogtied",
 		BondageLevel: 3,
 		SelfBondageLevel: 6,
+		RequiresPrerequisites: true,
 		Property: {
 			Type: "Hogtied",
 			Difficulty: 4,
@@ -50,6 +51,7 @@ const InventoryItemArmsWebOptions = [
 		Name: "Suspended",
 		BondageLevel: 4,
 		SelfBondageLevel: 8,
+		RequiresPrerequisites: true,
 		Property: {
 			Type: "Suspended",
 			Difficulty: 6,
@@ -63,6 +65,7 @@ const InventoryItemArmsWebOptions = [
 		Name: "SuspensionHogtied",
 		BondageLevel: 5,
 		SelfBondageLevel: 9,
+		RequiresPrerequisites: true,
 		Property: {
 			Type: "SuspensionHogtied",
 			Difficulty: 11,
@@ -82,6 +85,7 @@ function InventoryItemArmsWebLoad() {
 		DialogFocusItem.Property = InventoryItemArmsWebOptions[0].Property;
 	}
 	DialogExtendedMessage = DialogFind(Player, "WebBondageSelect");
+	InventoryItemArmsWebOptionOffset = 0;
 }
 
 function InventoryItemArmsWebDraw() {
@@ -158,6 +162,12 @@ function InventoryItemArmsWebSetType(NewType) {
 	if (CurrentScreen == "ChatRoom") {
 		DialogFocusItem = InventoryGet(C, C.FocusGroup.Name);
 		InventoryItemArmsWebLoad();
+	}
+
+	// Validates some prerequisites before allowing more advanced poses
+	if (NewType.RequiresPrerequisites && !InventoryAllow(C, ["NotKneeling", "NotChained", "CannotBeHogtiedWithAlphaHood"], true)) {
+		DialogExtendedMessage = DialogText;
+		return;
 	}
 
 	const NewIndex = InventoryItemArmsWebOptions.indexOf(NewType);

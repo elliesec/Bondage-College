@@ -1449,7 +1449,7 @@ var AssetFemale3DCG = [
 				]
 			},
 			{
-				Name: "Web", Value: 150, Difficulty: 4, SelfBondage: 2, Time: 20, RemoveTime: 30, Random: false, Left: 0,				Top: 0,
+				Name: "Web", Priority: 33, Value: 150, Difficulty: 4, SelfBondage: 2, Time: 20, RemoveTime: 30, Random: false, Left: 0, Top: 0,
 				Prerequisite: ["NotSuspended", "NotKneelingSpread", "NotMounted", "NoFeetSpreader"],
 				Hide: ["Cloth", "ClothLower"],
 				AllowPose: ["Kneel", "Hogtied", "Suspension"],
