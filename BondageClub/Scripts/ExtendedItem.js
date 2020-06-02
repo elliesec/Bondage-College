@@ -74,6 +74,7 @@ function ExtendedItemClick(Options) {
 	// Exit button
 	if (MouseX >= 1885 && MouseX <= 1975 && MouseY >= 25 && MouseY <= 110) {
 		DialogFocusItem = null;
+		return;
 	}
 
 	const IsSelfBondage = CharacterGetCurrent().ID === 0;

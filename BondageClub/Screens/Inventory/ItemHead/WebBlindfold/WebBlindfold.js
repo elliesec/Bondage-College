@@ -27,7 +27,7 @@ function InventoryItemHeadWebBlindfoldDraw() {
 }
 
 function InventoryItemHeadWebBlindfoldClick() {
-	ExtendedItemClick(InventoryItemHeadWebBlindfoldOptions, InventoryItemHeadWebBlindfoldSetType);
+	ExtendedItemClick(InventoryItemHeadWebBlindfoldOptions);
 }
 
 function InventoryItemHeadWebBlindfoldPublishAction(Option) {
