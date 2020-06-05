@@ -1,6 +1,6 @@
 "use strict";
 
-const InventoryItemArmsWebOptions = [
+var InventoryItemArmsWebOptions = [
 	{
 		Name: "Tangled",
 		Property: { Type: null, Difficulty: 0 },
@@ -93,7 +93,7 @@ function InventoryItemArmsWebClick() {
 }
 
 function InventoryItemArmsWebValidate(Option) {
-	const C = CharacterGetCurrent();
+	var C = CharacterGetCurrent();
 	// Validates some prerequisites before allowing more advanced poses
 	if (Option.RequiresPrerequisites && !InventoryAllow(C, ["NotKneeling", "NotChained", "CannotBeHogtiedWithAlphaHood"], true)) {
 		DialogExtendedMessage = DialogText;
@@ -102,12 +102,12 @@ function InventoryItemArmsWebValidate(Option) {
 }
 
 function InventoryItemArmsWebPublishAction(Option, PreviousOption) {
-	const C = CharacterGetCurrent();
-	const NewIndex = InventoryItemArmsWebOptions.indexOf(Option);
-	const PreviousIndex = InventoryItemArmsWebOptions.indexOf(PreviousOption);
-	const msg = "ArmsWebSet" + Option.Name;
-	const ActionDialog = DialogFind(Player, NewIndex > PreviousIndex ? "tightens" : "loosens", "ItemArms");
-	const Dictionary = [
+	var C = CharacterGetCurrent();
+	var NewIndex = InventoryItemArmsWebOptions.indexOf(Option);
+	var PreviousIndex = InventoryItemArmsWebOptions.indexOf(PreviousOption);
+	var msg = "ArmsWebSet" + Option.Name;
+	var ActionDialog = DialogFind(Player, NewIndex > PreviousIndex ? "tightens" : "loosens", "ItemArms");
+	var Dictionary = [
 		{ Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber },
 		{ Tag: "TargetCharacter", Text: C.Name, MemberNumber: C.MemberNumber },
 		{ Tag: "Action", Text: ActionDialog },

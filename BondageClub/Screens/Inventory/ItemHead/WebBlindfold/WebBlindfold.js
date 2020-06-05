@@ -1,6 +1,6 @@
 "use strict";
 
-const InventoryItemHeadWebBlindfoldOptions = [
+var InventoryItemHeadWebBlindfoldOptions = [
 	{
 		Name: "Blindfold",
 		Property: { Type: null, Difficulty: 0 },
@@ -32,8 +32,8 @@ function InventoryItemHeadWebBlindfoldClick() {
 
 function InventoryItemHeadWebBlindfoldPublishAction(Option) {
 	var C = CharacterGetCurrent();
-	const msg = "HeadWebSet" + Option.Name;
-	const Dictionary = [
+	var msg = "HeadWebSet" + Option.Name;
+	var Dictionary = [
 		{ Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber },
 		{ Tag: "TargetCharacter", Text: C.Name, MemberNumber: C.MemberNumber },
 	];

@@ -240,9 +240,9 @@ function CommonDynamicFunctionParams(FunctionName) {
  * @param {...*} [args] - zero or more arguments to be passed to the function (optional)
  */
 function CommonCallFunctionByName(FunctionName/*, ...args */) {
-	const Function = window[FunctionName];
+	var Function = window[FunctionName];
 	if (typeof Function === "function") {
-		const args = Array.prototype.slice.call(arguments, 1);
+		var args = Array.prototype.slice.call(arguments, 1);
 		return Function.apply(null, args);
 	}
 }
