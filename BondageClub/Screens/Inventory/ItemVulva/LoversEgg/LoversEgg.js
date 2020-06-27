@@ -167,12 +167,20 @@ function InventoryItemVulvaLoversEggOptionSetMode(Option) {
 	CharacterRefresh(C);
 	ChatRoomCharacterUpdate(C);
 
+	var Message;
+	var Dictionary = [];
+
 	if (Property.Intensity !== OldIntensity) {
 		var Direction = Property.Intensity > OldIntensity ? "Increase" : "Decrease";
-		var Dictionary = [{ Tag: "DestinationCharacterName", Text: C.Name, MemberNumber: C.MemberNumber }];
-		ChatRoomPublishCustomAction("Egg" + Direction + "To" + Property.Intensity, true, Dictionary);
+		Message = "Egg" + Direction + "To" + Property.Intensity;
+		Dictionary.push({ Tag: "DestinationCharacterName", Text: C.Name, MemberNumber: C.MemberNumber });
 	} else {
-		// TODO: New chat message here
-		// SourceCharacter adjusts the settings for DestinationCharacterName vibrating egg
+		Message = "EggModeChange";
+		Dictionary.push(
+			{ Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber },
+			{ Tag: "DestinationCharacterName", Text: C.Name, MemberNumber: C.MemberNumber },
+		);
 	}
+
+	ChatRoomPublishCustomAction(Message, true, Dictionary);
 }
