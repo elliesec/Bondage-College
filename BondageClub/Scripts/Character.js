@@ -645,6 +645,8 @@ function CharacterDecompressWardrobe(Wardrobe) {
 		return DecompressedWardrobe;
 	}
 	return Wardrobe;
+}
+
 // Returns true if every vibrating item on the character also has the "Denied" effect
 function CharacterIsDenied(C) {
 	if (!C.Effect.includes("Denied")) {
