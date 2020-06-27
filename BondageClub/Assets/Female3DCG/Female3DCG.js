@@ -1044,7 +1044,7 @@ var AssetFemale3DCG = [
 					{ Name: "Strap", AllowColorize: false}
 				]
 			},
-            { Name: "LoversEgg", Value: 75, Time: 5, Visible: false, Prerequisite: ["AccessVulva", "AccessVulvaSuitZip"], Effect: ["Egged"], AllowEffect: ["Egged", "Vibrating", "Denied"], ExpressionTrigger: [{ Name: "Low", Group: "Blush", Timer: 10 }] },
+            { Name: "LoversEgg", Value: 75, Time: 5, Visible: false, Prerequisite: ["AccessVulva", "AccessVulvaSuitZip"], Effect: ["Egged"], AllowEffect: ["Egged", "Vibrating", "Edged"], ExpressionTrigger: [{ Name: "Low", Group: "Blush", Timer: 10 }] },
 			AssetSpankingToys
 		],
 		Color: ["Default"]

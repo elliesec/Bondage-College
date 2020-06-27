@@ -51,7 +51,18 @@ function VibratorModeUpdateDeny(Item, C) {
 }
 
 function VibratorModeUpdateEdge(Item, C) {
-	// TODO: Implement this mode
+	var OldIntensity = Item.Property.Intensity;
+	var NewIntensity = Math.min(Item.Property.Intensity + 1, 3);
+	Object.assign(Item.Property, {
+		Intensity: NewIntensity,
+		ChangeTime: Math.floor(CurrentTime + 60000 + Math.random() * 60000), // Next update 1 - 2 minutes from now
+		Effect: ["Egged", "Vibrating", "Edged"],
+	});
+	if (NewIntensity === 3) {
+		// If we've hit max intensity, no more changes needed
+		delete Item.Property.ChangeTime;
+	}
+	VibratorModePublish(C, OldIntensity, Item.Property.Intensity);
 }
 
 var VibratorModeState = {
@@ -77,7 +88,7 @@ function VibratorModeUpdateStateBased(Item, C, TransitionsFromDefault) {
 	switch (OldState) {
 		case VibratorModeState.DEFAULT:
 			if (Arousal > 90) {
-				// If arousal is high, decide whether to deny or orgasm
+				// If arousal is high, decide whether to deny or orgasm, based on provided transitions
 				NewState = CommonRandomItemFromList(VibratorModeState.DEFAULT, TransitionsFromDefault);
 			}
 			if (TimeSinceLastChange > ONE_MINUTE && Math.random() < 0.05) {

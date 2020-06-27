@@ -76,17 +76,19 @@ var InventoryItemVulvaLoversEggOptions = [
 			Name: "Deny",
 			Property: {
 				Mode: "Deny",
-				Intensity: () => -1 + Math.floor(Math.random() * 5),
+				Intensity: () => CommonRandomItemFromList(-1, [0, 1, 2, 3]),
 				ChangeTime: () => CurrentTime,
-				Effect: ["Egged", "Vibrating"],
+				LastChange: () => CurrentTime,
+				Effect: ["Egged", "Vibrating", "Edged"],
 			},
 		},
 		{
 			Name: "Edge",
 			Property: {
 				Mode: "Edge",
-				Intensity: () => 0,
-				ChangeTime: () => CurrentTime,
+				Intensity: CommonRandomItemFromList(null, [0, 1]),
+				ChangeTime: () => Math.floor(CurrentTime + 60000 + Math.random() * 120000),
+				Effect: ["Egged", "Vibrating", "Edged"],
 			},
 		},
 	],

@@ -238,7 +238,7 @@ function ActivityOrgasmGameGenerate(Progress) {
 
 // Triggers an orgasm for the player or an NPC which lasts from 5 to 15 seconds
 function ActivityOrgasmPrepare(C) {
-	if (C.IsDenied()) {
+	if (C.IsEdged()) {
 		C.ArousalSettings.Progress = 99;
 		return;
 	}
