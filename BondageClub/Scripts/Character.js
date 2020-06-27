@@ -67,7 +67,8 @@ function CharacterReset(CharacterID, CharacterAssetFamily) {
 		IsKneeling: function () { return ((this.Pose != null) && (this.Pose.indexOf("Kneel") >= 0)) },
 		IsNaked: function () { return CharacterIsNaked(this); },
 		IsDeaf: function () { return ((this.Effect.indexOf("DeafLight") >= 0) || (this.Effect.indexOf("DeafNormal") >= 0) || (this.Effect.indexOf("DeafHeavy") >= 0)) },
-		HasNoItem: function () { return CharacterHasNoItem(this); }
+		HasNoItem: function () { return CharacterHasNoItem(this); },
+		IsDenied: function () { return CharacterIsDenied(this); },
 	};
 
 	// If the character doesn't exist, we create it
@@ -642,4 +643,13 @@ function CharacterDecompressWardrobe(Wardrobe) {
 		return DecompressedWardrobe;
 	}
 	return Wardrobe;
+// Returns true if every vibrating item on the character also has the "Denied" effect
+function CharacterIsDenied(C) {
+	if (!C.Effect.includes("Denied")) {
+		return false;
+	}
+	return !C.Appearance.some((Item) => {
+		return Item.Property && typeof Item.Property.Intensity === "number" && Item.Property.Intensity >= 0 &&
+			   !Item.Asset.Effect.includes("Denied") && !Item.Property.Effect.includes("Denied");
+	});
 }
