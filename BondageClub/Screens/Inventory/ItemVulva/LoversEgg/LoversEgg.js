@@ -95,8 +95,8 @@ var InventoryItemVulvaLoversEggOptions = [
 ];
 
 function InventoryItemVulvaLoversEggLoad() {
-	if (DialogFocusItem.Property == null) {
-		DialogFocusItem.Property = InventoryItemVulvaLoversEggOptions[0][0].Property;
+	if (!DialogFocusItem.Property || !DialogFocusItem.Property.Mode) {
+		DialogFocusItem.Property = Object.assign({}, DialogFocusItem.Property, InventoryItemVulvaLoversEggOptions[0][0].Property);
 	}
 }
 
@@ -160,7 +160,7 @@ function InventoryItemVulvaLoversEggOptionSetMode(Option) {
 	var C = CharacterGetCurrent();
 	DialogFocusItem = InventoryGet(C, C.FocusGroup.Name);
 	var OldIntensity = DialogFocusItem.Property.Intensity;
-	var Property = DialogFocusItem.Property = Object.assign({}, Option.Property);
+	var Property = DialogFocusItem.Property = Object.assign({}, DialogFocusItem.Property, Option.Property);
 	typeof Property.Intensity === "function" && (Property.Intensity = Property.Intensity());
 	typeof Property.ChangeTime === "function" && (Property.ChangeTime = Property.ChangeTime());
 	typeof Property.LastChange === "function" && (Property.LastChange = Property.LastChange());
