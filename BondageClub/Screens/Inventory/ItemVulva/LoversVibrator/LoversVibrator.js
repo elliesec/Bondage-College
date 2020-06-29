@@ -1,6 +1,6 @@
 "use strict";
 
-var InventoryItemVulvaLoversEggOptions = [
+var InventoryItemVulvaLoversVibratorOptions = [
 	[
 		{
 			Name: "TurnOff",
@@ -43,82 +43,40 @@ var InventoryItemVulvaLoversEggOptions = [
 			},
 		},
 	],
-	[
-		{
-			Name: "Random",
-			Property: {
-				Mode: "Random",
-				Intensity: () => CommonRandomItemFromList(null, [-1, 0, 1, 2, 3]),
-				ChangeTime: () => Math.floor(CurrentTime + 60000 + Math.random() * 120000),
-				Effect: ["Egged", "Vibrating"],
-			},
-		},
-		{
-			Name: "Escalate",
-			Property: {
-				Mode: "Escalate",
-				Intensity: 0,
-				ChangeTime: Math.floor(CurrentTime + (5000 + Math.random() * 5000) * 16),
-				Effect: ["Egged", "Vibrating"],
-			},
-		},
-		{
-			Name: "Tease",
-			Property: {
-				Mode: "Tease",
-				Intensity: () => CommonRandomItemFromList(-1, [0, 1, 2, 3]),
-				ChangeTime: () => CurrentTime + 2000,
-				LastChange: () => CurrentTime,
-				Effect: ["Egged", "Vibrating"],
-			},
-		},
-		{
-			Name: "Deny",
-			Property: {
-				Mode: "Deny",
-				Intensity: () => CommonRandomItemFromList(-1, [0, 1, 2, 3]),
-				ChangeTime: () => CurrentTime,
-				LastChange: () => CurrentTime,
-				Effect: ["Egged", "Vibrating", "Edged"],
-			},
-		},
-		{
-			Name: "Edge",
-			Property: {
-				Mode: "Edge",
-				Intensity: CommonRandomItemFromList(null, [0, 1]),
-				ChangeTime: () => Math.floor(CurrentTime + 60000 + Math.random() * 120000),
-				Effect: ["Egged", "Vibrating", "Edged"],
-			},
-		},
-	],
 ];
 
-function InventoryItemVulvaLoversEggLoad() {
+function InventoryItemVulvaLoversVibratorLoad() {
 	if (!DialogFocusItem.Property || !DialogFocusItem.Property.Mode) {
-		DialogFocusItem.Property = Object.assign({}, DialogFocusItem.Property, InventoryItemVulvaLoversEggOptions[0][0].Property);
+		DialogFocusItem.Property = Object.assign({}, DialogFocusItem.Property, InventoryItemVulvaLoversVibratorOptions[0][0].Property);
 	}
 }
 
-function InventoryItemVulvaLoversEggDraw() {
-	DrawRect(1387, 150, 225, 275, "white");
-	var AssetPath = "Assets/" + DialogFocusItem.Asset.Group.Family + "/" + DialogFocusItem.Asset.Group.Name + "/Preview/" +
-					DialogFocusItem.Asset.Name + ".png";
+function InventoryItemVulvaLoversVibratorDraw() {
+	var Asset = DialogFocusItem.Asset;
+	var Property = DialogFocusItem.Property;
+	var Description = Asset.Description;
+	var AssetPath = "Assets/" + Asset.Group.Family + "/" + Asset.Group.Name + "/Preview/" + Asset.Name + ".png";
+
+	DrawRect(1387, 100, 225, 275, "white");
 	if (DialogFocusItem.Property.Intensity >= 0) {
-		DrawImageResize(AssetPath, 1389 + Math.floor(Math.random() * 3) - 1, 152 + Math.floor(Math.random() * 3) - 1, 221,
+		DrawImageResize(AssetPath, 1389 + Math.floor(Math.random() * 3) - 1, 102 + Math.floor(Math.random() * 3) - 1, 221,
 			221,
 		);
 	} else {
-		DrawImageResize(AssetPath, 1389, 152, 221, 221);
+		DrawImageResize(AssetPath, 1389, 102, 221, 221);
 	}
-	DrawTextFit(DialogFocusItem.Asset.Description, 1500, 400, 221, "black");
+	DrawTextFit(Description, 1500, 350, 221, "black");
 	DrawText(
-		DialogFind(Player, "Intensity" + DialogFocusItem.Property.Intensity.toString()).replace("Item", DialogFocusItem.Asset.Description),
-		1500, 525, "White", "Gray",
+		DialogFind(Player, "ItemMemberNumber").replace("Item", Description) + " " + Property.ItemMemberNumber,
+		1500, 450, "white", "gray",
+	);
+	DrawText(
+		DialogFind(Player, "Intensity" + Property.Intensity.toString()).replace("Item", Description),
+		1500, 525, "white", "gray",
 	);
 
 	let Y = 525;
-	InventoryItemVulvaLoversEggOptions.forEach((OptionGroup) => {
+	InventoryItemVulvaLoversVibratorOptions.forEach((OptionGroup) => {
 		OptionGroup.forEach((Option, I) => {
 			var X = 1175 + (I % 3) * 225;
 			if (I % 3 === 0) {
@@ -131,22 +89,22 @@ function InventoryItemVulvaLoversEggDraw() {
 	});
 }
 
-function InventoryItemVulvaLoversEggClick() {
+function InventoryItemVulvaLoversVibratorClick() {
 	// Exit Button
 	if ((MouseX >= 1885) && (MouseX <= 1975) && (MouseY >= 25) && (MouseY <= 110)) {
 		DialogFocusItem = null;
 	}
 
 	let Y = 525;
-	InventoryItemVulvaLoversEggOptions.some((OptionGroup) => {
+	InventoryItemVulvaLoversVibratorOptions.some((OptionGroup) => {
 		var Handled = OptionGroup.some((Option, I) => {
-			var X = 1175 + (I % 3) * 250;
+			var X = 1175 + (I % 3) * 225;
 			if (I % 3 === 0) {
 				Y += 75;
 			}
 			if (MouseX >= X && MouseX <= X + 200 && MouseY >= Y && MouseY <= Y + 55) {
 				if (Option.Property.Mode !== DialogFocusItem.Property.Mode) {
-					InventoryItemVulvaLoversEggOptionSetMode(Option);
+					InventoryItemVulvaLoversVibratorOptionSetMode(Option);
 				}
 				return true;
 			}
@@ -156,7 +114,7 @@ function InventoryItemVulvaLoversEggClick() {
 	});
 }
 
-function InventoryItemVulvaLoversEggOptionSetMode(Option) {
+function InventoryItemVulvaLoversVibratorOptionSetMode(Option) {
 	var C = CharacterGetCurrent();
 	DialogFocusItem = InventoryGet(C, C.FocusGroup.Name);
 	var OldIntensity = DialogFocusItem.Property.Intensity;
