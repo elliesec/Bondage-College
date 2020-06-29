@@ -27,56 +27,68 @@ function TimerHourToString(T) {
 	return H + ":" + M;
 }
 
-// Check if we must remove items from a player or an NPC
-function TimerInventoryRemove() {
-
+// Check if we must change or remove items from a player or an NPC
+function TimerInventoryChangeOrRemove() {
 	// Cycles through all items items for all offline characters (player + NPC)
 	for (var C = 0; C < Character.length; C++)
 		if ((Character[C].ID == 0) || (Character[C].MemberNumber == null))
-			for (var A = 0; A < Character[C].Appearance.length; A++)
-				if ((Character[C].Appearance[A].Property != null) && (Character[C].Appearance[A].Property.RemoveTimer != null))
-					if ((typeof Character[C].Appearance[A].Property.RemoveTimer == "number") && (Character[C].Appearance[A].Property.RemoveTimer <= CurrentTime)) {
-						var LockName = Character[C].Appearance[A].Property.LockedBy;
+			for (var A = 0; A < Character[C].Appearance.length; A++) {
+				var Property = Character[C].Appearance[A].Property;
+				if (Property && typeof Property.RemoveTimer == "number" && Property.RemoveTimer <= CurrentTime)
+					return TimerInventoryRemove(C, A);
+				if (Property && typeof Property.ChangeTime === "number" && Property.ChangeTime <= CurrentTime)
+					return TimerInventoryChange(C, A);
+			}
+}
 
-						// Remove any lock or timer
-						delete Character[C].Appearance[A].Property.LockedBy;
-						delete Character[C].Appearance[A].Property.LockMemberNumber;
-						delete Character[C].Appearance[A].Property.RemoveTimer;
-						delete Character[C].Appearance[A].Property.MaxTimer;
-						delete Character[C].Appearance[A].Property.ShowTimer;
-						delete Character[C].Appearance[A].Property.EnableRandomInput;
-						delete Character[C].Appearance[A].Property.MemberNumberList;
-						if (Character[C].Appearance[A].Property.Effect != null)
-							for (var E = 0; E < Character[C].Appearance[A].Property.Effect.length; E++)
-								if (Character[C].Appearance[A].Property.Effect[E] == "Lock")
-									Character[C].Appearance[A].Property.Effect.splice(E, 1);
+function TimerInventoryRemove(C, A) {
+	var LockName = Character[C].Appearance[A].Property.LockedBy;
 
-						// If we're removing a lock and we're in a chatroom, send a chatroom message
-						if (LockName && CurrentScreen === "ChatRoom") {
-							var Dictionary = [
-								{Tag: "DestinationCharacterName", Text: Character[C].Name, MemberNumber: Character[C].MemberNumber},
-								{Tag: "FocusAssetGroup", AssetGroupName: Character[C].Appearance[A].Asset.Group.Name},
-								{Tag: "LockName", AssetName: LockName}
-							];
-							ServerSend("ChatRoomChat", {Content: "TimerRelease", Type: "Action", Dictionary});
-						}
+	// Remove any lock or timer
+	delete Character[C].Appearance[A].Property.LockedBy;
+	delete Character[C].Appearance[A].Property.LockMemberNumber;
+	delete Character[C].Appearance[A].Property.RemoveTimer;
+	delete Character[C].Appearance[A].Property.MaxTimer;
+	delete Character[C].Appearance[A].Property.ShowTimer;
+	delete Character[C].Appearance[A].Property.EnableRandomInput;
+	delete Character[C].Appearance[A].Property.MemberNumberList;
+	if (Character[C].Appearance[A].Property.Effect != null)
+		for (var E = 0; E < Character[C].Appearance[A].Property.Effect.length; E++)
+			if (Character[C].Appearance[A].Property.Effect[E] == "Lock")
+				Character[C].Appearance[A].Property.Effect.splice(E, 1);
 
-						// If we must remove the linked item from the character or the facial expression
-						if ((Character[C].Appearance[A].Property.RemoveItem != null) && Character[C].Appearance[A].Property.RemoveItem && (Character[C].Appearance[A].Asset.Group.Category != null) && (Character[C].Appearance[A].Asset.Group.Category == "Item"))
-							InventoryRemove(Character[C], Character[C].Appearance[A].Asset.Group.Name);
-						else
-							if (Character[C].Appearance[A].Asset.Group.AllowExpression != null)
-								CharacterSetFacialExpression(Character[C], Character[C].Appearance[A].Asset.Group.Name, null);
-							else
-								CharacterRefresh(Character[C]);
+	// If we're removing a lock and we're in a chatroom, send a chatroom message
+	if (LockName && CurrentScreen === "ChatRoom") {
+		var Dictionary = [
+			{Tag: "DestinationCharacterName", Text: Character[C].Name, MemberNumber: Character[C].MemberNumber},
+			{Tag: "FocusAssetGroup", AssetGroupName: Character[C].Appearance[A].Asset.Group.Name},
+			{Tag: "LockName", AssetName: LockName}
+		];
+		ServerSend("ChatRoomChat", {Content: "TimerRelease", Type: "Action", Dictionary});
+	}
 
-						// Sync with the server and exit
-						if (Character[C].ID == 0) ChatRoomCharacterUpdate(Character[C]);
-						else ServerPrivateCharacterSync();
-						return;
+	// If we must remove the linked item from the character or the facial expression
+	if ((Character[C].Appearance[A].Property.RemoveItem != null) && Character[C].Appearance[A].Property.RemoveItem &&
+		(Character[C].Appearance[A].Asset.Group.Category != null) &&
+		(Character[C].Appearance[A].Asset.Group.Category == "Item"))
+		InventoryRemove(Character[C], Character[C].Appearance[A].Asset.Group.Name);
+	else if (Character[C].Appearance[A].Asset.Group.AllowExpression != null)
+		CharacterSetFacialExpression(Character[C], Character[C].Appearance[A].Asset.Group.Name, null);
+	else
+		CharacterRefresh(Character[C]);
 
-					}
+	// Sync with the server and exit
+	if (Character[C].ID == 0) ChatRoomCharacterUpdate(Character[C]);
+	else ServerPrivateCharacterSync();
+}
 
+function TimerInventoryChange(C, A) {
+	VibratorModeUpdate(Character[C].Appearance[A], Character[C]);
+	CharacterRefresh(Character[C]);
+
+	// Sync with the server and exit
+	if (Character[C].ID == 0) ChatRoomCharacterUpdate(Character[C]);
+	else ServerPrivateCharacterSync();
 }
 
 // Sets a remove timer in seconds for a specific item part / body part
@@ -114,7 +126,7 @@ function TimerProcess(Timestamp) {
 	// At each 100 cycles, we check for timed events
 	TimerCycle++;
 	if (TimerCycle % 100 == 0) {
-		TimerInventoryRemove();
+		TimerInventoryChangeOrRemove();
 		TimerPrivateOwnerBeep();
 	}
 
