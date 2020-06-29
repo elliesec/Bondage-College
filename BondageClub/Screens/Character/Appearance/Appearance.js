@@ -517,7 +517,7 @@ function AppearanceRun() {
 }
 
 // Sets an item in the character appearance
-function CharacterAppearanceSetItem(C, Group, ItemAsset, NewColor, DifficultyFactor, Refresh) {
+function CharacterAppearanceSetItem(C, Group, ItemAsset, NewColor, DifficultyFactor, ItemMemberNumber, Refresh) {
 
 	// Sets the difficulty factor
 	if (DifficultyFactor == null) DifficultyFactor = 0;
@@ -535,7 +535,8 @@ function CharacterAppearanceSetItem(C, Group, ItemAsset, NewColor, DifficultyFac
 		var NA = {
 			Asset: ItemAsset,
 			Difficulty: parseInt((ItemAsset.Difficulty == null) ? 0 : ItemAsset.Difficulty) + parseInt(DifficultyFactor),
-			Color: ((NewColor == null) ? ItemColor : NewColor)
+			Color: ((NewColor == null) ? ItemColor : NewColor),
+			Property: ItemAsset.CharacterRestricted ? {ItemMemberNumber: ItemMemberNumber == null ? -1 : ItemMemberNumber} : undefined
 		}
 		C.Appearance.push(NA);
 	}
