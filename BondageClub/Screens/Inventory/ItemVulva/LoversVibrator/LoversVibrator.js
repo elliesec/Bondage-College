@@ -43,6 +43,55 @@ var InventoryItemVulvaLoversVibratorOptions = [
 			},
 		},
 	],
+	[
+		{
+			Name: "Random",
+			Property: {
+				Mode: "Random",
+				Intensity: () => CommonRandomItemFromList(null, [-1, 0, 1, 2, 3]),
+				ChangeTime: () => Math.floor(CurrentTime + 60000 + Math.random() * 120000),
+				Effect: (Intensity) => Intensity >= 0 ? ["Egged", "Vibrating"] : ["Egged"],
+			},
+		},
+		{
+			Name: "Escalate",
+			Property: {
+				Mode: "Escalate",
+				Intensity: 0,
+				ChangeTime: Math.floor(CurrentTime + (5000 + Math.random() * 5000) * 16),
+				Effect: ["Egged", "Vibrating"],
+			},
+		},
+		{
+			Name: "Tease",
+			Property: {
+				Mode: "Tease",
+				Intensity: () => CommonRandomItemFromList(-1, [0, 1, 2, 3]),
+				ChangeTime: () => CurrentTime + 2000,
+				LastChange: () => CurrentTime,
+				Effect: ["Egged", "Vibrating"],
+			},
+		},
+		{
+			Name: "Deny",
+			Property: {
+				Mode: "Deny",
+				Intensity: () => CommonRandomItemFromList(-1, [0, 1, 2, 3]),
+				ChangeTime: () => CurrentTime,
+				LastChange: () => CurrentTime,
+				Effect: ["Egged", "Vibrating", "Edged"],
+			},
+		},
+		{
+			Name: "Edge",
+			Property: {
+				Mode: "Edge",
+				Intensity: CommonRandomItemFromList(null, [0, 1]),
+				ChangeTime: () => Math.floor(CurrentTime + 60000 + Math.random() * 120000),
+				Effect: ["Egged", "Vibrating", "Edged"],
+			},
+		},
+	],
 ];
 
 function InventoryItemVulvaLoversVibratorLoad() {
@@ -122,6 +171,7 @@ function InventoryItemVulvaLoversVibratorOptionSetMode(Option) {
 	typeof Property.Intensity === "function" && (Property.Intensity = Property.Intensity());
 	typeof Property.ChangeTime === "function" && (Property.ChangeTime = Property.ChangeTime());
 	typeof Property.LastChange === "function" && (Property.LastChange = Property.LastChange());
+	typeof Property.Effect === "function" && (Property.Effect = Property.Effect(Property.Intensity));
 	CharacterRefresh(C);
 	ChatRoomCharacterUpdate(C);
 
