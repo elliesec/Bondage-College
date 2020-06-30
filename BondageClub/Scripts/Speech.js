@@ -75,7 +75,7 @@ function SpeechGarble(C, CD) {
 	}
 
 	// GagTotal3 always returns mmmmm and muffles some relatively frequent letters entirely, 50% least frequent letters
-	if (GagEffect >= 16) {
+	if (GagEffect >= 16  || ((C.ID != 0) && (Player.GetDeafLevel() >= 5))) {
 		for (var L = 0; L < CD.length; L++) {
 			var H = CD.charAt(L).toLowerCase();
 			if (H == "(") Par = true;
