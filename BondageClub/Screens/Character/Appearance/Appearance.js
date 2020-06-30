@@ -508,7 +508,7 @@ function CharacterAppearanceGetCurrentValue(C, Group, Type) {
 }
 
 /**
- * @description Loads the character appearance screen and keeps a backup of the previous appearance
+ * @description Loads the character appearance screen and keeps a backup of the previous appearance. The function name is created dynamically.
  * 
  * @returns {void} - Nothing
  */
@@ -522,7 +522,7 @@ function AppearanceLoad() {
 
 
 /**
- * @description Run the character appearance selection screen
+ * @description Run the character appearance selection screen. The function name is created dynamically.
  * 
  * @returns {void} - Nothing
  */
@@ -763,7 +763,7 @@ function CharacterAppearanceSetColorForGroup(C, Color, Group) {
 
 
 /**
- * @description Handle the clicks in the character appearance selection screen
+ * @description Handle the clicks in the character appearance selection screen. The function name is created dynamically.
  * 
  * @returns {void} - Nothing
  */
@@ -869,7 +869,7 @@ function AppearanceClick() {
 
 
 /**
- * @description Handle the exitiing of the appearance screen
+ * @description Handle the exitiing of the appearance screen. The function name is created dynamically.
  * 
  * @returns {void} - Nothing
  */
@@ -898,7 +898,7 @@ function CharacterAppearanceExit(C) {
 }
 
 /**
- * @description Handle the confirmation click in the wardrobe screen
+ * @description Handle the confirmation click in the wardrobe screen. 
  * 
  * @param {Character} C - The character who has been changed
  * @returns {void} - Nothing
