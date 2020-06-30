@@ -168,7 +168,7 @@ function AudioPlayContent(data) {
 	var targetIsPlayer = target.MemberNumber == Player.MemberNumber;
 
 	// If the player is the target, increase volume
-	if (targetIsPlayer) noiseLevelModifier += 3
+	if (targetIsPlayer) noiseLevelModifier += 3;
 
 	// If the player is blindfolded, increase volume based on blindfold level
 	if (Player.Effect.indexOf("BlindHeavy") >= 0) noiseLevelModifier += 4;
