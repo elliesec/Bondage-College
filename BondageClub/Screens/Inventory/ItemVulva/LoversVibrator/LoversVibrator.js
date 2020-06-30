@@ -1,5 +1,6 @@
 "use strict";
 
+// TODO: Can some of the dynamic initialisers be improved?
 var InventoryItemVulvaLoversVibratorOptions = [
 	[
 		{

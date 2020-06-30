@@ -85,6 +85,7 @@ function VibratorModeUpdateStateBased(Item, C, TransitionsFromDefault) {
 	var THREE_MINUTES = 180000;
 	var NINE_MINUTES = 540000;
 
+	// TODO: Can this be cleaned up a bit?
 	switch (OldState) {
 		case VibratorModeState.DEFAULT:
 			if (Arousal > 90) {
