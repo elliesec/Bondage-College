@@ -480,9 +480,9 @@ function CharacterAppearanceBuildCanvas(C) {
 		}
 }
 
-// Returns a value from the character current appearance
+
 /**
- * @description
+ * @description Returns a value from the character current appearance
  * 
  * @param {Character} C - The character to get values from
  * @param {string} Group - The name of the group, whose values we want to get
@@ -691,9 +691,9 @@ function CharacterAppearanceNextItem(C, Group, Forward, Description) {
 	if (Description == true) return "None";
 }
 
-// Find the next color for the item
+
 /**
- * @description
+ * @description Find the next color for the item
  * 
  * @param {Character} C - The character whose items are cycled
  * @param {string} Group - The name of the group for which we are colour cycling
