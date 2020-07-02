@@ -6,6 +6,7 @@ function InventoryItemMiscCombinationPadlockLoad() {
 	if ((DialogFocusSourceItem != null) && (DialogFocusSourceItem.Property == null)) DialogFocusSourceItem.Property = {};
 	if ((DialogFocusSourceItem != null) && (DialogFocusSourceItem.Property != null) && (DialogFocusSourceItem.Property.CombinationNumber == null)) DialogFocusSourceItem.Property.CombinationNumber = "0000";
 
+	// Only create the inputs if the zone isn't blocked
 	if (!InventoryGroupIsBlocked(C, C.FocusGroup.Name)) {
 		ElementCreateInput("CombinationNumber", "text", "", "4");
 		ElementCreateInput("NewCombinationNumber", "text", "", "4");
@@ -26,8 +27,10 @@ function InventoryItemMiscCombinationPadlockDraw() {
 		DrawText(DialogFind(Player, "LockMemberNumber") + " " + DialogFocusSourceItem.Property.LockMemberNumber.toString(), 1500, 700, "white", "gray");
 
 	if (InventoryGroupIsBlocked(C, C.FocusGroup.Name)) {
+		// If the zone is blocked, just display some text informing the player that they can't access the lock
 		DrawText(DialogFind(Player, "LockZoneBlocked"), 1500, 800, "white", "gray");
 	} else {
+		// Otherwise, draw the combination inputs
 		MainCanvas.textAlign = "right";
 		DrawText(DialogFind(Player, "CombinationOld"), 1400, 803, "white", "gray");
 		DrawText(DialogFind(Player, "CombinationNew"), 1400, 883, "white", "gray");
@@ -45,7 +48,7 @@ function InventoryItemMiscCombinationPadlockClick() {
 	var C = CharacterGetCurrent();
 	var Item = InventoryGet(C, C.FocusGroup.Name);
 
-	if ((MouseX >= 1600) && (MouseX <= 1950)){
+	if ((MouseX >= 1600) && (MouseX <= 1950) && !InventoryGroupIsBlocked(C, C.FocusGroup.Name)){
 		// Opens the padlock
 		if ((MouseY >= 771) && (MouseY <= 835)){
 			if (ElementValue("CombinationNumber") == DialogFocusSourceItem.Property.CombinationNumber){
