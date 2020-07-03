@@ -24,7 +24,7 @@ function InventoryAdd(C, NewItemName, NewItemGroup, Push) {
 
 	// Only add the item if we found the asset
 	if (NewItemAsset != null) {
-		
+
 		// Creates the item and pushes it in the inventory queue
 		var NewItem = {
 			Name: NewItemName,
@@ -38,7 +38,25 @@ function InventoryAdd(C, NewItemName, NewItemGroup, Push) {
 			ServerPlayerInventorySync();
 
 	}
+}
 
+/**
+ * Creates a new item for a character based on asset group and name
+ *
+ * @param {Character} C - The character to create the item for
+ * @param {string} Group - The name of the asset group the item belongs to
+ * @param {string} Name - The name of the asset for the item
+ *
+ * @return {Item} A new item for character using the specified asset name, or null if the specified asset could not be
+ * 		found in the named group
+ */
+function InventoryItemCreate(C, Group, Name) {
+	var NewItemAsset = AssetGet(C.AssetFamily, Group, Name);
+	if (NewItemAsset) {
+		// Only create the new inventory item if the asset was found
+		return { Name, Group, Asset: NewItemAsset };
+	}
+	return null;
 }
 
 /**
