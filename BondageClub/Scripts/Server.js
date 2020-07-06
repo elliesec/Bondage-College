@@ -40,6 +40,11 @@ function ServerInit() {
 	ServerBeepAudio.src = "Audio/BeepAlarm.mp3";
 }
 
+/**
+ * Sets the connection status of the server and updates the login page message
+ *
+ * @param {boolean} connected - whether or not the websocket connection to the server has been established successfully
+ */
 function ServerSetConnected(connected) {
 	ServerIsConnected = connected;
 	ServerDidDisconnect = !connected;
@@ -49,11 +54,18 @@ function ServerSetConnected(connected) {
 	LoginUpdateMessage();
 }
 
+/**
+ * Callback when receiving a "connect" event on the socket - this will be called on initial connection and on successful reconnects.
+ */
 function ServerConnect() {
 	console.info("Server connection established");
 	ServerSetConnected(true);
 }
 
+/**
+ * Callback when receiving a "reconnecting" event on the socket - this is called when socket.io initiates a retry after a failed
+ * connection attempt.
+ */
 function ServerReconnecting() {
 	ServerReconnectCount++;
 	LoginUpdateMessage();

@@ -419,10 +419,18 @@ function LoginDoLogin() {
 	}
 }
 
+/**
+ * Updates the message on the login page
+ */
 function LoginUpdateMessage() {
 	LoginMessage = TextGet(LoginGetMessageKey());
 }
 
+/**
+ * Retrieves the correct message key based on the current state of the login page
+ *
+ * @return {string} The key of the message to display
+ */
 function LoginGetMessageKey() {
 	if (!ServerIsConnected) {
 		if (LoginIsRelog) {
