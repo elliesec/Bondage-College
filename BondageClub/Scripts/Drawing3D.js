@@ -6,68 +6,67 @@ let model;
 var Draw3DEnabled = false;
 
 function Draw3DLoad() {
+	// const path3d =  "/Assets/3D/fbx/items/";
+	// //list all item folders
+  // const pathitem = ["arms", "back hair", "bra", "eyes", "front hair", "head"
+	// 									,"neck", "pantie", "shoes", "skin", "skirt", "socks", "Tail"
+	// 									, "top"	];
 	init();
-	renderer.domElement.addEventListener("click", Click);
-	renderer.domElement.addEventListener("touchstart", Touch);
-	renderer.domElement.addEventListener("mousemove", MouseMove);
-	renderer.domElement.addEventListener("mouseleave", LoseFocus);
-	renderer.domElement.addEventListener("keydown", Draw3DKeyDown);
-	document.body.addEventListener("keydown", Draw3DKeyDown);
-	document.body.appendChild(renderer.domElement);
+	MainCanvas.canvas.appendChild(renderer.domElement);
 }
 
 function Draw3DKeyDown(event) {
-	var KeyCode = event.keyCode || event.which;
-	if ((KeyCode == 51) && (CurrentScreen == "MainHall") && (CurrentCharacter == null)) Draw3DEnable(!Draw3DEnabled);
-	if ((KeyCode == 37) && Draw3DEnabled) model.rotation.y -= 0.1;
-	if ((KeyCode == 39) && Draw3DEnabled) model.rotation.y += 0.1;
-	if ((KeyCode == 38) && Draw3DEnabled) model.rotation.x -= 0.1;
-	if ((KeyCode == 40) && Draw3DEnabled) model.rotation.x += 0.1;
+	if ((KeyPress == 51) && (CurrentScreen == "MainHall") && (CurrentCharacter == null)) Draw3DEnable(!Draw3DEnabled);
+	if ((KeyPress == 37) && Draw3DEnabled) model.rotation.y -= 0.1;
+	if ((KeyPress == 39) && Draw3DEnabled) model.rotation.y += 0.1;
+	if ((KeyPress == 38) && Draw3DEnabled) model.rotation.x -= 0.1;
+	if ((KeyPress == 40) && Draw3DEnabled) model.rotation.x += 0.1;
 }
 
 function init(){
 	scene = new THREE.Scene();
 	camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight,1, 1000);
-
-
-
-	let light = new THREE.DirectionalLight( 0xffffff );
-	light.position.set( 0, 2000, 100 );
-	light.castShadow = true;
-	scene.add( light );
+// 	Google Chrome newest version.
+// Version 83.0.4103.116 Offical Build) (64-Bit)
+//
+// my fbx model is now inside the pmd folder.(maybe it was a problem, i'm not sure)
+//
+// test 1:
+// i've deleted all light section execpt the ambientLight.
+// please, change the model from Assets/3D/fbx/pmd/0intro/intro1.fbx to Assets/3D/Rin/Rin1.fbx, to see if one of them works.
+// both model work ?
+// when both models are working just fine. we know that's the second light and probably third light section is the problem.
+// when only your model works.(mmm, my model sucks ... <.<)
+//
+// test 2 :
+// i've added a second and a third light section.
+// please, change the model from Assets/3D/fbx/pmd/0intro/intro1.fbx to Assets/3D/Rin/Rin1.fbx, to see if one of them works.
+// i bet my model isn't working but i'm curious if your model works.
+// when your model works( something must be with my model.)
 
 	renderer = new THREE.WebGLRenderer({  alpha : true });
+	renderer.setPixelRatio(window.devicePixelRatio); //add
 	renderer.setSize(window.innerWidth, window.innerHeight);
 
-	//when we load an env.
-	// renderer.shadowMap.enabled = false;
-	// renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-	// renderer.shadowMapDebug = true;
+	let light = new THREE.DirectionalLight( 0xffffff, 0.5); //add
+	light.position.set( 0, 2000, 100 );//add
+	light.castShadow = true;//add
+	scene.add( light );//add
 
-	let ambientLight = new THREE.AmbientLight(0xffffff);
-	ambientLight.castShadow = true;
-	ambientLight.position.set(200,2000,200);
-	scene.add(ambientLight);
+	let light1 = new THREE.PointLight(0xffffff);
+	light1.castShadow = true;
+	scene.add(light1);
+
+	let ambientLight = new THREE.AmbientLight(0xffffff,1);
+  ambientLight.castShadow = true;
+  ambientLight.position.set(200,2000,200);
+  scene.add(ambientLight);
 
     let loader = new THREE.FBXLoader();
-    loader.load('Assets/3D/fbx/maid.fbx',
+    loader.load('Assets/3D/fbx/pmd/0intro/intro1.fbx',
 				function( object ) {
 					model = object;
-					// animation
-					// model.mixer = new THREE.AnimationMixer(object);
-					// model.mixer = object.mixer;
-					// model.root = object.mixer.getRoot();
 
-					model.castShadow = true;
-					model.reciveShadow = true;
-
-					model.traverse( function (child){
-						if (child.isMesh){
-							child.castShadow = true;
-							child.reciveShadow = true;
-						}
-					});
-					//object.scale.set(0.01, 0.01, 0.01);
 					scene.add(model);
     			},
 				undefined,
