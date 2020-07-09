@@ -13,11 +13,11 @@ var CommonCSVCache = {};
 var CutsceneStage = 0;
 var CommonBackgroundList = [
 	"Introduction", "KidnapLeague", "MaidQuarters", "MainHall", "Management", "Private", "Shibari", "MaidCafe", 
-	"HorseStable", "Nursery", "Bedroom", "PrisonHall", "Kennels",
+	"HorseStable", "Ranch", "Nursery", "Bedroom", "PrisonHall", "Kennels",
 	"BDSMRoomBlue", "BDSMRoomPurple", "BDSMRoomRed", "BondageBedChamber",
 	"CeremonialVenue", "WeddingRoom", "WeddingArch", "WeddingBeach",
 	"ParkDay", "ParkNight", "Gardens", "ParkWinter", "XmasEve", "XmasDay", "StreetNight", "SnowyStreet", "DystopianCity",
-	"IndoorPool", "OutdoorPool", "PublicBath", "Onsen", "Beach", "BeachCafe", "BeachHotel",
+	"IndoorPool", "OutdoorPool", "OutdoorPool2", "PublicBath", "Onsen", "Beach", "BeachCafe", "BeachHotel",
 	"PirateIsland", "PirateIslandNight", "ShipDeck", "CaptainCabin", "Shipwreck", 
 	"UnderwaterOne",
 	"MedinaMarket",	"SheikhPrivate", "SheikhTent",
@@ -29,7 +29,7 @@ var CommonBackgroundList = [
 	"SlumApartment", "AbandonedBuilding", "AbandonedSideRoom", "Industrial", "BackAlley", "CreepyBasement", "Cellar", "SlumCellar",
 	"VaultCorridor", "SciFiCell", "SpaceCaptainBedroom",
 	"HellEntrance", "HeavenEntrance", 
-	"BarRestaurant", "LostVages",
+	"Wagons", "Desert", "WesternStreet", "BarRestaurant", "LostVages",
 	"ChillRoom", "Boudoir", "Kitchen", "DiningRoom", "CozyLivingRoom", "TiledBathroom",
 	"RooftopParty", "PartyBasement", "CosyChalet", "BalconyNight"
 ];
