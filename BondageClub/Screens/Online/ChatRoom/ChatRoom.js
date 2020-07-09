@@ -15,6 +15,8 @@ var ChatRoomSpace = "";
 var ChatRoomSwapTarget = null;
 var ChatRoomHelpSeen = false;
 var ChatRoomAllowCharacterUpdate = true;
+var ChatRoomStruggleAssistBonus = 0;
+var ChatRoomStruggleAssistTimer = 0;
 
 // Returns TRUE if the dialog option is available
 function ChatRoomCanAddWhiteList() { return ((CurrentCharacter != null) && (CurrentCharacter.MemberNumber != null) && (Player.WhiteList.indexOf(CurrentCharacter.MemberNumber) < 0) && (Player.BlackList.indexOf(CurrentCharacter.MemberNumber) < 0)) }
@@ -34,7 +36,8 @@ function ChatRoomCanServeDrink() { return ((CurrentCharacter != null) && Current
 function ChatRoomCanGiveMoneyForOwner() { return ((ChatRoomMoneyForOwner > 0) && (CurrentCharacter != null) && (Player.Ownership != null) && (Player.Ownership.Stage == 1) && (Player.Ownership.MemberNumber == CurrentCharacter.MemberNumber)) }
 function ChatRoomPlayerIsAdmin() { return ((ChatRoomData != null && ChatRoomData.Admin != null) && (ChatRoomData.Admin.indexOf(Player.MemberNumber) >= 0)) }
 function ChatRoomCurrentCharacterIsAdmin() { return ((CurrentCharacter != null) && (ChatRoomData.Admin != null) && (ChatRoomData.Admin.indexOf(CurrentCharacter.MemberNumber) >= 0)) }
-function ChatRoomHasSwapTarget() { return ChatRoomSwapTarget != null }
+function ChatRoomHasSwapTarget() { return (ChatRoomSwapTarget != null) }
+function ChatRoomCanAssistStruggle() { return !CurrentCharacter.CanInteract() }
 
 // Creates the chat room input elements
 function ChatRoomCreateElement() {
@@ -488,6 +491,7 @@ function ChatRoomSendChat() {
 
 		}
 		else if (m.indexOf("/help") == 0) ServerSend("ChatRoomChat", { Content: "ChatRoomHelp", Type: "Action", Target: Player.MemberNumber});
+		else if (m.indexOf("/safeword") == 0) ChatRoomSafeword();
 		else if (m.indexOf("/friendlistadd ") == 0) ChatRoomListManipulation(Player.FriendList, null, msg);
 		else if (m.indexOf("/friendlistremove ") == 0) ChatRoomListManipulation(null, Player.FriendList, msg);
 		else if (m.indexOf("/ghostadd ") == 0) { ChatRoomListManipulation(Player.GhostList, null, msg); ChatRoomListManipulation(Player.BlackList, Player.WhiteList, msg); }
@@ -641,8 +645,13 @@ function ChatRoomMessage(data) {
 			while (msg.indexOf("<") > -1) msg = msg.replace("<", "&lt;");
 			while (msg.indexOf(">") > -1) msg = msg.replace(">", "&gt;");
 
-			// Hidden messages are processed separately, they are used by chat room mini-games
+			// Hidden messages are processed separately, they are used by chat room mini-games / events
 			if ((data.Type != null) && (data.Type == "Hidden")) {
+				for (var A = 1; A <= 6; A++)
+					if (msg == "StruggleAssist" + A.toString()) {
+						ChatRoomStruggleAssistTimer = CurrentTime + 60000;
+						ChatRoomStruggleAssistBonus = A;
+					}
 				if (msg == "MaidDrinkPick0") MaidQuartersOnlineDrinkPick(data.Sender, 0);
 				if (msg == "MaidDrinkPick5") MaidQuartersOnlineDrinkPick(data.Sender, 5);
 				if (msg == "MaidDrinkPick10") MaidQuartersOnlineDrinkPick(data.Sender, 10);
@@ -651,11 +660,10 @@ function ChatRoomMessage(data) {
 				if (data.Type == "Hidden") return;
 			}
 
-			// [Temporary?] Checks if the message is a notification about the user entering or leaving the room
-			var enterLeave = "";
-			if ((data.Type == "Action") && (msg.startsWith("ServerEnter")) || (msg.startsWith("ServerLeave")) || (msg.startsWith("ServerDisconnect")) || (msg.startsWith("ServerBan")) || (msg.startsWith("ServerKick"))) {
-				enterLeave = " ChatMessageEnterLeave";
-			}
+			// Checks if the message is a notification about the user entering or leaving the room
+			var MsgEnterLeave = "";
+			if ((data.Type == "Action") && (msg.startsWith("ServerEnter")) || (msg.startsWith("ServerLeave")) || (msg.startsWith("ServerDisconnect")) || (msg.startsWith("ServerBan")) || (msg.startsWith("ServerKick")))
+				MsgEnterLeave = " ChatMessageEnterLeave";
 
 			// Replace actions by the content of the dictionary
 			if (data.Type && ((data.Type == "Action") || (data.Type == "ServerMessage"))) {
@@ -710,7 +718,7 @@ function ChatRoomMessage(data) {
 									GroupName = dictionary[D].AssetGroupName;
 								}
 						}
-						else msg = msg.replace(dictionary[D].Tag, ChatRoomHTMLEntities(dictionary[D].Text));
+						else if (msg != null) msg = msg.replace(dictionary[D].Tag, ChatRoomHTMLEntities(dictionary[D].Text));
 					}
 
 					// If another player is using an item which applies an activity on the current player, apply the effect here
@@ -769,7 +777,7 @@ function ChatRoomMessage(data) {
 
 			// Adds the message and scrolls down unless the user has scrolled up
 			var div = document.createElement("div");
-			div.setAttribute('class', 'ChatMessage ChatMessage' + data.Type + enterLeave);
+			div.setAttribute('class', 'ChatMessage ChatMessage' + data.Type + MsgEnterLeave);
 			div.setAttribute('data-time', ChatRoomCurrentTime());
 			div.setAttribute('data-sender', data.Sender);
 			if (data.Type == "Emote" || data.Type == "Action" || data.Type == "Activity")
@@ -805,6 +813,7 @@ function ChatRoomSync(data) {
 						var BanList = ChatRoomConcatenateBanList(Player.ChatSettings.AutoBanBlackList, Player.ChatSettings.AutoBanGhostList);
 						if (BanList.length > 0) { 
 							data.Ban = BanList;
+							data.Limit = data.Limit.toString();
 							ServerSend("ChatRoomAdmin", { MemberNumber: Player.ID, Room: data, Action: "Update" });
 						}
 					}
@@ -1002,6 +1011,22 @@ function ChatRoomViewProfile() {
 		DialogLeave();
 		InformationSheetLoadCharacter(C);
 	}
+}
+
+// The player can assist another player to struggle out, the bonus is evasion / 2 + 1, with penalties if the player is restrained
+function ChatRoomStruggleAssist() {
+	var Dictionary = [];
+	Dictionary.push({Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber});
+	Dictionary.push({Tag: "TargetCharacter", Text: CurrentCharacter.Name, MemberNumber: CurrentCharacter.MemberNumber});
+	var Bonus = SkillGetLevelReal(Player, "Evasion") / 2 + 1;
+	if (!Player.CanInteract()) {
+		if (InventoryItemHasEffect(InventoryGet(Player, "ItemArms"), "Block", true)) Bonus = Bonus / 1.5;
+		if (InventoryItemHasEffect(InventoryGet(Player, "ItemHands"), "Block", true)) Bonus = Bonus / 1.5;
+		if (!Player.CanTalk()) Bonus = Bonus / 1.25;
+	}
+	ServerSend("ChatRoomChat", { Content: "StruggleAssist", Type: "Action", Dictionary: Dictionary} );
+    ServerSend("ChatRoomChat", { Content: "StruggleAssist" + Math.round(Bonus).toString(), Type: "Hidden", Target: CurrentCharacter.MemberNumber } );
+	DialogLeave();
 }
 
 // Sends an administrative command to the server for the chat room from the character dialog
@@ -1238,6 +1263,16 @@ function ChatRoomPayQuest(data) {
 // When a game message comes in, we forward it to the current online game being played
 function ChatRoomGameResponse(data) {
 	if (OnlineGameName == "LARP") GameLARPProcess(data);
+}
+
+// When the player activates her safeword, we swap her appearance to the state when she entered the chat room lobby
+function ChatRoomSafeword() {
+	if (ChatSearchSafewordAppearance != null) {
+		Player.Appearance = ChatSearchSafewordAppearance.slice(0);
+		CharacterRefresh(Player);
+		ChatRoomCharacterUpdate(Player);
+		ServerSend("ChatRoomChat", { Content: "ActionActivateSafeword", Type: "Action", Dictionary: [{Tag: "SourceCharacter", Text: Player.Name}] });
+	}
 }
 
 /** 
