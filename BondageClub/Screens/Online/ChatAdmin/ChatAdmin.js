@@ -1,7 +1,6 @@
 "use strict";
 var ChatAdminBackground = "Sheet";
 var ChatAdminMessage = "";
-var ChatAdminPrivate = false;
 var ChatAdminBackgroundIndex = 0;
 var ChatAdminBackgroundSelect = "";
 var ChatAdminPrivate = false;
