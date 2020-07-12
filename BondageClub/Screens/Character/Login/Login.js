@@ -10,8 +10,8 @@ var LoginThankYouList = ["Alvin", "Ayezona", "BlueEyedCat", "BlueWiner", "Bryce"
 						 "Shadow", "Sky", "Tam", "Thomas", "Trent", "William", "Xepherio"];
 var LoginThankYouNext = 0;
 var LoginSubmitted = false;
-var LoginInvalid = false;
 var LoginIsRelog = false;
+var LoginErrorMessage = "";
 //var LoginLastCT = 0;
 
 // Loads the next thank you bubble
@@ -74,9 +74,8 @@ function LoginLoad() {
 	CharacterReset(0, "Female3DCG");
 	LoginDoNextThankYou();
 	CharacterLoadCSVDialog(Player);
-	LoginSubmitted = false;
-	LoginInvalid = false;
-	LoginIsRelog = false;
+	LoginStatusReset();
+	LoginErrorMessage = "";
 	LoginUpdateMessage();
 	if (LoginCredits == null) CommonReadCSV("LoginCredits", CurrentModule, CurrentScreen, "GameCredits");
 	ActivityDictionaryLoad();
@@ -235,7 +234,6 @@ function LoginResponse(C) {
 		if ((C.Name != null) && (C.AccountName != null)) {
 
 			// Make sure we have values
-			LoginUpdateMessage();
 			if (C.Appearance == null) C.Appearance = [];
 			if (C.AssetFamily == null) C.AssetFamily = "Female3DCG";
 
@@ -351,9 +349,11 @@ function LoginResponse(C) {
 
 			}
 
-		} else LoginMessage = TextGet("ErrorLoadingCharacterData");
-	} else LoginMessage = TextGet(C);
-
+		} else {
+            LoginStatusReset("ErrorLoadingCharacterData");
+        }
+	} else LoginStatusReset(C);
+    LoginUpdateMessage();
 }
 
 // When the user clicks on the character login screen
@@ -411,16 +411,36 @@ function LoginDoLogin() {
 		var Password = ElementValue("InputPassword");
 		var letters = /^[a-zA-Z0-9]+$/;
 		if (Name.match(letters) && Password.match(letters) && (Name.length > 0) && (Name.length <= 20) && (Password.length > 0) && (Password.length <= 20)) {
-			LoginSubmitted = true;
-			LoginInvalid = false;
+		    LoginSetSubmitted();
 			ServerSend("AccountLogin", { AccountName: Name, Password: Password });
-		} else LoginInvalid = true;
-		LoginUpdateMessage();
+		} else LoginStatusReset("InvalidNamePassword");
 	}
+    LoginUpdateMessage();
+}
+
+/**
+ * Sets the state of the login page to the submitted state
+ */
+function LoginSetSubmitted() {
+    LoginSubmitted = true;
+    if (ServerIsConnected) LoginErrorMessage = "";
+}
+
+/**
+ * Resets the login submission state
+ * @param {boolean} IsRelog - whether or not we're on the relog screen
+ * @param {string} ErrorMessage - the login error message to set if the login is invalid - if not specified, will clear the login error message
+ * @returns {void} Nothing
+ */
+function LoginStatusReset(ErrorMessage, IsRelog) {
+    LoginSubmitted = false;
+    LoginIsRelog = !!IsRelog;
+    if (ErrorMessage) LoginErrorMessage = ErrorMessage;
 }
 
 /**
  * Updates the message on the login page
+ * @returns {void} Nothing
  */
 function LoginUpdateMessage() {
 	LoginMessage = TextGet(LoginGetMessageKey());
@@ -428,27 +448,16 @@ function LoginUpdateMessage() {
 
 /**
  * Retrieves the correct message key based on the current state of the login page
- *
- * @return {string} The key of the message to display
+ * @returns {string} The key of the message to display
  */
 function LoginGetMessageKey() {
-	if (!ServerIsConnected) {
-		if (LoginIsRelog) {
-			return "Disconnected";
-		} else if (ServerDidDisconnect) {
-			return "ErrorDisconnectedFromServer";
-		} else if (ServerReconnectCount >= 3) {
-			return "ErrorUnableToConnect";
-		} else {
-			return "ConnectingToServer";
-		}
-	} else {
-		if (LoginSubmitted) {
-			return "ValidatingNamePassword";
-		} else if (LoginInvalid) {
-			return "InvalidNamePassword";
-		} else {
-			return "EnterNamePassword";
-		}
-	}
+    if (LoginErrorMessage) {
+        return LoginErrorMessage;
+    } else if (!ServerIsConnected) {
+        return "ConnectingToServer";
+    } else if (LoginSubmitted) {
+        return "ValidatingNamePassword";
+    } else {
+        return LoginIsRelog ? "EnterPassword" : "EnterNamePassword";
+    }
 }

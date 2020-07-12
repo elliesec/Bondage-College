@@ -74,11 +74,10 @@ function PasswordResetClick() {
 		var Password = ElementValue("InputPassword");
 		var letters = /^[a-zA-Z0-9]+$/;
 		if (Name.match(letters) && Password.match(letters) && (Name.length > 0) && (Name.length <= 20) && (Password.length > 0) && (Password.length <= 20)) {
-			LoginSubmitted = true;
-			LoginInvalid = false;
+		    LoginSetSubmitted();
 			ServerSend("AccountLogin", { AccountName: Name, Password: Password } );
 		}
-		else LoginInvalid = true;
+		else LoginStatusReset("InvalidNamePassword");
 		LoginUpdateMessage();
 	}
 

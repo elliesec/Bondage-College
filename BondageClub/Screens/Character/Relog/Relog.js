@@ -12,8 +12,8 @@ function RelogLoad() {
 	for (var E = 0; E < Elements.length; E++)
 		Elements[E].style.display = "none";
 
-	// Clears the previous login message
-	LoginIsRelog = true;
+	// Resets login variables and sets the login message
+	LoginStatusReset(null, true);
 	LoginUpdateMessage();
 
 	// Keeps a copy of the main canvas and darkens it
@@ -62,15 +62,14 @@ function RelogKeyDown() {
 
 // Sends the relog query to the server
 function RelogSend() {
-	if (LoginMessage != TextGet("ValidatingNamePassword")) {
+	if (!LoginSubmitted) {
 		var Name = Player.AccountName;
 		var Password = ElementValue("InputPassword");
 		var letters = /^[a-zA-Z0-9]+$/;
 		if (Name.match(letters) && Password.match(letters) && (Name.length > 0) && (Name.length <= 20) && (Password.length > 0) && (Password.length <= 20)) {
-			LoginSubmitted = true;
-			LoginInvalid = false;
+		    LoginSetSubmitted();
 			ServerSend("AccountLogin", { AccountName: Name, Password: Password });
-		} else LoginInvalid = true;
+		} else LoginStatusReset("InvalidNamePassword", true);
 	}
 	LoginUpdateMessage();
 }
