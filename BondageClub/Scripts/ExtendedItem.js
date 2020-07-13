@@ -13,12 +13,14 @@
 
 /**
  * A lookup for the current pagination offset for all extended item options. Offsets are only recorded if the extended item requires
- * pagination
+ * pagination.
  * Example format:
+ * ```json
  * {
  *     "ItemArms/HempRope": 4,
  *     "ItemArms/Web": 0
  * }
+ * ```
  * @type {Object.<string, number>}
  * @constant
  */
