@@ -1,9 +1,11 @@
 "use strict";
-
 /**
  * Utility file for handling extended items
- *
+ */
+
+/**
  * @typedef {Object} ExtendedItemOption
+ * @description Defines a single extended item option
  * @property {string} Name - The name of the type - used for the preview icon and the translation key in the CSV
  * @property {number} [BondageLevel] - The required bondage skill level for this type (optional)
  * @property {number} [SelfBondageLevel] - The required self-bondage skill level for this type when using it on
