@@ -41,6 +41,6 @@ function InventoryItemMouthDildoPlugGagPublishAction(C, Option) {
 	ChatRoomPublishCustomAction(msg, true, Dictionary);
 }
 
-function InventoryItemArmsWebNpcDialog(C, Option) {
+function InventoryItemMouthDildoPlugGagNpcDialog(C, Option) {
 	C.CurrentDialog = DialogFind(C, "ItemMouthDildoPlugGag" + Option.Name, "ItemMouth");
 }
