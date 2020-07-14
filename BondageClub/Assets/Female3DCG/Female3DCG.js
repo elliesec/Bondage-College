@@ -456,7 +456,7 @@ var AssetFemale3DCG = [
 
 	{
 		Group: "Hat",
-		Priority: 46,
+		Priority: 52,
 		Default: false,
 		Clothing: true,
 		Left: 125,
@@ -781,7 +781,7 @@ var AssetFemale3DCG = [
 	{
 		Group: "HairFront",
 		ParentColor: "HairBack",
-		Priority: 44,
+		Priority: 51,
 		Left: 150,
 		Top: 50,
 		AllowNone: false,
@@ -884,7 +884,7 @@ var AssetFemale3DCG = [
 
 	{
 		Group: "Emoticon",
-		Priority: 50,
+		Priority: 53,
 		Left: 250,
 		Top: 0,
 		AllowNone: false,
