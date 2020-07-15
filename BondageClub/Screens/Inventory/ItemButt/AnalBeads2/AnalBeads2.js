@@ -81,7 +81,3 @@ function InventoryItemButtAnalBeads2SetBeads(Modifier) {
 		DialogMenuButtonBuild(C);
 	}
 }
-
-function InventoryItemButtAnalBeads2GetActivity(C) {
-	return "MasturbateItem";
-}
