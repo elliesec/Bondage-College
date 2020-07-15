@@ -1553,6 +1553,12 @@ var AssetFemale3DCG = [
 					{ Name: "Highlights", AllowColorize: false }
 				]
 			},
+			{
+				Name: "LatexButterflyLeotard", Value: 150, Priority: 23, Difficulty: 14, SelfBondage: 7, Time: 35, RemoveTime: 20, AllowLock: true, DefaultColor: "#825cb2", Hide: ["Cloth", "Bra", "ItemNipplesPiercings"], HideItem: ["ItemButtAnalBeads2", "ItemVulvaVibratingDildo", "ItemVulvaInflatableVibeDildo", "ItemVulvaClitSuctionCup"], SetPose: ["BackElbowTouch"], Effect: ["Block", "Prone"], Block: ["ItemNipples", "ItemNipplesPiercings", "ItemVulva", "ItemVulvaPiercings", "ItemButt", "ItemPelvis", "ItemTorso", "ItemBreast", "ItemHands"], SelfUnlock: false, Layer: [
+					{ Name: "Latex", AllowColorize: true },
+					{ Name: "Highlights", AllowColorize: false }
+				]
+			},
 			AssetSpankingToys
 		],
 		Color: ["Default"]
