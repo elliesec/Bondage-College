@@ -750,12 +750,9 @@ function ChatRoomMessage(data) {
 			}
 
 			// Outputs the sexual activities text and runs the activity if the player is targeted
-			if ((data.Type != null) && ((data.Type === "Activity") || data.Type === "Action")) {
-				if (data.Type === "Activity") {
-					// If the data is an Action we already created the message
-					// Creates the output message using the activity dictionary and tags, keep some values to calculate the activity effects on the player
-					msg = "(" + ActivityDictionaryText(msg) + ")";
-				}
+			if ((data.Type != null) && (data.Type === "Activity")) {
+				// Creates the output message using the activity dictionary and tags, keep some values to calculate the activity effects on the player
+				msg = "(" + ActivityDictionaryText(msg) + ")";
 				var TargetMemberNumber = null;
 				var ActivityName = null;
 				var ActivityGroup = null;

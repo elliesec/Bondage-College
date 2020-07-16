@@ -75,6 +75,14 @@ function InventoryItemButtAnalBeads2SetBeads(Modifier) {
 		ChatRoomPublishCustomAction("AnalBeads2Set" + (Modifier > 0 ? "UpTo" + beadsNum : "Down"), true, Dictionary);
 	}
 
+	if (C.ID == Player.ID) {
+		// The Player pulls beads from her own butt
+		var A = AssetGet(C.AssetFamily, "ItemButt", "AnalBeads2");
+		for (var i = beadsOld - beadsNum; i > 0; i--) {
+			ActivityArousalItem(C, C, A);
+		}
+	}
+
 	// Rebuilds the inventory menu
 	if (DialogInventory != null) {
 		DialogFocusItem = null;
