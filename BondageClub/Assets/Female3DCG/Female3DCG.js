@@ -1313,7 +1313,6 @@ var AssetFemale3DCG = [
 			{ Name: "NippleWeightClamps", Value: 35, Time: 10, Prerequisite: "AccessBreast", ExpressionTrigger: [{ Name: "Closed", Group: "Eyes", Timer: 5 }, { Name: "Angry", Group: "Eyebrows", Timer: 10 }] },
 			{ Name: "BellClamps", Value: 20, Time: 10, Prerequisite: "AccessBreast", ExpressionTrigger: [{ Name: "Closed", Group: "Eyes", Timer: 5 }, { Name: "Angry", Group: "Eyebrows", Timer: 10 }] },
 			{ Name: "ShockClamps", Value: 60, Time: 10, Extended: true, AlwaysExtend: true, Prerequisite: "AccessBreast", ExpressionTrigger: [{ Name: "Closed", Group: "Eyes", Timer: 5 }, { Name: "Angry", Group: "Eyebrows", Timer: 10 }] },
-			{ Name: "LoversVibratorRemote", Value: 75, Wear: false, LoverOnly: true, BuyGroup: "LoversVibratorRemote", Prerequisite: ["RemotesAllowed"], Effect: ["Remote"] },
 			AssetSpankingToys
 		],
 		Color: ["Default"]
