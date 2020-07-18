@@ -936,12 +936,11 @@ function ChatRoomSyncArousal(data) {
 		}
 }
 
-// Return TRUE if we can allow to change the item properties, when this item is owner/lover locked
 /**
  * Determines whether or not an owner/lover exclusive item can be modified by a non-owner/lover
- * @param {object} Data - The item data received from the server
+ * @param {object} Data - The item data received from the server which defines the modification being made to the item
  * @param Item - The currently equipped item
- * @return {boolean} - whether or not the modification is allowed
+ * @return {boolean} - Returns true if the defined modification is permitted, false otherwise.
  */
 function ChatRoomAllowChangeLockedItem(Data, Item) {
 	// Slave collars cannot be modified
