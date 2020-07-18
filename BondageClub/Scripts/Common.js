@@ -17,7 +17,7 @@ var CutsceneStage = 0;
  * @type {string[]}
  */
 var CommonBackgroundList = [
-	"Introduction", "KidnapLeague", "MaidQuarters", "MainHall", "Management", "Private", "Shibari", "MaidCafe", 
+	"Introduction", "KidnapLeague", "MaidQuarters", "MainHall", "Management", "Private", "Shop", "Dressing", "Shibari", "MaidCafe",
 	"HorseStable", "Ranch", "Nursery", "Bedroom", "PrisonHall", "Kennels",
 	"BDSMRoomBlue", "BDSMRoomPurple", "BDSMRoomRed", "BondageBedChamber",
 	"CeremonialVenue", "WeddingRoom", "WeddingArch", "WeddingBeach",
