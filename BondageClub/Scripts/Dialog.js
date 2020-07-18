@@ -469,6 +469,19 @@ function DialogAlwaysAllowRestraint() {
 	return (CurrentScreen == "Photographic");
 }
 
+function DialogCanUseRemote(C, Item) {
+	// Can't use remotes if there is no item, the item doesn't have the "Egged" effect, or the player cannot interact
+	// with remotes in the first place
+	if (!Item || !InventoryItemHasEffect(Item, "Egged") || !Player.CanInteract()) return false;
+	// Can't use remotes on self if the player is owned and their remotes have been blocked by an owner rule
+	if (C.ID === 0 && Player.Ownership && Player.Ownership.Stage === 1 && LogQuery("BlockRemoteSelf", "OwnerRule")) return false;
+	if (Item.Asset.LoverOnly) {
+		return C.IsLoverOfPlayer() && Item.Property && Item.Property.ItemMemberNumber === Player.MemberNumber && InventoryAvailable(Player, "LoversVibratorRemote", "ItemVulva");
+	} else {
+		return InventoryAvailable(Player, "VibratorRemote", "ItemVulva")
+	}
+}
+
 /**
  * Build the buttons in the top menu
  * @param {Character} C - The character for whom the dialog is prepared
@@ -503,8 +516,7 @@ function DialogMenuButtonBuild(C) {
 		if ((Item != null) && !IsItemLocked && !InventoryItemHasEffect(Item, "Mounted", true) && !InventoryItemHasEffect(Item, "Enclose", true) && Player.CanInteract() && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked) DialogMenuButton.push("Remove");
 		if ((Item != null) && !IsItemLocked && InventoryItemHasEffect(Item, "Mounted", true) && Player.CanInteract() && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked) DialogMenuButton.push("Dismount");
 		if ((Item != null) && !IsItemLocked && InventoryItemHasEffect(Item, "Enclose", true) && Player.CanInteract() && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked) DialogMenuButton.push("Escape");
-		if ((Item != null) && InventoryItemHasEffect(Item, "Egged") && !Item.Asset.LoverOnly && InventoryAvailable(Player, "VibratorRemote", "ItemVulva") && Player.CanInteract() && !(LogQuery("BlockRemoteSelf", "OwnerRule") &&(Player.Ownership != null && Player.Ownership.Stage == 1) && (C.ID == 0))) DialogMenuButton.push("Remote");
-		if ((Item != null) && InventoryItemHasEffect(Item, "Egged") && Item.Asset.LoverOnly && InventoryAvailable(Player, "LoversVibratorRemote", "ItemVulva") && C.IsLoverOfPlayer() && Item.Property && Item.Property.ItemMemberNumber === Player.MemberNumber && Player.CanInteract() && !(LogQuery("BlockRemoteSelf", "OwnerRule") && (C.ID == 0))) DialogMenuButton.push("Remote");
+		if (DialogCanUseRemote(C, Item)) DialogMenuButton.push("Remote");
 		if ((Item != null) && Item.Asset.Extended && ((Player.CanInteract()) || DialogAlwaysAllowRestraint() || Item.Asset.AlwaysInteract) && (!IsGroupBlocked || Item.Asset.AlwaysExtend) && (!Item.Asset.OwnerOnly || (C.IsOwnedByPlayer())) && (!Item.Asset.LoverOnly || (C.IsLoverOfPlayer()))) DialogMenuButton.push("Use");
 		if ((Player.CanInteract()) || DialogAlwaysAllowRestraint()) DialogMenuButton.push("ColorPick");
 
@@ -774,7 +786,7 @@ function DialogMenuButtonClick() {
 		if ((MouseX >= 1885 - I * 110) && (MouseX <= 1975 - I * 110)) {
 
 			// Gets the current character and item
-			var C = (Player.FocusGroup != null) ? Player : CurrentCharacter;
+			var C = CharacterGetCurrent();
 			var Item = InventoryGet(C, C.FocusGroup.Name);
 
 			// Exit Icon - Go back to the character dialog
@@ -798,9 +810,8 @@ function DialogMenuButtonClick() {
 			}
 
 			// Remote Icon - Pops the item extension
-			else if ((DialogMenuButton[I] == "Remote") && (Item != null)) {
-				if (InventoryItemHasEffect(Item, "Egged") && InventoryAvailable(Player, "VibratorRemote", "ItemVulva"))
-					DialogExtendItem(Item);
+			else if ((DialogMenuButton[I] == "Remote") && DialogCanUseRemote(C, Item)) {
+				DialogExtendItem(Item);
 				return;
 			}
 
@@ -1036,9 +1047,9 @@ function DialogItemClick(ClickItem) {
 
 						// The vibrating egg remote can open the vibrating egg's extended dialog
 						var Item = InventoryGet(C, C.FocusGroup.Name);
-						if ((ClickItem.Asset.Name == "VibratorRemote" && InventoryItemHasEffect(Item, "Egged") && !Item.Asset.LoverOnly) ||
-							(ClickItem.Asset.Name == "LoversVibratorRemote" && InventoryItemHasEffect(Item, "Egged") && Item.Asset.LoverOnly && C.IsLoverOfPlayer() && Item.Property && Item.Property.ItemMemberNumber === Player.MemberNumber)
-						) DialogExtendItem(InventoryGet(C, C.FocusGroup.Name));
+						if ((ClickItem.Asset.Name === "VibratorRemote" || ClickItem.Asset.Name === "LoversVibratorRemote") && DialogCanUseRemote(C, CurrentItem)) {
+							DialogExtendItem(InventoryGet(C, C.FocusGroup.Name));
+						}
 
 						// Runs the activity arousal process if activated, & publishes the item action text to the chatroom
 						DialogPublishAction(C, ClickItem);
