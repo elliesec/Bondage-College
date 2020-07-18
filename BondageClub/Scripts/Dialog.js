@@ -469,6 +469,12 @@ function DialogAlwaysAllowRestraint() {
 	return (CurrentScreen == "Photographic");
 }
 
+/**
+ * Checks whether the player can use a remote on the given character and item
+ * @param {Character} C - the character that the item is equipped on
+ * @param {Item} Item - the item to check for remote usage against
+ * @return {boolean} - Returns true if the player is able to use a remote for the given character and item. Returns false otherwise.
+ */
 function DialogCanUseRemote(C, Item) {
 	// Can't use remotes if there is no item, the item doesn't have the "Egged" effect, or the player cannot interact
 	// with remotes in the first place
@@ -480,7 +486,7 @@ function DialogCanUseRemote(C, Item) {
 		return C.IsLoverOfPlayer() && Item.Property && Item.Property.ItemMemberNumber === Player.MemberNumber && InventoryAvailable(Player, "LoversVibratorRemote", "ItemVulva");
 	} else {
 		// Otherwise, the player must have a vibrator remote
-		return InventoryAvailable(Player, "VibratorRemote", "ItemVulva")
+		return InventoryAvailable(Player, "VibratorRemote", "ItemVulva");
 	}
 }
 
