@@ -476,8 +476,10 @@ function DialogCanUseRemote(C, Item) {
 	// Can't use remotes on self if the player is owned and their remotes have been blocked by an owner rule
 	if (C.ID === 0 && Player.Ownership && Player.Ownership.Stage === 1 && LogQuery("BlockRemoteSelf", "OwnerRule")) return false;
 	if (Item.Asset.LoverOnly) {
+		// If the item is lover-only, the player must have the appropriate remote, be a lover of the character, and match the member number on the item
 		return C.IsLoverOfPlayer() && Item.Property && Item.Property.ItemMemberNumber === Player.MemberNumber && InventoryAvailable(Player, "LoversVibratorRemote", "ItemVulva");
 	} else {
+		// Otherwise, the player must have a vibrator remote
 		return InventoryAvailable(Player, "VibratorRemote", "ItemVulva")
 	}
 }

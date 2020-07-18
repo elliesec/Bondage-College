@@ -52,31 +52,27 @@ function InventoryItemVulvaLoversVibratorLoad() {
 }
 
 function InventoryItemVulvaLoversVibratorDraw() {
-	var Asset = DialogFocusItem.Asset;
-	var Property = DialogFocusItem.Property;
+	var { Asset, Property } = DialogFocusItem;
 	var Description = Asset.Description;
 	var AssetPath = "Assets/" + Asset.Group.Family + "/" + Asset.Group.Name + "/Preview/" + Asset.Name + ".png";
 
-	DrawRect(1387, 100, 225, 275, "white");
+	var X = 1389;
+	var Y = 102;
 	if (DialogFocusItem.Property.Intensity >= 0) {
-		DrawImageResize(AssetPath, 1389 + Math.floor(Math.random() * 3) - 1, 102 + Math.floor(Math.random() * 3) - 1, 221,
-			221,
-		);
-	} else {
-		DrawImageResize(AssetPath, 1389, 102, 221, 221);
+		X += Math.floor(Math.random() * 3) - 1;
+		Y += Math.floor(Math.random() * 3) - 1;
 	}
-	DrawTextFit(Description, 1500, 350, 221, "black");
-	DrawText(
-		DialogFind(Player, "ItemMemberNumber").replace("Item", Description) + " " + Property.ItemMemberNumber,
-		1500, 450, "white", "gray",
-	);
-	DrawText(
-		DialogFind(Player, "Intensity" + Property.Intensity.toString()).replace("Item", Description),
-		1500, 525, "white", "gray",
-	);
+	DrawRect(1387, 100, 225, 275, "white");
+	DrawImageResize(AssetPath, X, Y, 221, 221);
 
-	let Y = 525;
+	DrawTextFit(Description, 1500, 350, 221, "black");
+	var ItemMemberNumber = DialogFind(Player, "ItemMemberNumber").replace("Item", Description);
+	DrawText(ItemMemberNumber + " " + Property.ItemMemberNumber, 1500, 450, "white", "gray");
+	var ItemIntensity = DialogFind(Player, "Intensity" + Property.Intensity.toString()).replace("Item", Description);
+	DrawText(ItemIntensity, 1500, 525, "white", "gray");
+
 	InventoryItemVulvaLoversVibratorOptions.forEach((OptionGroup) => {
+		var Y = 525;
 		OptionGroup.forEach((Option, I) => {
 			var X = 1175 + (I % 3) * 225;
 			if (I % 3 === 0) {
@@ -91,7 +87,7 @@ function InventoryItemVulvaLoversVibratorDraw() {
 
 function InventoryItemVulvaLoversVibratorClick() {
 	// Exit Button
-	if ((MouseX >= 1885) && (MouseX <= 1975) && (MouseY >= 25) && (MouseY <= 110)) {
+	if (CommonIsClickAt(1885, 25, 90, 85)) {
 		DialogFocusItem = null;
 	}
 
@@ -102,7 +98,7 @@ function InventoryItemVulvaLoversVibratorClick() {
 			if (I % 3 === 0) {
 				Y += 75;
 			}
-			if (MouseX >= X && MouseX <= X + 200 && MouseY >= Y && MouseY <= Y + 55) {
+			if (CommonIsClickAt(X, Y, 200, 55)) {
 				if (Option.Property.Mode !== DialogFocusItem.Property.Mode) {
 					InventoryItemVulvaLoversVibratorOptionSetMode(Option);
 				}
