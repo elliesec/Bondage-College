@@ -230,7 +230,7 @@ function ChatRoomDrawCharacter(DoClick) {
 }
 
 // Sends the request to the server to check relationships
-function ChatRoomCheckRelationships(){
+function ChatRoomCheckRelationships() {
 	var C = (Player.FocusGroup != null) ? Player : CurrentCharacter;
 	if (C.ID != 0) ServerSend("AccountOwnership", { MemberNumber: C.MemberNumber });
 	if (C.ID != 0) ServerSend("AccountLovership", { MemberNumber: C.MemberNumber });
@@ -733,7 +733,7 @@ function ChatRoomMessage(data) {
 
 			// Prepares the HTML tags
 			if (data.Type != null) {
-				if (data.Type == "Chat"){
+				if (data.Type == "Chat") {
 					if (PreferenceIsPlayerInSensDep() && SenderCharacter.MemberNumber != Player.MemberNumber) msg = '<span class="ChatMessageName" style="color:' + (SenderCharacter.LabelColor || 'gray') + ';">' + SpeechGarble(SenderCharacter, SenderCharacter.Name) + ':</span> ' + SpeechGarble(SenderCharacter, msg);
 					else if (Player.IsDeaf()) msg = '<span class="ChatMessageName" style="color:' + (SenderCharacter.LabelColor || 'gray') + ';">' + SenderCharacter.Name + ':</span> ' + SpeechGarble(SenderCharacter, msg);
 					else msg = '<span class="ChatMessageName" style="color:' + (SenderCharacter.LabelColor || 'gray') + ';">' + SenderCharacter.Name + ':</span> ' + SpeechGarble(SenderCharacter, msg);
@@ -936,13 +936,24 @@ function ChatRoomSyncArousal(data) {
 		}
 }
 
-// Return TRUE if we can allow to change the item properties, when this item is owner/lover locked
+/**
+ * Determines whether or not an owner/lover exclusive item can be modified by a non-owner/lover
+ * @param {object} Data - The item data received from the server which defines the modification being made to the item
+ * @param Item - The currently equipped item
+ * @return {boolean} - Returns true if the defined modification is permitted, false otherwise.
+ */
 function ChatRoomAllowChangeLockedItem(Data, Item) {
+	// Slave collars cannot be modified
 	if (Item.Asset.Name == "SlaveCollar") return false;
+	// Items with AllowRemoveExclusive can always be removed
+	if (Data.Item.Name == null && Item.Asset.AllowRemoveExclusive) return true;
+	// Otherwise non-owners/lovers cannot remove/change the item
 	if ((Data.Item.Name == null) || (Data.Item.Name == "") || (Data.Item.Name != Item.Asset.Name)) return false;
+	// Lock member numbers cannot be modified
 	if ((Data.Item.Property == null) || (Data.Item.Property.LockedBy == null) || (Data.Item.Property.LockedBy != Item.Property.LockedBy) || (Data.Item.Property.LockMemberNumber == null) || (Data.Item.Property.LockMemberNumber != Item.Property.LockMemberNumber)) return false;
 	return true;
 }
+
 
 // Updates a single character item in the chatroom
 function ChatRoomSyncItem(data) {
@@ -1265,13 +1276,20 @@ function ChatRoomGameResponse(data) {
 	if (OnlineGameName == "LARP") GameLARPProcess(data);
 }
 
-// When the player activates her safeword, we swap her appearance to the state when she entered the chat room lobby
+// When the player activates her safeword, we swap her appearance to the state when she entered the chat room lobby, minimum permission becomes whitelist and up
 function ChatRoomSafeword() {
 	if (ChatSearchSafewordAppearance != null) {
 		Player.Appearance = ChatSearchSafewordAppearance.slice(0);
+		CharacterSetActivePose(Player, ChatSearchSafewordPose);
 		CharacterRefresh(Player);
 		ChatRoomCharacterUpdate(Player);
 		ServerSend("ChatRoomChat", { Content: "ActionActivateSafeword", Type: "Action", Dictionary: [{Tag: "SourceCharacter", Text: Player.Name}] });
+		if (Player.ItemPermission < 3) {
+			Player.ItemPermission = 3;
+			ServerSend("AccountUpdate", { ItemPermission: Player.ItemPermission });
+			CommonWait(1000);
+			ChatRoomCharacterUpdate(Player);
+		}
 	}
 }
 
