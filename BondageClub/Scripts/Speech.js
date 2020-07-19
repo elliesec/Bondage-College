@@ -17,7 +17,7 @@ var SpeechGagLevelLookup = {
 	GagEasy: 3,
 	GagLight: 2,
 	GagVeryLight: 1,
-}
+};
 
 /**
  * Analyzes a phrase to determine if it is a full emote. A full emote is a phrase wrapped in "()"
