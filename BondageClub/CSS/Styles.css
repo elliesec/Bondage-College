@@ -128,3 +128,7 @@ TextArea {
 .FriendListLinkColumn:Hover{
 	color: cyan !important;
 }
+
+.select{
+	position: relative;
+}

@@ -69,6 +69,25 @@ function ElementCreateInput(ID, Type, Value, MaxLength) {
 	}
 }
 
+function ElementCreateDropdown(ID, Options, SelectMultiple, Size, ClickEventListener) {
+	if (document.getElementById(ID) == null) {
+		var Select = document.createElement("select");
+		Select.setAttribute("ID", ID);
+		Select.setAttribute("Name", ID);
+		Select.setAttribute("class", "Select")
+		Select.setAttribute("size", Size.toString());
+		for (var i = 0; i < Options.length; i++) {
+			var Option = document.createElement("option");
+			Option.setAttribute("value", Options[i]);
+			Option.innerHTML = Options[i];
+			Select.appendChild(Option);
+		}
+		if (SelectMultiple) Select.setAttribute("Multiple", "");
+		if (ClickEventListener != null) Select.addEventListener("change", ClickEventListener)
+		document.body.appendChild(Select);
+	}
+}
+
 /** 
  * Creates a new div element in the main document. Does not create a new element if there is already an existing one with the same ID
  * @param {string} ID - The id of the div tag to create.
