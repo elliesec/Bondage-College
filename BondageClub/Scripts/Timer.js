@@ -7,7 +7,11 @@ var TimerLastArousalProgress = 0;
 var TimerLastArousalProgressCount = 0;
 var TimerLastArousalDecay = 0;
 
-// Returns a string of the current remaining timer
+/**
+ * Returns a string of the time remaining on a given timer
+ * @param {number} T - Time to convert to a string in ms 
+ * @returns {string} - The time string in the DD:HH:MM:SS format (Days and hours not displayed if it contains none)
+ */
 function TimerToString(T) {
 	var D = Math.floor(T / 86400000).toString();
 	var H = Math.floor((T % 86400000) / 3600000).toString();
@@ -19,7 +23,11 @@ function TimerToString(T) {
 	return ((D != "0") ? D + ":" : "") + (((D != "0") || (H != "00")) ? H + ":" : "") + M + ":" + S;
 }
 
-// Returns a string of the current remaining timer
+/**
+ * Returns a string of the time remaining on a given timer (Hours and minutes only)
+ * @param {number} T - Time to convert to a string in ms 
+ * @returns {string} - The time string in the HH:MM format
+ */
 function TimerHourToString(T) {
 	var M = T.getMinutes().toString();
 	var H = T.getHours().toString();
@@ -27,8 +35,12 @@ function TimerHourToString(T) {
 	return H + ":" + M;
 }
 
-// Check if we must change or remove items from a player or an NPC
+/**
+ * Check if we must change or remove items from characters. (Expressions, items being removed, locks, etc.)
+ * @returns {void} - Nothing 
+ */
 function TimerInventoryChangeOrRemove() {
+
 	// Cycles through all items items for all offline characters (player + NPC)
 	for (var C = 0; C < Character.length; C++)
 		if ((Character[C].ID == 0) || (Character[C].MemberNumber == null))
@@ -91,7 +103,13 @@ function TimerInventoryChange(C, A) {
 	else ServerPrivateCharacterSync();
 }
 
-// Sets a remove timer in seconds for a specific item part / body part
+/**
+ * Sets a remove timer in seconds for a specific item part / body part
+ * @param {Character} C - Character for which we are removing an item
+ * @param {string} AssetGroup - Group targeted by the removal
+ * @param {number} Timer - Seconds it takes to remove the item
+ * @returns {void} - Nothing 
+ */
 function TimerInventoryRemoveSet(C, AssetGroup, Timer) {
 	for (var E = 0; E < C.Appearance.length; E++)
 		if (C.Appearance[E].Asset.Group.Name == AssetGroup) {
@@ -100,10 +118,13 @@ function TimerInventoryRemoveSet(C, AssetGroup, Timer) {
 			break;
 		}
 	CharacterRefresh(C);
-	ChatRoomCharacterUpdate(C);
+	ChatRoomCharacterItemUpdate(C, AssetGroup);
 }
 
-// On a random chance, the private room owner can beep the player anywhere in the club, she has 2 minutes to get back to her
+/**
+ * Random trigger for the NPC owner in a private room. If possible, when triggered it will beep the player anywhere in the club, the player has 2 minutes to get back to her
+ * @returns {void} - Nothing
+ */
 function TimerPrivateOwnerBeep() {
 	if ((Player.Owner != "") && (Player.Ownership == null) && (CurrentScreen != "Private") && (CurrentScreen != "ChatRoom") && (CurrentScreen != "InformationSheet") && (CurrentScreen != "FriendList") && (CurrentScreen != "Cell") && PrivateOwnerInRoom())
 		if ((Math.floor(Math.random() * 500) == 1) && !LogQuery("OwnerBeepActive", "PrivateRoom") && !LogQuery("OwnerBeepTimer", "PrivateRoom") && !LogQuery("LockOutOfPrivateRoom", "Rule") && !LogQuery("Committed", "Asylum")) {
@@ -115,7 +136,12 @@ function TimerPrivateOwnerBeep() {
 		}
 }
 
-// Main timer process
+
+/**
+ * Main timer process
+ * @param {number} Timestamp - Time in ms of the time when the function was called
+ * @returns {void} - Nothing 
+ */
 function TimerProcess(Timestamp) {
 
 	// Increments the time from the last frame
@@ -216,7 +242,11 @@ function TimerProcess(Timestamp) {
 
 }
 
-// Convert milliseconds to written time
+/**
+ * Returns a string of the time remaining on a given timer (Hours, minutes, seconds)
+ * @param {number} s - Time to convert to a string in ms
+ * @Returns -  The time string in the HH:MM:SS format
+ */
 function TimermsToTime(s) {
 
 	// Pad to 2 or 3 digits, default is 2
@@ -234,4 +264,4 @@ function TimermsToTime(s) {
 	var hrs = (s - mins) / 60;
 	return pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
 	
-  }
+}
