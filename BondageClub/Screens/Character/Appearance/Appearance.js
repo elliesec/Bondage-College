@@ -389,8 +389,7 @@ function CharacterAppearanceBuildCanvas(C) {
 		if (!A.Visible || !CharacterAppearanceVisible(C, A.Name, AG.Name)) return;
 
 		// Check if we need to draw a different variation (from type property)
-		var Type = "";
-		if ((Property != null) && (Property.Type != null)) Type = Property.Type;
+		var Type = (Property && Property.Type) || "";
 
 		// If the variation is not allowed for this layer, do nothing
 		if (Layer.AllowTypes && !Layer.AllowTypes.includes(Type)) return;
@@ -481,8 +480,11 @@ function CharacterAppearanceBuildCanvas(C) {
 			var CountKey = AG.Name + "/" + A.Name;
 			LayerCounts[CountKey] = (LayerCounts[CountKey] || 0) + 1;
 
-			// If we just drew the last layer for this asset, draw the lock too (never colorized)
-			if (A.Layer.length === LayerCounts[CountKey]) {
+			// How many layers should be drawn for the asset
+			var DrawableLayerCount = A.Layer.filter(AL => !AL.AllowTypes || AL.AllowTypes.includes(Type)).length;
+
+			// If we just drew the last drawable layer for this asset, draw the lock too (never colorized)
+			if (DrawableLayerCount === LayerCounts[CountKey]) {
 				DrawImageCanvas("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + Type + "_Lock.png", C.Canvas.getContext("2d"), X, Y);
 				DrawImageCanvas("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + (AG.DrawingBlink ? "Closed/" : Expression) + A.Name + Type + "_Lock.png", C.CanvasBlink.getContext("2d"), X, Y);
 			}
