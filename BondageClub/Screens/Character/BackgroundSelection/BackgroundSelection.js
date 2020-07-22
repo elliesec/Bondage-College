@@ -43,8 +43,8 @@ function BackgroundSelectionLoad() {
 	BackgroundSelectionView = BackgroundSelectionAll.slice(0);
 	ElementCreateInput("InputBackground", "text", "", "30");
 	document.getElementById("InputBackground").oninput = BackgroundSelectionInputChanged;
-	ElementCreateDropdown("TagDropDown", BackgroundsTagList, false, 1, function () {
-		var i = document.getElementById("TagDropDown").options.selectedIndex;
+	ElementCreateDropdown("TagDropDown", BackgroundsTagList, function () {
+		var i = document.getElementById("TagDropDown-select").options.selectedIndex;
 		if (i != 0) {
 			BackgroundSelectionAll = BackgroundsList.filter(bg => bg.Public)
 				.filter(bg => bg.Tag.indexOf(BackgroundsTagList[i]) >= 0)
@@ -89,7 +89,7 @@ function BackgroundSelectionInputChanged() {
  */
 function BackgroundSelectionRun() {
 	DrawText(TextGet("Selection").replace("SelectedBackground", BackgroundSelectionSelectName), 300, 65, "White", "Black");
-	ElementPositionFix("TagDropDown", 36, 575, 35, 300, 60);
+	ElementPositionFix("TagDropDown", 36, 575, 35, 300, 65);
 	DrawText(TextGet("Filter").replace("Filtered", BackgroundSelectionView.length).replace("Total", BackgroundSelectionAll.length), 1000, 65, "White", "Black");
 
 	DrawButton(1585, 25, 90, 90, "", "White", "Icons/Prev.png", TextGet("Prev"));

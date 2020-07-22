@@ -69,24 +69,93 @@ function ElementCreateInput(ID, Type, Value, MaxLength) {
 	}
 }
 
-function ElementCreateDropdown(ID, Options, SelectMultiple, Size, ClickEventListener) {
+function ElementCreateDropdown(ID, Options, ClickEventListener) {
 	if (document.getElementById(ID) == null) {
+		var CustomSelect = document.createElement("DIV");
+		CustomSelect.setAttribute("class", "custom-select");
+		CustomSelect.setAttribute("ID", ID);
 		var Select = document.createElement("select");
-		Select.setAttribute("ID", ID);
-		Select.setAttribute("Name", ID);
-		Select.setAttribute("class", "Select")
-		Select.setAttribute("size", Size.toString());
+		Select.setAttribute("Name", ID + "-select");
+		Select.setAttribute("ID", ID + "-select");
+		var b = document.createElement("DIV");
+		b.setAttribute("class", "select-items select-hide");
 		for (var i = 0; i < Options.length; i++) {
 			var Option = document.createElement("option");
+			var c = document.createElement("DIV");
+
 			Option.setAttribute("value", Options[i]);
 			Option.innerHTML = Options[i];
+			c.innerHTML = Options[i];
+			c.addEventListener("click", function (e) {
+				/*when an item is clicked, update the original select box,
+				and the selected item:*/
+				var y, i, k, s, h, sl, yl;
+				s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+				sl = s.length;
+				h = this.parentNode.previousSibling;
+				for (i = 0; i < sl; i++) {
+					if (s.options[i].innerHTML == this.innerHTML) {
+						s.selectedIndex = i;
+						h.innerHTML = this.innerHTML;
+						y = this.parentNode.getElementsByClassName("same-as-selected");
+						yl = y.length;
+						for (k = 0; k < yl; k++) {
+							y[k].removeAttribute("class");
+						}
+						this.setAttribute("class", "same-as-selected");
+						break;
+					}
+				}
+				h.click();
+				s.dispatchEvent(new Event("change"));
+			});
+			// if (ClickEventListener != null) Option.addEventListener("click", ClickEventListener)
 			Select.appendChild(Option);
+			b.appendChild(c);
 		}
-		if (SelectMultiple) Select.setAttribute("Multiple", "");
+		var a = document.createElement("DIV");
+		a.setAttribute("class", "select-selected");
+		a.innerHTML = Select.options[0].innerHTML;
+		a.addEventListener("click", function (e) {
+			/*when the select box is clicked, close any other select boxes,
+			and open/close the current select box:*/
+			e.stopPropagation();
+			ElementCloseAllSelect(this);
+			this.nextSibling.classList.toggle("select-hide");
+			this.classList.toggle("select-arrow-active");
+		});
 		if (ClickEventListener != null) Select.addEventListener("change", ClickEventListener)
-		document.body.appendChild(Select);
+		CustomSelect.appendChild(Select);
+		CustomSelect.appendChild(a);
+		CustomSelect.appendChild(b);
+		document.body.appendChild(CustomSelect);
+		document.addEventListener("click", ElementCloseAllSelect);
 	}
 }
+
+function ElementCloseAllSelect(elmnt) {
+	/*a function that will close all select boxes in the document,
+	except the current select box:*/
+	var x, y, i, xl, yl, arrNo = [];
+	x = document.getElementsByClassName("select-items");
+	y = document.getElementsByClassName("select-selected");
+	xl = x.length;
+	yl = y.length;
+	for (i = 0; i < yl; i++) {
+		if (elmnt == y[i]) {
+			arrNo.push(i)
+		} else {
+			y[i].classList.remove("select-arrow-active");
+		}
+	}
+	for (i = 0; i < xl; i++) {
+		if (arrNo.indexOf(i)) {
+			x[i].classList.add("select-hide");
+		}
+	}
+}
+
+
 
 /** 
  * Creates a new div element in the main document. Does not create a new element if there is already an existing one with the same ID
@@ -146,7 +215,16 @@ function ElementPosition(ElementID, X, Y, W, H) {
 	}
 
 	// Sets the element style
-	document.getElementById(ElementID).setAttribute("style", "font-size:" + Font + "px; font-family:Arial; position:absolute; padding-left:10px; left:" + Left + "px; top:" + Top + "px; width:" + Width + "px; height:" + Height + "px;");
+	var E = document.getElementById(ElementID);
+	Object.assign(E.style, {
+		fontSize: Font + "px",
+		fontFamily: "Arial",
+		position: "absolute",
+		left: Left + "px",
+		top: Top + "px",
+		width: Width + "px",
+		height: Height + "px",
+	});
 
 }
 
@@ -181,7 +259,16 @@ function ElementPositionFix(ElementID, Font, X, Y, W, H) {
 	}
 
 	// Sets the element style
-	document.getElementById(ElementID).setAttribute("style", "font-size:" + Font + "px; font-family:Arial; position:absolute; padding-left:10px; left:" + Left + "px; top:" + Top + "px; width:" + Width + "px; height:" + Height + "px; resize: none;");
+	var E = document.getElementById(ElementID);
+	Object.assign(E.style, {
+		fontSize: Font + "px",
+		fontFamily: "Arial",
+		position: "absolute",
+		left: Left + "px",
+		top: Top + "px",
+		width: Width + "px",
+		height: Height + "px",
+	});
 
 }
 

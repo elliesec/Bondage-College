@@ -6,7 +6,7 @@
  * @type {string}
  */
 
-const BackgroundsTagNone = "- none -";
+const BackgroundsTagNone = "Filter by tag";
 const BackgroundsTagIndoor = "Indoor";
 const BackgroundsTagOutdoor = "Outdoor";
 const BackgroundsTagPirates = "Pirates";
