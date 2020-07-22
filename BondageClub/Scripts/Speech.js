@@ -49,15 +49,17 @@ function SpeechGetEffectGagLevel(Effect) {
  */
 function SpeechGetGagLevel(C, AssetGroup) {
 	var GagEffect = 0;
-	C.Appearance.some(item => {
-		if (item.Asset.Group.Name !== AssetGroup) return false;
-		var EffectArray = [];
-		if (item.Property && Array.isArray(item.Property.Effect)) EffectArray = item.Property.Effect;
-		else if (Array.isArray(item.Asset.Effect)) EffectArray = item.Asset.Effect;
-		else if (Array.isArray(item.Asset.Group.Effect)) EffectArray = item.Asset.Group.Effect;
-		GagEffect += SpeechGetEffectGagLevel(EffectArray);
-		return true;
-	});
+	for (var i = 0; i < C.Appearance.length; i++) {
+		var item = C.Appearance[i];
+		if (item.Asset.Group.Name === AssetGroup) {
+			var EffectArray = [];
+			if (item.Property && Array.isArray(item.Property.Effect)) EffectArray = item.Property.Effect;
+			else if (Array.isArray(item.Asset.Effect)) EffectArray = item.Asset.Effect;
+			else if (Array.isArray(item.Asset.Group.Effect)) EffectArray = item.Asset.Group.Effect;
+			GagEffect += SpeechGetEffectGagLevel(EffectArray);
+			break;
+		}
+	}
 	return GagEffect;
 }
 
