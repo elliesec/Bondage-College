@@ -298,6 +298,14 @@ function CharacterAppearanceSort(AP) {
 	return AP;
 }
 
+function CharacterAppearanceSortLayers(appearance) {
+    var layers = appearance.reduce((layersAcc, item) => {
+        Array.prototype.push.apply(layersAcc, item.Asset.Layer);
+        return layersAcc;
+    }, []);
+    return layers.sort((l1, l2) => l1.Priority - l2.Priority);
+}
+
 /**
  * Determines wether an item or a whole item group is visible or not
  * @param {Character} C - The character whose assets are checked
@@ -368,107 +376,119 @@ function CharacterAppearanceBuildCanvas(C) {
 
 	C.MustDraw = true;
 
-	// Loops in all visible items worn by the character
-	for (var A = 0; A < C.Appearance.length; A++)
-		if (C.Appearance[A].Asset.Visible && CharacterAppearanceVisible(C, C.Appearance[A].Asset.Name, C.Appearance[A].Asset.Group.Name)) {
+	var LayerCounts = {};
 
-			// If there's a father group, we must add it to find the correct image
-			var CA = C.Appearance[A];
-			var ParentGroup = CA.Asset.ParentGroupName ? CA.Asset.ParentGroupName : CA.Asset.Group.ParentGroupName && !CA.Asset.IgnoreParentGroup ? CA.Asset.Group.ParentGroupName : "";
-			var G = "";
-			if (ParentGroup != "")
-				for (var FG = 0; FG < C.Appearance.length; FG++)
-					if (ParentGroup == C.Appearance[FG].Asset.Group.Name)
-						G = "_" + C.Appearance[FG].Asset.Name;
+	// Loop through all layers in the character appearance
+	C.AppearanceLayers.forEach(Layer => {
+		var A = Layer.Asset;
+		var AG = A.Group;
+		var CA = C.Appearance.find(item => item.Asset === A);
+		var Property = CA.Property;
 
-			// If there's a pose style we must add (first by group then by item)
-			var Pose = "";
-			if ((CA.Asset.Group.AllowPose != null) && (CA.Asset.Group.AllowPose.length > 0) && (C.Pose != null) && (C.Pose.length > 0))
-				for (var AP = 0; AP < CA.Asset.Group.AllowPose.length; AP++)
-					for (var P = 0; P < C.Pose.length; P++)
-						if (C.Pose[P] == CA.Asset.Group.AllowPose[AP])
-							Pose = C.Pose[P] + "/";
-			if ((CA.Asset.AllowPose != null) && (CA.Asset.AllowPose.length > 0) && (C.Pose != null) && (C.Pose.length > 0))
-				for (var AP = 0; AP < CA.Asset.AllowPose.length; AP++)
-					for (var P = 0; P < C.Pose.length; P++)
-						if (C.Pose[P] == CA.Asset.AllowPose[AP])
-							Pose = C.Pose[P] + "/";
+		// If the asset is not visible, do nothing
+		if (!A.Visible || !CharacterAppearanceVisible(C, A.Name, AG.Name)) return;
 
-			// If we must apply alpha masks to the current image as it is being drawn
-			if (CA.Asset.Alpha != null)
-				for (var AL = 0; AL < CA.Asset.Alpha.length; AL++) {
-					C.Canvas.getContext("2d").clearRect(CA.Asset.Alpha[AL][0], CA.Asset.Alpha[AL][1], CA.Asset.Alpha[AL][2], CA.Asset.Alpha[AL][3]);
-					C.CanvasBlink.getContext("2d").clearRect(CA.Asset.Alpha[AL][0], CA.Asset.Alpha[AL][1], CA.Asset.Alpha[AL][2], CA.Asset.Alpha[AL][3]);
-				}
+		// Check if we need to draw a different variation (from type property)
+		var Type = "";
+		if ((Property != null) && (Property.Type != null)) Type = Property.Type;
 
-			// Check if we need to draw a different expression (for facial features)
-			var Expression = "";
-			if ((CA.Asset.Group.AllowExpression != null) && (CA.Asset.Group.AllowExpression.length > 0))
-				if ((CA.Property && CA.Property.Expression && CA.Asset.Group.AllowExpression.indexOf(CA.Property.Expression) >= 0))
-					Expression = CA.Property.Expression + "/";
+		// If the variation is not allowed for this layer, do nothing
+		if (Layer.AllowTypes && !Layer.AllowTypes.includes(Type)) return;
 
-			// Find the X and Y position to draw on
-			var X = CA.Asset.Group.DrawingLeft;
-			var Y = CA.Asset.Group.DrawingTop;
-			if (CA.Asset.DrawingLeft != null) X = CA.Asset.DrawingLeft;
-			if (CA.Asset.DrawingTop != null) Y = CA.Asset.DrawingTop;
-			if (C.Pose != null)
-				for (var CP = 0; CP < C.Pose.length; CP++)
-					for (var P = 0; P < PoseFemale3DCG.length; P++)
-						if ((C.Pose[CP] == PoseFemale3DCG[P].Name) && (PoseFemale3DCG[P].MovePosition != null))
-							for (var M = 0; M < PoseFemale3DCG[P].MovePosition.length; M++)
-								if (PoseFemale3DCG[P].MovePosition[M].Group == CA.Asset.Group.Name) {
-									X = X + PoseFemale3DCG[P].MovePosition[M].X;
-									Y = Y + PoseFemale3DCG[P].MovePosition[M].Y;
-								}
+		// If there's a parent group, we must add it to find the correct image
+		var ParentGroupName = A.ParentGroupName ? A.ParentGroupName : AG.ParentGroupName && !A.IgnoreParentGroup ? AG.ParentGroupName : "";
+		var G = "";
+		if (ParentGroupName != "") {
+			var ParentItem = C.Appearance.find(Item => Item.Asset.Group.Name === ParentGroupName);
+			if (ParentItem) G = "_" + ParentItem.Asset.Name;
+		}
 
-			// Check if we need to draw a different variation (from type property)
-			var Type = "";
-			if ((CA.Property != null) && (CA.Property.Type != null)) Type = CA.Property.Type;
-
-			// Cycle through all layers of the image
-			var MaxLayer = (CA.Asset.Layer == null) ? 1 : CA.Asset.Layer.length;
-			for (var L = 0; L < MaxLayer; L++) {
-				var Layer = "";
-				var LayerType = Type;
-				if (CA.Asset.Layer != null) {
-					Layer = "_" + CA.Asset.Layer[L].Name;
-					if ((CA.Asset.Layer[L].AllowTypes != null) && (CA.Asset.Layer[L].AllowTypes.indexOf(Type) < 0)) continue;
-					if (!CA.Asset.Layer[L].HasExpression) Expression = "";
-					if (!CA.Asset.Layer[L].HasType) LayerType = "";
-					if ((CA.Asset.Layer[L].NewParentGroupName != null) && (CA.Asset.Layer[L].NewParentGroupName != CA.Asset.Group.ParentGroupName)) {
-						if (CA.Asset.Layer[L].NewParentGroupName == "") G = "";
-						else
-							for (var FG = 0; FG < C.Appearance.length; FG++)
-								if (CA.Asset.Layer[L].NewParentGroupName == C.Appearance[FG].Asset.Group.Name)
-									G = "_" + C.Appearance[FG].Asset.Name;
-					}
-					if (CA.Asset.Layer[L].OverrideAllowPose != null) {
-						Pose = "";
-						for (var AP = 0; AP < CA.Asset.Layer[L].OverrideAllowPose.length; AP++)
-							for (var P = 0; P < C.Pose.length; P++)
-								if (C.Pose[P] == CA.Asset.Layer[L].OverrideAllowPose[AP])
-									Pose = C.Pose[P] + "/";
-					}
-				}
-
-				// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
-				if ((CA.Color != null) && (CA.Color.indexOf("#") == 0) && ((CA.Asset.Layer == null) || CA.Asset.Layer[L].AllowColorize)) {
-					DrawImageCanvasColorize("Assets/" + CA.Asset.Group.Family + "/" + CA.Asset.Group.Name + "/" + Pose + Expression + CA.Asset.Name + G + LayerType + Layer + ".png", C.Canvas.getContext("2d"), X, Y, 1, CA.Color, CA.Asset.Group.DrawingFullAlpha);
-					DrawImageCanvasColorize("Assets/" + CA.Asset.Group.Family + "/" + CA.Asset.Group.Name + "/" + Pose + (CA.Asset.Group.DrawingBlink ? "Closed/" : Expression) + CA.Asset.Name + G + LayerType + Layer + ".png", C.CanvasBlink.getContext("2d"), X, Y, 1, CA.Color, CA.Asset.Group.DrawingFullAlpha);
-				} else {
-					var Color = ((CA.Color == null) || (CA.Color == "Default") || (CA.Color == "") || (CA.Color.length == 1) || (CA.Color.indexOf("#") == 0)) ? "" : "_" + CA.Color;
-					DrawImageCanvas("Assets/" + CA.Asset.Group.Family + "/" + CA.Asset.Group.Name + "/" + Pose + Expression + CA.Asset.Name + G + LayerType + Color + Layer + ".png", C.Canvas.getContext("2d"), X, Y);
-					DrawImageCanvas("Assets/" + CA.Asset.Group.Family + "/" + CA.Asset.Group.Name + "/" + Pose + (CA.Asset.Group.DrawingBlink ? "Closed/" : Expression) + CA.Asset.Name + G + LayerType + Color + Layer + ".png", C.CanvasBlink.getContext("2d"), X, Y);
-				}
-			}
-
-			// If we must draw the lock (never colorized)
-			if ((CA.Property != null) && (CA.Property.LockedBy != null) && (CA.Property.LockedBy != "")) {
-				DrawImageCanvas("Assets/" + CA.Asset.Group.Family + "/" + CA.Asset.Group.Name + "/" + Pose + Expression + CA.Asset.Name + Type + "_Lock.png", C.Canvas.getContext("2d"), X, Y);
-				DrawImageCanvas("Assets/" + CA.Asset.Group.Family + "/" + CA.Asset.Group.Name + "/" + Pose + (CA.Asset.Group.DrawingBlink ? "Closed/" : Expression) + CA.Asset.Name + Type + "_Lock.png", C.CanvasBlink.getContext("2d"), X, Y);
+		// If there's a pose style we must add (first by group then by item)
+		var Pose = "";
+		if (C.Pose && C.Pose.length) {
+			var AllowPose = A.AllowPose;
+			if (!AllowPose || !AllowPose.length) AllowPose = AG.AllowPose;
+			if (AllowPose && AllowPose.length) {
+				AllowPose.forEach(AllowedPose => {
+					// TODO: Behaviour change - finds first rather than last pose
+					var CharacterPose = C.Pose.find(P => P === AllowedPose);
+					if (CharacterPose) Pose = CharacterPose + "/";
+				});
 			}
 		}
+
+		// If we must apply alpha masks to the current image as it is being drawn
+		if (Array.isArray(A.Alpha))
+			A.Alpha.forEach(([x, y, w, h]) => {
+				C.Canvas.getContext("2d").clearRect(x, y, w, h);
+				C.CanvasBlink.getContext("2d").clearRect(x, y, w, h);
+			});
+
+		// Check if we need to draw a different expression (for facial features)
+		var Expression = "";
+		if (AG.AllowExpression && AG.AllowExpression.length)
+			if ((Property && Property.Expression && AG.AllowExpression.indexOf(Property.Expression) >= 0))
+				Expression = Property.Expression + "/";
+
+		// Find the X and Y position to draw on
+		var X = A.DrawingLeft != null ? A.DrawingLeft : AG.DrawingLeft;
+		var Y = A.DrawingTop != null ? A.DrawingTop : AG.DrawingTop;
+		if (C.Pose != null)
+			for (var CP = 0; CP < C.Pose.length; CP++)
+				for (var P = 0; P < PoseFemale3DCG.length; P++)
+					if ((C.Pose[CP] == PoseFemale3DCG[P].Name) && (PoseFemale3DCG[P].MovePosition != null))
+						for (var M = 0; M < PoseFemale3DCG[P].MovePosition.length; M++)
+							if (PoseFemale3DCG[P].MovePosition[M].Group == CA.Asset.Group.Name) {
+								X = X + PoseFemale3DCG[P].MovePosition[M].X;
+								Y = Y + PoseFemale3DCG[P].MovePosition[M].Y;
+							}
+
+
+		var L = "";
+		var LayerType = Type;
+		if (Layer.Name) L = "_" + Layer.Name;
+
+		if (!Layer.HasType) LayerType = "";
+		if ((Layer.NewParentGroupName != null) && (Layer.NewParentGroupName != AG.ParentGroupName)) {
+			if (Layer.NewParentGroupName == "") G = "";
+			else
+				for (var FG = 0; FG < C.Appearance.length; FG++)
+					if (Layer.NewParentGroupName == C.Appearance[FG].Asset.Group.Name)
+						G = "_" + C.Appearance[FG].Asset.Name;
+		}
+		if (Layer.OverrideAllowPose != null && C.Pose && C.Pose.length) {
+			Pose = "";
+			for (var AP = 0; AP < Layer.OverrideAllowPose.length; AP++)
+				for (var P = 0; P < C.Pose.length; P++)
+					if (C.Pose[P] == Layer.OverrideAllowPose[AP])
+						Pose = C.Pose[P] + "/";
+		}
+
+		// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
+		if ((CA.Color != null) && (CA.Color.indexOf("#") == 0) && Layer.AllowColorize) {
+			DrawImageCanvasColorize("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", C.Canvas.getContext("2d"), X, Y, 1, CA.Color, AG.DrawingFullAlpha);
+			DrawImageCanvasColorize("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + (AG.DrawingBlink ? "Closed/" : Expression) + A.Name + G + LayerType + L + ".png", C.CanvasBlink.getContext("2d"), X, Y, 1, CA.Color, AG.DrawingFullAlpha);
+		} else {
+			var Color = ((CA.Color == null) || (CA.Color == "Default") || (CA.Color == "") || (CA.Color.length == 1) || (CA.Color.indexOf("#") == 0)) ? "" : "_" + CA.Color;
+			DrawImageCanvas("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + Color + L + ".png", C.Canvas.getContext("2d"), X, Y);
+			DrawImageCanvas("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + (AG.DrawingBlink ? "Closed/" : Expression) + A.Name + G + LayerType + Color + L + ".png", C.CanvasBlink.getContext("2d"), X, Y);
+		}
+
+
+		// If the item has been locked
+		if (Property && Property.LockedBy) {
+			// Count how many layers we've drawn for this asset
+			var CountKey = AG.Name + "/" + A.Name;
+			LayerCounts[CountKey] = (LayerCounts[CountKey] || 0) + 1;
+
+			// If we just drew the last layer for this asset, draw the lock too (never colorized)
+			if (A.Layer.length === LayerCounts[CountKey]) {
+				DrawImageCanvas("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + Type + "_Lock.png", C.Canvas.getContext("2d"), X, Y);
+				DrawImageCanvas("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + (AG.DrawingBlink ? "Closed/" : Expression) + A.Name + Type + "_Lock.png", C.CanvasBlink.getContext("2d"), X, Y);
+			}
+
+		}
+	});
 }
 
 

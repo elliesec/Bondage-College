@@ -90,7 +90,6 @@ function AssetAdd(NewAsset) {
 		OwnerOnly: (NewAsset.OwnerOnly == null) ? false : NewAsset.OwnerOnly,
 		LoverOnly: (NewAsset.LoverOnly == null) ? false : NewAsset.LoverOnly,
 		ExpressionTrigger: NewAsset.ExpressionTrigger,
-		Layer: AssetBuildLayer(NewAsset.Layer),
 		RemoveItemOnRemove: (NewAsset.RemoveItemOnRemove == null) ? [] : NewAsset.RemoveItemOnRemove,
 		AllowEffect: NewAsset.AllowEffect,
 		AllowBlock: NewAsset.AllowBlock,
@@ -109,28 +108,36 @@ function AssetAdd(NewAsset) {
 		DynamicGroupName: (NewAsset.DynamicGroupName || AssetCurrentGroup.Name),
 		DynamicActivity: (typeof NewAsset.DynamicActivity === 'function') ? NewAsset.DynamicActivity : function () { return NewAsset.Activity }
 	}
+	A.Layer = AssetBuildLayer(NewAsset, A);
 	// Unwearable assets are not visible but can be overwritten
 	if (!A.Wear && NewAsset.Visible != true) A.Visible = false;
 	Asset.push(A);
 }
 
 // Builds layers for an asset
-function AssetBuildLayer(NewLayers) {
-	if (NewLayers == null || !Array.isArray(NewLayers)) return null;
-	var Layers = [];
-	for (var L = 0; L < NewLayers.length; L++) {
-		var Layer = NewLayers[L];
-		Layers.push({
-			Name: Layer.Name,
-			AllowColorize: (Layer.AllowColorize == null) ? true : Layer.AllowColorize,
-			AllowTypes: (Layer.AllowTypes == null || !Array.isArray(Layer.AllowTypes)) ? [""] : Layer.AllowTypes,
-			HasExpression: (Layer.HasExpression == null) ? true : Layer.HasExpression,
-			HasType: (Layer.HasType == null) ? true : Layer.HasType,
-			NewParentGroupName: Layer.NewParentGroupName,
-			OverrideAllowPose: (Layer.OverrideAllowPose == null || !Array.isArray(Layer.OverrideAllowPose)) ? null : Layer.OverrideAllowPose
-		});
+function AssetBuildLayer(AssetDefinition, A) {
+	var Layers = Array.isArray(AssetDefinition.Layer) ? AssetDefinition.Layer : [{}];
+	return Layers.map(Layer => AssetMapLayer(Layer, AssetDefinition, A));
+}
+
+function AssetMapLayer(Layer, AssetDefinition, A) {
+	return {
+		Name: Layer.Name || null,
+		AllowColorize: AssetLayerAllowColorize(Layer, AssetDefinition),
+		AllowTypes: Array.isArray(Layer.AllowTypes) ? Layer.AllowTypes : null,
+		HasType: typeof Layer.HasType === 'boolean' ? Layer.HasType : true,
+		NewParentGroupName: Layer.ParentGroupName,
+		OverrideAllowPose: Array.isArray(Layer.OverrideAllowPose) ? Layer.OverrideAllowPose : null,
+		Priority: Layer.Priority || AssetDefinition.Priority || AssetCurrentGroup.Priority,
+		Asset: A,
 	}
-	return Layers;
+}
+
+function AssetLayerAllowColorize(Layer, NewAsset) {
+	return typeof Layer.AllowColorize === 'boolean' ? Layer.AllowColorize
+		   : typeof NewAsset.AllowColorize === 'boolean' ? NewAsset.AllowColorize
+			 : typeof AssetCurrentGroup.AllowColorize  === 'boolean' ? AssetCurrentGroup.AllowColorize
+			   : true;
 }
 
 // Builds the asset description from the CSV file
