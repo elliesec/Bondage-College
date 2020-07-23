@@ -125,7 +125,7 @@ function AssetMapLayer(Layer, AssetDefinition, A) {
 		AllowColorize: AssetLayerAllowColorize(Layer, AssetDefinition),
 		AllowTypes: Array.isArray(Layer.AllowTypes) ? Layer.AllowTypes : null,
 		HasType: typeof Layer.HasType === 'boolean' ? Layer.HasType : true,
-		NewParentGroupName: Layer.ParentGroupName,
+		ParentGroupName: Layer.ParentGroup,
 		OverrideAllowPose: Array.isArray(Layer.OverrideAllowPose) ? Layer.OverrideAllowPose : null,
 		Priority: Layer.Priority || AssetDefinition.Priority || AssetCurrentGroup.DrawingPriority,
 		Asset: A,

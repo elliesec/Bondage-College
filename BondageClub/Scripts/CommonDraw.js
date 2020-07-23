@@ -33,7 +33,7 @@ function CommonDrawAppearanceBuild(C, {
 		var Property = CA.Property;
 
 		// If there's a parent group (parent group of the layer overrides that of the asset, which overrides that of the group)
-		var ParentGroupName = Layer.NewParentGroupName;
+		var ParentGroupName = Layer.ParentGroupName;
 		if (typeof ParentGroupName === "undefined") ParentGroupName = A.ParentGroupName;
 		if (typeof ParentGroupName === "undefined") ParentGroupName = AG.ParentGroupName;
 		var G = "";
