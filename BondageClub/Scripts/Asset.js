@@ -127,9 +127,9 @@ function AssetMapLayer(Layer, AssetDefinition, A) {
 		HasType: typeof Layer.HasType === 'boolean' ? Layer.HasType : true,
 		NewParentGroupName: Layer.ParentGroupName,
 		OverrideAllowPose: Array.isArray(Layer.OverrideAllowPose) ? Layer.OverrideAllowPose : null,
-		Priority: Layer.Priority || AssetDefinition.Priority || AssetCurrentGroup.Priority,
+		Priority: Layer.Priority || AssetDefinition.Priority || AssetCurrentGroup.DrawingPriority,
 		Asset: A,
-	}
+	};
 }
 
 function AssetLayerAllowColorize(Layer, NewAsset) {

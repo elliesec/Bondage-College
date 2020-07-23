@@ -306,12 +306,24 @@ function CharacterAppearanceSortLayers(C) {
 			// Check if we need to draw a different variation (from type property)
 			var type = (item.Property && item.Property.Type) || "";
 			// Only include layers that permit the current type (if AllowTypes is not defined, also include the layer)
-			var layersToDraw = asset.Layer.filter(layer => !layer.AllowTypes || layer.AllowTypes.includes(type));
+			var layersToDraw = asset.Layer
+				.filter(layer => !layer.AllowTypes || layer.AllowTypes.includes(type))
+				.map(layer => {
+					var drawLayer = Object.assign({}, layer);
+					// If the item has an OverridePriority property, it completely overrides the layer priority
+					if (item.Property && typeof item.Property.OverridePriority === "number") drawLayer.Priority = item.Property.OverridePriority;
+					return drawLayer;
+				});
 			Array.prototype.push.apply(layersAcc, layersToDraw);
 		}
 		return layersAcc;
     }, []);
-    return layers.sort((l1, l2) => l1.Priority - l2.Priority);
+    return layers.sort((l1, l2) => {
+		// If the layers belong to the same Asset, ensure layer order is preserved
+		if (l1.Asset === l2.Asset) return l1.Asset.Layer.indexOf(l1) - l1.Asset.Layer.indexOf(l2);
+		// Otherwise, sort by priority
+		return l1.Priority - l2.Priority
+	});
 }
 
 /**
