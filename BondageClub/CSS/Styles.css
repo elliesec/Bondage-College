@@ -131,7 +131,7 @@ TextArea {
 
 .custom-select {
   position: relative;
-  font-family: Arial;
+  font-family: Arial, sans-serif;
 }
 
 .custom-select select {

@@ -48,15 +48,15 @@ function BackgroundSelectionLoad() {
 		if (i != 0) {
 			BackgroundSelectionAll = BackgroundsList.filter(bg => bg.Public)
 				.filter(bg => bg.Tag.indexOf(BackgroundsTagList[i]) >= 0)
-				.map(bg => bg.Name)
-				.map(B => {
-					var D = DialogFind(Player, B); return { Name: B, Description: D, Low: D.toLowerCase() }
+				.map(bg => {
+					var D = DialogFind(Player, bg.Name);
+					return { Name: bg.Name, Description: D, Low: D.toLowerCase() };
 				});
 		} else {
 			BackgroundSelectionAll = BackgroundsList.filter(bg => bg.Public)
-				.map(bg => bg.Name)
-				.map(B => {
-					var D = DialogFind(Player, B); return { Name: B, Description: D, Low: D.toLowerCase() }
+				.map(bg => {
+					var D = DialogFind(Player, bg.Name);
+					return { Name: bg.Name, Description: D, Low: D.toLowerCase() };
 				});
 		}
 		BackgroundSelectionInputChanged();
