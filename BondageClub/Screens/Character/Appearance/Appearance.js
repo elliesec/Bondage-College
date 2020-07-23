@@ -272,32 +272,6 @@ function CharacterAppearanceStripLayer(C) {
 	CharacterLoadCanvas(C);
 }
 
-/**
- * sorts the character appearance by drawing priority
- * @param {Appearance} AP - The appearance to be sorted
- * @returns {Appearance} - The sorted appearance
- */
-function CharacterAppearanceSort(AP) {
-	function GetPriority(A) {
-		return ((A.Property != null) && (A.Property.OverridePriority != null)) ? A.Property.OverridePriority : A.Asset.DrawingPriority != null ? A.Asset.DrawingPriority : A.Asset.Group.DrawingPriority;
-	}
-
-	for (var i = 1; i < AP.length; i++) {
-		var key = AP[i];
-		var j = i - 1;
-		var valuePriority = GetPriority(AP[j]);
-		var keyPriority = GetPriority(key);
-		while ((j >= 0) && (valuePriority > keyPriority)) {
-			AP[j + 1] = AP[j];
-			j--;
-			if (j >= 0) valuePriority = GetPriority(AP[j]);
-		}
-		AP[j + 1] = key;
-	}
-
-	return AP;
-}
-
 function CharacterAppearanceSortLayers(C) {
     var layers = C.Appearance.reduce((layersAcc, item) => {
     	var asset = item.Asset;
