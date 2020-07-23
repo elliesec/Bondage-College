@@ -480,7 +480,7 @@ function CharacterLoadCanvas(C) {
 
 	// Sorts the full appearance array first
 	C.Appearance = CharacterAppearanceSort(C.Appearance);
-	C.AppearanceLayers = CharacterAppearanceSortLayers(C.Appearance);
+	C.AppearanceLayers = CharacterAppearanceSortLayers(C);
 
 	// Sets the total height modifier for that character
 	CharacterApperanceSetHeightModifier(C);
