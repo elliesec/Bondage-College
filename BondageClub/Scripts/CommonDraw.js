@@ -1,5 +1,37 @@
 "use strict";
 
+/**
+ * A callback function used for clearing a rectangular area of a canvas
+ * @callback clearRect
+ * @param {number} x - The x coordinate of the left of the rectangle to clear
+ * @param {number} y - The y coordinate of the top of the rectangle to clear
+ * @param {number} w - The width of the rectangle to clear
+ * @param {number} h - The height of the rectangle to clear
+ */
+
+/**
+ * A callback function used to draw an image to a canvas
+ * @callback drawImage
+ * @param {string} src - The URL of the image to draw
+ * @param {number} x - The x coordinate to draw the image at
+ * @param {number} y - The y coordinate to draw the image at
+ */
+
+/**
+ * A callback function used to draw a colorized image to a canvas
+ * @callback drawImageColorize
+ * @param {string} src - The URL of the image to draw
+ * @param {number} x - The x coordinate to draw the image at
+ * @param {number} y - The y coordinate to draw the image at
+ * @param {string} color - The color to apply to the image
+ * @param {boolean} fullAlpha - Whether or not to apply colour to the entire image
+ */
+
+/**
+ * Prepares the character's drawing canvases before drawing the character's appearance.
+ * @param {Character} C - The character to prepare
+ * @returns {void} - Nothing
+ */
 function CommonDrawCanvasPrepare(C) {
 	if (C.Canvas == null) {
 		C.Canvas = document.createElement("canvas");
@@ -15,6 +47,16 @@ function CommonDrawCanvasPrepare(C) {
 	C.MustDraw = true;
 }
 
+/**
+ * Draws the given character's appearance using the provided drawing callbacks
+ * @param {Character} C - The character whose appearance to draw
+ * @param {clearRect} clearRect - A callback to clear an area of the main character canvas
+ * @param {clearRect} clearRectBlink - A callback to clear an area of the blink character canvas
+ * @param {drawImage} drawImage - A callback to draw an image to the main character canvas
+ * @param {drawImage} drawImageBlink - A callback to draw an image to the blink character canvas
+ * @param {drawImageColorize} drawImageColorize - A callback to draw a colorized image to the main character canvas
+ * @param {drawImageColorize} drawImageColorizeBlink - A callback to draw a colorized image to the blink character canvas
+ */
 function CommonDrawAppearanceBuild(C, {
 	clearRect,
 	clearRectBlink,
@@ -120,6 +162,12 @@ function CommonDrawAppearanceBuild(C, {
 	});
 }
 
+/**
+ * Finds the correct pose to draw for drawable layer for the provided character from the provided list of allowed poses
+ * @param {Character} C - The character to check for poses against
+ * @param {string[]} AllowedPoses - The list of permitted poses for the current layer
+ * @return {string} - The name of the pose to draw for the layer, or an empty string if no pose should be drawn
+ */
 function CommonDrawFindPose(C, AllowedPoses) {
 	let Pose = "";
 	if (AllowedPoses && AllowedPoses.length) {
