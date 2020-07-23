@@ -383,7 +383,6 @@ function CharacterAppearanceBuildCanvas(C) {
 	} else C.CanvasBlink.getContext("2d").clearRect(0, 0, 500, 1000);
 
 	C.MustDraw = true;
-
 	var LayerCounts = {};
 
 	// Loop through all layers in the character appearance
