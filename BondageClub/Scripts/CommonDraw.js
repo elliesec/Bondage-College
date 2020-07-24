@@ -100,8 +100,6 @@ function CommonDrawAppearanceBuild(C, {
 			A.Alpha.forEach(([x, y, w, h]) => {
 				clearRect(x, y, w, h);
 				clearRectBlink(x, y, w, h);
-				C.Canvas.getContext("2d").clearRect(x, y, w, h);
-				C.CanvasBlink.getContext("2d").clearRect(x, y, w, h);
 			});
 
 		// Check if we need to draw a different expression (for facial features)
