@@ -51,8 +51,9 @@ function GLDrawLoad() {
  * @returns {void} - Nothing
  */
 function GLDrawMakeGLProgam(gl) {
-    var vertexShader = GLDrawCreateShader(gl, GLDrawVertexShaderSource, gl.VERTEX_SHADER);
+	var vertexShader = GLDrawCreateShader(gl, GLDrawVertexShaderSource, gl.VERTEX_SHADER);
     var fragmentShader = GLDrawCreateShader(gl, GLDrawFragmentShaderSource, gl.FRAGMENT_SHADER);
+
     var fragmentShaderFullAlpha = GLDrawCreateShader(gl, GLDrawFragmentShaderSourceFullAlpha, gl.FRAGMENT_SHADER);
     var fragmentShaderHalfAlpha = GLDrawCreateShader(gl, GLDrawFragmentShaderSourceHalfAlpha, gl.FRAGMENT_SHADER);
 
@@ -60,8 +61,11 @@ function GLDrawMakeGLProgam(gl) {
     gl.programFull = GLDrawCreateProgram(gl, vertexShader, fragmentShaderFullAlpha);
     gl.programHalf = GLDrawCreateProgram(gl, vertexShader, fragmentShaderHalfAlpha);
 
+    gl.program.u_alpha = gl.getUniformLocation(gl.program, "u_alpha");
     gl.programFull.u_color = gl.getUniformLocation(gl.programFull, "u_color");
+    gl.programFull.u_alpha = gl.getUniformLocation(gl.programFull, "u_alpha");
     gl.programHalf.u_color = gl.getUniformLocation(gl.programHalf, "u_color");
+    gl.programHalf.u_alpha = gl.getUniformLocation(gl.programHalf, "u_alpha");
 
     gl.textureCache = new Map();
 }
@@ -122,11 +126,13 @@ var GLDrawFragmentShaderSource = `
   varying vec2 v_texcoord;
 
   uniform sampler2D u_texture;
+  uniform float u_alpha;
 
   void main() {
     vec4 texColor = texture2D(u_texture, v_texcoord);
     if (texColor.w < ` + GLDrawAlphaThreshold + `) discard;
-    gl_FragColor = texColor;   
+    gl_FragColor = texColor;
+    gl_FragColor.a *= u_alpha;
   }
 `;
 
@@ -142,12 +148,14 @@ var GLDrawFragmentShaderSourceFullAlpha = `
 
   uniform sampler2D u_texture;
   uniform vec4 u_color;
+  uniform float u_alpha;
 
   void main() {
     vec4 texColor = texture2D(u_texture, v_texcoord);
     if (texColor.w < ` + GLDrawAlphaThreshold + `) discard;
     float t = (texColor.x + texColor.y + texColor.z) / 383.0;
     gl_FragColor = u_color * vec4(t, t, t, texColor.w);
+    gl_FragColor.a *= u_alpha;
   }
 `;
 
@@ -163,6 +171,7 @@ var GLDrawFragmentShaderSourceHalfAlpha = `
 
   uniform sampler2D u_texture;
   uniform vec4 u_color;
+  uniform float u_alpha;
 
   void main() {
     vec4 texColor = texture2D(u_texture, v_texcoord);
@@ -173,6 +182,7 @@ var GLDrawFragmentShaderSourceHalfAlpha = `
     } else {
       gl_FragColor = u_color * vec4(t, t, t, texColor.w);
     }
+    gl_FragColor.a *= u_alpha;
   }
 `;
 
@@ -232,22 +242,26 @@ function GLDrawCreateProgram(gl, vertexShader, fragmentShader) {
  * @param {WebGLRenderingContext} gl - WebGL context
  * @param {number} dstX - Position of the image on the X axis
  * @param {number} dstY - Position of the image on the Y axis
+ * @param {number} opacity - The opacity at which the image should be drawn
  * @param {string} color - Color of the image to draw
  * @param {boolean} fullAlpha - Whether or not the full alpha should be rendered
  * @returns {void} - Nothing
  */
-function GLDrawImageBlink(url, gl, dstX, dstY, color, fullAlpha) { GLDrawImage(url, gl, dstX + 500, dstY, color, fullAlpha); }
+function GLDrawImageBlink(url, gl, dstX, dstY, opacity, color, fullAlpha) { GLDrawImage(url, gl, dstX + 500, dstY, opacity, color, fullAlpha); }
 /**
  * Draws an image from a given url to a WebGLRenderingContext
  * @param {string} url - URL of the image to render
  * @param {WebGLRenderingContext} gl - WebGL context
  * @param {number} dstX - Position of the image on the X axis
  * @param {number} dstY - Position of the image on the Y axis
+ * @param {number} opacity - The opacity at which the image should be drawn
  * @param {string} color - Color of the image to draw
  * @param {boolean} fullAlpha - Whether or not the full alpha should be rendered
  * @returns {void} - Nothing
  */
-function GLDrawImage(url, gl, dstX, dstY, color, fullAlpha) {
+function GLDrawImage(url, gl, dstX, dstY, opacity, color, fullAlpha) {
+	opacity = (typeof opacity === "number" && !isNaN(opacity)) ? opacity : 1;
+	opacity = Math.max(0, Math.min(1, opacity));
     var tex = GLDrawLoadImage(gl, url);
 
     gl.bindTexture(gl.TEXTURE_2D, tex.texture);
@@ -272,6 +286,7 @@ function GLDrawImage(url, gl, dstX, dstY, color, fullAlpha) {
 
     gl.uniformMatrix4fv(program.u_matrix, false, matrix);
     gl.uniform1i(program.u_texture, 0);
+    gl.uniform1f(program.u_alpha, opacity);
     if (program.u_color != null) gl.uniform4fv(program.u_color, GLDrawHexToRGBA(color));
 
     gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -392,10 +407,10 @@ function GLDrawAppearanceBuild(C) {
 	CommonDrawAppearanceBuild(C, {
 		clearRect: (x, y, w, h) => GLDrawClearRect(GLDrawCanvas.GL, x, 1000 - y - h, w, h),
 		clearRectBlink: (x, y, w, h) => GLDrawClearRectBlink(GLDrawCanvas.GL, x, 1000 - y - h, w, h),
-		drawImage: (src, x, y) => GLDrawImage(src, GLDrawCanvas.GL, x, y),
-		drawImageBlink: (src, x, y) => GLDrawImageBlink(src, GLDrawCanvas.GL, x, y),
-		drawImageColorize: (src, x, y, color, fullAlpha) => GLDrawImage(src, GLDrawCanvas.GL, x, y, color, fullAlpha),
-		drawImageColorizeBlink: (src, x, y, color, fullAlpha) => GLDrawImageBlink(src, GLDrawCanvas.GL, x, y, color, fullAlpha),
+		drawImage: (src, x, y, opacity) => GLDrawImage(src, GLDrawCanvas.GL, x, y, opacity),
+		drawImageBlink: (src, x, y, opacity) => GLDrawImageBlink(src, GLDrawCanvas.GL, x, y, opacity),
+		drawImageColorize: (src, x, y, color, fullAlpha, opacity) => GLDrawImage(src, GLDrawCanvas.GL, x, y, opacity, color, fullAlpha),
+		drawImageColorizeBlink: (src, x, y, color, fullAlpha, opacity) => GLDrawImageBlink(src, GLDrawCanvas.GL, x, y, opacity, color, fullAlpha),
 	});
     C.Canvas.getContext("2d").drawImage(GLDrawCanvas, 0, 0);
     C.CanvasBlink.getContext("2d").drawImage(GLDrawCanvas, -500, 0);
