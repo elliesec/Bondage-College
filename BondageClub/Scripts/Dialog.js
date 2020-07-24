@@ -5,6 +5,7 @@ var DialogTextDefaultTimer = -1;
 var DialogProgress = -1;
 var DialogColor = null;
 var DialogColorSelect = null;
+var DialogPreviousCharacterAppearance = null;
 var DialogProgressStruggleCount = 0;
 var DialogProgressAuto = 0;
 var DialogProgressOperation = "...";
@@ -30,9 +31,10 @@ var DialogExtendedMessage = "";
 var DialogActivityMode = false;
 var DialogActivity = [];
 var DialogSortOrderEnabled = 1;
-var DialogSortOrderUsable = 2;
-var DialogSortOrderUnusable = 3;
-var DialogSortOrderBlocked = 4;
+var DialogSortOrderEquipped = 2;
+var DialogSortOrderUsable = 3;
+var DialogSortOrderUnusable = 4;
+var DialogSortOrderBlocked = 5;
 
 /**
  * Compares the player's reputation with a given value 
@@ -399,6 +401,7 @@ function DialogLeaveItemMenu() {
 	DialogActivityMode = false;
 	DialogTextDefault = "";
 	DialogTextDefaultTimer = 0;
+	DialogPreviousCharacterAppearance = null;
 	ElementRemove("InputColor");
 	AudioDialogStop();
 	ColorPickerEndPick();
@@ -436,7 +439,7 @@ function DialogInventoryAdd(C, NewInv, NewInvWorn, SortOrder) {
 		if ((C.ID != 0) || ((C.Owner == "") && (C.Ownership == null)) || !NewInv.Asset.IsLock || ((C.ID == 0) && LogQuery("BlockOwnerLockSelf", "OwnerRule")))
 			return;
 	if (NewInv.Asset.LoverOnly && !NewInvWorn && !C.IsLoverOfPlayer())
-		if ((C.ID != 0) || (C.Lovership.length < 0) || !NewInv.Asset.IsLock)
+		if ((C.ID != 0) || (C.Lovership.length == 0) || !NewInv.Asset.IsLock || ((C.ID == 0) && C.GetLoversNumbers(true).length == 0))
 			return;
 
 	// Do not show keys if they are in the deposit
@@ -599,15 +602,18 @@ function DialogInventoryBuild(C) {
 
 			// Second, we add everything from the victim inventory
 			for (var A = 0; A < C.Inventory.length; A++)
-				if ((C.Inventory[A].Asset != null) && (C.Inventory[A].Asset.Group.Name == C.FocusGroup.Name) && C.Inventory[A].Asset.DynamicAllowInventoryAdd(C))
-					DialogInventoryAdd(C, C.Inventory[A], false, (InventoryAllow(C, C.Inventory[A].Asset.Prerequisite, false)) ? DialogSortOrderUsable : DialogSortOrderUnusable);
+				if ((C.Inventory[A].Asset != null) && (C.Inventory[A].Asset.Group.Name == C.FocusGroup.Name) && C.Inventory[A].Asset.DynamicAllowInventoryAdd(C)) {
+					var DialogSortOrder = C.Inventory[A].Asset.DialogSortOverride != null ? C.Inventory[A].Asset.DialogSortOverride : (InventoryAllow(C, C.Inventory[A].Asset.Prerequisite, false)) ? DialogSortOrderUsable : DialogSortOrderUnusable;
+					DialogInventoryAdd(C, C.Inventory[A], false, DialogSortOrder);
+				}
 
 			// Third, we add everything from the player inventory if the player isn't the victim
 			if (C.ID != 0)
 				for (var A = 0; A < Player.Inventory.length; A++)
-					if ((Player.Inventory[A].Asset != null) && (Player.Inventory[A].Asset.Group.Name == C.FocusGroup.Name) && Player.Inventory[A].Asset.DynamicAllowInventoryAdd(C))
-						DialogInventoryAdd(C, Player.Inventory[A], false, (InventoryAllow(C, Player.Inventory[A].Asset.Prerequisite, false)) ? DialogSortOrderUsable : DialogSortOrderUnusable);
-
+					if ((Player.Inventory[A].Asset != null) && (Player.Inventory[A].Asset.Group.Name == C.FocusGroup.Name) && Player.Inventory[A].Asset.DynamicAllowInventoryAdd(C)) {
+						var DialogSortOrder = Player.Inventory[A].Asset.DialogSortOverride != null ? Player.Inventory[A].Asset.DialogSortOverride : (InventoryAllow(C, Player.Inventory[A].Asset.Prerequisite, false)) ? DialogSortOrderUsable : DialogSortOrderUnusable;
+						DialogInventoryAdd(C, Player.Inventory[A], false, DialogSortOrder);
+					}
 		}
 
 		// Rebuilds the dialog menu and it's buttons
@@ -1449,6 +1455,13 @@ function DialogDrawItemMenu(C) {
 		// Add or subtract to the automatic progression, doesn't move in color picking mode
 		DialogProgress = DialogProgress + DialogProgressAuto;
 		if (DialogProgress < 0) DialogProgress = 0;
+		
+		// We cancel out if at least one of the following cases apply: a new item conflicts with this, the player can no longer interact, something else was added first, the item was already removed
+		if (InventoryGroupIsBlocked(C) || (C != Player && !Player.CanInteract()) || (DialogProgressNextItem == null && !InventoryGet(C, DialogProgressPrevItem.Asset.Group.Name)) || (DialogProgressNextItem != null && !InventoryAllow(C, DialogProgressNextItem.Asset.Prerequisite)) || (DialogProgressNextItem != null && DialogProgressPrevItem != null && ((InventoryGet(C, DialogProgressPrevItem.Asset.Group.Name) && InventoryGet(C, DialogProgressPrevItem.Asset.Group.Name).Asset.Name != DialogProgressPrevItem.Asset.Name) || !InventoryGet(C, DialogProgressPrevItem.Asset.Group.Name))) || (DialogProgressNextItem != null && DialogProgressPrevItem == null && InventoryGet(C, DialogProgressNextItem.Asset.Group.Name))) {
+			ChatRoomPublishAction(C, DialogProgressPrevItem, DialogProgressNextItem, true, "interrupted");
+			DialogProgress = -1;
+			return;
+		}
 
 		// Draw the current operation and progress
 		if (DialogProgressAuto < 0) DrawText(DialogFind(Player, "Challenge") + " " + ((DialogProgressStruggleCount >= 50) ? DialogProgressChallenge.toString() : "???"), 1500, 150, "White", "Black");
@@ -1578,19 +1591,32 @@ function DialogDraw() {
 	// If we must show the item/inventory menu
 	if (((Player.FocusGroup != null) || ((CurrentCharacter.FocusGroup != null) && CurrentCharacter.AllowItem)) && (DialogIntro() != "")) {
 
+		// We leave if the dialog focus item is no longer there
+		if (DialogFocusItem != null && (InventoryGet(CurrentCharacter, DialogFocusItem.Asset.Group.Name) == null || InventoryGet(CurrentCharacter, DialogFocusItem.Asset.Group.Name).Asset.Name != DialogFocusItem.Asset.Name) && !DialogFocusItem.Asset.IsLock) {
+			DialogLeaveFocusItem();
+			DialogFocusItem = null;
+		}
+
+		// We rebuild the menu if things changed
+		var C = CharacterGetCurrent();
+		if (DialogPreviousCharacterAppearance !== JSON.stringify(ServerAppearanceBundle(C.Appearance))) {
+			DialogInventoryBuild(C);
+			ActivityDialogBuild(C);
+			DialogPreviousCharacterAppearance = JSON.stringify(ServerAppearanceBundle(C.Appearance));
+		}
+
 		// The view can show one specific extended item or the list of all items for a group
 		if (DialogFocusItem != null) {
 			CommonDynamicFunction("Inventory" + DialogFocusItem.Asset.Group.Name + DialogFocusItem.Asset.Name + "Draw()");
 			DrawButton(1885, 25, 90, 90, "", "White", "Icons/Exit.png");
 		} else {
-			if (DialogActivityMode) DialogDrawActivityMenu((Player.FocusGroup != null) ? Player : CurrentCharacter);
-			else DialogDrawItemMenu((Player.FocusGroup != null) ? Player : CurrentCharacter);
+			if (DialogActivityMode) DialogDrawActivityMenu(C);
+			else DialogDrawItemMenu(C);
 		}
 
 		// Draw the 'Up' reposition button if some zones are offscreen
-		if (CurrentCharacter != null && CurrentCharacter.HeightModifier != null && CurrentCharacter.HeightModifier < -90 && CurrentCharacter.FocusGroup != null) {
+		if (CurrentCharacter != null && CurrentCharacter.HeightModifier != null && CurrentCharacter.HeightModifier < -90 && CurrentCharacter.FocusGroup != null)
 			DrawButton(510, 25, 90, 90, "", "White", "Icons/Up.png", DialogFind(Player, "UpPosition"));
-		}
 
 	} else {
 
