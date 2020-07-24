@@ -18,6 +18,7 @@ var Pose = [];
  * @property {string[] | null} OverrideAllowPose - An array of poses that this layer permits. If set, it will override the poses permitted
  * by the parent asset/group.
  * @property {number} Priority - The drawing priority of this layer. Inherited from the parent asset/group if not specified in the layer definition.
+ * @property {number} Opacity - The opacity at which this layer should be drawn. This is a value between 0 and 1
  * @property {Asset} Asset - The asset that this layer belongs to
  */
 
@@ -112,6 +113,7 @@ function AssetAdd(NewAsset) {
 		AllowBlock: NewAsset.AllowBlock,
 		AllowType: NewAsset.AllowType,
 		DefaultColor: NewAsset.DefaultColor,
+		Opacity: AssetParseOpacity(NewAsset.Opacity),
 		Audio: NewAsset.Audio,
 		ArousalZone: (NewAsset.ArousalZone == null) ? AssetCurrentGroup.Name : NewAsset.ArousalZone,
 		IsRestraint: (NewAsset.IsRestraint == null) ? ((AssetCurrentGroup.IsRestraint == null) ? false : AssetCurrentGroup.IsRestraint) : NewAsset.IsRestraint,
@@ -158,6 +160,7 @@ function AssetMapLayer(Layer, AssetDefinition, A) {
 		ParentGroupName: Layer.ParentGroup,
 		OverrideAllowPose: Array.isArray(Layer.OverrideAllowPose) ? Layer.OverrideAllowPose : null,
 		Priority: Layer.Priority || AssetDefinition.Priority || AssetCurrentGroup.DrawingPriority,
+		Opacity: typeof Layer.Opacity === "number" ? AssetParseOpacity(Layer.Opacity) : A.Opacity,
 		Asset: A,
 	};
 }
@@ -173,6 +176,13 @@ function AssetLayerAllowColorize(Layer, NewAsset) {
 		   : typeof NewAsset.AllowColorize === 'boolean' ? NewAsset.AllowColorize
 			 : typeof AssetCurrentGroup.AllowColorize  === 'boolean' ? AssetCurrentGroup.AllowColorize
 			   : true;
+}
+
+function AssetParseOpacity(opacity) {
+	if (typeof opacity === "number" && !isNaN(opacity)) {
+		return Math.max(0, Math.min(1, opacity));
+	}
+	return 1;
 }
 
 // Builds the asset description from the CSV file
