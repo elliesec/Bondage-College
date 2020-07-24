@@ -91,7 +91,7 @@ function InventoryItemVulvaLoversVibratorClick() {
 		DialogFocusItem = null;
 	}
 
-	let Y = 525;
+	var Y = 525;
 	InventoryItemVulvaLoversVibratorOptions.some((OptionGroup) => {
 		var Handled = OptionGroup.some((Option, I) => {
 			var X = 1175 + (I % 3) * 225;
@@ -115,9 +115,9 @@ function InventoryItemVulvaLoversVibratorOptionSetMode(Option) {
 	DialogFocusItem = InventoryGet(C, C.FocusGroup.Name);
 	var OldIntensity = DialogFocusItem.Property.Intensity;
 	var Property = DialogFocusItem.Property = Object.assign({}, DialogFocusItem.Property, Option.Property);
-	typeof Property.Intensity === "function" && (Property.Intensity = Property.Intensity());
-	typeof Property.ChangeTime === "function" && (Property.ChangeTime = Property.ChangeTime());
-	typeof Property.LastChange === "function" && (Property.LastChange = Property.LastChange());
+	if (typeof Property.Intensity === "function") Property.Intensity = Property.Intensity();
+	if (typeof Property.ChangeTime === "function") Property.ChangeTime = Property.ChangeTime();
+	if (typeof Property.LastChange === "function") Property.LastChange = Property.LastChange();
 	CharacterRefresh(C);
 	ChatRoomCharacterUpdate(C);
 
