@@ -24,6 +24,8 @@ var InventoryItemArmsHighSecurityStraitJacketCrotchOptions = [
 	{
 		Name: "c1",
 		Difficulty: 1,
+		Block: ["ItemPelvis", "ItemVulva", "ItemVulvaPiercings", "ItemButt"],
+		Hide: ["ItemVulva", "ItemVulvaPiercings", "ItemButt"],
 	},
 ];
 
@@ -50,14 +52,20 @@ var InventoryItemArmsHighSecurityStraitJacketStrapsOptions = [
 	{
 		Name: "s1",
 		Difficulty: 1,
+		Block: ["ItemPelvis", "ItemVulva", "ItemVulvaPiercings", "ItemButt"],
+		Hide: ["ItemVulva", "ItemVulvaPiercings", "ItemButt"],
 	},
 	{
 		Name: "s2",
 		Difficulty: 2,
+		Block: ["ItemPelvis"],
+		Hide: ["ItemVulva", "ItemVulvaPiercings", "ItemButt"],
 	},
 	{
 		Name: "s3",
 		Difficulty: 2,
+		Block: ["ItemPelvis", "ItemVulva", "ItemVulvaPiercings", "ItemButt"],
+		Hide: ["ItemVulva", "ItemVulvaPiercings", "ItemButt"],
 	},
 ];
 
@@ -260,11 +268,20 @@ function InventoryItemArmsHighSecurityStraitJacketMergeOptions(c, a, s) {
 	var straps = InventoryItemArmsHighSecurityStraitJacketStrapsOptions[s];
 	return [crotch, arms, straps].reduce((prop, componentProp) => {
 		prop.Difficulty += (componentProp.Difficulty || 0);
+		if (componentProp.Block) InventoryItemArmsHighSecurityStraitJacketAddToArray(prop.Block, componentProp.Block);
+		if (componentProp.Hide) InventoryItemArmsHighSecurityStraitJacketAddToArray(prop.Hide, componentProp.Hide);
 		return prop;
 	}, {
 		Type: `c${c}a${a}s${s}`,
 		Difficulty: 0,
 		Block: ["ItemNipples", "ItemNipplesPiercings", "ItemTorso", "ItemBreast", "ItemHands"],
+		Hide: ["Cloth", "ItemNipplesPiercings"],
+	});
+}
+
+function InventoryItemArmsHighSecurityStraitJacketAddToArray(dest, src) {
+	src.forEach(item => {
+		if (!dest.includes(item)) dest.push(item);
 	});
 }
 
