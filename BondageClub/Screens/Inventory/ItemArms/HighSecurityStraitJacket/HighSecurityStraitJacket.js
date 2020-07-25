@@ -117,16 +117,19 @@ function InventoryItemArmsHighSecurityStraitJacketDrawCommon(buttonDefinitions) 
 }
 
 function InventoryItemArmsHighSecurityStraitJacketDrawBase() {
+	DialogExtendedMessage = DialogFind(Player, "ItemArmsHighSecurityStraitJacketSelect");
 	var A = DialogFocusItem.Asset;
 	var DialogPrefix = "ItemArmsHighSecurityStraitJacketConfigure";
+	var [c, a, s] = InventoryItemArmsHighSecurityStraitJacketParseCurrent();
 	InventoryItemArmsHighSecurityStraitJacketDrawCommon([
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/c1.png", DialogPrefix + "Crotch"],
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/a1.png", DialogPrefix + "Arms"],
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/s3.png", DialogPrefix + "Straps"],
+		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + `/c${c}.png`, DialogPrefix + "Crotch"],
+		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + `/a${a}.png`, DialogPrefix + "Arms"],
+		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + `/s${s}.png`, DialogPrefix + "Straps"],
 	]);
 }
 
 function InventoryItemArmsHighSecurityStraitJacketDrawCrotch() {
+	DialogExtendedMessage = DialogFind(Player, "ItemArmsHighSecurityStraitJacketSelectCrotch");
 	var A = DialogFocusItem.Asset;
 	var DialogPrefix = "ItemArmsHighSecurityStraitJacketType";
 	InventoryItemArmsHighSecurityStraitJacketDrawCommon([
@@ -136,6 +139,7 @@ function InventoryItemArmsHighSecurityStraitJacketDrawCrotch() {
 }
 
 function InventoryItemArmsHighSecurityStraitJacketDrawArms() {
+	DialogExtendedMessage = DialogFind(Player, "ItemArmsHighSecurityStraitJacketSelectArms");
 	var A = DialogFocusItem.Asset;
 	var DialogPrefix = "ItemArmsHighSecurityStraitJacketType";
 	InventoryItemArmsHighSecurityStraitJacketDrawCommon([
@@ -146,6 +150,7 @@ function InventoryItemArmsHighSecurityStraitJacketDrawArms() {
 }
 
 function InventoryItemArmsHighSecurityStraitJacketDrawStraps() {
+	DialogExtendedMessage = DialogFind(Player, "ItemArmsHighSecurityStraitJacketSelectStraps");
 	var A = DialogFocusItem.Asset;
 	var DialogPrefix = "ItemArmsHighSecurityStraitJacketType";
 	InventoryItemArmsHighSecurityStraitJacketDrawCommon([
