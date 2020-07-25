@@ -42,7 +42,7 @@ var InventoryItemArmsHighSecurityStraitJacketArmsOptions = [
 	{
 		Name: "a2",
 		Difficulty: 3,
-		SelfBondage: 9,
+		SelfBondage: 8,
 	},
 ];
 
