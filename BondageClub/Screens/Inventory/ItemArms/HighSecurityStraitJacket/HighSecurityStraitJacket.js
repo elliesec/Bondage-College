@@ -269,5 +269,11 @@ function InventoryItemArmsHighSecurityStraitJacketMergeOptions(c, a, s) {
 }
 
 function InventoryItemArmsHighSecurityStraitJacketChatRoomMessage(componentName) {
-	console.log(componentName);
+	var C = CharacterGetCurrent();
+	var msg = "ItemArmsHighSecurityStraitJacketSet" + componentName;
+	var dictionary = [
+		{ Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber },
+		{ Tag: "DestinationCharacter", Text: C.Name, MemberNumber: C.MemberNumber },
+	];
+	ChatRoomPublishCustomAction(msg, false, dictionary);
 }
