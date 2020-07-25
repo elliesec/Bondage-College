@@ -1560,11 +1560,24 @@ var AssetFemale3DCG = [
 					{ Name: "Highlights", AllowColorize: false }
 				]
 			},
-			{ Name: "HighSecurityStraitJacket", Value: 220, Priority: 23, Difficulty: 4, SelfBondage: 3, Time: 45, RemoveTime: 30, /*AllowLock: true,*/ Hide: ["Cloth", "ItemNipplesPiercings"], SetPose: ["BackElbowTouch"], Effect: ["Block", "Prone"],
+			{ Name: "HighSecurityStraitJacket", Value: 220, Priority: 23, Difficulty: 4, SelfBondage: 3, Time: 45, RemoveTime: 30, Top: 4, Left: 1, /*AllowLock: true,*/ Hide: ["Cloth", "ItemNipplesPiercings"], SetPose: ["BackElbowTouch"], Effect: ["Block", "Prone"],
 				AllowBlock: ["ItemNipples", "ItemNipplesPiercings", "ItemTorso", "ItemBreast", "ItemHands", "ItemVulva", "ItemVulvaPiercings", "ItemButt", "ItemPelvis"],
 				AllowType: ["c0a0s0", "c0a0s1", "c0a0s2", "c0a0s3", "c0a1s0", "c0a1s1", "c0a1s2", "c0a1s3", "c0a2s0", "c0a2s1", "c0a2s2", "c0a2s3", "c1a0s0", "c1a0s1", "c1a0s2", "c1a0s3", "c1a1s0", "c1a1s1", "c1a1s2", "c1a1s3", "c1a2s0", "c1a2s1", "c1a2s2", "c1a2s3"],
 				Block: ["ItemNipples", "ItemNipplesPiercings", "ItemTorso", "ItemBreast", "ItemHands"],
-				Extended: true, SelfUnlock: false
+				Extended: true,
+				Layer: [
+					{ Name: "JacketLoose", ParentGroup: null, AllowTypes: ["c0a0s0", "c0a0s1", "c0a0s2", "c0a0s3", "c1a0s0", "c1a0s1", "c1a0s2", "c1a0s3"], HasType: false},
+					{ Name: "JacketFront", AllowTypes: ["c0a1s0", "c0a1s1", "c0a1s2", "c0a1s3", "c1a1s0", "c1a1s1", "c1a1s2", "c1a1s3"], HasType: false },
+					{ Name: "JacketBack", AllowTypes: ["c0a2s0", "c0a2s1", "c0a2s2", "c0a2s3", "c1a2s0", "c1a2s1", "c1a2s2", "c1a2s3"], HasType: false },
+					{ Name: "StrapsLoose", AllowColorize: false, AllowTypes: ["c0a0s0", "c0a0s1", "c0a0s2", "c0a0s3", "c1a0s0", "c1a0s1", "c1a0s2", "c1a0s3"], HasType: false},
+					{ Name: "StrapsFront", AllowColorize: false, AllowTypes: ["c0a1s0", "c0a1s1", "c0a1s2", "c0a1s3", "c1a1s0", "c1a1s1", "c1a1s2", "c1a1s3"], HasType: false },
+					{ Name: "StrapsBack", AllowColorize: false, AllowTypes: ["c0a2s0", "c0a2s1", "c0a2s2", "c0a2s3", "c1a2s0", "c1a2s1", "c1a2s2", "c1a2s3"], HasType: false },
+					{ Name: "Crotch", ParentGroup: null, AllowTypes: ["c1a0s0", "c1a0s1", "c1a0s2", "c1a0s3", "c1a1s0", "c1a1s1", "c1a1s2", "c1a1s3", "c1a2s0", "c1a2s1", "c1a2s2", "c1a2s3"], HasType: false },
+					{ Name: "CrotchStrapsSingle", ParentGroup: null, AllowColorize: false, AllowTypes: ["c0a0s1", "c0a1s1", "c0a2s1", "c1a0s1", "c1a1s1", "c1a2s1"], HasType: false },
+					{ Name: "CrotchStrapsDouble", ParentGroup: null, AllowColorize: false, AllowTypes: ["c0a0s2", "c0a1s2", "c0a2s2", "c1a0s2", "c1a1s2", "c1a2s2"], HasType: false },
+					{ Name: "CrotchStrapsTriple", ParentGroup: null, AllowColorize: false, AllowTypes: ["c0a0s3", "c0a1s3", "c0a2s3", "c1a0s3", "c1a1s3", "c1a2s3"], HasType: false },
+				],
+				SelfUnlock: false
 			},
 			AssetSpankingToys
 		],
