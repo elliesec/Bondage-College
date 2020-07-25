@@ -87,16 +87,17 @@ function InventoryItemArmsHighSecurityStraitJacketLoad() {
 	DialogExtendedMessage = DialogFind(Player, "ItemArmsHighSecurityStraitJacketSelect");
 }
 
+function InventoryItemArmsHighSecurityStraitJacketCall(functionMap) {
+	var func = functionMap[InventoryItemArmsHighSecurityStraitJacketPage] || functionMap.base;
+	return func();
+}
+
 function InventoryItemArmsHighSecurityStraitJacketDraw() {
-	var drawFunction = InventoryItemArmsHighSecurityStraitJacketDrawFunctions[InventoryItemArmsHighSecurityStraitJacketPage] ||
-					   InventoryItemArmsHighSecurityStraitJacketDrawFunctions.base;
-	drawFunction();
+	InventoryItemArmsHighSecurityStraitJacketCall(InventoryItemArmsHighSecurityStraitJacketDrawFunctions);
 }
 
 function InventoryItemArmsHighSecurityStraitJacketClick() {
-	var clickFunction = InventoryItemArmsHighSecurityStraitJacketClickFunctions[InventoryItemArmsHighSecurityStraitJacketPage] ||
-						InventoryItemArmsHighSecurityStraitJacketClickFunctions.base;
-	clickFunction();
+	InventoryItemArmsHighSecurityStraitJacketCall(InventoryItemArmsHighSecurityStraitJacketClickFunctions);
 }
 
 function InventoryItemArmsHighSecurityStraitJacketDrawCommon(buttonDefinitions) {
@@ -116,49 +117,45 @@ function InventoryItemArmsHighSecurityStraitJacketDrawCommon(buttonDefinitions) 
 	});
 }
 
+function InventoryItemArmsHighSecurityStraitJacketMapButtonDefinition(option) {
+	var A = DialogFocusItem.Asset;
+	return [
+		"Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/" + option.Name + ".png",
+		"ItemArmsHighSecurityStraitJacketType" + option.Name,
+	];
+}
+
 function InventoryItemArmsHighSecurityStraitJacketDrawBase() {
 	DialogExtendedMessage = DialogFind(Player, "ItemArmsHighSecurityStraitJacketSelect");
 	var A = DialogFocusItem.Asset;
 	var DialogPrefix = "ItemArmsHighSecurityStraitJacketConfigure";
 	var [c, a, s] = InventoryItemArmsHighSecurityStraitJacketParseCurrent();
 	InventoryItemArmsHighSecurityStraitJacketDrawCommon([
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + `/c${c}.png`, DialogPrefix + "Crotch"],
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + `/a${a}.png`, DialogPrefix + "Arms"],
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + `/s${s}.png`, DialogPrefix + "Straps"],
+		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/c" + c + ".png", DialogPrefix + "Crotch"],
+		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/a" + a + ".png", DialogPrefix + "Arms"],
+		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/s" + s + ".png", DialogPrefix + "Straps"],
 	]);
 }
 
 function InventoryItemArmsHighSecurityStraitJacketDrawCrotch() {
 	DialogExtendedMessage = DialogFind(Player, "ItemArmsHighSecurityStraitJacketSelectCrotch");
-	var A = DialogFocusItem.Asset;
-	var DialogPrefix = "ItemArmsHighSecurityStraitJacketType";
-	InventoryItemArmsHighSecurityStraitJacketDrawCommon([
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/c0.png", DialogPrefix + "c0"],
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/c1.png", DialogPrefix + "c1"],
-	]);
+	InventoryItemArmsHighSecurityStraitJacketDrawCommon(
+		InventoryItemArmsHighSecurityStraitJacketCrotchOptions.map(InventoryItemArmsHighSecurityStraitJacketMapButtonDefinition),
+	);
 }
 
 function InventoryItemArmsHighSecurityStraitJacketDrawArms() {
 	DialogExtendedMessage = DialogFind(Player, "ItemArmsHighSecurityStraitJacketSelectArms");
-	var A = DialogFocusItem.Asset;
-	var DialogPrefix = "ItemArmsHighSecurityStraitJacketType";
-	InventoryItemArmsHighSecurityStraitJacketDrawCommon([
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/a0.png", DialogPrefix + "a0"],
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/a1.png", DialogPrefix + "a1"],
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/a2.png", DialogPrefix + "a2"],
-	]);
+	InventoryItemArmsHighSecurityStraitJacketDrawCommon(
+		InventoryItemArmsHighSecurityStraitJacketArmsOptions.map(InventoryItemArmsHighSecurityStraitJacketMapButtonDefinition),
+	);
 }
 
 function InventoryItemArmsHighSecurityStraitJacketDrawStraps() {
 	DialogExtendedMessage = DialogFind(Player, "ItemArmsHighSecurityStraitJacketSelectStraps");
-	var A = DialogFocusItem.Asset;
-	var DialogPrefix = "ItemArmsHighSecurityStraitJacketType";
-	InventoryItemArmsHighSecurityStraitJacketDrawCommon([
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/s0.png", DialogPrefix + "s0"],
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/s1.png", DialogPrefix + "s1"],
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/s2.png", DialogPrefix + "s2"],
-		["Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/s3.png", DialogPrefix + "s3"],
-	]);
+	InventoryItemArmsHighSecurityStraitJacketDrawCommon(
+		InventoryItemArmsHighSecurityStraitJacketStrapsOptions.map(InventoryItemArmsHighSecurityStraitJacketMapButtonDefinition),
+	);
 }
 
 function InventoryItemArmsHighSecurityStraitJacketClickCommon(exitCallback, itemCallback) {
@@ -254,7 +251,6 @@ function InventoryItemArmsHighSecurityStraitJacketSetType(option) {
 		}
 	}
 
-	console.log(JSON.stringify(DialogFocusItem.Property, null, 4));
 	InventoryItemArmsHighSecurityStraitJacketPage = "base";
 }
 
