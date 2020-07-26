@@ -256,7 +256,7 @@ function InventoryItemArmsHighSecurityStraitJacketSetType(option) {
 	}
 
 	if (hasChanged) {
-		DialogFocusItem.Property = InventoryItemArmsHighSecurityStraitJacketMergeOptions(c, a, s);
+		Object.assign(DialogFocusItem.Property, InventoryItemArmsHighSecurityStraitJacketMergeOptions(c, a, s));
 		CharacterRefresh(C);
 		ChatRoomCharacterUpdate(C);
 
