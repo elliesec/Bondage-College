@@ -131,15 +131,16 @@ function CommonDrawAppearanceBuild(C, {
 		var LayerType = Type;
 		if (Layer.Name) L = "_" + Layer.Name;
 		if (!Layer.HasType) LayerType = "";
+		var BlinkExpression = (A.OverrideBlinking ? !AG.DrawingBlink : AG.DrawingBlink) ? "Closed/" : Expression;
 
 		// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
 		if ((CA.Color != null) && (CA.Color.indexOf("#") == 0) && Layer.AllowColorize) {
 			drawImageColorize("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, CA.Color, AG.DrawingFullAlpha);
-			drawImageColorizeBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + (AG.DrawingBlink ? "Closed/" : Expression) + A.Name + G + LayerType + L + ".png", X, Y, CA.Color, AG.DrawingFullAlpha);
+			drawImageColorizeBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y, CA.Color, AG.DrawingFullAlpha);
 		} else {
 			var Color = ((CA.Color == null) || (CA.Color == "Default") || (CA.Color == "") || (CA.Color.length == 1) || (CA.Color.indexOf("#") == 0)) ? "" : "_" + CA.Color;
 			drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + Color + L + ".png", X, Y);
-			drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + (AG.DrawingBlink ? "Closed/" : Expression) + A.Name + G + LayerType + Color + L + ".png", X, Y);
+			drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + Color + L + ".png", X, Y);
 		}
 
 		// If the item has been locked
@@ -154,7 +155,7 @@ function CommonDrawAppearanceBuild(C, {
 			// If we just drew the last drawable layer for this asset, draw the lock too (never colorized)
 			if (DrawableLayerCount === LayerCounts[CountKey]) {
 				drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + Type + "_Lock.png", X, Y);
-				drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + (AG.DrawingBlink ? "Closed/" : Expression) + A.Name + Type + "_Lock.png", X, Y);
+				drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + Type + "_Lock.png", X, Y);
 			}
 		}
 	});

@@ -73,12 +73,12 @@ function AsylumEntranceClick() {
 		ManagementClubSlaveDialog(AsylumEntranceNurse);
 		CharacterSetCurrent(AsylumEntranceNurse);
 	}
-	if ((MouseIn(1885, 25, 90, 90)) && Player.CanWalk() && (LogValue("Committed", "Asylum") < CurrentTime)) CommonSetScreen("Room", "MainHall");
-	if ((MouseIn(1885, 145, 90, 90))) InformationSheetLoadCharacter(Player);
-	if ((MouseIn(1885, 265, 90, 90)) && AsylumEntranceCanWander()) AsylumEntranceStartChat();
-	if ((MouseIn(1885, 385, 90, 90)) && AsylumEntranceCanWander()) CommonSetScreen("Room", "AsylumBedroom");
-	if ((MouseIn(1885, 505, 90, 90)) && AsylumEntranceCanWander()) CommonSetScreen("Room", "AsylumMeeting");
-	if ((MouseIn(1885, 625, 90, 90)) && AsylumEntranceCanWander()) CommonSetScreen("Room", "AsylumTherapy");
+	if (MouseIn(1885, 25, 90, 90) && Player.CanWalk() && (LogValue("Committed", "Asylum") < CurrentTime)) CommonSetScreen("Room", "MainHall");
+	if (MouseIn(1885, 145, 90, 90)) InformationSheetLoadCharacter(Player);
+	if (MouseIn(1885, 265, 90, 90) && AsylumEntranceCanWander()) AsylumEntranceStartChat();
+	if (MouseIn(1885, 385, 90, 90) && AsylumEntranceCanWander()) CommonSetScreen("Room", "AsylumBedroom");
+	if (MouseIn(1885, 505, 90, 90) && AsylumEntranceCanWander()) CommonSetScreen("Room", "AsylumMeeting");
+	if (MouseIn(1885, 625, 90, 90) && AsylumEntranceCanWander()) CommonSetScreen("Room", "AsylumTherapy");
 }
 
 /**
@@ -86,7 +86,7 @@ function AsylumEntranceClick() {
  * @returns {void} - Nothing
  */
 function AsylumEntranceStartChat() {
-	ChatRoomStart("Asylum", "", "AsylumEntrance", "AsylumEntranceDark", ["AsylumEntrance", "AsylumBedroom", "AsylumMeeting", "AsylumTherapy", "PaddedCell", "PaddedCell2"]);
+	ChatRoomStart("Asylum", "", "AsylumEntrance", "AsylumEntranceDark", BackgroundsList.filter(bg => bg.Tag.indexOf(BackgroundsTagAsylum) >= 0).map(bg => bg.Name));
 }
 
 // Wears the nurse clothes on a character (same as nursery)
