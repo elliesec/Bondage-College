@@ -68,7 +68,7 @@ function InventoryItemNeckAccessoriesCollarShockUnitTrigger() {
 	}
 
 	var Dictionary = [];
-	Dictionary.push({Tag: "DestinationCharacterName", Text: C.Name, MemberNumber: C.MemberNumber});
+	Dictionary.push({Tag: "DestinationCharacter", Text: C.Name, MemberNumber: C.MemberNumber});
 	Dictionary.push({Tag: "AssetName", AssetName: DialogFocusItem.Asset.Name});
 	ChatRoomPublishCustomAction("TriggerShock" + DialogFocusItem.Property.Intensity, true, Dictionary);
 	
