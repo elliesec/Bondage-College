@@ -135,11 +135,12 @@ function InventoryItemArmsHighSecurityStraitJacketDrawCommon(buttonDefinitions) 
 function InventoryItemArmsHighSecurityStraitJacketMapButtonDefinition(option) {
 	var C = CharacterGetCurrent();
 	var A = DialogFocusItem.Asset;
+	var failLockCheck = DialogFocusItem.Property.LockedBy && !DialogCanUnlock(C, DialogFocusItem);
 	var failSkillCheck = option.SelfBondage && C.ID === 0 && SkillGetLevelReal(C, "SelfBondage") < option.SelfBondage;
 	return [
 		"Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/" + option.Name + ".png",
 		"ItemArmsHighSecurityStraitJacketType" + option.Name,
-		failSkillCheck ? "#ffc0cb" : "#fff",
+		(failLockCheck || failSkillCheck) ? "#ffc0cb" : "#fff",
 	];
 }
 
@@ -229,6 +230,12 @@ function InventoryItemArmsHighSecurityStraitJacketParseCurrent() {
 function InventoryItemArmsHighSecurityStraitJacketSetType(option) {
 	var C = CharacterGetCurrent();
 	DialogFocusItem = InventoryGet(C, C.FocusGroup.Name);
+
+	// Lock check - cannot change type if you can't unlock the item
+	if (DialogFocusItem.Property.LockedBy && !DialogCanUnlock(C, DialogFocusItem)) {
+		DialogExtendedMessage = DialogFind(Player, "CantChangeWhileLocked");
+		return;
+	}
 
 	// Self bondage requirement check
 	if (option.SelfBondage && C.ID === 0 && SkillGetLevelReal(C, "SelfBondage") < option.SelfBondage) {
