@@ -1,8 +1,6 @@
 // Main variables
 "use strict";
 var Player;
-var MouseX = 0;
-var MouseY = 0;
 var KeyPress = "";
 var CurrentModule;
 var CurrentScreen;
@@ -11,33 +9,6 @@ var CurrentOnlinePlayers = 0;
 var CommonIsMobile = false;
 var CommonCSVCache = {};
 var CutsceneStage = 0;
-/**
- * List of all the common backgrounds.
- * @constant 
- * @type {string[]}
- */
-var CommonBackgroundList = [
-	"Introduction", "KidnapLeague", "MaidQuarters", "MainHall", "Management", "Private", "Shibari", "MaidCafe", 
-	"HorseStable", "Nursery", "Bedroom", "PrisonHall", "Kennels",
-	"BDSMRoomBlue", "BDSMRoomPurple", "BDSMRoomRed", "BondageBedChamber",
-	"CeremonialVenue", "WeddingRoom", "WeddingArch", "WeddingBeach",
-	"ParkDay", "ParkNight", "Gardens", "ParkWinter", "XmasEve", "XmasDay", "StreetNight", "SnowyStreet", "DystopianCity",
-	"IndoorPool", "OutdoorPool", "PublicBath", "Onsen", "Beach", "BeachCafe", "BeachHotel",
-	"PirateIsland", "PirateIslandNight", "ShipDeck", "CaptainCabin", "Shipwreck", 
-	"UnderwaterOne",
-	"MedinaMarket",	"SheikhPrivate", "SheikhTent",
-	"ForestPath", "WoodenCabin", "DeepForest", "ForestCave", "SpookyForest", "WitchWood", "DesolateVillage",
-	"ThroneRoom", "SecretChamber", "Dungeon", "DungeonRuin", "Confessions",
-	"AncientRuins", "JungleTemple", "SunTemple",
-	"AlchemistOffice", "ResearchPrep", "ResearchProgress",
-	"MiddletownSchool", "SlipperyClassroom", "LockerRoom", "SchoolHospital", "SchoolRuins", "SlumRuins", 
-	"SlumApartment", "AbandonedBuilding", "AbandonedSideRoom", "Industrial", "BackAlley", "CreepyBasement", "Cellar", "SlumCellar",
-	"VaultCorridor", "SciFiCell", "SpaceCaptainBedroom",
-	"HellEntrance", "HeavenEntrance", 
-	"BarRestaurant", "LostVages",
-	"ChillRoom", "Boudoir", "Kitchen", "DiningRoom", "CozyLivingRoom", "TiledBathroom",
-	"RooftopParty", "PartyBasement", "CosyChalet", "BalconyNight"
-];
 
 /**
  * Checks if a variable is a number
@@ -78,7 +49,7 @@ function CommonDetectMobile() {
 
 	// Second check
 	if (sessionStorage.desktop) return false;
-	else if (localStorage.mobile) return true;	
+	else if (localStorage.mobile) return true;
 
 	// If nothing is found, we assume desktop
 	return false;
@@ -172,7 +143,7 @@ function CommonReadCSV(Array, Path, Screen, File) {
 	// If a translation file is available, we open the txt file and keep it in cache
 	var TranslationPath = FullPath.replace(".csv", "_" + TranslationLanguage + ".txt");
 	if (TranslationAvailable(TranslationPath))
-		CommonGet(TranslationPath, function() {
+		CommonGet(TranslationPath, function () {
 			if (this.status == 200) TranslationCache[TranslationPath] = TranslationParseTXT(this.responseText);
 		});
 
@@ -200,18 +171,6 @@ function CommonClick() {
 		CommonDynamicFunction(CurrentScreen + "Click()");
 	else
 		DialogClick();
-}
-
-/**
- * Check if the click was within the boundaries of a given zone (Useful for UI components)
- * @param {number} Left - Starting position on the X axis
- * @param {number} Top - Starting position on the Y axis
- * @param {number} Width - Width of the zone
- * @param {number} Height - Height of the zone
- * @returns {boolean} - Returns TRUE if the click occured on the given zone
- */
-function CommonIsClickAt(Left, Top, Width, Height) {
-	return (MouseX >= Left) && (MouseX <= Left + Width) && (MouseY >= Top) && (MouseY <= Top + Height);
 }
 
 /**
@@ -357,7 +316,7 @@ function CommonRandomItemFromList(ItemPrevious, ItemList) {
 function CommonConvertStringToArray(s) {
 	var arr = [];
 	if (s != "") {
-		arr = s.split(',').map(Number).reduce((list,curr) => {
+		arr = s.split(',').map(Number).reduce((list, curr) => {
 			if (!((curr === false) || Number.isNaN(curr))) list.push(curr);
 			return list;
 		}, []);
@@ -385,5 +344,5 @@ function CommonConvertArrayToString(Arr) {
  */
 function CommonWait(MS) {
 	var waitUntil = new Date().getTime() + MS;
-	while(new Date().getTime() < waitUntil) true;
+	while (new Date().getTime() < waitUntil) true;
 }
