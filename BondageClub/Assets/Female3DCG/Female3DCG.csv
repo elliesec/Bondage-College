@@ -522,6 +522,8 @@ ItemVulva,FullLatexSuitWand,Wand
 ItemVulva,ClitAndDildoVibratorbelt,Clit&Dildo Vibrating belt
 ItemVulva,HempRopeBelt,Hemp Rope Wand Belt
 ItemVulva,WiredEgg,Wired Vibrating Egg
+ItemVulva,LoversVibrator,Lovers Vibrator
+ItemVulva,LoversVibratorRemote,Lovers Remote
 ItemVulvaPiercings,,Clit
 ItemVulvaPiercings,StraightClitPiercing,Straight Clit Piercing
 ItemVulvaPiercings,RoundClitPiercing,Round Clit Piercing
@@ -826,6 +828,7 @@ ItemMouth,WebGag,Web
 ItemMouth,RopeGag,Rope Gag
 ItemMouth,MilkBottle,Milk Bottle
 ItemMouth,MedicalMask,Medical Mask
+ItemMouth,RegressedMilk,Nursery Milk
 ItemMouth2,,Mouth
 ItemMouth2,ClothGag,Cloth Gag
 ItemMouth2,WiffleGag,Wiffle Ball Gag
@@ -864,6 +867,7 @@ ItemMouth2,GasMaskGag,Respirator Mask
 ItemMouth2,WebGag,Web Gag
 ItemMouth2,RopeGag,Rope Gag
 ItemMouth2,MedicalMask,Medical Mask
+ItemMouth2,RegressedMilk,Nursery Milk
 ItemMouth3,,Mouth
 ItemMouth3,ClothGag,Cloth Gag
 ItemMouth3,WiffleGag,Wiffle Ball Gag
@@ -902,6 +906,7 @@ ItemMouth3,GasMaskGag,Respirator Mask
 ItemMouth3,WebGag,Web Gag
 ItemMouth3,RopeGag,Rope Gag
 ItemMouth3,MedicalMask,Medical Mask
+ItemMouth3,RegressedMilk,Nursery Milk
 ItemHead,,Eyes
 ItemHead,ClothBlindfold,Cloth Blindfold
 ItemHead,LeatherBlindfold,Leather Blindfold
@@ -938,6 +943,7 @@ ItemHood,DogHood,Dog Hood
 ItemHood,FoxyMask,Foxy Mask
 ItemHood,PonyHood,Pony Hood
 ItemHood,LeatherHoodOpenMouth,Leather Hood Mouth
+ItemHood,CanvasHood,Canvas Hood
 ItemEars,,Ears
 ItemEars,LightDutyEarPlugs,Light Duty Ear Plugs
 ItemEars,HeavyDutyEarPlugs,Heavy Duty Ear Plugs
@@ -990,6 +996,7 @@ ItemDevices,Vacbed,Vacbed
 ItemDevices,Crib,Crib
 ItemDevices,Bed,Bed
 ItemDevices,X-Cross,St. Andrews Cross
+ItemDevices,ChangingTable,Changing Table
 ItemAddon,,Body
 ItemAddon,BondageBenchStraps,Leather Belt Straps
 ItemAddon,OldGasMaskLenses,Blinding Lenses
