@@ -2292,7 +2292,17 @@ var AssetFemale3DCG = [
 			{ Name: "FoxyMask", Value: 50, Difficulty: 2, Time: 15, Random: false, AllowLock: true, Effect: ["GagLight", "BlockMouth"], Block: ["ItemMouth", "ItemMouth2", "ItemMouth3", "ItemHead", "ItemNose"] },
 			{ Name: "PonyHood", Value: -1, Difficulty: 50, Time: 15, Random: false, AllowLock: true, DefaultColor: "#404040", Hide: ["HairFront", "HairBack", "Glasses", "ItemMouth", "ItemMouth2", "ItemMouth3", "HairAccessory1", "HairAccessory2", "Mask"], Effect: ["BlindHeavy", "DeafLight", "Prone", "GagNormal", "BlockMouth"], Block: ["ItemMouth", "ItemMouth2", "ItemMouth3", "ItemEars", "ItemNeck", "ItemHead", "ItemNose"] },
 			{ Name: "LeatherHoodOpenMouth", Value: 50, Difficulty: 50, Time: 15, AllowLock: true, DefaultColor: "#404040", Hide: ["HairFront", "HairBack", "Glasses", "HairAccessory1", "HairAccessory2", "Mask"], Effect: ["Prone", "BlindHeavy"], Block: ["ItemEars", "ItemHead", "ItemNose"] },
-			{ Name: "CanvasHood", Value: 50, Difficulty: 20, Time: 15, AllowLock: true, DefaultColor: "#a5a095", Hide: ["HairFront", "HairBack", "Glasses", "ItemMouth", "ItemMouth2", "ItemMouth3", "HairAccessory1", "HairAccessory2", "Mask"], Effect: ["Prone", "BlindHeavy", "GagHeavy", "BlockMouth", "DeafLight"], Block: ["ItemMouth", "ItemMouth2", "ItemMouth3", "ItemEars", "ItemNose", "ItemHead"] }
+			{ Name: "CanvasHood", Value: 50, Difficulty: 20, Time: 15, AllowLock: true, DefaultColor: "#a5a095", Hide: ["HairFront", "HairBack", "Glasses", "ItemMouth", "ItemMouth2", "ItemMouth3", "HairAccessory1", "HairAccessory2", "Mask"], Effect: ["Prone", "BlindHeavy", "GagHeavy", "BlockMouth", "DeafLight"], Block: ["ItemMouth", "ItemMouth2", "ItemMouth3", "ItemEars", "ItemNose", "ItemHead"] },
+			{
+				Name: "ModularLatexHood", Value: 90, Difficulty: 50, Time: 15, AllowLock: true, DefaultColor: "#333", Hide: ["HairFront", "HairBack", "Glasses", "Hat", "HairAccessory1", "HairAccessory2", "Mask"], AllowBlock: ["ItemMouth", "ItemMouth2", "ItemMouth3", "ItemNose", "ItemEars", "ItemHead"], AllowEffect: ["GagEasy", "GagHeavy", "BlockMouth", "BlindHeavy", "Prone", "DeafLight", "DeafNormal"], Block: ["ItemNose", "ItemEars", "ItemHead"], Extended: true,
+				AllowType: ["b0g0d0", "b0g0d1", "b0g0d2", "b0g1d0", "b0g1d1", "b0g1d2", "b0g2d0", "b0g2d1", "b0g2d2", "b1g0d0", "b1g0d1", "b1g0d2", "b1g1d0", "b1g1d1", "b1g1d2", "b1g2d0", "b1g2d1", "b1g2d2"],
+				Layer: [
+					{ Name: "Base", HasType: false, },
+					{ Name: "Highlights", AllowColorize: false, HasType: false, },
+					{ Name: "Blindfold", AllowTypes: ["b1g0d0", "b1g0d1", "b1g0d2", "b1g1d0", "b1g1d1", "b1g1d2", "b1g2d0", "b1g2d1", "b1g2d2"], HasType: false, },
+					{ Name: "Gag", AllowTypes: ["b0g1d0", "b0g1d1", "b0g1d2", "b0g2d0", "b0g2d1", "b0g2d2", "b1g1d0", "b1g1d1", "b1g1d2", "b1g2d0", "b1g2d1", "b1g2d2"], HasType: false },
+				]
+			}
 		],
 	},
 
