@@ -85,12 +85,13 @@ function ChatRoomLoad() {
 }
 
 // When the chat room selection must start
-function ChatRoomStart(Space, Game, LeaveRoom, Background, BackgroundList) {
+function ChatRoomStart(Space, Game, LeaveRoom, Background, BackgroundTagList) {
 	ChatRoomSpace = Space;
 	OnlineGameName = Game;
 	ChatSearchLeaveRoom = LeaveRoom;
 	ChatSearchBackground = Background;
-	ChatCreateBackgroundList = BackgroundList;
+	ChatCreateBackgroundList = BackgroundsGenerateList(BackgroundTagList);
+	BackgroundSelectionTagList = BackgroundTagList;
 	CommonSetScreen("Online", "ChatSearch");
 }
 
@@ -393,8 +394,8 @@ function ChatRoomCanLeave() {
 // Chat room keyboard shortcuts
 function ChatRoomKeyDown() {
 
-	// If the input textfield is not focussed at the moment, set the focus to it.
-	if (document.activeElement.id != "InputChat") document.getElementById("InputChat").focus();
+	// If the input text is not focused and not on mobile, set the focus to it
+	if (document.activeElement.id != "InputChat") ElementFocus("InputChat");
 
 	// The ENTER key sends the chat.  The "preventDefault" is needed for <textarea>, otherwise it adds a new line after clearing the field
 	if (KeyPress == 13) {
@@ -494,8 +495,8 @@ function ChatRoomSendChat() {
 			if (msg != "") ServerSend("ChatRoomChat", { Content: msg, Type: "Emote" });
 
 		}
-		else if (m.indexOf("/help") == 0) ServerSend("ChatRoomChat", { Content: "ChatRoomHelp", Type: "Action", Target: Player.MemberNumber });
-		else if (m.indexOf("/safeword") == 0) ChatRoomSafeword();
+		else if (m.indexOf("/help") == 0) ServerSend("ChatRoomChat", { Content: "ChatRoomHelp", Type: "Action", Target: Player.MemberNumber});
+		else if (m.indexOf("/safeword") == 0) ChatRoomSafewordChatCommand();
 		else if (m.indexOf("/friendlistadd ") == 0) ChatRoomListManipulation(Player.FriendList, null, msg);
 		else if (m.indexOf("/friendlistremove ") == 0) ChatRoomListManipulation(null, Player.FriendList, msg);
 		else if (m.indexOf("/ghostadd ") == 0) { ChatRoomListManipulation(Player.GhostList, null, msg); ChatRoomListManipulation(Player.BlackList, Player.WhiteList, msg); }
@@ -562,6 +563,11 @@ function ChatRoomPublishAction(C, DialogProgressPrevItem, DialogProgressNextItem
 			else if (DialogProgressNextItem != null) msg = "ActionUse";
 			else if (InventoryItemHasEffect(DialogProgressPrevItem, "Lock")) msg = "ActionUnlockAndRemove";
 			else msg = "ActionRemove";
+		} else if (Action == "interrupted") {
+			if ((DialogProgressPrevItem != null) && (DialogProgressNextItem != null) && !DialogProgressNextItem.Asset.IsLock) msg = "ActionInterruptedSwap";
+			else if (DialogProgressNextItem != null) msg = "ActionInterruptedAdd";
+			else msg = "ActionInterruptedRemove";
+			Dictionary.push({ Tag: "TargetCharacter", Text: C.Name, MemberNumber: C.MemberNumber });
 		} else msg = Action;
 
 		// Replaces the action tags to build the phrase
@@ -589,10 +595,10 @@ function ChatRoomCharacterItemUpdate(C, Group) {
 		var P = {};
 		P.Target = C.MemberNumber;
 		P.Group = Group;
-		P.Name = (Item != null) ? Item.Asset.Name : null;
+		P.Name = (Item != null) ? Item.Asset.Name : undefined;
 		P.Color = ((Item != null) && (Item.Color != null)) ? Item.Color : "Default";
-		P.Difficulty = SkillGetWithRatio("Bondage");
-		P.Property = ((Item != null) && (Item.Property != null)) ? Item.Property : null;
+		P.Difficulty = (Item != null) ? (Item.Difficulty - Item.Asset.Difficulty) : SkillGetWithRatio("Bondage");
+		P.Property = ((Item != null) && (Item.Property != null)) ? Item.Property : undefined;
 		ServerSend("ChatRoomCharacterItemUpdate", P);
 	}
 }
@@ -626,10 +632,8 @@ function ChatRoomHTMLEntities(str) {
 
 // When the server sends a chat message
 function ChatRoomMessage(data) {
-
 	// Make sure the message is valid (needs a Sender and Content)
 	if ((data != null) && (typeof data === "object") && (data.Content != null) && (typeof data.Content === "string") && (data.Content != "") && (data.Sender != null) && (typeof data.Sender === "number")) {
-
 		// Exits right away if the sender is ghosted
 		if (Player.GhostList.indexOf(data.Sender) >= 0) return;
 
@@ -643,7 +647,6 @@ function ChatRoomMessage(data) {
 
 		// If we found the sender
 		if (SenderCharacter != null) {
-
 			// Replace < and > characters to prevent HTML injections
 			var msg = data.Content;
 			while (msg.indexOf("<") > -1) msg = msg.replace("<", "&lt;");
@@ -676,10 +679,11 @@ function ChatRoomMessage(data) {
 				if (data.Dictionary) {
 					var dictionary = data.Dictionary;
 					var SourceCharacter = null;
-					var isPlayerInvolved = SenderCharacter.MemberNumber == Player.MemberNumber;
+					var IsPlayerInvolved = (SenderCharacter.MemberNumber == Player.MemberNumber);
 					var TargetMemberNumber = null;
 					var ActivityName = null;
 					var GroupName = null;
+					var ActivityCounter = 1;
 					for (var D = 0; D < dictionary.length; D++) {
 
 						// If there's a member number in the dictionary packet, we use that number to alter the chat message
@@ -701,10 +705,11 @@ function ChatRoomMessage(data) {
 										SourceCharacter = ChatRoomCharacter[T];
 							}
 
-							// Checks if the player is involved in the action
-							if (!isPlayerInvolved && ((dictionary[D].Tag == "DestinationCharacter") || (dictionary[D].Tag == "DestinationCharacterName") || (dictionary[D].Tag == "TargetCharacter") || (dictionary[D].Tag == "TargetCharacterName") || (dictionary[D].Tag == "SourceCharacter")))
+							// Sets if the player is involved in the action
+							if (!IsPlayerInvolved && ((dictionary[D].Tag == "DestinationCharacter") || (dictionary[D].Tag == "DestinationCharacterName") || (dictionary[D].Tag == "TargetCharacter") || (dictionary[D].Tag == "TargetCharacterName") || (dictionary[D].Tag == "SourceCharacter")))
 								if (dictionary[D].MemberNumber == Player.MemberNumber)
-									isPlayerInvolved = true;
+									IsPlayerInvolved = true;
+
 						}
 						else if (dictionary[D].TextToLookUp) msg = msg.replace(dictionary[D].Tag, DialogFind(Player, ChatRoomHTMLEntities(dictionary[D].TextToLookUp)).toLowerCase());
 						else if (dictionary[D].AssetName) {
@@ -722,16 +727,19 @@ function ChatRoomMessage(data) {
 									GroupName = dictionary[D].AssetGroupName;
 								}
 						}
+						else if (dictionary[D].ActivityCounter) ActivityCounter = dictionary[D].ActivityCounter;
 						else if (msg != null) msg = msg.replace(dictionary[D].Tag, ChatRoomHTMLEntities(dictionary[D].Text));
 					}
 
 					// If another player is using an item which applies an activity on the current player, apply the effect here
 					if ((ActivityName != null) && (TargetMemberNumber != null) && (TargetMemberNumber == Player.MemberNumber) && (SenderCharacter.MemberNumber != Player.MemberNumber))
 						if ((Player.ArousalSettings == null) || (Player.ArousalSettings.Active == null) || (Player.ArousalSettings.Active == "Hybrid") || (Player.ArousalSettings.Active == "Automatic"))
-							ActivityEffect(SenderCharacter, Player, ActivityName, GroupName);
+							ActivityEffect(SenderCharacter, Player, ActivityName, GroupName, ActivityCounter);
 
-					if (!Player.AudioSettings.PlayItemPlayerOnly || isPlayerInvolved)
+					// Launches the audio file if allowed
+					if (!Player.AudioSettings.PlayItemPlayerOnly || IsPlayerInvolved)
 						AudioPlayContent(data);
+
 				}
 			}
 
@@ -754,25 +762,25 @@ function ChatRoomMessage(data) {
 			}
 
 			// Outputs the sexual activities text and runs the activity if the player is targeted
-			if ((data.Type != null) && (data.Type == "Activity")) {
-
+			if ((data.Type != null) && (data.Type === "Activity")) {
 				// Creates the output message using the activity dictionary and tags, keep some values to calculate the activity effects on the player
 				msg = "(" + ActivityDictionaryText(msg) + ")";
 				var TargetMemberNumber = null;
 				var ActivityName = null;
 				var ActivityGroup = null;
+				var ActivityCounter = 1;
 				if (data.Dictionary != null)
 					for (var D = 0; D < data.Dictionary.length; D++) {
 						if (data.Dictionary[D].MemberNumber != null) msg = msg.replace(data.Dictionary[D].Tag, (PreferenceIsPlayerInSensDep() && (data.Dictionary[D].MemberNumber != Player.MemberNumber)) ? DialogFind(Player, "Someone") : ChatRoomHTMLEntities(data.Dictionary[D].Text));
 						if ((data.Dictionary[D].MemberNumber != null) && (data.Dictionary[D].Tag == "TargetCharacter")) TargetMemberNumber = data.Dictionary[D].MemberNumber;
 						if (data.Dictionary[D].Tag == "ActivityName") ActivityName = data.Dictionary[D].Text;
 						if (data.Dictionary[D].Tag == "ActivityGroup") ActivityGroup = data.Dictionary[D].Text;
+						if (data.Dictionary[D].ActivityCounter != null) ActivityCounter = data.Dictionary[D].ActivityCounter;
 					}
-
 				// If the player does the activity on herself or an NPC, we calculate the result right away
-				if ((TargetMemberNumber == Player.MemberNumber) && (SenderCharacter.MemberNumber != Player.MemberNumber))
+				if ((data.Type === "Action") || ((TargetMemberNumber == Player.MemberNumber) && (SenderCharacter.MemberNumber != Player.MemberNumber)))
 					if ((Player.ArousalSettings == null) || (Player.ArousalSettings.Active == null) || (Player.ArousalSettings.Active == "Hybrid") || (Player.ArousalSettings.Active == "Automatic"))
-						ActivityEffect(SenderCharacter, Player, ActivityName, ActivityGroup);
+						ActivityEffect(SenderCharacter, Player, ActivityName, GroupName, ActivityCounter);
 
 				// Exits before outputting the text if the player doesn't want to see the sexual activity messages
 				if ((Player.ChatSettings != null) && (Player.ChatSettings.ShowActivities != null) && !Player.ChatSettings.ShowActivities) return;
@@ -788,6 +796,7 @@ function ChatRoomMessage(data) {
 				div.setAttribute('style', 'background-color:' + ChatRoomGetTransparentColor(SenderCharacter.LabelColor) + ';');
 			div.innerHTML = msg;
 
+			// Returns the focus on the chat box
 			var Refocus = document.activeElement.id == "InputChat";
 			var ShouldScrollDown = ElementIsScrolledToEnd("TextAreaChatLog");
 			if (document.getElementById("TextAreaChatLog") != null) {
@@ -795,6 +804,7 @@ function ChatRoomMessage(data) {
 				if (ShouldScrollDown) ElementScrollToEnd("TextAreaChatLog");
 				if (Refocus) ElementFocus("InputChat");
 			}
+
 		}
 	}
 }
@@ -925,8 +935,9 @@ function ChatRoomSyncArousal(data) {
 	for (var C = 0; C < ChatRoomCharacter.length; C++)
 		if ((ChatRoomCharacter[C].MemberNumber == data.MemberNumber) && (ChatRoomCharacter[C].ArousalSettings != null)) {
 
-			// Sets the active pose
+			// Sets the orgasm count & progress
 			ChatRoomCharacter[C].ArousalSettings.OrgasmTimer = data.OrgasmTimer;
+			ChatRoomCharacter[C].ArousalSettings.OrgasmCount = data.OrgasmCount;
 			ChatRoomCharacter[C].ArousalSettings.Progress = data.Progress;
 			ChatRoomCharacter[C].ArousalSettings.ProgressTimer = data.ProgressTimer;
 			if ((ChatRoomCharacter[C].ArousalSettings.AffectExpression == null) || ChatRoomCharacter[C].ArousalSettings.AffectExpression) ActivityExpression(ChatRoomCharacter[C], ChatRoomCharacter[C].ArousalSettings.Progress);
@@ -935,6 +946,7 @@ function ChatRoomSyncArousal(data) {
 			for (var C = 0; C < ChatRoomData.Character.length; C++)
 				if (ChatRoomData.Character[C].MemberNumber == data.MemberNumber) {
 					ChatRoomData.Character[C].ArousalSettings.OrgasmTimer = data.OrgasmTimer;
+					ChatRoomData.Character[C].ArousalSettings.OrgasmCount = data.OrgasmCount;
 					ChatRoomData.Character[C].ArousalSettings.Progress = data.Progress;
 					ChatRoomData.Character[C].ArousalSettings.ProgressTimer = data.ProgressTimer;
 					ChatRoomData.Character[C].Appearance = ChatRoomCharacter[C].Appearance;
@@ -1012,8 +1024,8 @@ function ChatRoomRefreshChatSettings(C) {
 	if (C.ChatSettings) {
 		for (var property in C.ChatSettings)
 			ElementSetDataAttribute("TextAreaChatLog", property, C.ChatSettings[property]);
-		if (C.GameplaySettings && (C.GameplaySettings.SensDepChatLog == "SensDepNames" || C.GameplaySettings.SensDepChatLog == "SensDepTotal") && (C.Effect.indexOf("DeafHeavy") >= 0) && (C.Effect.indexOf("BlindHeavy") >= 0)) ElementSetDataAttribute("TextAreaChatLog", "EnterLeave", "Hidden");
-		if (C.GameplaySettings && (C.GameplaySettings.SensDepChatLog == "SensDepTotal") && (C.Effect.indexOf("DeafHeavy") >= 0) && (C.Effect.indexOf("BlindHeavy") >= 0)) {
+		if (C.GameplaySettings && (C.GameplaySettings.SensDepChatLog == "SensDepNames" || C.GameplaySettings.SensDepChatLog == "SensDepTotal") && (C.GetDeafLevel() >= 3) && (C.Effect.indexOf("BlindHeavy") >= 0)) ElementSetDataAttribute("TextAreaChatLog", "EnterLeave", "Hidden");
+		if (C.GameplaySettings && (C.GameplaySettings.SensDepChatLog == "SensDepTotal") && (C.GetDeafLevel() >= 3) && (C.Effect.indexOf("BlindHeavy") >= 0)) {
 			ElementSetDataAttribute("TextAreaChatLog", "DisplayTimestamps", "false");
 			ElementSetDataAttribute("TextAreaChatLog", "ColorNames", "false");
 			ElementSetDataAttribute("TextAreaChatLog", "ColorActions", "false");
@@ -1111,8 +1123,7 @@ function ChatRoomListManage(Operation, ListType) {
 		var data = {};
 		data[ListType] = Player[ListType];
 		ServerSend("AccountUpdate", data);
-		CommonWait(1000);
-		ChatRoomCharacterUpdate(Player);
+		setTimeout(() => ChatRoomCharacterUpdate(Player), 5000);
 	}
 	if (ListType == "GhostList") ChatRoomListManage(Operation, "BlackList");
 }
@@ -1124,8 +1135,7 @@ function ChatRoomListManipulation(Add, Remove, Message) {
 		if ((Add != null) && (Add.indexOf(C) < 0)) Add.push(C);
 		if ((Remove != null) && (Remove.indexOf(C) >= 0)) Remove.splice(Remove.indexOf(C), 1);
 		ServerSend("AccountUpdate", { FriendList: Player.FriendList, GhostList: Player.GhostList, WhiteList: Player.WhiteList, BlackList: Player.BlackList });
-		CommonWait(1000);
-		ChatRoomCharacterUpdate(Player);
+		setTimeout(() => ChatRoomCharacterUpdate(Player), 5000);
 	}
 }
 
@@ -1286,21 +1296,41 @@ function ChatRoomGameResponse(data) {
 	if (OnlineGameName == "LARP") GameLARPProcess(data);
 }
 
-// When the player activates her safeword, we swap her appearance to the state when she entered the chat room lobby, minimum permission becomes whitelist and up
-function ChatRoomSafeword() {
+// When the player uses the /safeword command, we revert the character if safewords are enabled, and display a warning in chat if not
+function ChatRoomSafewordChatCommand() {
+	if (DialogChatRoomCanSafeword())
+		ChatRoomSafewordRevert();
+	else if (CurrentScreen == "ChatRoom") {
+		var msg = {Sender: Player.MemberNumber, Content: "SafewordDisabled", Type: "Action"};
+		ChatRoomMessage(msg);
+	}
+}
+
+// When the player activates her safeword to revert, we swap her appearance to the state when she entered the chat room lobby, minimum permission becomes whitelist and up
+function ChatRoomSafewordRevert() {
 	if (ChatSearchSafewordAppearance != null) {
 		Player.Appearance = ChatSearchSafewordAppearance.slice(0);
 		CharacterSetActivePose(Player, ChatSearchSafewordPose);
 		CharacterRefresh(Player);
 		ChatRoomCharacterUpdate(Player);
-		ServerSend("ChatRoomChat", { Content: "ActionActivateSafeword", Type: "Action", Dictionary: [{ Tag: "SourceCharacter", Text: Player.Name }] });
+		ServerSend("ChatRoomChat", { Content: "ActionActivateSafewordRevert", Type: "Action", Dictionary: [{ Tag: "SourceCharacter", Text: Player.Name }] });
 		if (Player.ItemPermission < 3) {
 			Player.ItemPermission = 3;
 			ServerSend("AccountUpdate", { ItemPermission: Player.ItemPermission });
-			CommonWait(1000);
-			ChatRoomCharacterUpdate(Player);
+			setTimeout(() => ChatRoomCharacterUpdate(Player), 5000);
 		}
 	}
+}
+
+// When the player activates her safeword and wants to be released, we remove all bondage from her and return her to the Main Lobby.
+function ChatRoomSafewordRelease() {
+	CharacterReleaseTotal(Player);
+	CharacterRefresh(Player);
+	ServerSend("ChatRoomChat", { Content: "ActionActivateSafewordRelease", Type: "Action", Dictionary: [{Tag: "SourceCharacter", Text: Player.Name}] });
+	ElementRemove("InputChat");
+	ElementRemove("TextAreaChatLog");
+	ServerSend("ChatRoomLeave", "");
+	CommonSetScreen("Room","MainHall");
 }
 
 /** 
