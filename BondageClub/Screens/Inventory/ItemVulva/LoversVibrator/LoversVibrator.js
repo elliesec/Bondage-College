@@ -121,10 +121,10 @@ function InventoryItemVulvaLoversVibratorDraw() {
 	var ItemIntensity = DialogFind(Player, "Intensity" + Property.Intensity.toString()).replace("Item", Description);
 	DrawText(ItemIntensity, 1500, 525, "white", "gray");
 
+	Y = 525;
 	InventoryItemVulvaLoversVibratorOptions.forEach((OptionGroup) => {
-		var Y = 525;
 		OptionGroup.forEach((Option, I) => {
-			var X = 1175 + (I % 3) * 225;
+			X = 1175 + (I % 3) * 225;
 			if (I % 3 === 0) {
 				Y += 75;
 			}
@@ -137,7 +137,7 @@ function InventoryItemVulvaLoversVibratorDraw() {
 
 function InventoryItemVulvaLoversVibratorClick() {
 	// Exit Button
-	if (CommonIsClickAt(1885, 25, 90, 85)) {
+	if (MouseIn(1885, 25, 90, 85)) {
 		DialogFocusItem = null;
 	}
 
@@ -148,7 +148,7 @@ function InventoryItemVulvaLoversVibratorClick() {
 			if (I % 3 === 0) {
 				Y += 75;
 			}
-			if (CommonIsClickAt(X, Y, 200, 55)) {
+			if (MouseIn(X, Y, 200, 55)) {
 				if (Option.Property.Mode !== DialogFocusItem.Property.Mode) {
 					InventoryItemVulvaLoversVibratorOptionSetMode(Option);
 				}
