@@ -63,5 +63,5 @@ function InventoryItemFeetSturdyLeatherBeltsPublishAction(C, Option) {
 }
 
 function InventoryItemFeetSturdyLeatherBeltsNpcDialog(C, Option) {
-	C.CurrentDialog = DialogFind(C, "ItemFeetSturdyLeatherBelts" + Option.Name, "ItemArms");
+	C.CurrentDialog = DialogFind(C, "ItemFeetSturdyLeatherBelts" + Option.Name, "ItemFeet");
 }
