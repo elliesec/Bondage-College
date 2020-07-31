@@ -79,7 +79,7 @@ function InventoryItemFeetSturdyLeatherBeltsSetPose(NewPose) {
 
 	// Refreshes the character and chatroom
 	CharacterRefresh(C);
-	var msg = "SturdyLeatherBeltsRestrain" + ((NewPose == null) ? "None" : NewPose);
+	var msg = "SturdyLeatherBeltsRestrain" + ((NewPose == null) ? "One" : NewPose);
 	var Dictionary = [];
 	Dictionary.push({Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber});
 	Dictionary.push({Tag: "TargetCharacter", Text: C.Name, MemberNumber: C.MemberNumber});
