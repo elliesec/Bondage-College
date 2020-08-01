@@ -1587,7 +1587,7 @@ var AssetFemale3DCG = [
 				]
 			},
 			{
-				Name: "PrisonLockdownSuit", Value: 90, Difficulty: 7, SelfBondage: 7, Time: 50, RemoveTime: 30, Random: false, Top: 0, Left: 0, AllowLock: false, DefaultColor: "#c4630f", Hide: ["BodyLower", "Cloth", "ClothLower", "Shoes", "Socks"], SetPose: ["BackElbowTouch"], Prerequisite: ["NotSuspended", "NotKneeling", "NotHogtied", "NotMounted", "NotKneelingSpread", "NoFeetSpreader", "NotShackled"], Effect: ["Block", "Prone"], AllowType: ["Ankles", "Thighs", "Full"], Extended: true, SelfUnlock: false, Layer: [
+				Name: "PrisonLockdownSuit", Value: 90, Difficulty: 7, SelfBondage: 7, Time: 50, RemoveTime: 30, Random: false, Top: 0, Left: 0, AllowLock: false, DefaultColor: "#ab5207", Hide: ["BodyLower", "Cloth", "ClothLower", "Shoes", "Socks", "ItemLegs", "ItemFeet"], SetPose: ["BackElbowTouch"], Prerequisite: ["NotSuspended", "NotKneeling", "NotHogtied", "NotMounted", "NotKneelingSpread", "NoFeetSpreader", "NotShackled"], Effect: ["Block", "Prone"], AllowType: ["Ankles", "Thighs", "Full"], Extended: true, SelfUnlock: false, Layer: [
 					{ Name: "Suit", AllowTypes: ["", "Ankles", "Thighs", "Full"] },
 					{ Name: "Belts", AllowColorize: false, AllowTypes: ["", "Ankles", "Thighs", "Full"] }
 				]
