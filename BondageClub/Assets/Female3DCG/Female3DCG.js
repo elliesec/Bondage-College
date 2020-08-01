@@ -1592,6 +1592,12 @@ var AssetFemale3DCG = [
 					{ Name: "Highlights", AllowColorize: false, AllowTypes: ["", "Polished"] },
 				]
 			},
+			{
+				Name: "PrisonLockdownSuit", Value: 90, Difficulty: 7, SelfBondage: 7, Time: 50, RemoveTime: 30, Random: false, Top: 0, Left: 0, AllowLock: false, DefaultColor: "#b85600", Hide: ["BodyLower", "Cloth", "ClothLower", "Shoes", "Socks"], SetPose: ["BackElbowTouch"], Prerequisite: ["NotSuspended", "NotKneeling", "NotHogtied", "NotMounted", "NotKneelingSpread", "NoFeetSpreader", "NotShackled"], Effect: ["Block", "Prone"], AllowType: ["Ankles", "Thighs", "Full"], Extended: true, SelfUnlock: false, Layer: [
+					{ Name: "Suit", AllowTypes: ["", "Ankles", "Thighs", "Full"] },
+					{ Name: "Belts", AllowColorize: false, AllowTypes: ["", "Ankles", "Thighs", "Full"] }
+				]
+			},
 			AssetSpankingToys
 		],
 		Color: ["Default"]
