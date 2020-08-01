@@ -49,7 +49,7 @@ function InventoryItemArmsPrisonLockdownSuitDraw() {
 	CommonCallFunctionByName("InventoryItemArmsPrisonLockdownSuitDraw" + InventoryItemArmsPrisonLockdownSuitPage);
 }
 
-function InventoryItemArmsPrisonLockdownSuitDrawCommon() {
+function InventoryItemArmsPrisonLockdownSuitDrawBase() {
 	var A = DialogFocusItem.Asset;
 
 	// Draw the header and item
@@ -57,15 +57,9 @@ function InventoryItemArmsPrisonLockdownSuitDrawCommon() {
 	DrawImageResize("Assets/" + A.Group.Family + "/" + A.Group.Name + "/Preview/" + A.Name + ".png", 1389, 57, 221, 221);
 	DrawTextFit(A.Description, 1500, 310, 221, "black");
 	DrawText(DialogExtendedMessage, 1500, 375, "white", "gray");
-}
-
-function InventoryItemArmsPrisonLockdownSuitDrawBase() {
-	var A = DialogFocusItem.Asset;
-
-	InventoryItemArmsPrisonLockdownSuitDrawCommon();
 
 	DrawButton(1175, 550, 225, 225, "", "white");
-	DrawImage("Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/Straps.png", 1175, 550);
+	DrawImage("Screens/Inventory/" + A.Group.Name + "/" + A.Name + "/" + (DialogFocusItem.Property.Type || "Free") + ".png", 1175, 550);
 	DrawText(DialogFind(Player, "ItemArmsPrisonLockdownSuitStraps"), 1288, 800, "white", "gray");
 
 	DrawButton(1600, 550, 225, 225, "", "white");
