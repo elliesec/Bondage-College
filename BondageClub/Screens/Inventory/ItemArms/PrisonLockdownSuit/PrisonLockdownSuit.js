@@ -5,13 +5,14 @@ var InventoryItemArmsPrisonLockdownSuitOptions = [
 		Name: "Free",
 		Property: { Type: null, Difficulty: 0 },
 		SetPose: ["BackElbowTouch"],
+		Effect: ["Block", "Prone"],
 	},
 	{
 		Name: "Ankles",
 		Property: {
 			Type: "Ankles",
 			Difficulty: 2,
-			SetPose: ["LegsClosed", "BackElbowTouch"],
+			Effect: ["Block", "Prone", "Freeze"],
 		},
 	},
 	{
@@ -19,7 +20,7 @@ var InventoryItemArmsPrisonLockdownSuitOptions = [
 		Property: {
 			Type: "Thighs",
 			Difficulty: 1,
-			SetPose: ["LegsClosed", "BackElbowTouch"],
+			Effect: ["Block", "Prone"],
 		},
 	},
 	{
@@ -27,7 +28,7 @@ var InventoryItemArmsPrisonLockdownSuitOptions = [
 		Property: {
 			Type: "Full",
 			Difficulty: 3,
-			SetPose: ["LegsClosed", "BackElbowTouch"],
+			Effect: ["Block", "Prone", "Freeze"],
 		},
 	},
 ];
