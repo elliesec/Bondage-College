@@ -168,7 +168,7 @@ function CommonDrawAppearanceBuild(C, {
  * @return {string} - The name of the pose to draw for the layer, or an empty string if no pose should be drawn
  */
 function CommonDrawFindPose(C, AllowedPoses) {
-	let Pose = "";
+	var Pose = "";
 	if (AllowedPoses && AllowedPoses.length) {
 		AllowedPoses.forEach(AllowedPose => {
 			if (C.Pose.includes(AllowedPose)) Pose = AllowedPose + "/";
