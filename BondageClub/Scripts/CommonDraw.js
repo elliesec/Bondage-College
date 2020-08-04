@@ -102,8 +102,6 @@ function CommonDrawAppearanceBuild(C, {
 			A.Alpha.forEach(([x, y, w, h]) => {
 				clearRect(x, y, w, h);
 				clearRectBlink(x, y, w, h);
-				C.Canvas.getContext("2d").clearRect(x, y, w, h);
-				C.CanvasBlink.getContext("2d").clearRect(x, y, w, h);
 			});
 
 		// Check if we need to draw a different expression (for facial features)
@@ -136,15 +134,16 @@ function CommonDrawAppearanceBuild(C, {
 		if (Layer.Name) L = "_" + Layer.Name;
 		if (!Layer.HasType) LayerType = "";
 		var Opacity = (Property && typeof Property.Opacity === "number") ? AssetParseOpacity(Property.Opacity) : Layer.Opacity;
+		var BlinkExpression = (A.OverrideBlinking ? !AG.DrawingBlink : AG.DrawingBlink) ? "Closed/" : Expression;
 
 		// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
 		if ((CA.Color != null) && (CA.Color.indexOf("#") == 0) && Layer.AllowColorize) {
 			drawImageColorize("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, CA.Color, AG.DrawingFullAlpha, Opacity);
-			drawImageColorizeBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + (AG.DrawingBlink ? "Closed/" : Expression) + A.Name + G + LayerType + L + ".png", X, Y, CA.Color, AG.DrawingFullAlpha, Opacity);
+			drawImageColorizeBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y, CA.Color, AG.DrawingFullAlpha, Opacity);
 		} else {
 			var Color = ((CA.Color == null) || (CA.Color == "Default") || (CA.Color == "") || (CA.Color.length == 1) || (CA.Color.indexOf("#") == 0)) ? "" : "_" + CA.Color;
 			drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + Color + L + ".png", X, Y, Opacity);
-			drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + (AG.DrawingBlink ? "Closed/" : Expression) + A.Name + G + LayerType + Color + L + ".png", X, Y, Opacity);
+			drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + Color + L + ".png", X, Y, Opacity);
 		}
 
 		// If the item has been locked
@@ -159,7 +158,7 @@ function CommonDrawAppearanceBuild(C, {
 			// If we just drew the last drawable layer for this asset, draw the lock too (never colorized)
 			if (DrawableLayerCount === LayerCounts[CountKey]) {
 				drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + Type + "_Lock.png", X, Y, 1);
-				drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + (AG.DrawingBlink ? "Closed/" : Expression) + A.Name + Type + "_Lock.png", X, Y, 1);
+				drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + Type + "_Lock.png", X, Y, 1);
 			}
 		}
 	});
@@ -172,7 +171,7 @@ function CommonDrawAppearanceBuild(C, {
  * @return {string} - The name of the pose to draw for the layer, or an empty string if no pose should be drawn
  */
 function CommonDrawFindPose(C, AllowedPoses) {
-	let Pose = "";
+	var Pose = "";
 	if (AllowedPoses && AllowedPoses.length) {
 		AllowedPoses.forEach(AllowedPose => {
 			if (C.Pose.includes(AllowedPose)) Pose = AllowedPose + "/";

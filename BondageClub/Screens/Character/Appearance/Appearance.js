@@ -161,7 +161,7 @@ function CharacterAppearanceFullRandom(C, ClothOnly) {
 	// For each item group (non default items only show at a 20% rate, if it can occasionally happen)
 	for (var A = 0; A < AssetGroup.length; A++)
 		if ((AssetGroup[A].Category == "Appearance") && (AssetGroup[A].IsDefault || (AssetGroup[A].Random && Math.random() < 0.2) || CharacterAppearanceRequired(C, AssetGroup[A].Name)) && (!CharacterAppearanceMustHide(C, AssetGroup[A].Name) || !AssetGroup[A].AllowNone) && (CharacterAppearanceGetCurrentValue(C, AssetGroup[A].Name, "Name") == "None")) {
-
+			
 			// Get the parent size
 			var ParentSize = "";
 			if (AssetGroup[A].ParentSize != "")
@@ -189,6 +189,11 @@ function CharacterAppearanceFullRandom(C, ClothOnly) {
 				if (SelectedAsset.Group.ParentColor != "")
 					if (CharacterAppearanceGetCurrentValue(C, SelectedAsset.Group.ParentColor, "Color") != "None")
 						SelectedColor = CharacterAppearanceGetCurrentValue(C, SelectedAsset.Group.ParentColor, "Color");
+				// Rare chance of keeping eyes of a different color
+				if (SelectedAsset.Group.Name == "Eyes2" && Math.random() < 0.995)
+					for (var A = 0; A < C.Appearance.length; A++)
+						if (C.Appearance[A].Asset.Group.Name == "Eyes")
+							SelectedColor = C.Appearance[A].Color;
 				var NA = {
 					Asset: SelectedAsset,
 					Color: SelectedColor
@@ -279,10 +284,10 @@ function CharacterAppearanceStripLayer(C) {
  * @return {Layer[]} - A sorted set of layers, sorted by layer drawing priority
  */
 function CharacterAppearanceSortLayers(C) {
-    var layers = C.Appearance.reduce((layersAcc, item) => {
-    	var asset = item.Asset;
-    	// Only include layers for visible assets
-    	if (asset.Visible && CharacterAppearanceVisible(C, asset.Name, asset.Group.Name)) {
+	var layers = C.Appearance.reduce((layersAcc, item) => {
+		var asset = item.Asset;
+		// Only include layers for visible assets
+		if (asset.Visible && CharacterAppearanceVisible(C, asset.Name, asset.Group.Name)) {
 			// Check if we need to draw a different variation (from type property)
 			var type = (item.Property && item.Property.Type) || "";
 			// Only include layers that permit the current type (if AllowTypes is not defined, also include the layer)
@@ -291,18 +296,21 @@ function CharacterAppearanceSortLayers(C) {
 				.map(layer => {
 					var drawLayer = Object.assign({}, layer);
 					// If the item has an OverridePriority property, it completely overrides the layer priority
-					if (item.Property && typeof item.Property.OverridePriority === "number") drawLayer.Priority = item.Property.OverridePriority;
+					if (item.Property && typeof item.Property.OverridePriority === "number") drawLayer.Priority =
+						item.Property.OverridePriority;
 					return drawLayer;
 				});
 			Array.prototype.push.apply(layersAcc, layersToDraw);
 		}
 		return layersAcc;
-    }, []);
-    return layers.sort((l1, l2) => {
+	}, []);
+	return layers.sort((l1, l2) => {
 		// If the layers belong to the same Asset, ensure layer order is preserved
 		if (l1.Asset === l2.Asset) return l1.Asset.Layer.indexOf(l1) - l1.Asset.Layer.indexOf(l2);
-		// Otherwise, sort by priority
-		return l1.Priority - l2.Priority
+		// If priorities are different, sort by priority
+		if (l1.Priority !== l2.Priority) return l1.Priority - l2.Priority;
+		// If priorities are identical, sort alphabetically to maintain consistency
+		return (l1.Asset.Group.Name + l1.Asset.Name).localeCompare(l2.Asset.Group.Name + l2.Asset.Name);
 	});
 }
 
@@ -404,11 +412,9 @@ function CharacterAppearanceGetCurrentValue(C, Group, Type) {
 function AppearanceLoad() {
 	if (!CharacterAppearanceSelection) CharacterAppearanceSelection = Player;
 	var C = CharacterAppearanceSelection;
-
 	CharacterAppearanceBuildAssets(Player);
-	CharacterAppearanceBackup = C.Appearance.map(Item => Object.assign({}, Item));
+	CharacterAppearanceBackup = C.Appearance.slice();
 }
-
 
 /**
  * Run the character appearance selection screen. The function name is created dynamically.
@@ -499,10 +505,11 @@ function AppearanceRun() {
  * @param {Asset} ItemAsset - The asset collection of the item to be changed
  * @param {string} NewColor - The new color (as "#xxyyzz" hex value) for that item
  * @param {number} DifficultyFactor - The difficulty factor of the ne item
+ * @param {number} ItemMemberNumber - The member number of the player adding the item - defaults to -1
  * @param {boolean} Refresh - Determines, wether the character should be redrawn after the item change
  * @returns {void} - Nothing
  */
-function CharacterAppearanceSetItem(C, Group, ItemAsset, NewColor, DifficultyFactor, Refresh) {
+function CharacterAppearanceSetItem(C, Group, ItemAsset, NewColor, DifficultyFactor, ItemMemberNumber, Refresh) {
 
 	// Sets the difficulty factor
 	if (DifficultyFactor == null) DifficultyFactor = 0;
@@ -520,7 +527,8 @@ function CharacterAppearanceSetItem(C, Group, ItemAsset, NewColor, DifficultyFac
 		var NA = {
 			Asset: ItemAsset,
 			Difficulty: parseInt((ItemAsset.Difficulty == null) ? 0 : ItemAsset.Difficulty) + parseInt(DifficultyFactor),
-			Color: ((NewColor == null) ? ItemColor : NewColor)
+			Color: ((NewColor == null) ? ItemColor : NewColor),
+			Property: ItemAsset.CharacterRestricted ? {ItemMemberNumber: ItemMemberNumber == null ? -1 : ItemMemberNumber} : undefined
 		}
 		C.Appearance.push(NA);
 	}
