@@ -672,5 +672,5 @@ function InventoryIsKey(Item) {
  */
 function InventoryStringify(C) {
 	if (!C || !Array.isArray(C.Inventory)) return "";
-	return C.Inventory.map(({ Name, Group }) => Group + Name ).join(",");
+	return C.Inventory.map(({ Name, Group }) => Group + Name ).join();
 }
