@@ -96,11 +96,18 @@ function CommonDrawAppearanceBuild(C, {
 		}
 
 		// If we must apply alpha masks to the current image as it is being drawn
-		if (Array.isArray(A.Alpha))
-			A.Alpha.forEach(([x, y, w, h]) => {
-				clearRect(x, y, w, h);
-				clearRectBlink(x, y, w, h);
+		if (Array.isArray(A.Alpha)) {
+			A.Alpha.forEach(AlphaDef => {
+				// If no groups are defined and the character's pose matches one of the allowed poses (or no poses are defined)
+				if ((!AlphaDef.Group || !AlphaDef.Group.length) &&
+					(!AlphaDef.Pose || !Array.isArray(AlphaDef.Pose) || !!CommonDrawFindPose(C, AlphaDef.Pose))) {
+					AlphaDef.Masks.forEach(([x, y, w, h]) => {
+						clearRect(x, y, w, h);
+						clearRectBlink(x, y, w, h);
+					});
+				}
 			});
+		}
 
 		// Check if we need to draw a different expression (for facial features)
 		var Expression = "";
