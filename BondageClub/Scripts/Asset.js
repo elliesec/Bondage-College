@@ -29,7 +29,7 @@ var Pose = [];
  * alpha masks will be applied to every layer underneath the present one.
  * @property {string[]} [Pose] - A list of the poses that the given alpha masks should be applied to. If empty or not present, the alpha
  * masks will be applied regardless of character pose.
- * @property {number[][]} Alpha - A list of alpha mask definitions. A definition is a 4-tuple of numbers defining the top left coordinate of
+ * @property {number[][]} Masks - A list of alpha mask definitions. A definition is a 4-tuple of numbers defining the top left coordinate of
  * a rectangle and the rectangle's width and height - e.g. [left, top, width, height]
  */
 

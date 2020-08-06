@@ -286,6 +286,7 @@ function CharacterAppearanceStripLayer(C) {
  * @return {Layer[]} - A sorted set of layers, sorted by layer drawing priority
  */
 function CharacterAppearanceSortLayers(C) {
+	var groupAlphas = {};
 	var layers = C.Appearance.reduce((layersAcc, item) => {
 		var asset = item.Asset;
 		// Only include layers for visible assets
@@ -297,15 +298,32 @@ function CharacterAppearanceSortLayers(C) {
 				.filter(layer => !layer.AllowTypes || layer.AllowTypes.includes(type))
 				.map(layer => {
 					var drawLayer = Object.assign({}, layer);
+					// Store any group-level alpha mask definitions
+					drawLayer.Alpha.forEach(alphaDef => {
+						if (alphaDef.Group && alphaDef.Group.length) {
+							alphaDef.Group.forEach(groupName => {
+								groupAlphas[groupName] = groupAlphas[groupName] || [];
+								groupAlphas[groupName].push({Pose: alphaDef.Pose, Masks: alphaDef.Masks});
+							});
+						}
+					});
 					// If the item has an OverridePriority property, it completely overrides the layer priority
-					if (item.Property && typeof item.Property.OverridePriority === "number") drawLayer.Priority =
-						item.Property.OverridePriority;
+					if (item.Property && typeof item.Property.OverridePriority === "number") drawLayer.Priority = item.Property.OverridePriority;
 					return drawLayer;
 				});
 			Array.prototype.push.apply(layersAcc, layersToDraw);
 		}
 		return layersAcc;
 	}, []);
+
+	// Run back over the layers to apply the group-level alpha mask definitions to the appropriate layers
+	layers.forEach(layer => {
+		const groupName = layer.Asset.Group.Name;
+		if (groupAlphas[groupName]) {
+			layer.GroupAlpha = groupAlphas[groupName];
+		}
+	});
+
 	return layers.sort((l1, l2) => {
 		// If the layers belong to the same Asset, ensure layer order is preserved
 		if (l1.Asset === l2.Asset) return l1.Asset.Layer.indexOf(l1) - l1.Asset.Layer.indexOf(l2);
