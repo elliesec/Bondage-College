@@ -15,6 +15,7 @@
  * @param {string} src - The URL of the image to draw
  * @param {number} x - The x coordinate to draw the image at
  * @param {number} y - The y coordinate to draw the image at
+ * @param {number[][]} alphaMasks - A list of alpha masks to apply to the image when drawing
  */
 
 /**
@@ -25,6 +26,7 @@
  * @param {number} y - The y coordinate to draw the image at
  * @param {string} color - The color to apply to the image
  * @param {boolean} fullAlpha - Whether or not to apply colour to the entire image
+ * @param {number[][]} alphaMasks - A list of alpha masks to apply to the image when drawing
  */
 
 /**
@@ -141,23 +143,29 @@ function CommonDrawAppearanceBuild(C, {
 		if (Layer.Name) L = "_" + Layer.Name;
 		if (!Layer.HasType) LayerType = "";
 		var BlinkExpression = (A.OverrideBlinking ? !AG.DrawingBlink : AG.DrawingBlink) ? "Closed/" : Expression;
+		var AlphaMasks = Layer.GroupAlpha
+			.filter(({Pose}) => !Pose || !Array.isArray(Pose) || !!CommonDrawFindPose(C, Pose))
+			.reduce((Acc, {Masks}) => {
+				Array.prototype.push.apply(Acc, Masks);
+				return Acc;
+			}, []);
 
 		// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
 		if ((CA.Color != null) && (CA.Color.indexOf("#") == 0) && Layer.AllowColorize) {
 			drawImageColorize(
 				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, CA.Color,
-				AG.DrawingFullAlpha,
+				AG.DrawingFullAlpha, AlphaMasks
 			);
 			drawImageColorizeBlink(
 				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y, CA.Color,
-				AG.DrawingFullAlpha,
+				AG.DrawingFullAlpha, AlphaMasks
 			);
 		} else {
 			var Color = ((CA.Color == null) || (CA.Color == "Default") || (CA.Color == "") || (CA.Color.length == 1) ||
 						 (CA.Color.indexOf("#") == 0)) ? "" : "_" + CA.Color;
-			drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + Color + L + ".png", X, Y);
+			drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + Color + L + ".png", X, Y, AlphaMasks);
 			drawImageBlink(
-				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + Color + L + ".png", X, Y);
+				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + Color + L + ".png", X, Y, AlphaMasks);
 		}
 
 		// If the item has been locked
@@ -168,8 +176,8 @@ function CommonDrawAppearanceBuild(C, {
 
 			// If we just drew the last drawable layer for this asset, draw the lock too (never colorized)
 			if (DrawableLayerCount === LayerCounts[CountKey]) {
-				drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + Type + "_Lock.png", X, Y);
-				drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + Type + "_Lock.png", X, Y);
+				drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + Type + "_Lock.png", X, Y, AlphaMasks);
+				drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + Type + "_Lock.png", X, Y, AlphaMasks);
 			}
 		}
 	});

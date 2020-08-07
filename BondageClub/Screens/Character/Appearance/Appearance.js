@@ -319,8 +319,9 @@ function CharacterAppearanceSortLayers(C) {
 	// Run back over the layers to apply the group-level alpha mask definitions to the appropriate layers
 	layers.forEach(layer => {
 		const groupName = layer.Asset.Group.Name;
+		layer.GroupAlpha = [];
 		if (groupAlphas[groupName]) {
-			layer.GroupAlpha = groupAlphas[groupName];
+			Array.prototype.push.apply(layer.GroupAlpha, groupAlphas[groupName]);
 		}
 	});
 
@@ -393,10 +394,10 @@ function CharacterAppearanceBuildCanvas(C) {
 	CommonDrawAppearanceBuild(C, {
 		clearRect: (x, y, w, h) => C.Canvas.getContext("2d").clearRect(x, y, w, h),
 		clearRectBlink: (x, y, w, h) => C.CanvasBlink.getContext("2d").clearRect(x, y, w, h),
-		drawImage: (src, x, y) => DrawImageCanvas(src, C.Canvas.getContext("2d"), x, y),
-		drawImageBlink: (src, x, y) => DrawImageCanvas(src, C.CanvasBlink.getContext("2d"), x, y),
-		drawImageColorize: (src, x, y, color, fullAlpha) => DrawImageCanvasColorize(src, C.Canvas.getContext("2d"), x, y, 1, color, fullAlpha),
-		drawImageColorizeBlink: (src, x, y, color, fullAlpha) => DrawImageCanvasColorize(src, C.CanvasBlink.getContext("2d"), x, y, 1, color, fullAlpha),
+		drawImage: (src, x, y, alphaMasks) => DrawImageCanvas(src, C.Canvas.getContext("2d"), x, y, alphaMasks),
+		drawImageBlink: (src, x, y, alphaMasks) => DrawImageCanvas(src, C.CanvasBlink.getContext("2d"), x, y, alphaMasks),
+		drawImageColorize: (src, x, y, color, fullAlpha, alphaMasks) => DrawImageCanvasColorize(src, C.Canvas.getContext("2d"), x, y, 1, color, fullAlpha, alphaMasks),
+		drawImageColorizeBlink: (src, x, y, color, fullAlpha, alphaMasks) => DrawImageCanvasColorize(src, C.CanvasBlink.getContext("2d"), x, y, 1, color, fullAlpha, alphaMasks),
 	});
 }
 
