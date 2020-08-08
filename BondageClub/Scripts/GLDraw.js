@@ -248,19 +248,21 @@ function GLDrawCreateProgram(gl, vertexShader, fragmentShader) {
  * @param {number[][]} alphaMasks - A list of alpha masks to apply to the asset
  * @returns {void} - Nothing
  */
-function GLDrawImageBlink(url, gl, dstX, dstY, color, fullAlpha, alphaMasks) { GLDrawImage(url, gl, dstX + 500, dstY, color, fullAlpha, alphaMasks); }
+function GLDrawImageBlink(url, gl, dstX, dstY, color, fullAlpha, alphaMasks) { GLDrawImage(url, gl, dstX, dstY, 500, color, fullAlpha, alphaMasks); }
 /**
  * Draws an image from a given url to a WebGLRenderingContext
  * @param {string} url - URL of the image to render
  * @param {WebGLRenderingContext} gl - WebGL context
  * @param {number} dstX - Position of the image on the X axis
  * @param {number} dstY - Position of the image on the Y axis
+ * @param {number} offsetX - Additional offset to add to the X axis (for blinking)
  * @param {string} color - Color of the image to draw
  * @param {boolean} fullAlpha - Whether or not the full alpha should be rendered
  * @param {number[][]} alphaMasks - A list of alpha masks to apply to the asset
  * @returns {void} - Nothing
  */
-function GLDrawImage(url, gl, dstX, dstY, color, fullAlpha, alphaMasks) {
+function GLDrawImage(url, gl, dstX, dstY, offsetX, color, fullAlpha, alphaMasks) {
+    offsetX = offsetX || 0;
     var tex = GLDrawLoadImage(gl, url);
     var mask = GLDrawLoadMask(gl, tex.width, tex.height, dstX, dstY, alphaMasks);
 
@@ -279,7 +281,7 @@ function GLDrawImage(url, gl, dstX, dstY, color, fullAlpha, alphaMasks) {
     gl.vertexAttribPointer(program.a_texcoord, 2, gl.FLOAT, false, 0, 0);
 
     var matrix = m4.orthographic(0, gl.canvas.width, gl.canvas.height, 0, -1, 1);
-    matrix = m4.translate(matrix, dstX, dstY, 0);
+    matrix = m4.translate(matrix, dstX + offsetX, dstY, 0);
     matrix = m4.scale(matrix, tex.width, tex.height, 1);
 
     gl.uniformMatrix4fv(program.u_matrix, false, matrix);
@@ -382,7 +384,7 @@ function GLDrawLoadMask(gl, texWidth, texHeight, offsetX, offsetY, alphaMasks) {
 		tmpCanvas.height = texHeight;
 		var ctx = tmpCanvas.getContext("2d");
 		ctx.fillRect(0, 0, texWidth, texHeight);
-		alphaMasks.forEach(([x, y, w, h]) => ctx.clearRect(x, y, w, h));
+		alphaMasks.forEach(([x, y, w, h]) => ctx.clearRect(x - offsetX, y - offsetY, w, h));
 
 		mask = gl.createTexture();
 
@@ -447,9 +449,9 @@ function GLDrawAppearanceBuild(C) {
 	CommonDrawAppearanceBuild(C, {
 		clearRect: (x, y, w, h) => GLDrawClearRect(GLDrawCanvas.GL, x, 1000 - y - h, w, h),
 		clearRectBlink: (x, y, w, h) => GLDrawClearRectBlink(GLDrawCanvas.GL, x, 1000 - y - h, w, h),
-		drawImage: (src, x, y, alphaMasks) => GLDrawImage(src, GLDrawCanvas.GL, x, y, null, null, alphaMasks),
+		drawImage: (src, x, y, alphaMasks) => GLDrawImage(src, GLDrawCanvas.GL, x, y, 0, null, null, alphaMasks),
 		drawImageBlink: (src, x, y, alphaMasks) => GLDrawImageBlink(src, GLDrawCanvas.GL, x, y, null, null, alphaMasks),
-		drawImageColorize: (src, x, y, color, fullAlpha, alphaMasks) => GLDrawImage(src, GLDrawCanvas.GL, x, y, color, fullAlpha, alphaMasks),
+		drawImageColorize: (src, x, y, color, fullAlpha, alphaMasks) => GLDrawImage(src, GLDrawCanvas.GL, x, y, 0, color, fullAlpha, alphaMasks),
 		drawImageColorizeBlink: (src, x, y, color, fullAlpha, alphaMasks) => GLDrawImageBlink(src, GLDrawCanvas.GL, x, y, color, fullAlpha, alphaMasks),
 	});
     C.Canvas.getContext("2d").drawImage(GLDrawCanvas, 0, 0);
