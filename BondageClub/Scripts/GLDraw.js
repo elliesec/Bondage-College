@@ -394,7 +394,6 @@ function GLDrawLoadMask(gl, texWidth, texHeight, offsetX, offsetY, alphaMasks) {
 
 		gl.maskCache.set(key, mask);
 	}
-	console.log(gl.maskCache.keys());
 	return mask;
 }
 
