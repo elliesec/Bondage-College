@@ -312,6 +312,7 @@ function CharacterAppearanceSortLayers(C) {
 					return drawLayer;
 				});
 			Array.prototype.push.apply(layersAcc, layersToDraw);
+		}
 		return layersAcc;
 	}, []);
 
@@ -323,7 +324,7 @@ function CharacterAppearanceSortLayers(C) {
 			Array.prototype.push.apply(layer.GroupAlpha, groupAlphas[groupName]);
 		}
 	});
-	}, []);
+
 	return layers.sort((l1, l2) => {
 		// If the layers belong to the same Asset, ensure layer order is preserved
 		if (l1.Asset === l2.Asset) return l1.Asset.Layer.indexOf(l1) - l1.Asset.Layer.indexOf(l2);
