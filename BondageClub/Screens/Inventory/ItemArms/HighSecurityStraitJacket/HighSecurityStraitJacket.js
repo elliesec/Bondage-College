@@ -92,9 +92,11 @@ var InventoryItemArmsHighSecurityStraitJacketClickFunctions = {
 function InventoryItemArmsHighSecurityStraitJacketLoad() {
 	if (!DialogFocusItem.Property) {
 		// Default to the base configuration if no property is set
+		var C = CharacterGetCurrent();
 		var [c, a, s] = InventoryItemArmsHighSecurityStraitJacketParseCurrent();
 		DialogFocusItem.Property = InventoryItemArmsHighSecurityStraitJacketMergeOptions(c, a, s);
-		CharacterRefresh(CharacterGetCurrent());
+		CharacterRefresh(C);
+		ChatRoomCharacterItemUpdate(C, DialogFocusItem.Asset.Group.Name);
 	}
 	DialogExtendedMessage = DialogFind(Player, "ItemArmsHighSecurityStraitJacketSelectBase");
 }
