@@ -137,21 +137,16 @@ function InventoryItemVulvaLoversVibratorDraw() {
 
 function InventoryItemVulvaLoversVibratorClick() {
 	// Exit Button
-	if (MouseIn(1885, 25, 90, 85)) {
-		DialogFocusItem = null;
-	}
+	if (MouseIn(1885, 25, 90, 85)) DialogFocusItem = null;
 
-	let Y = 525;
+	var Y = 525;
 	InventoryItemVulvaLoversVibratorOptions.some((OptionGroup) => {
 		var Handled = OptionGroup.some((Option, I) => {
 			var X = 1175 + (I % 3) * 225;
-			if (I % 3 === 0) {
-				Y += 75;
-			}
+			if (I % 3 === 0) Y += 75;
 			if (MouseIn(X, Y, 200, 55)) {
-				if (Option.Property.Mode !== DialogFocusItem.Property.Mode) {
+				if (Option.Property.Mode !== DialogFocusItem.Property.Mode)
 					InventoryItemVulvaLoversVibratorOptionSetMode(Option);
-				}
 				return true;
 			}
 		});
@@ -165,10 +160,10 @@ function InventoryItemVulvaLoversVibratorOptionSetMode(Option) {
 	DialogFocusItem = InventoryGet(C, C.FocusGroup.Name);
 	var OldIntensity = DialogFocusItem.Property.Intensity;
 	var Property = DialogFocusItem.Property = Object.assign({}, DialogFocusItem.Property, Option.Property);
-	typeof Property.Intensity === "function" && (Property.Intensity = Property.Intensity());
-	typeof Property.ChangeTime === "function" && (Property.ChangeTime = Property.ChangeTime());
-	typeof Property.LastChange === "function" && (Property.LastChange = Property.LastChange());
-	typeof Property.Effect === "function" && (Property.Effect = Property.Effect(Property.Intensity));
+	if (typeof Property.Intensity === "function") Property.Intensity = Property.Intensity();
+	if (typeof Property.ChangeTime === "function") Property.ChangeTime = Property.ChangeTime();
+	if (typeof Property.LastChange === "function") Property.LastChange = Property.LastChange();
+	if (typeof Property.Effect === "function") Property.Effect = Property.Effect(Property.Intensity);
 	CharacterRefresh(C);
 	ChatRoomCharacterUpdate(C);
 
