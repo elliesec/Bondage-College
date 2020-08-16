@@ -116,7 +116,7 @@ function VibratorModeLoad(Options) {
 
 function VibratorModeDraw(Options) {
 	VibratorModeDrawHeader();
-	VibratorModeDrawControls(450, Options);
+	VibratorModeDrawControls(Options);
 }
 
 function VibratorModeDrawHeader() {
@@ -134,7 +134,8 @@ function VibratorModeDrawHeader() {
 	DrawTextFit(Asset.Description, 1500, 350, 221, "black");
 }
 
-function VibratorModeDrawControls(Y, Options) {
+function VibratorModeDrawControls(Options, Y) {
+	Y = typeof Y === "number" ? Y : 450;
 	Options = Options || ["Standard"];
 	var { Asset, Property } = DialogFocusItem;
 	var ItemIntensity = DialogFind(Player, "Intensity" + Property.Intensity.toString()).replace("Item", Asset.Description);
@@ -152,7 +153,8 @@ function VibratorModeDrawControls(Y, Options) {
 	});
 }
 
-function VibratorModeClick(Y, Options) {
+function VibratorModeClick(Options, Y) {
+	Y = typeof Y === "number" ? Y : 450;
 	// Exit Button
 	if (MouseIn(1885, 25, 90, 85)) DialogFocusItem = null;
 
