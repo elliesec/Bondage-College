@@ -106,9 +106,9 @@ function CommonDrawAppearanceBuild(C, {
 			// If no groups are defined and the character's pose matches one of the allowed poses (or no poses are defined)
 			if ((!AlphaDef.Group || !AlphaDef.Group.length) &&
 				(!AlphaDef.Pose || !Array.isArray(AlphaDef.Pose) || !!CommonDrawFindPose(C, AlphaDef.Pose))) {
-				AlphaDef.Masks.forEach(([x, y, w, h]) => {
-					clearRect(x, y, w, h);
-					clearRectBlink(x, y, w, h);
+				AlphaDef.Masks.forEach(rect => {
+					clearRect(rect[0], rect[1], rect[2], rect[3]);
+					clearRectBlink(rect[0], rect[1], rect[2], rect[3]);
 				});
 			}
 		});
