@@ -202,6 +202,7 @@ function PreferenceInit(C) {
 	if (C.ChatSettings.ShowActivities == null) C.ChatSettings.ShowActivities = true;
 	if (C.ChatSettings.AutoBanBlackList == null) C.ChatSettings.AutoBanBlackList = false;
 	if (C.ChatSettings.AutoBanGhostList == null) C.ChatSettings.AutoBanGhostList = true;
+	if (C.ChatSettings.ShowAutomaticMessages == null) C.ChatSettings.ShowAutomaticMessages = false;
 	if (!C.VisualSettings) C.VisualSettings = { ForceFullHeight: false };
 
 	// Sets the default audio settings
@@ -521,6 +522,7 @@ function PreferenceSubscreenChatRun() {
 	DrawCheckbox(500, 812, 64, 64, TextGet("ShowActivities"), Player.ChatSettings.ShowActivities);
 	DrawCheckbox(1200, 492, 64, 64, TextGet("AutoBanBlackList"), Player.ChatSettings.AutoBanBlackList);
 	DrawCheckbox(1200, 572, 64, 64, TextGet("AutoBanGhostList"), Player.ChatSettings.AutoBanGhostList);
+	DrawCheckbox(1200, 652, 64, 64, "Show all automatic messages", Player.ChatSettings.ShowAutomaticMessages);
 	MainCanvas.textAlign = "center";
 	DrawBackNextButton(1000, 190, 350, 70, TextGet(PreferenceChatColorThemeSelected), "White", "",
 		() => TextGet((PreferenceChatColorThemeIndex == 0) ? PreferenceChatColorThemeList[PreferenceChatColorThemeList.length - 1] : PreferenceChatColorThemeList[PreferenceChatColorThemeIndex - 1]),
@@ -701,6 +703,7 @@ function PreferenceSubscreenChatClick() {
 	if ((MouseX >= 1200) && (MouseX <= 1264)) {
 		if ((MouseY >= 492) && (MouseY <= 556)) Player.ChatSettings.AutoBanBlackList = !Player.ChatSettings.AutoBanBlackList;
 		if ((MouseY >= 572) && (MouseY <= 636)) Player.ChatSettings.AutoBanGhostList = !Player.ChatSettings.AutoBanGhostList;
+		if ((MouseY >= 652) && (MouseY <= 716)) Player.ChatSettings.ShowAutomaticMessages = !Player.ChatSettings.ShowAutomaticMessages;
 	}
 
 	// If the user used one of the BackNextButtons

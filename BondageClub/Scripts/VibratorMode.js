@@ -220,7 +220,7 @@ function VibratorModeUpdateRandom(Item, C) {
 		ChangeTime: Math.floor(CurrentTime + OneMinute + Math.random() * 2 * OneMinute), // Next update 1 - 3 minutes from now
 		Effect: ["Egged", "Vibrating"],
 	});
-	VibratorModePublish(C, Item.Asset.Name, OldIntensity, Item.Property.Intensity);
+	VibratorModePublish(C, Item, OldIntensity, Item.Property.Intensity);
 }
 
 function VibratorModeUpdateEscalate(Item, C) {
@@ -234,7 +234,7 @@ function VibratorModeUpdateEscalate(Item, C) {
 		ChangeTime: Math.floor(CurrentTime + TimeToNextUpdate),
 		Effect: ["Egged", "Vibrating"],
 	});
-	VibratorModePublish(C, Item.Asset.Name, OldIntensity, Intensity);
+	VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
 
 function VibratorModeUpdateTease(Item, C) {
@@ -260,7 +260,7 @@ function VibratorModeUpdateEdge(Item, C) {
 		// If we've hit max intensity, no more changes needed
 		delete Item.Property.ChangeTime;
 	}
-	VibratorModePublish(C, Item.Asset.Name, OldIntensity, Item.Property.Intensity);
+	VibratorModePublish(C, Item, OldIntensity, Item.Property.Intensity);
 }
 
 function VibratorModeUpdateStateBased(Item, C, TransitionsFromDefault) {
@@ -293,7 +293,7 @@ function VibratorModeUpdateStateBased(Item, C, TransitionsFromDefault) {
 		Effect,
 	});
 
-	if (Intensity !== OldIntensity) VibratorModePublish(C, Item.Asset.Name, OldIntensity, Intensity);
+	if (Intensity !== OldIntensity) VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
 
 function VibratorModeStateUpdateDefault(C, Arousal, TimeSinceLastChange, OldIntensity, TransitionsFromDefault) {
@@ -352,12 +352,14 @@ function VibratorModeStateUpdateRest(C, Arousal, TimeSinceLastChange, OldIntensi
 	return { State, Intensity };
 }
 
-function VibratorModePublish(C, AssetName, OldIntensity, Intensity) {
+function VibratorModePublish(C, Item, OldIntensity, Intensity) {
 	var Direction = Intensity > OldIntensity ? "Increase" : "Decrease";
 	var Dictionary = [
 		{ Tag: "DestinationCharacterName", Text: C.Name, MemberNumber: C.MemberNumber },
-		{ Tag: "AssetName", AssetName },
+		{ Tag: "AssetName", AssetName: Item.Asset.Name },
+		{ Automatic: true },
 	];
+	if (Item.Property.ItemMemberNumber) Dictionary.push({ Tag: "ItemMemberNumber", MemberNumber: Item.Property.ItemMemberNumber });
 	if (CurrentScreen == "ChatRoom") {
 		ServerSend("ChatRoomChat", { Content: "Egg" + Direction + "To" + Intensity, Type: "Action", Dictionary });
 		ChatRoomCharacterItemUpdate(C);
