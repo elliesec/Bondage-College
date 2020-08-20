@@ -315,7 +315,7 @@ function ActivityOrgasmGameGenerate(Progress) {
  */
 function ActivityOrgasmPrepare(C) {
 	if (C.IsEdged()) {
-		C.ArousalSettings.Progress = 99;
+		C.ArousalSettings.Progress = 90;
 		return;
 	}
 
