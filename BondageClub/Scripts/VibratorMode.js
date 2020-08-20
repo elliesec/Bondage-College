@@ -248,12 +248,12 @@ function VibratorModeUpdateDeny(Item, C) {
 }
 
 function VibratorModeUpdateEdge(Item, C) {
-	var OneMinute = 60000;
+	var ThirtySeconds = 30000;
 	var OldIntensity = Item.Property.Intensity;
 	var NewIntensity = Math.min(Item.Property.Intensity + 1, 3);
 	Object.assign(Item.Property, {
 		Intensity: NewIntensity,
-		ChangeTime: Math.floor(CurrentTime + OneMinute + Math.random() * OneMinute), // Next update 1 - 2 minutes from now
+		ChangeTime: Math.floor(CurrentTime + ThirtySeconds + Math.random() * ThirtySeconds), // Next update 30-60 seconds from now
 		Effect: ["Egged", "Vibrating", "Edged"],
 	});
 	if (NewIntensity === 3) {
