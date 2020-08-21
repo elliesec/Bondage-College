@@ -143,7 +143,7 @@ function CommonDrawAppearanceBuild(C, {
 			const DrawingData = {
 				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
-			const OverridenData = window["Asset" + A.Group.Name + A.Name + "BeforeDraw"](DrawingData);
+			const OverridenData = window["Assets" + A.Group.Name + A.Name + "BeforeDraw"](DrawingData);
 			if (typeof OverridenData == "object") {
 				for (const key in OverridenData) {
 					switch (key) { 
@@ -214,7 +214,7 @@ function CommonDrawAppearanceBuild(C, {
 			const DrawingData = {
 				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
-			window["Asset" + A.Group.Name + A.Name + "AfterDraw"](DrawingData);
+			window["Assets" + A.Group.Name + A.Name + "AfterDraw"](DrawingData);
 		}
 	});
 }
