@@ -406,6 +406,7 @@ function CharacterLoadOnline(data, SourceMemberNumber) {
 function CharacterDelete(NPCType) {
 	for (let C = 0; C < Character.length; C++)
 		if (Character[C].AccountName == NPCType) {
+			AnimationPersistentDataPurge(Character[C], true);
 			Character.splice(C, 1);
 			return;
 		}
@@ -543,6 +544,7 @@ function CharacterChangeMoney(C, Value) {
  * @returns {void} - Nothing
  */
 function CharacterRefresh(C, Push) {
+	AnimationPersistentDataPurge(C, false);
 	CharacterLoadEffect(C);
 	CharacterLoadPose(C);
 	CharacterLoadCanvas(C);
