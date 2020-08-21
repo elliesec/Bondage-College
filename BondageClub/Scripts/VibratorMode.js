@@ -56,7 +56,6 @@ var VibratorModeOptions = {
 			Property: {
 				Mode: "Random",
 				Intensity: () => CommonRandomItemFromList(null, [-1, 0, 1, 2, 3]),
-				ChangeTime: () => Math.floor(CurrentTime + 60000 + Math.random() * 120000),
 				Effect: (Intensity) => Intensity >= 0 ? ["Egged", "Vibrating"] : ["Egged"],
 			},
 		},
@@ -65,7 +64,6 @@ var VibratorModeOptions = {
 			Property: {
 				Mode: "Escalate",
 				Intensity: 0,
-				ChangeTime: Math.floor(CurrentTime + (5000 + Math.random() * 5000) * 16),
 				Effect: ["Egged", "Vibrating"],
 			},
 		},
@@ -74,8 +72,6 @@ var VibratorModeOptions = {
 			Property: {
 				Mode: "Tease",
 				Intensity: () => CommonRandomItemFromList(-1, [0, 1, 2, 3]),
-				ChangeTime: () => CurrentTime + 2000,
-				LastChange: () => CurrentTime,
 				Effect: ["Egged", "Vibrating"],
 			},
 		},
@@ -84,8 +80,6 @@ var VibratorModeOptions = {
 			Property: {
 				Mode: "Deny",
 				Intensity: () => CommonRandomItemFromList(-1, [0, 1, 2, 3]),
-				ChangeTime: () => CurrentTime,
-				LastChange: () => CurrentTime,
 				Effect: ["Egged", "Vibrating", "Edged"],
 			},
 		},
@@ -94,7 +88,6 @@ var VibratorModeOptions = {
 			Property: {
 				Mode: "Edge",
 				Intensity: CommonRandomItemFromList(null, [0, 1]),
-				ChangeTime: () => Math.floor(CurrentTime + 60000 + Math.random() * 120000),
 				Effect: ["Egged", "Vibrating", "Edged"],
 			},
 		},
@@ -102,7 +95,7 @@ var VibratorModeOptions = {
 };
 
 function VibratorModeLoad(Options) {
-	var { Asset, Property } = DialogFocusItem;
+	var Property = DialogFocusItem.Property;
 	if (!Property || !Property.Mode) {
 		Options = (Options && Options.length) ? Options : ["Standard"];
 		var FirstOption = VibratorModeOptions[Options[0]][0] || VibratorModeOptions.Standard[0];
@@ -110,7 +103,7 @@ function VibratorModeLoad(Options) {
 		VibratorModeSetDynamicProperties(Property);
 		var C = CharacterGetCurrent();
 		CharacterRefresh(C);
-		ChatRoomCharacterItemUpdate(C, Asset.Group.Name);
+		ChatRoomCharacterItemUpdate(C, DialogFocusItem.Asset.Group.Name);
 	}
 }
 
@@ -120,12 +113,12 @@ function VibratorModeDraw(Options) {
 }
 
 function VibratorModeDrawHeader() {
-	var { Asset, Property } = DialogFocusItem;
+	var Asset = DialogFocusItem.Asset;
 	var AssetPath = "Assets/" + Asset.Group.Family + "/" + Asset.Group.Name + "/Preview/" + Asset.Name + ".png";
 
 	var X = 1389;
 	var Y = 102;
-	if (Property.Intensity >= 0) {
+	if (DialogFocusItem.Property.Intensity >= 0) {
 		X += Math.floor(Math.random() * 3) - 1;
 		Y += Math.floor(Math.random() * 3) - 1;
 	}
@@ -137,8 +130,8 @@ function VibratorModeDrawHeader() {
 function VibratorModeDrawControls(Options, Y) {
 	Y = typeof Y === "number" ? Y : 450;
 	Options = Options || ["Standard"];
-	var { Asset, Property } = DialogFocusItem;
-	var ItemIntensity = DialogFind(Player, "Intensity" + Property.Intensity.toString()).replace("Item", Asset.Description);
+	var Property = DialogFocusItem.Property;
+	var ItemIntensity = DialogFind(Player, "Intensity" + Property.Intensity.toString()).replace("Item", DialogFocusItem.Asset.Description);
 	DrawText(ItemIntensity, 1500, Y, "white", "gray");
 
 	Options.forEach((OptionName) => {
@@ -202,9 +195,25 @@ function VibratorModeSetMode(Option) {
 
 function VibratorModeSetDynamicProperties(Property) {
 	if (typeof Property.Intensity === "function") Property.Intensity = Property.Intensity();
-	if (typeof Property.ChangeTime === "function") Property.ChangeTime = Property.ChangeTime();
-	if (typeof Property.LastChange === "function") Property.LastChange = Property.LastChange();
 	if (typeof Property.Effect === "function") Property.Effect = Property.Effect(Property.Intensity);
+}
+
+function VibratorModeScriptDraw(Data) {
+	var C = Data.C;
+	// Only run vibrator updates on the player and NPCs
+	if (C.ID !== 0 && C.MemberNumber !== null) return;
+
+	var Item = Data.Item;
+	// No need to update the vibrator if it has no mode
+	if (!Item.Property || !Item.Property.Mode) return;
+
+	var PersistentData = Data.PersistentData();
+	if (typeof PersistentData.ChangeTime !== "number") PersistentData.ChangeTime = 0;
+	if (typeof PersistentData.LastChange !== "number") PersistentData.LastChange = 0;
+
+	if (CurrentTime > PersistentData.ChangeTime) {
+		CommonCallFunctionByName("VibratorModeUpdate" + Item.Property.Mode, Item, C, PersistentData);
+	}
 }
 
 function VibratorModeUpdate(Item, C) {
@@ -212,64 +221,60 @@ function VibratorModeUpdate(Item, C) {
 	CommonCallFunctionByName("VibratorModeUpdate" + Item.Property.Mode, Item, C);
 }
 
-function VibratorModeUpdateRandom(Item, C) {
-	var OneMinute = 60000;
+function VibratorModeUpdateRandom(Item, C, PersistentData) {
+	var ThirtySeconds = 30000;
 	var OldIntensity = Item.Property.Intensity;
-	Object.assign(Item.Property, {
-		Intensity: CommonRandomItemFromList(OldIntensity, [0, 1, 2, 3]),
-		ChangeTime: Math.floor(CurrentTime + OneMinute + Math.random() * 2 * OneMinute), // Next update 1 - 3 minutes from now
-		Effect: ["Egged", "Vibrating"],
-	});
-	VibratorModePublish(C, Item, OldIntensity, Item.Property.Intensity);
+	var Intensity = CommonRandomItemFromList(OldIntensity, [-1, 0, 1, 2, 3]);
+	var Effect = Intensity === -1 ? ["Egged"] : ["Egged", "Vibrating"];
+	Object.assign(Item.Property, { Intensity, Effect });
+	// Next update in 30 - 120 seconds
+	PersistentData.ChangeTime = Math.floor(CurrentTime + ThirtySeconds + Math.random() * 4 * ThirtySeconds);
+	VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
 
-function VibratorModeUpdateEscalate(Item, C) {
+function VibratorModeUpdateEscalate(Item, C, PersistentData) {
 	var OldIntensity = Item.Property.Intensity;
 	var Intensity = (OldIntensity + 1) % 4;
 	// As intensity increases, time between updates decreases
 	var TimeFactor = Math.pow((4 - Intensity), 2);
 	var TimeToNextUpdate = (5000 + Math.random() * 5000) * TimeFactor;
-	Object.assign(Item.Property, {
-		Intensity: Intensity,
-		ChangeTime: Math.floor(CurrentTime + TimeToNextUpdate),
-		Effect: ["Egged", "Vibrating"],
-	});
+	Object.assign(Item.Property, { Intensity, Effect: ["Egged", "Vibrating"] });
+	PersistentData.ChangeTime = Math.floor(CurrentTime + TimeToNextUpdate);
 	VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
 
-function VibratorModeUpdateTease(Item, C) {
+function VibratorModeUpdateTease(Item, C, PersistentData) {
 	// Tease mode allows orgasm and denial states once arousal gets high enough
-	VibratorModeUpdateStateBased(Item, C, [VibratorModeState.DENY, VibratorModeState.ORGASM]);
+	VibratorModeUpdateStateBased(Item, C, PersistentData, [VibratorModeState.DENY, VibratorModeState.ORGASM]);
 }
 
-function VibratorModeUpdateDeny(Item, C) {
+function VibratorModeUpdateDeny(Item, C, PersistentData) {
 	// Deny mode only allows the denial state on high arousal
-	VibratorModeUpdateStateBased(Item, C, [VibratorModeState.DENY]);
+	VibratorModeUpdateStateBased(Item, C, PersistentData, [VibratorModeState.DENY]);
 }
 
-function VibratorModeUpdateEdge(Item, C) {
+function VibratorModeUpdateEdge(Item, C, PersistentData) {
 	var ThirtySeconds = 30000;
 	var OldIntensity = Item.Property.Intensity;
-	var NewIntensity = Math.min(Item.Property.Intensity + 1, 3);
-	Object.assign(Item.Property, {
-		Intensity: NewIntensity,
-		ChangeTime: Math.floor(CurrentTime + ThirtySeconds + Math.random() * ThirtySeconds), // Next update 30-60 seconds from now
-		Effect: ["Egged", "Vibrating", "Edged"],
-	});
-	if (NewIntensity === 3) {
+	var Intensity = Math.min(Item.Property.Intensity + 1, 3);
+	Object.assign(Item.Property, { Intensity, Effect: ["Egged", "Vibrating", "Edged"] });
+	if (Intensity === 3) {
 		// If we've hit max intensity, no more changes needed
-		delete Item.Property.ChangeTime;
+		PersistentData.ChangeTime = Infinity;
+	} else {
+		// Next update 30-60 seconds from now
+		PersistentData.ChangeTime = Math.floor(CurrentTime + ThirtySeconds + Math.random() * ThirtySeconds);
 	}
-	VibratorModePublish(C, Item, OldIntensity, Item.Property.Intensity);
+	VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
 
-function VibratorModeUpdateStateBased(Item, C, TransitionsFromDefault) {
+function VibratorModeUpdateStateBased(Item, C, PersistentData, TransitionsFromDefault) {
 	var Arousal = C.ArousalSettings.Progress;
-	var TimeSinceLastChange = CurrentTime - (Item.Property.LastChange || 0);
+	var TimeSinceLastChange = CurrentTime - PersistentData.LastChange;
 	var OldState = Item.Property.State || VibratorModeState.DEFAULT;
 	var OldIntensity = Item.Property.Intensity;
 
-	var { State, Intensity } = CommonCallFunctionByName(
+	var NewStateAndIntensity = CommonCallFunctionByName(
 		"VibratorModeStateUpdate" + OldState,
 		C,
 		Arousal,
@@ -277,6 +282,8 @@ function VibratorModeUpdateStateBased(Item, C, TransitionsFromDefault) {
 		OldIntensity,
 		TransitionsFromDefault,
 	);
+	var State = NewStateAndIntensity.State;
+	var Intensity = NewStateAndIntensity.Intensity;
 
 	if (!State) State = VibratorModeState.DEFAULT;
 	if (typeof Intensity !== "number" || Intensity < -1 || Intensity > 3) Intensity = OldIntensity;
@@ -285,15 +292,13 @@ function VibratorModeUpdateStateBased(Item, C, TransitionsFromDefault) {
 	if (State === VibratorModeState.DENY || Item.Property.Mode === "Deny") Effect.push("Edged");
 	if (Intensity !== -1) Effect.push("Vibrating");
 
-	Object.assign(Item.Property, {
-		State,
-		Intensity,
+	Object.assign(Item.Property, { State, Intensity, Effect });
+	Object.assign(PersistentData, {
 		ChangeTime: CurrentTime + 5000,
 		LastChange: Intensity !== OldIntensity ? CurrentTime : Item.Property.LastChange,
-		Effect,
 	});
 
-	if (Intensity !== OldIntensity) VibratorModePublish(C, Item, OldIntensity, Intensity);
+	VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
 
 function VibratorModeStateUpdateDefault(C, Arousal, TimeSinceLastChange, OldIntensity, TransitionsFromDefault) {
@@ -303,23 +308,23 @@ function VibratorModeStateUpdateDefault(C, Arousal, TimeSinceLastChange, OldInte
 	// If arousal is high, decide whether to deny or orgasm, based on provided transitions
 	if (Arousal > 90) State = CommonRandomItemFromList(VibratorModeState.DEFAULT, TransitionsFromDefault);
 	// If it's been at least a minute since the last intensity change, there's a 5% chance to change intensity
-	if (TimeSinceLastChange > OneMinute && Math.random() < 0.05) Intensity = CommonRandomItemFromList(OldIntensity, [0, 1, 2, 3]);
+	if (TimeSinceLastChange > OneMinute && Math.random() < 0.08) Intensity = CommonRandomItemFromList(OldIntensity, [0, 1, 2, 3]);
 	return { State, Intensity };
 }
 
 function VibratorModeStateUpdateDeny(C, Arousal, TimeSinceLastChange, OldIntensity) {
-	var TwoMinutes = 2 * 60000;
+	var OneMinute = 60000;
 	var State = VibratorModeState.DENY;
 	var Intensity = OldIntensity;
-	if (Arousal > 95 && TimeSinceLastChange > TwoMinutes && Math.random() < 0.2) {
-		// In deny mode, there's a small chance to change to rest mode after two minutes
+	if (Arousal > 95 && TimeSinceLastChange > OneMinute && Math.random() < 0.1) {
+		// In deny mode, there's a small chance to change to rest mode after a minute
 		State = VibratorModeState.REST;
 		Intensity = -1;
 	} else if (Arousal > 95) {
 		// If arousal is too high, change intensity back down to tease
 		Intensity = 0;
-	} else if (TimeSinceLastChange > TwoMinutes && Math.random() < 0.05) {
-		// Otherwise, there's a 5% chance to change intensity if it's been more than two minutes since the last change
+	} else if (TimeSinceLastChange > OneMinute && Math.random() < 0.08) {
+		// Otherwise, there's a 5% chance to change intensity if it's been more than a minute since the last change
 		Intensity = CommonRandomItemFromList(OldIntensity, [0, 1, 2, 3]);
 	}
 	return { State, Intensity };
@@ -332,7 +337,7 @@ function VibratorModeStateUpdateOrgasm(C, Arousal, TimeSinceLastChange, OldInten
 	if (C.ArousalSettings.OrgasmStage > 0) {
 		// If we're in orgasm mode and the player is either resisting or mid-orgasm, change back to either rest or default mode
 		State = Math.random() < 0.75 ? VibratorModeState.REST : VibratorModeState.DEFAULT;
-	} else if (TimeSinceLastChange > OneMinute && Math.random() < 0.05) {
+	} else if (TimeSinceLastChange > OneMinute && Math.random() < 0.08) {
 		// Otherwise, if it's been over a minute since the last intensity change, there's a 5% chance to change intensity
 		Intensity = CommonRandomItemFromList(OldIntensity, [0, 1, 2, 3]);
 	}
@@ -353,6 +358,9 @@ function VibratorModeStateUpdateRest(C, Arousal, TimeSinceLastChange, OldIntensi
 }
 
 function VibratorModePublish(C, Item, OldIntensity, Intensity) {
+	// If the intensity hasn't changed, don't publish a chat message
+	if (OldIntensity === Intensity) return;
+
 	var Direction = Intensity > OldIntensity ? "Increase" : "Decrease";
 	var Dictionary = [
 		{ Tag: "DestinationCharacterName", Text: C.Name, MemberNumber: C.MemberNumber },

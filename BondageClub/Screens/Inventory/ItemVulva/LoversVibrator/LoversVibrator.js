@@ -15,3 +15,7 @@ function InventoryItemVulvaLoversVibratorDraw() {
 function InventoryItemVulvaLoversVibratorClick() {
 	VibratorModeClick(["Standard", "Advanced"], 525);
 }
+
+function AssetsItemVulvaLoversVibratorScriptDraw(data) {
+	VibratorModeScriptDraw(data);
+}
