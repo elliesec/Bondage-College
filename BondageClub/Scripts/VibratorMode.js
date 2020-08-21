@@ -208,11 +208,14 @@ function VibratorModeScriptDraw(Data) {
 	if (!Item.Property || !Item.Property.Mode) return;
 
 	var PersistentData = Data.PersistentData();
-	if (typeof PersistentData.ChangeTime !== "number") PersistentData.ChangeTime = 0;
-	if (typeof PersistentData.LastChange !== "number") PersistentData.LastChange = 0;
+	var ModeChanged = Item.Property.Mode !== PersistentData.Mode;
+	if (ModeChanged || typeof PersistentData.ChangeTime !== "number") PersistentData.ChangeTime = CurrentTime + 60000;
+	if (ModeChanged || typeof PersistentData.LastChange !== "number") PersistentData.LastChange = CurrentTime;
+	if (ModeChanged) PersistentData.Mode = Item.Property.Mode;
 
 	if (CurrentTime > PersistentData.ChangeTime) {
 		CommonCallFunctionByName("VibratorModeUpdate" + Item.Property.Mode, Item, C, PersistentData);
+		PersistentData.Mode = Item.Property.Mode;
 	}
 }
 
@@ -295,7 +298,7 @@ function VibratorModeUpdateStateBased(Item, C, PersistentData, TransitionsFromDe
 	Object.assign(Item.Property, { State, Intensity, Effect });
 	Object.assign(PersistentData, {
 		ChangeTime: CurrentTime + 5000,
-		LastChange: Intensity !== OldIntensity ? CurrentTime : Item.Property.LastChange,
+		LastChange: Intensity !== OldIntensity ? CurrentTime : PersistentData.LastChange,
 	});
 
 	VibratorModePublish(C, Item, OldIntensity, Intensity);
@@ -307,8 +310,8 @@ function VibratorModeStateUpdateDefault(C, Arousal, TimeSinceLastChange, OldInte
 	var Intensity = OldIntensity;
 	// If arousal is high, decide whether to deny or orgasm, based on provided transitions
 	if (Arousal > 90) State = CommonRandomItemFromList(VibratorModeState.DEFAULT, TransitionsFromDefault);
-	// If it's been at least a minute since the last intensity change, there's a 5% chance to change intensity
-	if (TimeSinceLastChange > OneMinute && Math.random() < 0.08) Intensity = CommonRandomItemFromList(OldIntensity, [0, 1, 2, 3]);
+	// If it's been at least a minute since the last intensity change, there's a small chance to change intensity
+	if (TimeSinceLastChange > OneMinute && Math.random() < 0.1) Intensity = CommonRandomItemFromList(OldIntensity, [0, 1, 2, 3]);
 	return { State, Intensity };
 }
 
@@ -316,15 +319,15 @@ function VibratorModeStateUpdateDeny(C, Arousal, TimeSinceLastChange, OldIntensi
 	var OneMinute = 60000;
 	var State = VibratorModeState.DENY;
 	var Intensity = OldIntensity;
-	if (Arousal > 95 && TimeSinceLastChange > OneMinute && Math.random() < 0.1) {
+	if (Arousal > 95 && TimeSinceLastChange > OneMinute && Math.random() < 0.2) {
 		// In deny mode, there's a small chance to change to rest mode after a minute
 		State = VibratorModeState.REST;
 		Intensity = -1;
 	} else if (Arousal > 95) {
 		// If arousal is too high, change intensity back down to tease
 		Intensity = 0;
-	} else if (TimeSinceLastChange > OneMinute && Math.random() < 0.08) {
-		// Otherwise, there's a 5% chance to change intensity if it's been more than a minute since the last change
+	} else if (TimeSinceLastChange > OneMinute && Math.random() < 0.1) {
+		// Otherwise, there's a small chance to change intensity if it's been more than a minute since the last change
 		Intensity = CommonRandomItemFromList(OldIntensity, [0, 1, 2, 3]);
 	}
 	return { State, Intensity };
@@ -337,20 +340,20 @@ function VibratorModeStateUpdateOrgasm(C, Arousal, TimeSinceLastChange, OldInten
 	if (C.ArousalSettings.OrgasmStage > 0) {
 		// If we're in orgasm mode and the player is either resisting or mid-orgasm, change back to either rest or default mode
 		State = Math.random() < 0.75 ? VibratorModeState.REST : VibratorModeState.DEFAULT;
-	} else if (TimeSinceLastChange > OneMinute && Math.random() < 0.08) {
-		// Otherwise, if it's been over a minute since the last intensity change, there's a 5% chance to change intensity
+	} else if (TimeSinceLastChange > OneMinute && Math.random() < 0.1) {
+		// Otherwise, if it's been over a minute since the last intensity change, there's a small chance to change intensity
 		Intensity = CommonRandomItemFromList(OldIntensity, [0, 1, 2, 3]);
 	}
 	return { State, Intensity };
 }
 
 function VibratorModeStateUpdateRest(C, Arousal, TimeSinceLastChange, OldIntensity) {
-	var ThreeMinutes = 3 * 60000;
-	var NineMinutes = 9 * 60000;
-	var State = VibratorModeState.ORGASM;
+	var FiveMinutes = 5 * 60000;
+	var TenMinutes = 10 * 60000;
+	var State = VibratorModeState.REST;
 	var Intensity = OldIntensity;
-	if (TimeSinceLastChange > ThreeMinutes && Math.random() < Math.pow((TimeSinceLastChange - ThreeMinutes) / NineMinutes, 2)) {
-		// Rest between 3 and 12 minutes
+	if (TimeSinceLastChange > FiveMinutes && Math.random() < Math.pow((TimeSinceLastChange - FiveMinutes) / TenMinutes, 2)) {
+		// Rest between 5 and 15 minutes (probably of change gets increasingly more likely as time approaches 15 minutes)
 		State = VibratorModeState.DEFAULT;
 		Intensity = CommonRandomItemFromList(OldIntensity, [0, 1, 2, 3]);
 	}
