@@ -18,6 +18,7 @@ function AssetItemNeckAccessoriesCustomCollarTagBeforeDraw(data) {
 function AssetItemNeckAccessoriesCustomCollarTagScriptDraw(data) { 
     console.log('script draw');
     // every second, new color so trigger a refresh
+    if (typeof data.PersistentData().LastTime != "number") data.PersistentData().LastTime = 0;
     if (data.PersistentData().LastTime + 1000 < CommonTime()) { 
         CharacterRefresh(data.C, false);
         data.PersistentData().LastTime = CommonTime();
