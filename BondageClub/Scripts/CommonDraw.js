@@ -65,9 +65,9 @@ function CommonDrawAppearanceBuild(C, {
 	drawImageColorizeBlink,
 }) {
 	var LayerCounts = {};
-
+	
 	// Loop through all layers in the character appearance
-	C.AppearanceLayers.forEach(function (Layer) {
+	C.AppearanceLayers.forEach((Layer) => {
 		var A = Layer.Asset;
 		var AG = A.Group;
 		var CA = C.Appearance.find(item => item.Asset === A);
@@ -143,12 +143,34 @@ function CommonDrawAppearanceBuild(C, {
 			const DrawingData = {
 				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
-			const OverridenData = A.DynamicBeforeDraw(DrawingData);
+			const OverridenData = window["Asset" + A.Group.Name + A.Name + "BeforeDraw"](DrawingData);
 			if (typeof OverridenData == "object") {
 				for (const key in OverridenData) {
-					if (key == "Data" || key == "LayerCounts") continue;
-					if (typeof this[key] !== "undefined") {
-						this[key] = OverridenData[key];
+					switch (key) { 
+						case "Property": { 
+							Property = OverridenData[key];
+							break;
+						}
+						case "CA": { 
+							CA = OverridenData[key];
+							break;
+						}
+						case "X": { 
+							X = OverridenData[key];
+							break;
+						}
+						case "Y": { 
+							Y = OverridenData[key];
+							break;
+						}
+						case "LayerType": { 
+							LayerType = OverridenData[key];
+							break;
+						}
+						case "L": { 
+							L = OverridenData[key];
+							break;
+						}
 					}
 				}
 			}
@@ -192,7 +214,7 @@ function CommonDrawAppearanceBuild(C, {
 			const DrawingData = {
 				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
-			A.DynamicAfterDraw(DrawingData);
+			window["Asset" + A.Group.Name + A.Name + "AfterDraw"](DrawingData);
 		}
 	});
 }

@@ -185,11 +185,9 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 		}
 
 		// Run any existing asset scripts
-		var DynamicAssets = C.Appearance
-			.filter(CA => typeof CA.Asset.DynamicScriptDraw == "function")
-			.map(CA => CA.Asset);
+		var DynamicAssets = C.Appearance.filter(CA => CA.Asset.DynamicScriptDraw).map(CA => CA.Asset);
 		DynamicAssets.forEach(A =>
-			A.DynamicScriptDraw({ C, PersistentData: () => AnimationPersistentDataGet(C, A) })
+			window["Asset" + A.Group.Name + A.Name + "ScriptDraw"]({ C, PersistentData: () => AnimationPersistentDataGet(C, A) })
 		);
 		
 		// There's 2 different canvas, one blinking and one that doesn't
