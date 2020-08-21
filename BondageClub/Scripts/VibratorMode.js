@@ -351,7 +351,7 @@ function VibratorModeStateUpdateRest(C, Arousal, TimeSinceLastChange, OldIntensi
 	var FiveMinutes = 5 * 60000;
 	var TenMinutes = 10 * 60000;
 	var State = VibratorModeState.REST;
-	var Intensity = OldIntensity;
+	var Intensity = -1;
 	if (TimeSinceLastChange > FiveMinutes && Math.random() < Math.pow((TimeSinceLastChange - FiveMinutes) / TenMinutes, 2)) {
 		// Rest between 5 and 15 minutes (probably of change gets increasingly more likely as time approaches 15 minutes)
 		State = VibratorModeState.DEFAULT;
