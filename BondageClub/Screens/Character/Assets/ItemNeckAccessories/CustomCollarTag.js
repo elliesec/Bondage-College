@@ -1,6 +1,5 @@
 // TODO: hook into the character canvas to draw things easily in before/after draw
-// TODO: in chatrooms, other characters are not animated
-// TODO: option to disable animations
+// TODO: option to disable animations(?)
 
 // THIS IS A DEMO
 
