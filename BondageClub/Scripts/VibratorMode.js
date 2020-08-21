@@ -1,6 +1,24 @@
 "use strict";
 
 /**
+ * An enum for the possible vibrator modes
+ * @readonly
+ * @enum {string}
+ */
+var VibratorMode = {
+	OFF: "Off",
+	LOW: "Low",
+	MEDIUM: "Medium",
+	HIGH: "High",
+	MAXIMUM: "Maximum",
+	RANDOM: "Random",
+	ESCALATE: "Escalate",
+	TEASE: "Tease",
+	DENY: "Deny",
+	EDGE: "Edge",
+};
+
+/**
  * An enum for the possible vibrator states when a vibrator is in a state machine mode
  * @readonly
  * @enum {string}
@@ -42,7 +60,7 @@ var VibratorModeOptions = {
 		{
 			Name: "TurnOff",
 			Property: {
-				Mode: "Off",
+				Mode: VibratorMode.OFF,
 				Intensity: -1,
 				Effect: ["Egged"],
 			},
@@ -50,7 +68,7 @@ var VibratorModeOptions = {
 		{
 			Name: "Low",
 			Property: {
-				Mode: "Low",
+				Mode: VibratorMode.LOW,
 				Intensity: 0,
 				Effect: ["Egged", "Vibrating"],
 			},
@@ -58,7 +76,7 @@ var VibratorModeOptions = {
 		{
 			Name: "Medium",
 			Property: {
-				Mode: "Medium",
+				Mode: VibratorMode.MEDIUM,
 				Intensity: 1,
 				Effect: ["Egged", "Vibrating"],
 			},
@@ -66,7 +84,7 @@ var VibratorModeOptions = {
 		{
 			Name: "High",
 			Property: {
-				Mode: "High",
+				Mode: VibratorMode.HIGH,
 				Intensity: 2,
 				Effect: ["Egged", "Vibrating"],
 			},
@@ -74,7 +92,7 @@ var VibratorModeOptions = {
 		{
 			Name: "Maximum",
 			Property: {
-				Mode: "Maximum",
+				Mode: VibratorMode.MAXIMUM,
 				Intensity: 3,
 				Effect: ["Egged", "Vibrating"],
 			},
@@ -84,7 +102,7 @@ var VibratorModeOptions = {
 		{
 			Name: "Random",
 			Property: {
-				Mode: "Random",
+				Mode: VibratorMode.RANDOM,
 				Intensity: () => CommonRandomItemFromList(null, [-1, 0, 1, 2, 3]),
 				Effect: (Intensity) => Intensity >= 0 ? ["Egged", "Vibrating"] : ["Egged"],
 			},
@@ -92,7 +110,7 @@ var VibratorModeOptions = {
 		{
 			Name: "Escalate",
 			Property: {
-				Mode: "Escalate",
+				Mode: VibratorMode.ESCALATE,
 				Intensity: 0,
 				Effect: ["Egged", "Vibrating"],
 			},
@@ -100,7 +118,7 @@ var VibratorModeOptions = {
 		{
 			Name: "Tease",
 			Property: {
-				Mode: "Tease",
+				Mode: VibratorMode.TEASE,
 				Intensity: () => CommonRandomItemFromList(-1, [0, 1, 2, 3]),
 				Effect: ["Egged", "Vibrating"],
 			},
@@ -108,7 +126,7 @@ var VibratorModeOptions = {
 		{
 			Name: "Deny",
 			Property: {
-				Mode: "Deny",
+				Mode: VibratorMode.DENY,
 				Intensity: () => CommonRandomItemFromList(-1, [0, 1, 2, 3]),
 				Effect: ["Egged", "Vibrating", "Edged"],
 			},
@@ -116,7 +134,7 @@ var VibratorModeOptions = {
 		{
 			Name: "Edge",
 			Property: {
-				Mode: "Edge",
+				Mode: VibratorMode.EDGE,
 				Intensity: CommonRandomItemFromList(null, [0, 1]),
 				Effect: ["Egged", "Vibrating", "Edged"],
 			},
@@ -402,7 +420,7 @@ function VibratorModeUpdateStateBased(Item, C, PersistentData, TransitionsFromDe
 	if (typeof Intensity !== "number" || Intensity < -1 || Intensity > 3) Intensity = OldIntensity;
 
 	var Effect = ["Egged"];
-	if (State === VibratorModeState.DENY || Item.Property.Mode === "Deny") Effect.push("Edged");
+	if (State === VibratorModeState.DENY || Item.Property.Mode === VibratorMode.DENY) Effect.push("Edged");
 	if (Intensity !== -1) Effect.push("Vibrating");
 
 	Object.assign(Item.Property, { State, Intensity, Effect });

@@ -1,15 +1,15 @@
 "use strict";
 
 function InventoryItemVulvaPiercingsVibeHeartClitPiercingLoad() {
-	VibratorModeLoad(["Standard", "Advanced"]);
+	VibratorModeLoad([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
 function InventoryItemVulvaPiercingsVibeHeartClitPiercingDraw() {
-	VibratorModeDraw(["Standard", "Advanced"]);
+	VibratorModeDraw([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
 function InventoryItemVulvaPiercingsVibeHeartClitPiercingClick() {
-	VibratorModeClick(["Standard", "Advanced"]);
+	VibratorModeClick([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
 function AssetsItemVulvaPiercingsVibeHeartClitPiercingScriptDraw(data) {

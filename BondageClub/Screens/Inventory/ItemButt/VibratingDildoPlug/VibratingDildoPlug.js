@@ -1,15 +1,15 @@
 "use strict";
 
 function InventoryItemButtVibratingDildoPlugLoad() {
-	VibratorModeLoad(["Standard", "Advanced"]);
+	VibratorModeLoad([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
 function InventoryItemButtVibratingDildoPlugDraw() {
-	VibratorModeDraw(["Standard", "Advanced"]);
+	VibratorModeDraw([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
 function InventoryItemButtVibratingDildoPlugClick() {
-	VibratorModeClick(["Standard", "Advanced"]);
+	VibratorModeClick([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
 function AssetsItemButtVibratingDildoPlugScriptDraw(data) {

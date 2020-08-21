@@ -1,15 +1,15 @@
 "use strict";
 
 function InventoryItemVulvaVibratingDildoLoad() {
-	VibratorModeLoad(["Standard", "Advanced"]);
+	VibratorModeLoad([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
 function InventoryItemVulvaVibratingDildoDraw() {
-	VibratorModeDraw(["Standard", "Advanced"]);
+	VibratorModeDraw([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
 function InventoryItemVulvaVibratingDildoClick() {
-	VibratorModeClick(["Standard", "Advanced"]);
+	VibratorModeClick([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
 function AssetsItemVulvaVibratingDildoScriptDraw(data) {

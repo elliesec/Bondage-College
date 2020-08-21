@@ -1,15 +1,15 @@
 "use strict";
 
 function InventoryItemNipplesVibeNippleClampLoad() {
-	VibratorModeLoad(["Standard", "Advanced"]);
+	VibratorModeLoad([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
 function InventoryItemNipplesVibeNippleClampDraw() {
-	VibratorModeDraw(["Standard", "Advanced"]);
+	VibratorModeDraw([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
 function InventoryItemNipplesVibeNippleClampClick() {
-	VibratorModeClick(["Standard", "Advanced"]);
+	VibratorModeClick([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
 function AssetsItemNipplesVibeNippleClampScriptDraw(data) {
