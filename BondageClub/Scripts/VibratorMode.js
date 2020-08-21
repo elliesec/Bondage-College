@@ -1,5 +1,10 @@
 "use strict";
 
+/**
+ * An enum for the possible vibrator states when a vibrator is in a state machine mode
+ * @readonly
+ * @enum {string}
+ */
 var VibratorModeState = {
 	DEFAULT: "Default",
 	DENY: "Deny",
@@ -7,8 +12,33 @@ var VibratorModeState = {
 	REST: "Rest",
 };
 
+/**
+ * A wrapper object defining a vibrator state and intensity
+ * @typedef {Object} StateAndIntensity
+ * @property {VibratorModeState} State - The vibrator state
+ * @property {number} Intensity - The vibrator intensity
+ */
+
+/**
+ * An enum for the vibrator configuration sets that a vibrator can have
+ * @readonly
+ * @enum {string}
+ */
+var VibratorModeSet = {
+	STANDARD: "Standard",
+	ADVANCED: "Advanced",
+};
+
+/**
+ * A record of the various available vibrator sets of vibrator modes
+ * @type {{
+ *     Standard: ExtendedItemOption[],
+ *     Advanced: ExtendedItemOption[]
+ * }}
+ * @constant
+ */
 var VibratorModeOptions = {
-	Standard: [
+	[VibratorModeSet.STANDARD]: [
 		{
 			Name: "TurnOff",
 			Property: {
@@ -50,7 +80,7 @@ var VibratorModeOptions = {
 			},
 		},
 	],
-	Advanced: [
+	[VibratorModeSet.ADVANCED]: [
 		{
 			Name: "Random",
 			Property: {
@@ -94,11 +124,16 @@ var VibratorModeOptions = {
 	],
 };
 
+/**
+ * Common load function for vibrators
+ * @param {VibratorModeSet[]} Options - The vibrator mode sets to load the item with
+ * @returns {void} - Nothing
+ */
 function VibratorModeLoad(Options) {
 	var Property = DialogFocusItem.Property;
 	if (!Property || !Property.Mode) {
-		Options = (Options && Options.length) ? Options : ["Standard"];
-		var FirstOption = VibratorModeOptions[Options[0]][0] || VibratorModeOptions.Standard[0];
+		Options = (Options && Options.length) ? Options : [VibratorModeSet.STANDARD];
+		var FirstOption = VibratorModeOptions[Options[0]][0] || VibratorModeOptions[VibratorModeSet.STANDARD][0];
 		DialogFocusItem.Property = Object.assign({}, Property, FirstOption.Property);
 		VibratorModeSetDynamicProperties(Property);
 		var C = CharacterGetCurrent();
@@ -107,11 +142,20 @@ function VibratorModeLoad(Options) {
 	}
 }
 
+/**
+ * Common draw function for vibrators
+ * @param {VibratorModeSet[]} Options - The vibrator mode sets to draw for the item
+ * @returns {void} - Nothing
+ */
 function VibratorModeDraw(Options) {
 	VibratorModeDrawHeader();
 	VibratorModeDrawControls(Options);
 }
 
+/**
+ * Common draw function for drawing the header of the extended item menu screen for a vibrator
+ * @returns {void} - Nothing
+ */
 function VibratorModeDrawHeader() {
 	var Asset = DialogFocusItem.Asset;
 	var AssetPath = "Assets/" + Asset.Group.Family + "/" + Asset.Group.Name + "/Preview/" + Asset.Name + ".png";
@@ -127,9 +171,15 @@ function VibratorModeDrawHeader() {
 	DrawTextFit(Asset.Description, 1500, 350, 221, "black");
 }
 
+/**
+ * Common draw function for drawing the control sets of the extended item menu screen for a vibrator
+ * @param {VibratorModeSet[]} Options - The vibrator mode sets to draw for the item
+ * @param {number} Y - The y-coordinate at which to start drawing the controls
+ * @returns {void} - Nothing
+ */
 function VibratorModeDrawControls(Options, Y) {
 	Y = typeof Y === "number" ? Y : 450;
-	Options = Options || ["Standard"];
+	Options = Options || [VibratorModeSet.STANDARD];
 	var Property = DialogFocusItem.Property;
 	var ItemIntensity = DialogFind(Player, "Intensity" + Property.Intensity.toString()).replace("Item", DialogFocusItem.Asset.Description);
 	DrawText(ItemIntensity, 1500, Y, "white", "gray");
@@ -146,6 +196,12 @@ function VibratorModeDrawControls(Options, Y) {
 	});
 }
 
+/**
+ * Common click function for vibrators
+ * @param {VibratorModeSet[]} Options - The vibrator mode sets for the item
+ * @param {number} Y - The y-coordinate at which the extended item controls were drawn
+ * @returns {void} - Nothing
+ */
 function VibratorModeClick(Options, Y) {
 	Y = typeof Y === "number" ? Y : 450;
 	// Exit Button
@@ -167,6 +223,11 @@ function VibratorModeClick(Options, Y) {
 	});
 }
 
+/**
+ * Sets a new mode for a vibrating item and publishes a corresponding chatroom message
+ * @param {ExtendedItemOption} Option - The extended item option defining the new mode to be set
+ * @returns {void} - Nothing
+ */
 function VibratorModeSetMode(Option) {
 	var C = CharacterGetCurrent();
 	DialogFocusItem = InventoryGet(C, C.FocusGroup.Name);
@@ -193,11 +254,21 @@ function VibratorModeSetMode(Option) {
 	ChatRoomPublishCustomAction(Message, false, Dictionary);
 }
 
+/**
+ * Helper function to set dynamic properties on an item
+ * @param {object} Property - The Property object to initialise
+ * @returns {void} - Nothing
+ */
 function VibratorModeSetDynamicProperties(Property) {
 	if (typeof Property.Intensity === "function") Property.Intensity = Property.Intensity();
 	if (typeof Property.Effect === "function") Property.Effect = Property.Effect(Property.Intensity);
 }
 
+/**
+ * Common dynamic script draw function for vibrators. This function is called every frame.
+ * @param {{ C: Character, Item: Item, PersistentData: function }} Data - The script draw data for the item
+ * @returns {void} - Nothing
+ */
 function VibratorModeScriptDraw(Data) {
 	var C = Data.C;
 	// Only run vibrator updates on the player and NPCs
@@ -219,11 +290,13 @@ function VibratorModeScriptDraw(Data) {
 	}
 }
 
-function VibratorModeUpdate(Item, C) {
-	if (!Item.Property || !Item.Property.Mode) return;
-	CommonCallFunctionByName("VibratorModeUpdate" + Item.Property.Mode, Item, C);
-}
-
+/**
+ * Vibrator update function for the Random mode
+ * @param {Item} Item - The item that is being updated
+ * @param {Character} C - The character that the item is equipped on
+ * @param {object} PersistentData - Persistent animation data for the item
+ * @returns {void} - Nothing
+ */
 function VibratorModeUpdateRandom(Item, C, PersistentData) {
 	var ThirtySeconds = 30000;
 	var OldIntensity = Item.Property.Intensity;
@@ -235,27 +308,55 @@ function VibratorModeUpdateRandom(Item, C, PersistentData) {
 	VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
 
+/**
+ * Vibrator update function for the Escalate mode
+ * @param {Item} Item - The item that is being updated
+ * @param {Character} C - The character that the item is equipped on
+ * @param {object} PersistentData - Persistent animation data for the item
+ * @returns {void} - Nothing
+ */
 function VibratorModeUpdateEscalate(Item, C, PersistentData) {
 	var OldIntensity = Item.Property.Intensity;
 	var Intensity = (OldIntensity + 1) % 4;
 	// As intensity increases, time between updates decreases
-	var TimeFactor = Math.pow((4 - Intensity), 2);
-	var TimeToNextUpdate = (5000 + Math.random() * 5000) * TimeFactor;
+	var TimeFactor = Math.pow((5 - Intensity), 1.6);
+	var TimeToNextUpdate = (8000 + Math.random() * 4000) * TimeFactor;
 	Object.assign(Item.Property, { Intensity, Effect: ["Egged", "Vibrating"] });
 	PersistentData.ChangeTime = Math.floor(CurrentTime + TimeToNextUpdate);
 	VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
 
+/**
+ * Vibrator update function for the Tease mode
+ * @param {Item} Item - The item that is being updated
+ * @param {Character} C - The character that the item is equipped on
+ * @param {object} PersistentData - Persistent animation data for the item
+ * @returns {void} - Nothing
+ */
 function VibratorModeUpdateTease(Item, C, PersistentData) {
 	// Tease mode allows orgasm and denial states once arousal gets high enough
 	VibratorModeUpdateStateBased(Item, C, PersistentData, [VibratorModeState.DENY, VibratorModeState.ORGASM]);
 }
 
+/**
+ * Vibrator update function for the Deny mode
+ * @param {Item} Item - The item that is being updated
+ * @param {Character} C - The character that the item is equipped on
+ * @param {object} PersistentData - Persistent animation data for the item
+ * @returns {void} - Nothing
+ */
 function VibratorModeUpdateDeny(Item, C, PersistentData) {
 	// Deny mode only allows the denial state on high arousal
 	VibratorModeUpdateStateBased(Item, C, PersistentData, [VibratorModeState.DENY]);
 }
 
+/**
+ * Vibrator update function for the Edge mode
+ * @param {Item} Item - The item that is being updated
+ * @param {Character} C - The character that the item is equipped on
+ * @param {object} PersistentData - Persistent animation data for the item
+ * @returns {void} - Nothing
+ */
 function VibratorModeUpdateEdge(Item, C, PersistentData) {
 	var ThirtySeconds = 30000;
 	var OldIntensity = Item.Property.Intensity;
@@ -271,6 +372,15 @@ function VibratorModeUpdateEdge(Item, C, PersistentData) {
 	VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
 
+/**
+ * Vibrator update function for vibrator state machine modes
+ * @param {Item} Item - The item that is being updated
+ * @param {Character} C - The character that the item is equipped on
+ * @param {object} PersistentData - Persistent animation data for the item
+ * @param {VibratorModeState[]} TransitionsFromDefault - The possible vibrator states that may be transitioned to from
+ * the default state
+ * @returns {void} - Nothing
+ */
 function VibratorModeUpdateStateBased(Item, C, PersistentData, TransitionsFromDefault) {
 	var Arousal = C.ArousalSettings.Progress;
 	var TimeSinceLastChange = CurrentTime - PersistentData.LastChange;
@@ -304,6 +414,16 @@ function VibratorModeUpdateStateBased(Item, C, PersistentData, TransitionsFromDe
 	VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
 
+/**
+ * Vibrator update function for vibrator state machine modes in the Default state
+ * @param {Character} C - The character that the item is equipped on
+ * @param {number} Arousal - The current arousal of the character
+ * @param {number} TimeSinceLastChange - The time in milliseconds since the vibrator intensity was last changed
+ * @param {number} OldIntensity - The current intensity of the vibrating item
+ * @param {VibratorModeState[]} TransitionsFromDefault - The possible vibrator states that may be transitioned to from
+ * the default state
+ * @returns {StateAndIntensity} - The updated state and intensity of the vibrator
+ */
 function VibratorModeStateUpdateDefault(C, Arousal, TimeSinceLastChange, OldIntensity, TransitionsFromDefault) {
 	var OneMinute = 60000;
 	var State = VibratorModeState.DEFAULT;
@@ -315,6 +435,15 @@ function VibratorModeStateUpdateDefault(C, Arousal, TimeSinceLastChange, OldInte
 	return { State, Intensity };
 }
 
+/**
+ * Vibrator update function for vibrator state machine modes in the Deny state
+ * @param {Character} C - The character that the item is equipped on
+ * @param {number} Arousal - The current arousal of the character
+ * @param {number} TimeSinceLastChange - The time in milliseconds since the vibrator intensity was last changed
+ * @param {number} OldIntensity - The current intensity of the vibrating item
+ * the default state
+ * @returns {StateAndIntensity} - The updated state and intensity of the vibrator
+ */
 function VibratorModeStateUpdateDeny(C, Arousal, TimeSinceLastChange, OldIntensity) {
 	var OneMinute = 60000;
 	var State = VibratorModeState.DENY;
@@ -333,6 +462,15 @@ function VibratorModeStateUpdateDeny(C, Arousal, TimeSinceLastChange, OldIntensi
 	return { State, Intensity };
 }
 
+/**
+ * Vibrator update function for vibrator state machine modes in the Orgasm state
+ * @param {Character} C - The character that the item is equipped on
+ * @param {number} Arousal - The current arousal of the character
+ * @param {number} TimeSinceLastChange - The time in milliseconds since the vibrator intensity was last changed
+ * @param {number} OldIntensity - The current intensity of the vibrating item
+ * the default state
+ * @returns {StateAndIntensity} - The updated state and intensity of the vibrator
+ */
 function VibratorModeStateUpdateOrgasm(C, Arousal, TimeSinceLastChange, OldIntensity) {
 	var OneMinute = 60000;
 	var State = VibratorModeState.ORGASM;
@@ -347,6 +485,15 @@ function VibratorModeStateUpdateOrgasm(C, Arousal, TimeSinceLastChange, OldInten
 	return { State, Intensity };
 }
 
+/**
+ * Vibrator update function for vibrator state machine modes in the Rest state
+ * @param {Character} C - The character that the item is equipped on
+ * @param {number} Arousal - The current arousal of the character
+ * @param {number} TimeSinceLastChange - The time in milliseconds since the vibrator intensity was last changed
+ * @param {number} OldIntensity - The current intensity of the vibrating item
+ * the default state
+ * @returns {StateAndIntensity} - The updated state and intensity of the vibrator
+ */
 function VibratorModeStateUpdateRest(C, Arousal, TimeSinceLastChange, OldIntensity) {
 	var FiveMinutes = 5 * 60000;
 	var TenMinutes = 10 * 60000;
@@ -360,6 +507,15 @@ function VibratorModeStateUpdateRest(C, Arousal, TimeSinceLastChange, OldIntensi
 	return { State, Intensity };
 }
 
+/**
+ * Publishes a chatroom message for an automatic change in vibrator intensity. Does nothing if the vibrator's intensity
+ * did not change.
+ * @param {Character} C - The character that the vibrator is equipped on
+ * @param {Item} Item - The vibrator item
+ * @param {number} OldIntensity - The previous intensity of the vibrator
+ * @param {number} Intensity - The new intensity of the vibrator
+ * @returns {void} - Nothing
+ */
 function VibratorModePublish(C, Item, OldIntensity, Intensity) {
 	// If the intensity hasn't changed, don't publish a chat message
 	if (OldIntensity === Intensity) return;
