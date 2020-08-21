@@ -184,6 +184,14 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 			return;
 		}
 
+		// Run any existing asset scripts
+		var DynamicAssets = C.Appearance
+			.filter(CA => typeof CA.Asset.DynamicScriptDraw == "function")
+			.map(CA => CA.Asset);
+		DynamicAssets.forEach(A =>
+			A.DynamicScriptDraw({ C, PersistentData: () => AnimationPersistentDataGet(C, A) })
+		);
+		
 		// There's 2 different canvas, one blinking and one that doesn't
 		var seconds = new Date().getTime();
 		var Canvas = (Math.round(seconds / 400) % C.BlinkFactor == 0) ? C.CanvasBlink : C.Canvas;

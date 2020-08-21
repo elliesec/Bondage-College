@@ -131,6 +131,9 @@ function AssetAdd(NewAsset) {
 		DynamicActivity: (typeof NewAsset.DynamicActivity === 'function') ? NewAsset.DynamicActivity : function () { return NewAsset.Activity },
 		CharacterRestricted: typeof NewAsset.CharacterRestricted === 'boolean' ? NewAsset.CharacterRestricted : false,
 		AllowRemoveExclusive: typeof NewAsset.AllowRemoveExclusive === 'boolean' ? NewAsset.CharacterRestricted : false,
+		DynamicBeforeDraw: (typeof NewAsset.DynamicBeforeDraw === 'function') ? NewAsset.DynamicBeforeDraw : null,
+		DynamicAfterDraw: (typeof NewAsset.DynamicAfterDraw === 'function') ? NewAsset.DynamicAfterDraw : null,
+		DynamicScriptDraw: (typeof NewAsset.DynamicScriptDraw === 'function') ? NewAsset.DynamicScriptDraw : null,
 	}
 	A.Layer = AssetBuildLayer(NewAsset, A);
 	// Unwearable assets are not visible but can be overwritten

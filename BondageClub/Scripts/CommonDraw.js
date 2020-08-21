@@ -1,5 +1,4 @@
 "use strict";
-
 /**
  * A callback function used for clearing a rectangular area of a canvas
  * @callback clearRect
@@ -68,7 +67,7 @@ function CommonDrawAppearanceBuild(C, {
 	var LayerCounts = {};
 
 	// Loop through all layers in the character appearance
-	C.AppearanceLayers.forEach(Layer => {
+	C.AppearanceLayers.forEach(function (Layer) {
 		var A = Layer.Asset;
 		var AG = A.Group;
 		var CA = C.Appearance.find(item => item.Asset === A);
@@ -137,6 +136,24 @@ function CommonDrawAppearanceBuild(C, {
 		if (!Layer.HasType) LayerType = "";
 		var BlinkExpression = (A.OverrideBlinking ? !AG.DrawingBlink : AG.DrawingBlink) ? "Closed/" : Expression;
 
+		// Before drawing hook, receives all processed data. Any of them can be overriden if returned inside an object.
+		// CAREFUL! The dynamic function should not contain heavy computations, and should not have any side effects. 
+		// Watch out for object references.
+		if (A.DynamicBeforeDraw) {
+			const DrawingData = {
+				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, PersistentData: () => AnimationPersistentDataGet(C, A)
+			};
+			const OverridenData = A.DynamicBeforeDraw(DrawingData);
+			if (typeof OverridenData == "object") {
+				for (const key in OverridenData) {
+					if (key == "Data" || key == "LayerCounts") continue;
+					if (typeof this[key] !== "undefined") {
+						this[key] = OverridenData[key];
+					}
+				}
+			}
+		}
+		
 		// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
 		if ((CA.Color != null) && (CA.Color.indexOf("#") == 0) && Layer.AllowColorize) {
 			drawImageColorize(
@@ -166,6 +183,16 @@ function CommonDrawAppearanceBuild(C, {
 				drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + Type + "_Lock.png", X, Y);
 				drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + Type + "_Lock.png", X, Y);
 			}
+		}
+		
+		// After drawing hook, receives all processed data.
+		// CAREFUL! The dynamic function should not contain heavy computations, and should not have any side effects. 
+		// Watch out for object references.
+		if (A.DynamicAfterDraw) {
+			const DrawingData = {
+				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, PersistentData: () => AnimationPersistentDataGet(C, A)
+			};
+			A.DynamicAfterDraw(DrawingData);
 		}
 	});
 }
