@@ -14,7 +14,7 @@ function AssetsItemNeckAccessoriesCustomCollarTagAfterDraw(data) {
 	context.font = "14px serif";
     context.fillStyle = "#FF0000";
     context.textAlign = "center";
-    context.fillText(data.C.Name, 50, 50, 100);
+    context.fillText(data.C.Name, 22.5, 22.5, 45);
     
     data.drawCanvas(TempCanvas, data.X + 227.5, data.Y + 30);
     data.drawCanvasBlink(TempCanvas, data.X + 227.5, data.Y + 30);
