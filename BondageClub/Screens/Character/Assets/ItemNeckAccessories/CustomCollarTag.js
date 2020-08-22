@@ -12,13 +12,13 @@ function AssetsItemNeckAccessoriesCustomCollarTagAfterDraw(data) {
     TempCanvas.height = 100;
     
 
-	TempCanvas.font = "48px Arial";
+	context.font = "14px serif";
     context.fillStyle = "#FF0000";
     context.textAlign = "center";
     context.fillText(data.C.Name, 50, 50, 100);
     
-    data.drawCanvas(TempCanvas, data.X + 200, data.Y + 2.25);
-    data.drawCanvasBlink(TempCanvas, data.X + 200, data.Y + 2.25);
+    data.drawCanvas(TempCanvas, data.X + 200, data.Y + 5);
+    data.drawCanvasBlink(TempCanvas, data.X + 200, data.Y + 5);
 }
 
 function AssetsItemNeckAccessoriesCustomCollarTagBeforeDraw(data) { 
