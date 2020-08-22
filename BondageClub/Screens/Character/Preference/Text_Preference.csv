@@ -32,6 +32,7 @@ ShowActivities,Show sexual activities & orgasms
 AutoBanBlackList,Ban blacklist when creating a room
 AutoBanGhostList,Ban ghostlist when creating a room
 DisableAnimations,Disable scripted assets on others
+ShowAutomaticMessages,Show all automatic messages
 AudioVolume,Audio volume
 AudioPlayBeeps,Audio alarm for beeps
 AudioPlayItem,Play item sounds in chatrooms
