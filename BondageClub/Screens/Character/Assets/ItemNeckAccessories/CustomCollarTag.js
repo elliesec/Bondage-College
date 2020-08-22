@@ -1,4 +1,4 @@
-// TODO: tweak drawCanvas (canvas vs Img does not work, need to convert the canvas to an Img or get proper texture)
+// TODO: tweak drawCanvas (canvas vs Img for texture2D, verify everything is okay)
 
 // THIS IS A DEMO
 
@@ -13,9 +13,9 @@ function AssetsItemNeckAccessoriesCustomCollarTagAfterDraw(data) {
     
 
 	TempCanvas.font = "48px Arial";
-    context.fillStyle = "red";
+    context.fillStyle = "#FF0000";
     context.textAlign = "center";
-    context.strokeText(data.C.Name, 50, 50, 100);
+    context.fillText(data.C.Name, 50, 50, 100);
     
     data.drawCanvas(TempCanvas, data.X + 200, data.Y + 2.25);
     data.drawCanvasBlink(TempCanvas, data.X + 200, data.Y + 2.25);
