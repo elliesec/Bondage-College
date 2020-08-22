@@ -278,6 +278,26 @@ function GLDrawImage(url, gl, dstX, dstY, color, fullAlpha) {
 }
 
 /**
+ * Draws a canvas on the WebGL canvas for the blinking effect
+ * @param {WebGLRenderingContext} gl - WebGL context
+ * @param {ImageData} Img - Canvas to get the data of
+ * @param {number} X - Position of the image on the X axis
+ * @param {number} Y - Position of the image on the Y axis
+ */
+function GLDraw2DCanvasBlink(gl, Img, X, Y) { GLDraw2DCanvas(gl, Img, X + 500, Y); }
+/**
+ * Draws a canvas on the WebGL canvas
+ * @param {WebGLRenderingContext} gl - WebGL context
+ * @param {ImageData} Img - Canvas to get the data of
+ * @param {number} X - Position of the image on the X axis
+ * @param {number} Y - Position of the image on the Y axis
+ */
+function GLDraw2DCanvas(gl, Img, X, Y) { 
+    GLDrawImageCache.set(Img.getAttribute("name"), Img);
+    GLDrawImage(Img.getAttribute("name"), gl, X, Y);
+}
+
+/**
  * Sets texture info from image data
  * @param {WebGLRenderingContext} gl - WebGL context
  * @param {ImageData} Img - Image to get the data of
@@ -389,9 +409,11 @@ function GLDrawHexToRGBA(color) {
 function GLDrawAppearanceBuild(C) {
     GLDrawClearRect(GLDrawCanvas.GL, 0, 0, 1000, 1000);
     CommonDrawCanvasPrepare(C);
-	CommonDrawAppearanceBuild(C, {
+    CommonDrawAppearanceBuild(C, {
 		clearRect: (x, y, w, h) => GLDrawClearRect(GLDrawCanvas.GL, x, 1000 - y - h, w, h),
 		clearRectBlink: (x, y, w, h) => GLDrawClearRectBlink(GLDrawCanvas.GL, x, 1000 - y - h, w, h),
+		drawCanvas: (Img, x, y) => GLDraw2DCanvas(GLDrawCanvas.GL, Img, x, y),
+		drawCanvasBlink: (Img, x, y) => GLDraw2DCanvasBlink(GLDrawCanvas.GL, Img, x, y),
 		drawImage: (src, x, y) => GLDrawImage(src, GLDrawCanvas.GL, x, y),
 		drawImageBlink: (src, x, y) => GLDrawImageBlink(src, GLDrawCanvas.GL, x, y),
 		drawImageColorize: (src, x, y, color, fullAlpha) => GLDrawImage(src, GLDrawCanvas.GL, x, y, color, fullAlpha),
