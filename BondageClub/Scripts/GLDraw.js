@@ -293,8 +293,10 @@ function GLDraw2DCanvasBlink(gl, Img, X, Y) { GLDraw2DCanvas(gl, Img, X + 500, Y
  * @param {number} Y - Position of the image on the Y axis
  */
 function GLDraw2DCanvas(gl, Img, X, Y) { 
-    GLDrawImageCache.set(Img.getAttribute("name"), Img);
-    GLDrawImage(Img.getAttribute("name"), gl, X, Y);
+    var TempCanvasName = Img.getAttribute("name");
+    gl.textureCache.delete(TempCanvasName);
+    GLDrawImageCache.set(TempCanvasName, Img);
+    GLDrawImage(TempCanvasName, gl, X, Y);
 }
 
 /**

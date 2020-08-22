@@ -6,19 +6,18 @@ function AssetsItemNeckAccessoriesCustomCollarTagAfterDraw(data) {
     //console.log('after draw');
     
     let TempCanvas = document.createElement("canvas");
-    let context = TempCanvas.getContext('2d');
     TempCanvas.setAttribute('name', AnimationTemporaryCanvasGetName(data.C, data.A));
-    TempCanvas.width = 100;
-    TempCanvas.height = 100;
+    TempCanvas.width = 45;
+    TempCanvas.height = 50;
     
-
+    let context = TempCanvas.getContext('2d');
 	context.font = "14px serif";
     context.fillStyle = "#FF0000";
     context.textAlign = "center";
     context.fillText(data.C.Name, 50, 50, 100);
     
-    data.drawCanvas(TempCanvas, data.X + 200, data.Y + 5);
-    data.drawCanvasBlink(TempCanvas, data.X + 200, data.Y + 5);
+    data.drawCanvas(TempCanvas, data.X + 227.5, data.Y + 30);
+    data.drawCanvasBlink(TempCanvas, data.X + 227.5, data.Y + 30);
 }
 
 function AssetsItemNeckAccessoriesCustomCollarTagBeforeDraw(data) { 
