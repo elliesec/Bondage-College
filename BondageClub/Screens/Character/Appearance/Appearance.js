@@ -398,6 +398,8 @@ function CharacterAppearanceBuildCanvas(C) {
 	CommonDrawAppearanceBuild(C, {
 		clearRect: (x, y, w, h) => C.Canvas.getContext("2d").clearRect(x, y, w, h),
 		clearRectBlink: (x, y, w, h) => C.CanvasBlink.getContext("2d").clearRect(x, y, w, h),
+		drawCanvas: (Img, x, y) => C.Canvas.getContext("2d").drawImage(Img, x, y),
+		drawCanvasBlink: (Img, x, y) => C.CanvasBlink.getContext("2d").drawImage(Img, x, y),
 		drawImage: (src, x, y) => DrawImageCanvas(src, C.Canvas.getContext("2d"), x, y),
 		drawImageBlink: (src, x, y) => DrawImageCanvas(src, C.CanvasBlink.getContext("2d"), x, y),
 		drawImageColorize: (src, x, y, color, fullAlpha) => DrawImageCanvasColorize(src, C.Canvas.getContext("2d"), x, y, 1, color, fullAlpha),

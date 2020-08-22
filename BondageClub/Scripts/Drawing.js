@@ -185,10 +185,12 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 		}
 
 		// Run any existing asset scripts
-		var DynamicAssets = C.Appearance.filter(CA => CA.Asset.DynamicScriptDraw);
-		DynamicAssets.forEach(Item =>
-			window["Assets" + Item.Asset.Group.Name + Item.Asset.Name + "ScriptDraw"]({ C, Item, PersistentData: () => AnimationPersistentDataGet(C, Item.Asset) })
-		);
+		if (!C.AccountName.startsWith('Online-') || !(Player.ChatSettings && Player.ChatSettings.DisableAnimations)) {
+			var DynamicAssets = C.Appearance.filter(CA => CA.Asset.DynamicScriptDraw);
+			DynamicAssets.forEach(Item =>
+				window["Assets" + Item.Asset.Group.Name + Item.Asset.Name + "ScriptDraw"]({ C, Item, PersistentData: () => AnimationPersistentDataGet(C, Item.Asset) })
+			);
+		}
 		
 		// There's 2 different canvas, one blinking and one that doesn't
 		var seconds = new Date().getTime();

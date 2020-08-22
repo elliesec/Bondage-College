@@ -7,10 +7,20 @@
 var AnimationPersistentStorage = {};
 
 /**
- * Gets the persistent data storage name for a given item on a given character. 
+ * Gets the temporary canvas name for a given item on a given character. 
  * @param {Character} C - Character wearing the animated object
  * @param {Asset} Asset - The animated object
  * @returns {object} - Contains the persistent data of the animated object, if any.
+ */
+function AnimationTemporaryCanvasGetName(C, Asset) { 
+    return "DynamicPlayerCanvas" + C.AccountName + "__" + Asset.Group.Name + "__" + Asset.Name;
+}
+
+/**
+ * Gets the persistent data storage name for a given item on a given character. 
+ * @param {Character} C - Character wearing the animated object
+ * @param {Asset} Asset - The animated object
+ * @returns {object} - Contains the name of the persistent data key.
  */
 function AnimationPersistentDataGetName(C, Asset) { 
     return C.AccountName + "__" + Asset.Group.Name + "__" + Asset.Name;
@@ -36,13 +46,19 @@ function AnimationPersistentDataGet(C, Asset) {
  * @param {boolean} IncludeAll - TRUE if we should delete every animation data for the given character.
  * @returns {void} - Nothing
  */
-function AnimationPersistentDataPurge(C, IncludeAll) { 
+function AnimationPurge(C, IncludeAll) { 
     const PossiblePersistentData = IncludeAll ? [] : C.Appearance.map(CA => AnimationPersistentDataGetName(C, CA.Asset));
     for (const key in AnimationPersistentStorage) { 
         if (key.startsWith(C.AccountName + "__") && !PossiblePersistentData.includes(key)) { 
             delete AnimationPersistentStorage[key];
         }
     }
+    const PossibleTemporaryCanvas = IncludeAll ? [] : C.Appearance.map(CA => AnimationTemporaryCanvasGetName(C, CA.Asset));
+    GLDrawImageCache.forEach((img, key) => {
+        if (key.startsWith("DynamicPlayerCanvas" + C.AccountName + "__") && !PossibleTemporaryCanvas.includes(key)) { 
+            GLDrawImageCache.delete(key);
+        }
+    });
 }
 
 

@@ -17,6 +17,14 @@
  */
 
 /**
+ * A callback function used to draw a canvas on a canvas
+ * @callback drawCanvas
+ * @param {string} Img - The canvas to draw
+ * @param {number} x - The x coordinate to draw the canvas at
+ * @param {number} y - The y coordinate to draw the canvas at
+ */
+
+/**
  * A callback function used to draw a colorized image to a canvas
  * @callback drawImageColorize
  * @param {string} src - The URL of the image to draw
@@ -51,6 +59,8 @@ function CommonDrawCanvasPrepare(C) {
  * @param {Character} C - The character whose appearance to draw
  * @param {clearRect} clearRect - A callback to clear an area of the main character canvas
  * @param {clearRect} clearRectBlink - A callback to clear an area of the blink character canvas
+ * @param {drawCanvas} drawCanvas - Function used to draw a canvas on top of the normal canvas
+ * @param {drawCanvas} drawCanvasBlink - Function used to draw a canvas on top of the blink canvas
  * @param {drawImage} drawImage - A callback to draw an image to the main character canvas
  * @param {drawImage} drawImageBlink - A callback to draw an image to the blink character canvas
  * @param {drawImageColorize} drawImageColorize - A callback to draw a colorized image to the main character canvas
@@ -59,6 +69,8 @@ function CommonDrawCanvasPrepare(C) {
 function CommonDrawAppearanceBuild(C, {
 	clearRect,
 	clearRectBlink,
+	drawCanvas,
+	drawCanvasBlink,
 	drawImage,
 	drawImageBlink,
 	drawImageColorize,
@@ -149,7 +161,7 @@ function CommonDrawAppearanceBuild(C, {
 		// Watch out for object references.
 		if (A.DynamicBeforeDraw) {
 			const DrawingData = {
-				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, PersistentData: () => AnimationPersistentDataGet(C, A)
+				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
 			const OverridenData = window["Assets" + A.Group.Name + A.Name + "BeforeDraw"](DrawingData);
 			if (typeof OverridenData == "object") {
@@ -220,7 +232,7 @@ function CommonDrawAppearanceBuild(C, {
 		// Watch out for object references.
 		if (A.DynamicAfterDraw) {
 			const DrawingData = {
-				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, PersistentData: () => AnimationPersistentDataGet(C, A)
+				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
 			window["Assets" + A.Group.Name + A.Name + "AfterDraw"](DrawingData);
 		}
