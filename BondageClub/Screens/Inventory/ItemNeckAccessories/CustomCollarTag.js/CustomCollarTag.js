@@ -13,7 +13,10 @@ function InventoryItemNeckAccessoriesCustomCollarTagLoad() {
 		DialogFocusItem.Property.Text = "Tag";
 		MustRefresh = true;
 	}
-	if (MustRefresh) CharacterRefresh(C);
+	if (MustRefresh) {
+		CharacterRefresh(C);
+		ChatRoomCharacterItemUpdate(C, DialogFocusItem.Asset.Group.Name);
+	}
 	
 	// Only create the inputs if the item isn't locked
 	if (!InventoryItemHasEffect(DialogFocusItem, "Lock", true)) {
@@ -45,22 +48,23 @@ function InventoryItemNeckAccessoriesCustomCollarTagDraw() {
 function InventoryItemNeckAccessoriesCustomCollarTagClick() {
 	
 	if (!InventoryItemHasEffect(DialogFocusItem, "Lock", true)) {
+		// Change values if they are different and the tag is not locked
 		if ((MouseX >= 1500) && (MouseX <= 1850)) {
 			// Changes the color
-			if ((MouseY >= 571) && (MouseY <= 635) && CommonIsColor(ElementValue("Color"))) {
+			if ((MouseY >= 571) && (MouseY <= 635) && CommonIsColor(ElementValue("Color")) && DialogFocusItem.Property.Text !== ElementValue("Color")) {
 				DialogFocusItem.Property.Color = ElementValue("Color");
 				InventoryItemNeckAccessoriesCustomCollarTagChange();
 			}
 
 			// Changes the text
-			if ((MouseY >= 671) && (MouseY <= 735)) {
+			if ((MouseY >= 671) && (MouseY <= 735) && DialogFocusItem.Property.Text !== ElementValue("TagText")) {
 				DialogFocusItem.Property.Text = ElementValue("TagText");
 				InventoryItemNeckAccessoriesCustomCollarTagChange();
 			}
 		}
 
 		// Changes both
-		if (MouseIn(1350, 731, 350, 64) && CommonIsColor(ElementValue("Color"))) {
+		if (MouseIn(1350, 731, 350, 64) && CommonIsColor(ElementValue("Color")) && (DialogFocusItem.Property.Text !== ElementValue("Color") || DialogFocusItem.Property.Text !== ElementValue("TagText"))) {
 			DialogFocusItem.Property.Text = ElementValue("TagText");
 			DialogFocusItem.Property.Color = ElementValue("Color");
 			InventoryItemNeckAccessoriesCustomCollarTagChange();
