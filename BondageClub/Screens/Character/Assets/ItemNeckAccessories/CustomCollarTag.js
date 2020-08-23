@@ -32,9 +32,11 @@ function AssetsItemNeckAccessoriesCustomCollarTagBeforeDraw({ CA }) {
 function AssetsItemNeckAccessoriesCustomCollarTagScriptDraw({C, PersistentData}) { 
     //console.log('script draw');
     // every second, new color so trigger a refresh
-    if (typeof PersistentData().LastTime != "number") PersistentData().LastTime = 0;
-    if (PersistentData().LastTime + 1000 < CommonTime()) { 
+    if (typeof PersistentData().LastTime != "number") {
+        PersistentData().LastTime = 0;
         AnimationRequestRefreshRate(C, 1000);
+    }
+    if (PersistentData().LastTime + 1000 < CommonTime()) { 
         AnimationRequestDraw(C);
         PersistentData().LastTime = CommonTime();
     } 

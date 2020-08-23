@@ -76,15 +76,13 @@ function AnimationRequestDraw(C) {
 function AnimationPurge(C, IncludeAll) { 
     const PossibleData = [];
     const PossibleCanvas = [];
-    const PossibleRefreshRate = [];
-    const PossibleRebuild = [];
+    const PossibleRefreshRate = AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshRate);
+    const PossibleRebuild = AnimationGetDynamicDataName(C, AnimationDataTypes.Rebuild);
     
     if (!IncludeAll) {
         C.Appearance.forEach((CA) => {
             PossibleData.push(AnimationGetDynamicDataName(C, AnimationDataTypes.PersistentData, CA.Asset));
             PossibleCanvas.push(AnimationGetDynamicDataName(C, AnimationDataTypes.Canvas, CA.Asset));
-            PossibleRefreshRate.push(AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshRate));
-            PossibleRebuild.push(AnimationGetDynamicDataName(C, AnimationDataTypes.Rebuild));
         });
     }
     
@@ -94,8 +92,8 @@ function AnimationPurge(C, IncludeAll) {
         const isCharBuildKey = key.startsWith(AnimationDataTypes.Rebuild + "__" + C.AccountName + "__");
         if (
             (isCharDataKey && !PossibleData.includes(key)) ||
-            (isCharRefreshKey && !PossibleRefreshRate.includes(key)) ||
-            (isCharBuildKey && !PossibleRebuild.includes(key))
+            (isCharRefreshKey && PossibleRefreshRate !== key) ||
+            (isCharBuildKey && PossibleRebuild !== key)
         ) { 
             delete AnimationPersistentStorage[key];
         }
