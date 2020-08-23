@@ -169,10 +169,6 @@ function CommonDrawAppearanceBuild(C, {
 				for (const key in OverridenData) {
 					if (AllowedOverrides.includes(key)) { 
 						window[key] = OverridenData[key];
-						case "Color": {
-							Color = OverridenData[key];
-							break;
-						}
 					}
 				}
 			}

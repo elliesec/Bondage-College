@@ -88,23 +88,18 @@ function InventoryItemNeckAccessoriesCollarShockUnitTrigger() {
 }
 
 function AssetsItemNeckAccessoriesCollarShockUnitBeforeDraw(data) {
-	var persistentData = data.PersistentData();
-	var overriddenData = {};
-	if (data.L === "_NoBlink" && persistentData.Blinking) {
-		overriddenData.Color = "#2f0";
-		overriddenData.L = "_Blink";
-	}
-	return overriddenData;
+	return data.L === "_Light" ? { Color: "#2f0" } : null;
 }
 
 function AssetsItemNeckAccessoriesCollarShockUnitScriptDraw(data) {
 	var persistentData = data.PersistentData();
+	var property = (data.Item.Property = data.Item.Property || {});
 	if (typeof persistentData.ChangeTime !== "number") persistentData.ChangeTime = CommonTime() + 4000;
-	if (typeof persistentData.Blinking !== "boolean") persistentData.Blinking = false;
 
 	if (persistentData.ChangeTime < CommonTime()) {
-		persistentData.Blinking = !persistentData.Blinking;
-		var timeToNextRefresh = persistentData.Blinking ? 1000 : 4000;
+		var wasBlinking = property.Type === "Blink";
+		property.Type = wasBlinking ? null : "Blink";
+		var timeToNextRefresh = wasBlinking ? 4000 : 1000;
 		persistentData.ChangeTime = CommonTime() + timeToNextRefresh;
 		AnimationRequestRefreshRate(data.C, 5000 - timeToNextRefresh);
 		AnimationRequestDraw(data.C);
