@@ -149,6 +149,14 @@ function CommonDrawAppearanceBuild(C, {
 		var BlinkExpression = (A.OverrideBlinking ? !AG.DrawingBlink : AG.DrawingBlink) ? "Closed/" : Expression;
 		var Color = CA.Color;
 
+		// Check if we need to copy the color of another asset
+		var Color = CA.Color;
+		var InheritColor = Layer.InheritColor || (Color == "Default" ? (CA.Asset.InheritColor || CA.Asset.Group.InheritColor) : null);
+		if (InheritColor != null) {
+			var ParentAsset = InventoryGet(C, InheritColor);
+			if (ParentAsset != null) Color = ParentAsset.Color;
+		}
+		
 		// Before drawing hook, receives all processed data. Any of them can be overriden if returned inside an object.
 		// CAREFUL! The dynamic function should not contain heavy computations, and should not have any side effects. 
 		// Watch out for object references.
@@ -170,7 +178,7 @@ function CommonDrawAppearanceBuild(C, {
 				}
 			}
 		}
-		
+
 		// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
 		if ((Color != null) && (Color.indexOf("#") == 0) && Layer.AllowColorize) {
 			drawImageColorize(
@@ -182,11 +190,11 @@ function CommonDrawAppearanceBuild(C, {
 				AG.DrawingFullAlpha,
 			);
 		} else {
-			Color = ((Color == null) || (Color == "Default") || (Color == "") || (Color.length == 1) ||
-						 (Color.indexOf("#") == 0)) ? "" : "_" + Color;
-			drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + Color + L + ".png", X, Y);
+			var ColorName = ((Color == null) || (Color == "Default") || (Color == "") || (Color.length == 1) ||
+							 (Color.indexOf("#") == 0)) ? "" : "_" + Color;
+			drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + ColorName + L + ".png", X, Y);
 			drawImageBlink(
-				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + Color + L + ".png", X, Y);
+				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + ColorName + L + ".png", X, Y);
 		}
 
 		// If the item has been locked
