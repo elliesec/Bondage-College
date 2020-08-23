@@ -17,7 +17,7 @@ function InventoryItemNeckShockCollarClick() {
 
 function AssetsItemNeckShockCollarBeforeDraw(data) {
 	var persistentData = data.PersistentData();
-	var overriddenData = { CA: data.CA, L: data.L };
+	var overriddenData = {};
 	if (data.L === "_NoBlink" && persistentData.Blinking) {
 		overriddenData.Color = "#2f0";
 		overriddenData.L = "_Blink";
