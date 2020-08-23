@@ -547,7 +547,7 @@ function VibratorModePublish(C, Item, OldIntensity, Intensity) {
 	if (Item.Property.ItemMemberNumber) Dictionary.push({ Tag: "ItemMemberNumber", MemberNumber: Item.Property.ItemMemberNumber });
 	if (CurrentScreen == "ChatRoom") {
 		ServerSend("ChatRoomChat", { Content: "Egg" + Direction + "To" + Intensity, Type: "Action", Dictionary });
-		ChatRoomCharacterItemUpdate(C);
+		ChatRoomCharacterItemUpdate(C, Item.Asset.Group.Name);
 		ActivityChatRoomArousalSync(C);
 	}
 }
