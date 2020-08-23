@@ -155,47 +155,25 @@ function CommonDrawAppearanceBuild(C, {
 			var ParentAsset = InventoryGet(C, InheritColor);
 			if (ParentAsset != null) Color = ParentAsset.Color;
 		}
-
+		
 		// Before drawing hook, receives all processed data. Any of them can be overriden if returned inside an object.
 		// CAREFUL! The dynamic function should not contain heavy computations, and should not have any side effects. 
 		// Watch out for object references.
-		if (A.DynamicBeforeDraw) {
+		if (A.DynamicBeforeDraw && (!Player.GhostList || Player.GhostList.indexOf(C.MemberNumber) == -1)) {
 			const DrawingData = {
-				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, PersistentData: () => AnimationPersistentDataGet(C, A)
+				C, X, Y, CA, Color, Property, A, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
 			const OverridenData = window["Assets" + A.Group.Name + A.Name + "BeforeDraw"](DrawingData);
 			if (typeof OverridenData == "object") {
+				const AllowedOverrides = ["Property", "CA", "X", "Y", "Color", "LayerType", "L"];
 				for (const key in OverridenData) {
-					switch (key) { 
-						case "Property": { 
-							Property = OverridenData[key];
-							break;
-						}
-						case "CA": { 
-							CA = OverridenData[key];
-							break;
-						}
-						case "X": { 
-							X = OverridenData[key];
-							break;
-						}
-						case "Y": { 
-							Y = OverridenData[key];
-							break;
-						}
-						case "LayerType": { 
-							LayerType = OverridenData[key];
-							break;
-						}
-						case "L": { 
-							L = OverridenData[key];
-							break;
-						}
+					if (AllowedOverrides.includes(key)) { 
+						window[key] = OverridenData[key];
 					}
 				}
 			}
 		}
-		
+
 		// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
 		if ((Color != null) && (Color.indexOf("#") == 0) && Layer.AllowColorize) {
 			drawImageColorize(
@@ -230,7 +208,7 @@ function CommonDrawAppearanceBuild(C, {
 		// After drawing hook, receives all processed data.
 		// CAREFUL! The dynamic function should not contain heavy computations, and should not have any side effects. 
 		// Watch out for object references.
-		if (A.DynamicAfterDraw) {
+		if (A.DynamicAfterDraw && (!Player.GhostList || Player.GhostList.indexOf(C.MemberNumber) == -1)) {
 			const DrawingData = {
 				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
