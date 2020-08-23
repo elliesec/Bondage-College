@@ -2,11 +2,13 @@
 
 // THIS IS A DEMO
 
-function AssetsItemNeckAccessoriesCustomCollarTagAfterDraw(data) { 
+function AssetsItemNeckAccessoriesCustomCollarTagAfterDraw({
+    C, A, X, Y, drawCanvas, drawCanvasBlink
+}) { 
     //console.log('after draw');
     
     let TempCanvas = document.createElement("canvas");
-    TempCanvas.setAttribute('name', AnimationTemporaryCanvasGetName(data.C, data.A));
+    TempCanvas.setAttribute('name', AnimationGetDynamicDataName(C, AnimationDataTypes.Canvas, A));
     TempCanvas.width = 45;
     TempCanvas.height = 50;
     
@@ -14,25 +16,26 @@ function AssetsItemNeckAccessoriesCustomCollarTagAfterDraw(data) {
 	context.font = "14px serif";
     context.fillStyle = "#FF0000";
     context.textAlign = "center";
-    context.fillText(data.C.Name, 22.5, 22.5, 45);
+    context.fillText(C.Name, 22.5, 22.5, 45);
     
-    data.drawCanvas(TempCanvas, data.X + 227.5, data.Y + 30);
-    data.drawCanvasBlink(TempCanvas, data.X + 227.5, data.Y + 30);
+    drawCanvas(TempCanvas, X + 227.5, Y + 30);
+    drawCanvasBlink(TempCanvas, X + 227.5, Y + 30);
 }
 
-function AssetsItemNeckAccessoriesCustomCollarTagBeforeDraw(data) { 
+function AssetsItemNeckAccessoriesCustomCollarTagBeforeDraw({ CA }) { 
     //console.log('before draw');
-    const OverridenData = { CA: data.CA};
+    const OverridenData = { CA };
     OverridenData.CA.Color = "#" + Math.floor(Math.random() * 16777215).toString(16);
     return OverridenData;
 }
 
-function AssetsItemNeckAccessoriesCustomCollarTagScriptDraw(data) { 
+function AssetsItemNeckAccessoriesCustomCollarTagScriptDraw({C, PersistentData}) { 
     //console.log('script draw');
     // every second, new color so trigger a refresh
-    if (typeof data.PersistentData().LastTime != "number") data.PersistentData().LastTime = 0;
-    if (data.PersistentData().LastTime + 1000 < CommonTime()) { 
-        CharacterRefresh(data.C, false);
-        data.PersistentData().LastTime = CommonTime();
+    if (typeof PersistentData().LastTime != "number") PersistentData().LastTime = 0;
+    if (PersistentData().LastTime + 1000 < CommonTime()) { 
+        AnimationRequestRefreshRate(C, 1000);
+        AnimationRequestDraw(C);
+        PersistentData().LastTime = CommonTime();
     } 
 }

@@ -192,6 +192,18 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 			);
 		}
 		
+		// If we must rebuild the canvas due to an animation
+		const refreshTimeKey = AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshTime);
+		const refreshRateKey = AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshRate);
+		const buildKey = AnimationGetDynamicDataName(C, AnimationDataTypes.Rebuild);
+		const lastRefresh = AnimationPersistentStorage[refreshTimeKey] || 0;
+		const refreshRate = AnimationPersistentStorage[refreshRateKey] == null ? 10000 : AnimationPersistentStorage[refreshRateKey];
+		if ( refreshRate + lastRefresh < CommonTime() && AnimationPersistentStorage[buildKey]) { 
+			CharacterRefresh(C, false);
+			AnimationPersistentStorage[buildKey] = false;
+			AnimationPersistentStorage[refreshTimeKey] = CommonTime();
+		}
+		
 		// There's 2 different canvas, one blinking and one that doesn't
 		var seconds = new Date().getTime();
 		var Canvas = (Math.round(seconds / 400) % C.BlinkFactor == 0) ? C.CanvasBlink : C.Canvas;
