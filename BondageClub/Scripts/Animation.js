@@ -76,9 +76,8 @@ function AnimationRequestDraw(C) {
 function AnimationPurge(C, IncludeAll) { 
     const PossibleData = [];
     const PossibleCanvas = [];
-    const PossibleRefreshRate = AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshRate);
-    const PossibleRebuild = AnimationGetDynamicDataName(C, AnimationDataTypes.Rebuild);
     
+    // Highlights the data to keep
     if (!IncludeAll) {
         C.Appearance.forEach((CA) => {
             PossibleData.push(AnimationGetDynamicDataName(C, AnimationDataTypes.PersistentData, CA.Asset));
@@ -86,19 +85,24 @@ function AnimationPurge(C, IncludeAll) {
         });
     }
     
+    // Checks if any character specific info is worth being kept
+    if (IncludeAll || !C.Appearance.find(CA => CA.Asset.DynamicScriptDraw)) { 
+        delete AnimationPersistentStorage[AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshTime)];
+        delete AnimationPersistentStorage[AnimationGetDynamicDataName(C, AnimationDataTypes.Rebuild)];
+    }
+    
+    // Always delete the refresh rate for accurate requested rate.
+    delete AnimationPersistentStorage[AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshRate)];
+    
+    // Clear no longer needed data
     for (const key in AnimationPersistentStorage) { 
         const isCharDataKey = key.startsWith(AnimationDataTypes.PersistentData + "__" + C.AccountName + "__");
-        const isCharRefreshKey = key.startsWith(AnimationDataTypes.Canvas + "__" + C.AccountName + "__");
-        const isCharBuildKey = key.startsWith(AnimationDataTypes.Rebuild + "__" + C.AccountName + "__");
-        if (
-            (isCharDataKey && !PossibleData.includes(key)) ||
-            (isCharRefreshKey && PossibleRefreshRate !== key) ||
-            (isCharBuildKey && PossibleRebuild !== key)
-        ) { 
+        if (isCharDataKey && !PossibleData.includes(key)) { 
             delete AnimationPersistentStorage[key];
         }
     }
     
+    // Clear no longer needed cached canvases
     GLDrawImageCache.forEach((img, key) => {
         if (key.startsWith(AnimationDataTypes.Canvas + "__" + + C.AccountName + "__") && !PossibleCanvas.includes(key)) { 
             GLDrawImageCache.delete(key);
