@@ -53,7 +53,7 @@ function AnimationPersistentDataGet(C, Asset) {
  */
 function AnimationRequestRefreshRate(C, RequestedRate) { 
     const key = AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshRate);
-    let RefreshRate = AnimationPersistentStorage[key] || Infinity;
+    let RefreshRate = AnimationPersistentStorage[key] != null ? AnimationPersistentStorage[key] : Infinity;
     if (RequestedRate < RefreshRate) { 
         AnimationPersistentStorage[key] = RequestedRate;
     }
