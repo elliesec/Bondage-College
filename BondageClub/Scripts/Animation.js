@@ -8,15 +8,16 @@ var AnimationPersistentStorage = {};
 
 /**
  * Types of dynamic data that can be stored.
- * @enum AnimationDataTypes
+ * @constant
+ * @enum
  */
 var AnimationDataTypes = {
     Base: "",
     Canvas: "DynamicPlayerCanvas",
-    RefreshTime: "RefreshTime",
     PersistentData: "PersistentData",
-    RefreshRate: "RefreshRate",
     Rebuild: "Rebuild",
+    RefreshTime: "RefreshTime",
+    RefreshRate: "RefreshRate",
 };
 
 /**
@@ -52,7 +53,7 @@ function AnimationPersistentDataGet(C, Asset) {
  */
 function AnimationRequestRefreshRate(C, RequestedRate) { 
     const key = AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshRate);
-    let RefreshRate = AnimationPersistentStorage[key] || Infinity;
+    let RefreshRate = AnimationPersistentStorage[key] != null ? AnimationPersistentStorage[key] : Infinity;
     if (RequestedRate < RefreshRate) { 
         AnimationPersistentStorage[key] = RequestedRate;
     }
