@@ -147,13 +147,14 @@ function CommonDrawAppearanceBuild(C, {
 		if (Layer.Name) L = "_" + Layer.Name;
 		if (!Layer.HasType) LayerType = "";
 		var BlinkExpression = (A.OverrideBlinking ? !AG.DrawingBlink : AG.DrawingBlink) ? "Closed/" : Expression;
+		var Color = CA.Color;
 
 		// Before drawing hook, receives all processed data. Any of them can be overriden if returned inside an object.
 		// CAREFUL! The dynamic function should not contain heavy computations, and should not have any side effects. 
 		// Watch out for object references.
 		if (A.DynamicBeforeDraw) {
 			const DrawingData = {
-				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, PersistentData: () => AnimationPersistentDataGet(C, A)
+				C, X, Y, CA, Color, Property, A, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
 			const OverridenData = window["Assets" + A.Group.Name + A.Name + "BeforeDraw"](DrawingData);
 			if (typeof OverridenData == "object") {
@@ -165,6 +166,10 @@ function CommonDrawAppearanceBuild(C, {
 						}
 						case "CA": { 
 							CA = OverridenData[key];
+							break;
+						}
+						case "Color": {
+							Color = OverridenData[key];
 							break;
 						}
 						case "X": { 
@@ -189,18 +194,18 @@ function CommonDrawAppearanceBuild(C, {
 		}
 		
 		// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
-		if ((CA.Color != null) && (CA.Color.indexOf("#") == 0) && Layer.AllowColorize) {
+		if ((Color != null) && (Color.indexOf("#") == 0) && Layer.AllowColorize) {
 			drawImageColorize(
-				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, CA.Color,
+				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, Color,
 				AG.DrawingFullAlpha,
 			);
 			drawImageColorizeBlink(
-				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y, CA.Color,
+				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y, Color,
 				AG.DrawingFullAlpha,
 			);
 		} else {
-			var Color = ((CA.Color == null) || (CA.Color == "Default") || (CA.Color == "") || (CA.Color.length == 1) ||
-						 (CA.Color.indexOf("#") == 0)) ? "" : "_" + CA.Color;
+			Color = ((Color == null) || (Color == "Default") || (Color == "") || (Color.length == 1) ||
+						 (Color.indexOf("#") == 0)) ? "" : "_" + Color;
 			drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + Color + L + ".png", X, Y);
 			drawImageBlink(
 				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + Color + L + ".png", X, Y);
