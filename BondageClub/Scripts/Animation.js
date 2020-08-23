@@ -8,15 +8,16 @@ var AnimationPersistentStorage = {};
 
 /**
  * Types of dynamic data that can be stored.
- * @enum AnimationDataTypes
+ * @constant
+ * @enum
  */
 var AnimationDataTypes = {
     Base: "",
     Canvas: "DynamicPlayerCanvas",
-    RefreshTime: "RefreshTime",
     PersistentData: "PersistentData",
-    RefreshRate: "RefreshRate",
     Rebuild: "Rebuild",
+    RefreshTime: "RefreshTime",
+    RefreshRate: "RefreshRate",
 };
 
 /**
