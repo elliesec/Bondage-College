@@ -153,7 +153,7 @@ function VibratorModeLoad(Options) {
 		Options = (Options && Options.length) ? Options : [VibratorModeSet.STANDARD];
 		var FirstOption = VibratorModeOptions[Options[0]][0] || VibratorModeOptions[VibratorModeSet.STANDARD][0];
 		DialogFocusItem.Property = Object.assign({}, Property, FirstOption.Property);
-		VibratorModeSetDynamicProperties(Property);
+		VibratorModeSetDynamicProperties(DialogFocusItem.Property);
 		var C = CharacterGetCurrent();
 		CharacterRefresh(C);
 		ChatRoomCharacterItemUpdate(C, DialogFocusItem.Asset.Group.Name);
