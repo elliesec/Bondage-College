@@ -185,11 +185,28 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 		}
 
 		// Run any existing asset scripts
-		if (!C.AccountName.startsWith('Online-') || !(Player.ChatSettings && Player.ChatSettings.DisableAnimations)) {
+		if (
+			!C.AccountName.startsWith('Online-') ||
+			!(Player.ChatSettings && Player.ChatSettings.DisableAnimations)
+		) {
 			var DynamicAssets = C.Appearance.filter(CA => CA.Asset.DynamicScriptDraw);
 			DynamicAssets.forEach(Item =>
-				window["Assets" + Item.Asset.Group.Name + Item.Asset.Name + "ScriptDraw"]({ C, Item, PersistentData: () => AnimationPersistentDataGet(C, Item.Asset) })
+				window["Assets" + Item.Asset.Group.Name + Item.Asset.Name + "ScriptDraw"]({
+					C, Item, PersistentData: () => AnimationPersistentDataGet(C, Item.Asset)
+				})
 			);
+			
+			// If we must rebuild the canvas due to an animation
+			const refreshTimeKey = AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshTime);
+			const refreshRateKey = AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshRate);
+			const buildKey = AnimationGetDynamicDataName(C, AnimationDataTypes.Rebuild);
+			const lastRefresh = AnimationPersistentStorage[refreshTimeKey] || 0;
+			const refreshRate = AnimationPersistentStorage[refreshRateKey] == null ? 60000 : AnimationPersistentStorage[refreshRateKey];
+			if (refreshRate + lastRefresh < CommonTime() && AnimationPersistentStorage[buildKey]) { 
+				CharacterRefresh(C, false);
+				AnimationPersistentStorage[buildKey] = false;
+				AnimationPersistentStorage[refreshTimeKey] = CommonTime();
+			}
 		}
 		
 		// There's 2 different canvas, one blinking and one that doesn't
