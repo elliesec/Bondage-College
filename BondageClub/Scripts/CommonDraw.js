@@ -165,10 +165,36 @@ function CommonDrawAppearanceBuild(C, {
 			};
 			const OverridenData = window["Assets" + A.Group.Name + A.Name + "BeforeDraw"](DrawingData);
 			if (typeof OverridenData == "object") {
-				const AllowedOverrides = ["Property", "CA", "X", "Y", "Color", "LayerType", "L"];
 				for (const key in OverridenData) {
-					if (AllowedOverrides.includes(key)) { 
-						window[key] = OverridenData[key];
+					switch (key) { 
+						case "Property": { 
+							Property = OverridenData[key];
+							break;
+						}
+						case "CA": { 
+							CA = OverridenData[key];
+							break;
+						}
+						case "Color": {
+							Color = OverridenData[key];
+							break;
+						}
+						case "X": { 
+							X = OverridenData[key];
+							break;
+						}
+						case "Y": { 
+							Y = OverridenData[key];
+							break;
+						}
+						case "LayerType": { 
+							LayerType = OverridenData[key];
+							break;
+						}
+						case "L": { 
+							L = OverridenData[key];
+							break;
+						}
 					}
 				}
 			}
