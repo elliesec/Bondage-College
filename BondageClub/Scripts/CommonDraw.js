@@ -147,7 +147,6 @@ function CommonDrawAppearanceBuild(C, {
 		if (Layer.Name) L = "_" + Layer.Name;
 		if (!Layer.HasType) LayerType = "";
 		var BlinkExpression = (A.OverrideBlinking ? !AG.DrawingBlink : AG.DrawingBlink) ? "Closed/" : Expression;
-		var Color = CA.Color;
 
 		// Check if we need to copy the color of another asset
 		var Color = CA.Color;
