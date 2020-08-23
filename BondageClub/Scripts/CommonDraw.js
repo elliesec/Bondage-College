@@ -152,7 +152,7 @@ function CommonDrawAppearanceBuild(C, {
 		// Before drawing hook, receives all processed data. Any of them can be overriden if returned inside an object.
 		// CAREFUL! The dynamic function should not contain heavy computations, and should not have any side effects. 
 		// Watch out for object references.
-		if (A.DynamicBeforeDraw) {
+		if (A.DynamicBeforeDraw && (!Player.GhostList || Player.GhostList.indexOf(C.MemberNumber) == -1)) {
 			const DrawingData = {
 				C, X, Y, CA, Color, Property, A, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
@@ -201,7 +201,7 @@ function CommonDrawAppearanceBuild(C, {
 		// After drawing hook, receives all processed data.
 		// CAREFUL! The dynamic function should not contain heavy computations, and should not have any side effects. 
 		// Watch out for object references.
-		if (A.DynamicAfterDraw) {
+		if (A.DynamicAfterDraw && (!Player.GhostList || Player.GhostList.indexOf(C.MemberNumber) == -1)) {
 			const DrawingData = {
 				C, X, Y, CA, Property, A, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};

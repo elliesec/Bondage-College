@@ -1,10 +1,20 @@
 "use strict";
 // Loads the item extension properties
 function InventoryItemNeckAccessoriesCustomCollarTagLoad() {
+    var C = CharacterGetCurrent();
+	var MustRefresh = false;
+	
 	if (DialogFocusItem.Property == null) DialogFocusItem.Property = {};
-	if (DialogFocusItem.Property.Color == null) DialogFocusItem.Property.Color = "#000000";
-	if (DialogFocusItem.Property.Text == null) DialogFocusItem.Property.Text = "Tag";
-
+	if (DialogFocusItem.Property.Color == null) {
+		DialogFocusItem.Property.Color = "#000000";
+		MustRefresh = true;
+	}
+	if (DialogFocusItem.Property.Text == null) {
+		DialogFocusItem.Property.Text = "Tag";
+		MustRefresh = true;
+	}
+	if (MustRefresh) CharacterRefresh(C);
+	
 	// Only create the inputs if the item isn't locked
 	if (!InventoryItemHasEffect(DialogFocusItem, "Lock", true)) {
 		ElementCreateInput("Color", "text", DialogFocusItem.Property.Color, "7");
