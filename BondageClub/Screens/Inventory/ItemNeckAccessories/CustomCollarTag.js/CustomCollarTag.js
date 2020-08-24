@@ -103,18 +103,17 @@ function AssetsItemNeckAccessoriesCustomCollarTagAfterDraw({
     C, A, X, Y, Property, drawCanvas, drawCanvasBlink
 }) { 
     
-    // We set up a canvas
-    let TempCanvas = document.createElement("canvas"); 
-    TempCanvas.setAttribute('name', AnimationGetDynamicDataName(C, AnimationDataTypes.Canvas, A));
-    TempCanvas.width = 45;
-    TempCanvas.height = 50;
+	// We set up a canvas
+	const Height = 50;
+	const Width = 45;
+	const TempCanvas = AnimationGenerateTempCanvas(C, A, Width, Height);
     
     // We draw the desired info on that canvas
     let context = TempCanvas.getContext('2d');
 	context.font = "14px serif";
     context.fillStyle = (Property ? Property.Color : null) || "#000000";
     context.textAlign = "center";
-    context.fillText((Property ? Property.Text : ""), 22.5, 22.5, 45);
+    context.fillText((Property ? Property.Text : ""), Width / 2, Width / 2, Width);
     
     // We print the canvas to the character based on the asset position
     drawCanvas(TempCanvas, X + 227.5, Y + 30);

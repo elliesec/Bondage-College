@@ -69,6 +69,23 @@ function AnimationRequestDraw(C) {
 }
 
 /**
+ * Generates a temporary canvas used draw on for dynamic assets.
+ * Careful! The width of the canvas should never be higher than 500px.
+ * @param {Character} C - Character for which the temporary canvas is
+ * @param {Asset} A - Asset for which the canvas is
+ * @param {number} W - Width of the canvas (can be changed later)
+ * @param {number} H - Height of the canvas (can be changed later)
+ * @returns {HTMLCanvasElement} - The temporary canvas to use
+ */
+function AnimationGenerateTempCanvas(C, A, W, H) { 
+    let TempCanvas = document.createElement("canvas"); 
+    TempCanvas.setAttribute('name', AnimationGetDynamicDataName(C, AnimationDataTypes.Canvas, A));
+    TempCanvas.width = W ? W : 500;
+    TempCanvas.height = H ? H : 500;
+    return TempCanvas;
+}
+
+/**
  * Purges all dynamic asset data corresponding to a given character.
  * @param {Character} C - The character to delete the animation data of
  * @param {boolean} IncludeAll - TRUE if we should delete every animation data for the given character.
