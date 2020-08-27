@@ -19,6 +19,7 @@ var Pose = [];
  * by the parent asset/group.
  * @property {number} Priority - The drawing priority of this layer. Inherited from the parent asset/group if not specified in the layer definition.
  * @property {Asset} Asset - The asset that this layer belongs to
+ * @property {number} ColorIndex - The coloring index for this layer
  */
 
 // Adds a new asset group to the main list
@@ -132,9 +133,10 @@ function AssetAdd(NewAsset) {
 		DynamicActivity: (typeof NewAsset.DynamicActivity === 'function') ? NewAsset.DynamicActivity : function () { return NewAsset.Activity },
 		CharacterRestricted: typeof NewAsset.CharacterRestricted === 'boolean' ? NewAsset.CharacterRestricted : false,
 		AllowRemoveExclusive: typeof NewAsset.AllowRemoveExclusive === 'boolean' ? NewAsset.CharacterRestricted : false,
-		InheritColor: NewAsset.InheritColor
+		InheritColor: NewAsset.InheritColor,
 	}
 	A.Layer = AssetBuildLayer(NewAsset, A);
+	AssetAssignColorIndices(A);
 	// Unwearable assets are not visible but can be overwritten
 	if (!A.Wear && NewAsset.Visible != true) A.Visible = false;
 	Asset.push(A);
@@ -184,6 +186,23 @@ function AssetLayerAllowColorize(Layer, NewAsset) {
 		   : typeof NewAsset.AllowColorize === 'boolean' ? NewAsset.AllowColorize
 			 : typeof AssetCurrentGroup.AllowColorize  === 'boolean' ? AssetCurrentGroup.AllowColorize
 			   : true;
+}
+
+/**
+ * Assigns colour indices to the layers of an asset. These determine which colours get applied to the layer. Also adds a count of colorable
+ * layers to the asset definition.
+ * @param {Object} A - The built asset
+ * @returns {void} - Nothing
+ */
+function AssetAssignColorIndices(A) {
+	var colorIndex = 0;
+	A.Layer.forEach(Layer => {
+		if (Layer.AllowColorize) {
+			Layer.ColorIndex = colorIndex;
+			colorIndex++;
+		}
+	});
+	A.ColorableLayerCount = colorIndex;
 }
 
 // Builds the asset description from the CSV file
