@@ -17,7 +17,8 @@ var Pose = [];
  * undefined, the layer inherits its parent group from it's asset/group.
  * @property {string[] | null} OverrideAllowPose - An array of poses that this layer permits. If set, it will override the poses permitted
  * by the parent asset/group.
- * @property {number} Priority - The drawing priority of this layer. Inherited from the parent asset/group if not specified in the layer definition.
+ * @property {number} Priority - The drawing priority of this layer. Inherited from the parent asset/group if not specified in the layer
+ *     definition.
  * @property {Asset} Asset - The asset that this layer belongs to
  * @property {number} ColorIndex - The coloring index for this layer
  */
@@ -165,13 +166,14 @@ function AssetMapLayer(Layer, AssetDefinition, A) {
 	return {
 		Name: Layer.Name || null,
 		AllowColorize: AssetLayerAllowColorize(Layer, AssetDefinition),
+		CopyLayerColor: Layer.CopyLayerColor || null,
 		AllowTypes: Array.isArray(Layer.AllowTypes) ? Layer.AllowTypes : null,
 		HasType: typeof Layer.HasType === "boolean" ? Layer.HasType : true,
 		ParentGroupName: Layer.ParentGroup,
 		OverrideAllowPose: Array.isArray(Layer.OverrideAllowPose) ? Layer.OverrideAllowPose : null,
 		Priority: Layer.Priority || AssetDefinition.Priority || AssetCurrentGroup.DrawingPriority,
 		InheritColor: Layer.InheritColor,
-		Asset: A
+		Asset: A,
 	};
 }
 
@@ -196,9 +198,23 @@ function AssetLayerAllowColorize(Layer, NewAsset) {
  */
 function AssetAssignColorIndices(A) {
 	var colorIndex = 0;
+	var colorMap = {};
 	A.Layer.forEach(Layer => {
-		if (Layer.AllowColorize) {
-			Layer.ColorIndex = colorIndex;
+		// If the layer can't be coloured, we don't need to set a color index
+		if (!Layer.AllowColorize) return;
+
+		var CopyLayer = Layer.CopyLayerColor;
+		if (CopyLayer) {
+			if (typeof colorMap[CopyLayer] === "number") {
+				Layer.ColorIndex = colorMap[CopyLayer];
+			} else {
+				Layer.ColorIndex = colorMap[CopyLayer] = colorIndex;
+				colorIndex++;
+			}
+		} else if (typeof colorMap[Layer.Name] === "number") {
+			Layer.ColorIndex = colorMap[Layer.Name];
+		} else {
+			Layer.ColorIndex = colorMap[Layer.Name] = colorIndex;
 			colorIndex++;
 		}
 	});
