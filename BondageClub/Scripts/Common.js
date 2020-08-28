@@ -337,3 +337,16 @@ function CommonConvertArrayToString(Arr) {
 	}
 	return S;
 }
+
+/**
+ * Checks whether two item colors are equal. An item color may either be a string or an array of strings.
+ * @param {string|string[]} C1 - The first color to check
+ * @param {string|string[]} C2 - The second color to check
+ * @returns {boolean} - TRUE if C1 and C2 represent the same item color, FALSE otherwise
+ */
+function CommonColorsEqual(C1, C2) {
+	if (Array.isArray(C1) && Array.isArray(C2)) {
+		return C1.length === C2.length && C1.every((C, I) => C2[I] === C);
+	}
+	return C1 === C2;
+}

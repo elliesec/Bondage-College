@@ -419,7 +419,7 @@ function CharacterAppearanceGetCurrentValue(C, Group, Type) {
 		if ((C.Appearance[A].Asset.Group.Family == C.AssetFamily) && (C.Appearance[A].Asset.Group.Name == Group)) {
 			if (Type == "Name") return C.Appearance[A].Asset.Name;
 			if (Type == "Description") return C.Appearance[A].Asset.Description;
-			if (Type == "Color") return (C.Appearance[A].Color == C.Appearance[A].Asset.DefaultColor) ? "Default" : C.Appearance[A].Color;
+			if (Type == "Color") return CommonColorsEqual(C.Appearance[A].Color, C.Appearance[A].Asset.DefaultColor) ? "Default" : C.Appearance[A].Color;
 			if (Type == "ID") return A;
 			if (Type == "Effect") return C.Appearance[A].Asset.Effect;
 			if (Type == "Asset") return C.Appearance[A].Asset;
