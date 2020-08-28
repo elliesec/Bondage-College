@@ -203,18 +203,11 @@ function AssetAssignColorIndices(A) {
 		// If the layer can't be coloured, we don't need to set a color index
 		if (!Layer.AllowColorize) return;
 
-		var CopyLayer = Layer.CopyLayerColor;
-		if (CopyLayer) {
-			if (typeof colorMap[CopyLayer] === "number") {
-				Layer.ColorIndex = colorMap[CopyLayer];
-			} else {
-				Layer.ColorIndex = colorMap[CopyLayer] = colorIndex;
-				colorIndex++;
-			}
-		} else if (typeof colorMap[Layer.Name] === "number") {
-			Layer.ColorIndex = colorMap[Layer.Name];
+		var LayerKey = Layer.CopyLayerColor || Layer.Name;
+		if (typeof colorMap[LayerKey] === "number") {
+			Layer.ColorIndex = colorMap[LayerKey];
 		} else {
-			Layer.ColorIndex = colorMap[Layer.Name] = colorIndex;
+			Layer.ColorIndex = colorMap[LayerKey] = colorIndex;
 			colorIndex++;
 		}
 	});
