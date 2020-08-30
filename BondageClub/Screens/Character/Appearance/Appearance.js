@@ -440,7 +440,7 @@ function AppearanceLoad() {
 	if (!CharacterAppearanceSelection) CharacterAppearanceSelection = Player;
 	var C = CharacterAppearanceSelection;
 	CharacterAppearanceBuildAssets(Player);
-	CharacterAppearanceBackup = C.Appearance.slice();
+	CharacterAppearanceBackup = CharacterAppearanceBackupGenerate(C);
 	if ((Player.GameplaySettings != null) && Player.GameplaySettings.EnableWardrobeIcon && (CharacterAppearanceReturnRoom == "ChatRoom")) {
 		CharacterAppearancePreviousEmoticon = WardrobeGetExpression(Player).Emoticon;
 		ServerSend("ChatRoomCharacterExpressionUpdate", { Name: "Wardrobe", Group: "Emoticon", Appearance: ServerAppearanceBundle(Player.Appearance) });
@@ -983,7 +983,7 @@ function AppearanceExit() {
 function CharacterAppearanceExit(C) {
 	ElementRemove("InputWardrobeName");
 	CharacterAppearanceMode = "";
-	C.Appearance = CharacterAppearanceBackup;
+	CharacterAppearanceBackupRestore(C, CharacterAppearanceBackup);
 	if ((Player.GameplaySettings != null) && Player.GameplaySettings.EnableWardrobeIcon && (CharacterAppearanceReturnRoom == "ChatRoom")) {
 		CharacterSetFacialExpression(Player, "Emoticon", CharacterAppearancePreviousEmoticon);
 		CharacterAppearancePreviousEmoticon = "";
@@ -1094,4 +1094,23 @@ function CharacterAppearanceWardrobeLoad(C) {
 	ElementCreateInput("InputWardrobeName", "text", C.Name, "20");
 	CharacterAppearanceMode = "Wardrobe";
 	CharacterAppearanceWardrobeText = TextGet("WardrobeNameInfo");
+}
+
+function CharacterAppearanceBackupGenerate(C) {
+    return JSON.stringify(C.Appearance,(key, value) => {
+        if (key === "Asset") {
+            return value.Group.Family + "/" + value.Group.Name + "/" + value.Name;
+        }
+        return value;
+    });
+}
+
+function CharacterAppearanceBackupRestore(C, backup) {
+    C.Appearance = JSON.parse(backup, (key, value) => {
+        if (key === "Asset") {
+            const FGA = value.split("/");
+            return AssetGet(FGA[0], FGA[1], FGA[2]);
+        }
+        return value;
+    });
 }
