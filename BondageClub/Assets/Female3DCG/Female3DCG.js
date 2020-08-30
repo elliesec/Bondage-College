@@ -55,7 +55,10 @@ var AssetFemale3DCG = [
 				],
 				Require: ["ClothLower", "ClothAccessory"]
 			},
-			{ Name: "BabydollDress1", Fetish: ["ABDL"], HideItem: ["ClothLowerLatexSkirt1", "ItemNipplesPiercingsRoundPiercing", "ItemNipplesPiercingsWeightedPiercing", "ItemDevicesStrapOnSmooth", "ItemDevicesStrapOnStuds", "ItemNipplesLactationPump"] },
+			{ Name: "BabydollDress1", Fetish: ["ABDL"], HideItem: ["ClothLowerLatexSkirt1", "ItemNipplesPiercingsRoundPiercing", "ItemNipplesPiercingsWeightedPiercing", "ItemDevicesStrapOnSmooth", "ItemDevicesStrapOnStuds", "ItemNipplesLactationPump"], Layer: [
+				{ Name: "Dress"},
+				{ Name: "Trim"}
+			] },
 			{ Name: "TeacherOutfit1", Hide: ["ItemNeck", "ItemHidden"], HideItem: ["ItemArmsLeatherCuffs", "ItemArmsOrnateCuffs", "ClothLowerLatexSkirt1", "ClothLowerSkirt1", "ClothLowerSkirt2", "ClothLowerSkirt3", "ClothLowerTennisSkirt1", "ClothLowerClothSkirt1", "ItemNipplesPiercingsRoundPiercing", "ItemNipplesPiercingsWeightedPiercing", "ItemDevicesStrapOnSmooth", "ItemDevicesStrapOnStuds", "ItemNipplesLactationPump"], AllowPose: ["Horse", "KneelingSpread", "BackBoxTie", "BackCuffs", "BackElbowTouch", "Bolero"] },
 			{ Name: "ChineseDress1", HideItem: ["ClothLowerLatexSkirt1", "ClothLowerLatexSkirt2", "ClothLowerSkirt1", "ClothLowerSkirt2", "ClothLowerSkirt3", "ClothLowerTennisSkirt1", "ClothLowerClothSkirt1", "ItemNipplesPiercingsRoundPiercing", "ItemNipplesPiercingsWeightedPiercing", "ItemDevicesStrapOnSmooth", "ItemDevicesStrapOnStuds", "ItemNipplesLactationPump"] },
 			{ Name: "ChineseDress2", Value: 60, HideItem: ["ItemNipplesPiercingsRoundPiercing", "ItemNipplesPiercingsWeightedPiercing", "ItemDevicesStrapOnSmooth", "ItemDevicesStrapOnStuds", "ItemNipplesLactationPump"] },
@@ -686,20 +689,36 @@ var AssetFemale3DCG = [
 		Top: 150,
 		AllowPose: ["AllFours"],
 		Asset: [
-			{ Name: "TailStrap", Fetish: ["Pet"], Value: 30 },
+			{ Name: "TailStrap", Fetish: ["Pet"], Value: 30, Layer: [
+				{ Name: "Ribbon"},
+				{ Name: "Bell"},
+				{ Name: "Tail"}
+			] },
 			{ Name: "HorseTailStrap", Fetish: ["Pony"], Value: 20 },
 			{ Name: "HorseTailStrap1", Fetish: ["Pony"], Value: 30 },
-			{ Name: "FoxTailsStrap", Fetish: ["Pet"], Priority: 2, Value: 50 },
+			{ Name: "FoxTailsStrap", Fetish: ["Pet"], Priority: 2, Value: 50, Layer: [
+				{ Name: "Tips"},
+				{ Name: "Bases"}
+			] },
 			{ Name: "PuppyTailStrap", Fetish: ["Pet"], Value: 15 },
 			{ Name: "SuccubusTailStrap", Fetish: ["Pet"], Value: 10 },
-			{ Name: "SuccubusHeartTailStrap", Fetish: ["Pet"], Value: 15 },
+			{ Name: "SuccubusHeartTailStrap", Fetish: ["Pet"], Value: 15, Layer: [
+				{ Name: "Heart"},
+				{ Name: "Tail"}
+			]},
 			{ Name: "RaccoonStrap", Fetish: ["Pet"], Value: 25 },
 			{ Name: "RaccoonTailStrap", Fetish: ["Pet"], Priority: 2, Value: 35 },
 			{ Name: "PuppyTailStrap1", Fetish: ["Pet"], Value: 20 },
 			{ Name: "KittenTailStrap1", Fetish: ["Pet"], Value: 20 },
 			{ Name: "KittenTailStrap2", Fetish: ["Pet"], Value: 20 },
-			{ Name: "FoxTailStrap1", Fetish: ["Pet"], Value: 20 },
-			{ Name: "FoxTailStrap2", Fetish: ["Pet"], Value: 20 },
+			{ Name: "FoxTailStrap1", Fetish: ["Pet"], Value: 20, Layer: [
+				{ Name: "Tip"},
+				{ Name: "Base"}
+			] },
+			{ Name: "FoxTailStrap2", Fetish: ["Pet"], Value: 20, Layer: [
+				{ Name: "Tip"},
+				{ Name: "Base"}
+			]},
 			{ Name: "WolfTailStrap1", Fetish: ["Pet"], Value: 20 },
 			{ Name: "WolfTailStrap2", Fetish: ["Pet"], Value: 20 },
 			{ Name: "WolfTailStrap3", Fetish: ["Pet"], Value: 20 },
