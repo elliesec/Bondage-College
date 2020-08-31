@@ -12,6 +12,7 @@ var AnimationPersistentStorage = {};
  * @enum
  */
 var AnimationDataTypes = {
+    AssetGroup: "AssetGroup",
     Base: "",
     Canvas: "DynamicPlayerCanvas",
     PersistentData: "PersistentData",
@@ -69,6 +70,39 @@ function AnimationRequestDraw(C) {
 }
 
 /**
+ * Gets the group object for a given character. This method should not be called explicitly, use the Data builder passed to the dynamic drawing functions.
+ * @param {Character} C - Character wearing the animated object
+ * @param {Asset} Asset - The animated object
+ * @returns {object} - Contains the persistent group data, returns a new empty object if it was never initialized previously.
+ */
+function AnimationGroupGet(C, Name) { 
+    let GroupKey = AnimationGetDynamicDataName(C, AnimationDataTypes.AssetGroup);
+    if (!AnimationPersistentStorage[GroupKey]) { 
+        AnimationPersistentStorage[GroupKey] = {}
+    }
+    if (!AnimationPersistentStorage[GroupKey][Name]) { 
+        AnimationPersistentStorage[GroupKey][Name] = { Subscriptions: [] }
+    }
+    return AnimationPersistentStorage[GroupKey][Name];
+}
+
+/**
+ * Marks a given asset as part of a shared data group.
+ * @param {Character} C - Character wearing the dynamic object
+ * @param {Asset} Asset - The animated object
+ * @param {string} Name - Name of the group to subscribe to.
+ * @returns {void} - Nothing
+ */
+function AnimationGroupSubscribe(C, Asset, Name) { 
+    const DataKey = AnimationGetDynamicDataName(C, AnimationDataTypes.PersistentData, Asset);
+    const Group = AnimationGroupGet(C, Name)
+    AnimationPersistentDataGet(C, Asset).Group = Group;
+    if (Array.isArray(Group.Subscriptions) && !Group.Subscriptions.includes(DataKey)) { 
+        Group.Subscriptions.push(DataKey);
+    }
+}
+
+/**
  * Generates a temporary canvas used draw on for dynamic assets.
  * Careful! The width of the canvas should never be higher than 500px.
  * @param {Character} C - Character for which the temporary canvas is
@@ -104,18 +138,23 @@ function AnimationPurge(C, IncludeAll) {
     }
     
     // Checks if any character specific info is worth being kept
-    if (IncludeAll || !C.Appearance.find(CA => CA.Asset.DynamicScriptDraw)) { 
+    if (IncludeAll || !C.Appearance.find(CA => CA.Asset.DynamicScriptDraw || CA.Asset.DynamicAfterDraw || CA.Asset.DynamicBeforeDraw)) { 
         delete AnimationPersistentStorage[AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshTime)];
         delete AnimationPersistentStorage[AnimationGetDynamicDataName(C, AnimationDataTypes.Rebuild)];
+        delete AnimationPersistentStorage[AnimationGetDynamicDataName(C, AnimationDataTypes.AssetGroup)];
     }
     
     // Always delete the refresh rate for accurate requested rate.
     delete AnimationPersistentStorage[AnimationGetDynamicDataName(C, AnimationDataTypes.RefreshRate)];
     
-    // Clear no longer needed data
+    // Clear no longer needed data (Clear the subscription, then clear the asset data)
     for (const key in AnimationPersistentStorage) { 
         const isCharDataKey = key.startsWith(AnimationDataTypes.PersistentData + "__" + C.AccountName + "__");
         if (isCharDataKey && !PossibleData.includes(key)) { 
+            const Group = AnimationPersistentStorage[key].Group;
+            if (Group && Array.isArray(Group.Subscriptions)) { 
+                Group.Subscriptions = Group.Subscriptions.filter(k => k != key);
+            }
             delete AnimationPersistentStorage[key];
         }
     }
@@ -126,4 +165,14 @@ function AnimationPurge(C, IncludeAll) {
             GLDrawImageCache.delete(key);
         }
     });
+    
+    // Clear empty groups when all is done
+    const GroupKey = AnimationGetDynamicDataName(C, AnimationDataTypes.AssetGroup);
+    if (AnimationPersistentStorage[GroupKey]) { 
+        for (const key in AnimationPersistentStorage[GroupKey]) {
+            if (!AnimationPersistentStorage[GroupKey][key].Subscriptions || !Array.isArray(AnimationPersistentStorage[GroupKey][key].Subscriptions) || AnimationPersistentStorage[GroupKey][key].Subscriptions.length == 0) { 
+                delete AnimationPersistentStorage[GroupKey][key];
+            }
+        }
+    }
 }
