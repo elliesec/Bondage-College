@@ -393,6 +393,31 @@ function DrawImageCanvas(Source, Canvas, X, Y, AlphaMasks) {
 	return true;
 }
 
+
+/**
+ * Draws a canvas to a specific canvas
+ * @param {HTMLCanvasElement} Img - Canvas to draw
+ * @param {HTMLCanvasElement} Canvas - Canvas on which to draw the image
+ * @param {number} X - Position of the image on the X axis
+ * @param {number} Y - Position of the image on the Y axis
+ * @param {number[][]} AlphaMasks - A list of alpha masks to apply to the asset
+ * @returns {boolean} - whether the image was complete or not
+ */
+function DrawCanvas(Img, Canvas, X, Y, AlphaMasks) {
+	if (AlphaMasks && AlphaMasks.length) {
+		var tmpCanvas = document.createElement("canvas");
+		tmpCanvas.width = Img.width;
+		tmpCanvas.height = Img.height;
+		var ctx = tmpCanvas.getContext('2d');
+		ctx.drawImage(Img, 0, 0);
+		AlphaMasks.forEach(([x, y, w, h]) => ctx.clearRect(x - X, y - Y, w, h));
+		Canvas.drawImage(tmpCanvas, X, Y);
+	} else {
+		Canvas.drawImage(Img, X, Y);
+	}
+	return true;
+}
+
 /**
  * Draws a specific canvas on the main canvas
  * @param {HTMLCanvasElement} Canvas - Canvas to draw on the main canvas

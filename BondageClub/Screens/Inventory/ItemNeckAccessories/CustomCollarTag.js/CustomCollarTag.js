@@ -101,7 +101,7 @@ function InventoryItemNeckAccessoriesCustomCollarTagChange() {
 
 // Drawing function for the text on the tag
 function AssetsItemNeckAccessoriesCustomCollarTagAfterDraw({
-    C, A, X, Y, Property, drawCanvas, drawCanvasBlink
+    C, A, X, Y, Property, drawCanvas, drawCanvasBlink, AlphaMasks
 }) { 
     
 	// We set up a canvas
@@ -117,6 +117,6 @@ function AssetsItemNeckAccessoriesCustomCollarTagAfterDraw({
     context.fillText((Property && Property.Text.match(InventoryItemNeckAccessoriesCustomCollarTagAllowedChars) ? Property.Text : "Tag"), Width / 2, Width / 2, Width);
     
     // We print the canvas to the character based on the asset position
-    drawCanvas(TempCanvas, X + 227.5, Y + 30);
-    drawCanvasBlink(TempCanvas, X + 227.5, Y + 30);
+    drawCanvas(TempCanvas, X + 227.5, Y + 30, AlphaMasks);
+    drawCanvasBlink(TempCanvas, X + 227.5, Y + 30, AlphaMasks);
 }
