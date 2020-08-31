@@ -96,7 +96,7 @@ function AnimationGroupGet(C, Name) {
 function AnimationGroupSubscribe(C, Asset, Name) { 
     const DataKey = AnimationGetDynamicDataName(C, AnimationDataTypes.PersistentData, Asset);
     const Group = AnimationGroupGet(C, Name)
-    AnimationPersistentDataGet(C, Asset).Group = Group;
+    AnimationPersistentDataGet(C, Asset)["GroupData" + Name] = Group;
     if (Array.isArray(Group.Subscriptions) && !Group.Subscriptions.includes(DataKey)) { 
         Group.Subscriptions.push(DataKey);
     }
