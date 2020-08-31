@@ -488,7 +488,8 @@ function AppearanceRun() {
 		// Creates buttons for all groups
 		for (let A = CharacterAppearanceOffset; A < AssetGroup.length && A < CharacterAppearanceOffset + CharacterAppearanceNumPerPage; A++)
 			if ((AssetGroup[A].Family == C.AssetFamily) && (AssetGroup[A].Category == "Appearance") && AssetGroup[A].AllowCustomize && (C.ID == 0 || AssetGroup[A].Clothing)) {
-				if (AssetGroup[A].AllowNone && !AssetGroup[A].KeepNaked && (AssetGroup[A].Category == "Appearance") && (InventoryGet(C, AssetGroup[A].Name) != null))
+				const Item = InventoryGet(C, AssetGroup[A].Name);
+				if (AssetGroup[A].AllowNone && !AssetGroup[A].KeepNaked && (AssetGroup[A].Category == "Appearance") && (Item != null))
 					DrawButton(1210, 145 + (A - CharacterAppearanceOffset) * 95, 65, 65, "", "White", "Icons/Small/Naked.png", TextGet("StripItem"));
 				if (!AssetGroup[A].AllowNone)
 					DrawBackNextButton(1300, 145 + (A - CharacterAppearanceOffset) * 95, 400, 65, AssetGroup[A].Description + ": " + CharacterAppearanceGetCurrentValue(C, AssetGroup[A].Name, "Description"), "White", "",
@@ -497,11 +498,12 @@ function AppearanceRun() {
 				else
 					DrawButton(1300, 145 + (A - CharacterAppearanceOffset) * 95, 400, 65, AssetGroup[A].Description + ": " + CharacterAppearanceGetCurrentValue(C, AssetGroup[A].Name, "Description"), "White");
 				var Color = CharacterAppearanceGetCurrentValue(C, AssetGroup[A].Name, "Color", "");
-				if (Color == null) Color = "Default";
-				DrawButton(1725, 145 + (A - CharacterAppearanceOffset) * 95, 160, 65, Color, ((Color.indexOf("#") == 0) ? Color : "White"));
-				DrawButton(1910, 145 + (A - CharacterAppearanceOffset) * 95, 65, 65, "", "White", AssetGroup[A].AllowColorize ? "Icons/Color.png" : "Icons/ColorBlocked.png");
+				const ColorButtonText = ItemColorGetColorButtonText(Color);
+				const ButtonColor = ColorButtonText.startsWith("#") ? ColorButtonText : "#fff";
+				const CanColor = AssetGroup[A].AllowColorize && !!Item;
+				DrawButton(1725, 145 + (A - CharacterAppearanceOffset) * 95, 160, 65, ColorButtonText, CanColor ? ButtonColor : "#aaa");
+				DrawButton(1910, 145 + (A - CharacterAppearanceOffset) * 95, 65, 65, "", CanColor ? "#fff" : "#aaa", CanColor ? "Icons/Color.png" : "Icons/ColorBlocked.png");
 			}
-
 	}
 	
 	// In wardrobe mode
@@ -526,15 +528,17 @@ function AppearanceRun() {
 	// In color picking mode
 	if (CharacterAppearanceMode == "Color") {
 
+	    ItemColorDraw(CharacterAppearanceSelection, CharacterAppearanceColorPicker, 1300, 25, 675, 950);
+
 		// Draw the color picker, the setTimeout is done to prevent unnecessary character redraw
-		ElementPosition("InputColor", 1450, 65, 300);
-		HideColorPicker = false;
-		ColorPickerDraw(1300, 145, 675, 830, document.getElementById("InputColor"), function (Color) {
-			clearTimeout(CharacterAppearanceColorPickerRefreshTimer);
-			CharacterAppearanceColorPickerRefreshTimer = setTimeout(function () {
-				CharacterAppearanceSetColorForGroup(C, Color, CharacterAppearanceColorPicker);
-			}, 100);
-		});
+		// ElementPosition("InputColor", 1450, 65, 300);
+		// HideColorPicker = false;
+		// ColorPickerDraw(1300, 145, 675, 830, document.getElementById("InputColor"), function (Color) {
+		// 	clearTimeout(CharacterAppearanceColorPickerRefreshTimer);
+		// 	CharacterAppearanceColorPickerRefreshTimer = setTimeout(function () {
+		// 		CharacterAppearanceSetColorForGroup(C, Color, CharacterAppearanceColorPicker);
+		// 	}, 100);
+		// });
 
 	}
 
@@ -577,7 +581,7 @@ function AppearanceRun() {
 	if (HideColorPicker) ColorPickerHide();
 	
 	// Draw the default buttons
-	if (!DialogItemPermissionMode) {
+	if (!DialogItemPermissionMode && CharacterAppearanceMode !== "Color") {
 		DrawButton(1768, 25, 90, 90, "", "White", "Icons/Cancel.png", TextGet("Cancel"));
 		DrawButton(1885, 25, 90, 90, "", "White", "Icons/Accept.png", TextGet("Accept"));
 	}
@@ -784,17 +788,20 @@ function AppearanceClick() {
 						CharacterAppearanceNextColor(C, AssetGroup[A].Name);
 
 		// If we must open the color panel
-		if ((MouseX >= 1910) && (MouseX < 1975) && (MouseY >= 145) && (MouseY < 975))
+		if (MouseIn(1910, 145, 65, 830))
 			for (let A = CharacterAppearanceOffset; A < AssetGroup.length && A < CharacterAppearanceOffset + CharacterAppearanceNumPerPage; A++)
 				if ((AssetGroup[A].Family == C.AssetFamily) && (AssetGroup[A].Category == "Appearance") && (C.ID == 0 || AssetGroup[A].Clothing) && AssetGroup[A].AllowColorize)
 					if ((MouseY >= 145 + (A - CharacterAppearanceOffset) * 95) && (MouseY <= 210 + (A - CharacterAppearanceOffset) * 95)) {
-
-						// Keeps the previous color in backup and creates a text box to enter the color
-						CharacterAppearanceMode = "Color";
-						CharacterAppearanceColorPicker = AssetGroup[A].Name;
-						CharacterAppearanceColorPickerBackup = CharacterAppearanceGetCurrentValue(C, CharacterAppearanceColorPicker, "Color");
-						ElementCreateInput("InputColor", "text", ((CharacterAppearanceColorPickerBackup == "Default") || (CharacterAppearanceColorPickerBackup == "None")) ? "#" : CharacterAppearanceColorPickerBackup, "7");
-
+					    const Item = InventoryGet(C, AssetGroup[A].Name);
+					    if (Item) {
+                            // Keeps the previous color in backup and creates a text box to enter the color
+                            CharacterAppearanceMode = "Color";
+                            CharacterAppearanceColorPicker = AssetGroup[A].Name;
+                            CharacterAppearanceColorPickerBackup = CharacterAppearanceGetCurrentValue(C, CharacterAppearanceColorPicker, "Color");
+                            // ElementCreateInput("InputColor", "text", ((CharacterAppearanceColorPickerBackup == "Default") || (CharacterAppearanceColorPickerBackup == "None")) ? "#" : CharacterAppearanceColorPickerBackup, "7");
+                            ItemColorLoad(Item);
+                            ItemColorOnExit(() => CharacterAppearanceMode = "");
+                        }
 					}
 
 		// If we must set back the default outfit or set a random outfit
@@ -847,21 +854,22 @@ function AppearanceClick() {
 	if (CharacterAppearanceMode == "Color") {
 
 		// Can set a color manually from the text field
-		if ((MouseX >= 1610) && (MouseX < 1675) && (MouseY >= 37) && (MouseY < 102))
-			if (CommonIsColor(ElementValue("InputColor")))
-				CharacterAppearanceSetColorForGroup(C, ElementValue("InputColor").toLowerCase(), CharacterAppearanceColorPicker);
+		// if ((MouseX >= 1610) && (MouseX < 1675) && (MouseY >= 37) && (MouseY < 102))
+		// 	if (CommonIsColor(ElementValue("InputColor")))
+		// 		CharacterAppearanceSetColorForGroup(C, ElementValue("InputColor").toLowerCase(), CharacterAppearanceColorPicker);
 
 		// Accepts the new color
-		if ((MouseX >= 1768) && (MouseX < 1858) && (MouseY >= 25) && (MouseY < 115)) {
-			CharacterAppearanceSetColorForGroup(C, CharacterAppearanceColorPickerBackup, CharacterAppearanceColorPicker);
-			CharacterAppearanceColorPicker = "";
-			AppearanceExit();
-		}
+		// if ((MouseX >= 1768) && (MouseX < 1858) && (MouseY >= 25) && (MouseY < 115)) {
+		// 	CharacterAppearanceSetColorForGroup(C, CharacterAppearanceColorPickerBackup, CharacterAppearanceColorPicker);
+		// 	CharacterAppearanceColorPicker = "";
+		// 	AppearanceExit();
+		// }
 
 		// Cancels out of color picking
-		if ((MouseX >= 1885) && (MouseX < 1975) && (MouseY >= 25) && (MouseY < 115)) AppearanceExit();
-		return;
+		// if ((MouseX >= 1885) && (MouseX < 1975) && (MouseY >= 25) && (MouseY < 115)) AppearanceExit();
 
+		// No other buttons were hit, delegate further click handling to the ItemColor screen
+		return ItemColorClick(CharacterAppearanceSelection, CharacterAppearanceColorPicker, 1300, 25, 675, 950);
 	}
 
 	// In cloth selection mode
@@ -966,12 +974,11 @@ function AppearanceExit() {
 		DialogFocusItem = null;
 		return;
 	}
-	
+
 	if (CharacterAppearanceMode != "") { 
 		CharacterAppearanceMode = "";
 		CharacterAppearanceHeaderText = "";
-		ElementRemove("InputColor");
-		ElementRemove("InputWardrobeName"); 
+		ElementRemove("InputWardrobeName");
 	} else CharacterAppearanceExit(CharacterAppearanceSelection);
 }
 
@@ -1102,7 +1109,11 @@ function CharacterAppearanceWardrobeLoad(C) {
  * @returns {string} - A serialised version of the character's current appearance
  */
 function CharacterAppearanceStringify(C) {
-    return JSON.stringify(C.Appearance,(key, value) => {
+    return AppearanceItemStringify(C.Appearance);
+}
+
+function AppearanceItemStringify(Item) {
+    return JSON.stringify(Item, (key, value) => {
         if (key === "Asset") {
             return value.Group.Family + "/" + value.Group.Name + "/" + value.Name;
         }
@@ -1117,7 +1128,11 @@ function CharacterAppearanceStringify(C) {
  * @returns {void} - Nothing
  */
 function CharacterAppearanceRestore(C, backup) {
-    C.Appearance = JSON.parse(backup, (key, value) => {
+    C.Appearance = AppearanceItemParse(backup);
+}
+
+function AppearanceItemParse(stringified) {
+    return JSON.parse(stringified, (key, value) => {
         if (key === "Asset") {
             const FGA = value.split("/");
             return AssetGet(FGA[0], FGA[1], FGA[2]);

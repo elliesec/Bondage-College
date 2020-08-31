@@ -346,7 +346,35 @@ function CommonConvertArrayToString(Arr) {
  */
 function CommonColorsEqual(C1, C2) {
 	if (Array.isArray(C1) && Array.isArray(C2)) {
-		return C1.length === C2.length && C1.every((C, I) => C2[I] === C);
+	    return CommonArraysEqual(C1, C2);
 	}
 	return C1 === C2;
 }
+
+function CommonArraysEqual(a1, a2) {
+    return a1.length === a2.length && a1.every((item, i) => item === a2[i]);
+}
+
+function CommonTransformInputs(inputs) {
+    return JSON.stringify(inputs);
+}
+
+function CommonMemoizeOne(callback, transformInputs) {
+    let lastInputs;
+    let lastResult;
+    let calledOnce = false;
+    transformInputs = transformInputs || CommonTransformInputs;
+
+    return function() {
+        let newInputs
+        if (calledOnce && (newInputs = transformInputs(arguments)) === lastInputs) {
+            return lastResult;
+        }
+
+        lastResult = callback.apply(this, arguments);
+        calledOnce = true;
+        lastInputs = newInputs;
+        return lastResult;
+    }
+}
+
