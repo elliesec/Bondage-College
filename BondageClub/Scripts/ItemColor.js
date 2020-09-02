@@ -83,31 +83,37 @@ function ItemColorDrawDefault(x, y) {
 
 	layerGroups.forEach((layerGroup, i) => {
 		const groupY = y + (i * (buttonHeight + buttonSpacing));
-		if (layerGroup.layers.length === 1) {
-			const layer = layerGroup.layers[0];
-			const layerColor = colors[layer.ColorIndex];
-			const buttonColor = layerColor.startsWith("#") ? layerColor : "#fff";
-			DrawButton(x, groupY, groupButtonWidth, buttonHeight, layer.Name || ItemColorItem.Asset.Description, "#fff");
-			DrawButton(colorDisplayButtonX, groupY, colorDisplayWidth, buttonHeight, layerColor, buttonColor);
-			DrawButton(colorPickerButtonX, groupY, colorPickerButtonWidth, buttonHeight, "", "#fff", "Icons/Color.png");
+		let groupName, buttonText, buttonColor;
+		let isBackNextButton = false;
+		if (layerGroup.name === null) {
+			groupName = "Whole Item";
+			buttonText = ItemColorGetColorButtonText(colors);
+			buttonColor = buttonText.startsWith("#") ? buttonText : "#fff";
+		} else if (layerGroup.layers.length === 1) {
+			groupName = layerGroup.name;
+			buttonText = colors[layerGroup.layers[0].ColorIndex];
+			buttonColor = buttonText.startsWith("#") ? buttonText : "#fff";
 		} else {
 			let currentColors;
-			let layerText;
 			const layerPage = ItemColorLayerPages[layerGroup.name];
 			if (layerPage === 0) {
 				currentColors = layerGroup.layers.map(layer => colors[layer.ColorIndex]);
-				layerText = layerGroup.name + ": All";
+				groupName = layerGroup.name + ": All";
 			} else {
 				const layer = layerGroup.layers[layerPage - 1];
 				currentColors = colors[layer.ColorIndex];
-				layerText = layerGroup.name + ": " + layer.Name;
+				groupName = layerGroup.name + ": " + layer.Name;
 			}
-			let buttonColorText = ItemColorGetColorButtonText(currentColors);
-			const buttonColor = buttonColorText.startsWith("#") ? buttonColorText : "#fff";
-			DrawBackNextButton(x, groupY, groupButtonWidth, buttonHeight, layerText, "#fff", null, () => "Previous", () => "Next");
-			DrawButton(colorDisplayButtonX, groupY, colorDisplayWidth, buttonHeight, buttonColorText, buttonColor);
-			DrawButton(colorPickerButtonX, groupY, colorPickerButtonWidth, buttonHeight, "", "#fff", "Icons/Color.png");
+			buttonText = ItemColorGetColorButtonText(currentColors);
+			buttonColor = buttonText.startsWith("#") ? buttonText : "#fff";
 		}
+		if (isBackNextButton) {
+			DrawBackNextButton(x, groupY, groupButtonWidth, buttonHeight, groupName, "#fff", null, () => "Previous", () => "Next");
+		} else {
+			DrawButton(x, groupY, groupButtonWidth, buttonHeight, groupName, "#fff");
+		}
+		DrawButton(colorDisplayButtonX, groupY, colorDisplayWidth, buttonHeight, buttonText, buttonColor);
+		DrawButton(colorPickerButtonX, groupY, colorPickerButtonWidth, buttonHeight, "", "#fff", "Icons/Color.png");
 	});
 }
 
@@ -213,7 +219,9 @@ function ItemColorCloseColorPicker() {
 }
 
 function ItemColorGetColorIndices(layerGroup) {
-	if (layerGroup.layers.length === 1) {
+	if (layerGroup.name === null) {
+		return ItemColorState.colors.map((c, i) => i);
+	} else if (layerGroup.layers.length === 1) {
 		return [layerGroup.layers[0].ColorIndex];
 	} else {
 		const layerPage = ItemColorLayerPages[layerGroup.name];
@@ -286,6 +294,7 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 			};
 		})
 		.sort((g1, g2) => g1.colorIndex = g2.colorIndex);
+	layerGroups.unshift({ name: null, layers: [], colorIndex: -1 });
 
 	let colors;
 	if (Array.isArray(item.Color)) {
