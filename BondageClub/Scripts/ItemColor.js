@@ -26,7 +26,7 @@ let ItemColorPickerIndices = [];
 let ItemColorExitListeners = [];
 let ItemColorBackup;
 
-function ItemColorLoad(c, item) {
+function ItemColorLoad(c, item, x, y, width, height) {
 	ItemColorCharacter = c;
 	ItemColorItem = item;
 	ItemColorCurrentMode = ItemColorMode.DEFAULT;
@@ -38,6 +38,10 @@ function ItemColorLoad(c, item) {
 	ItemColorPickerIndices = [];
 	ItemColorExitListeners = [];
 	ItemColorBackup = AppearanceItemStringify(item);
+	ItemColorStateBuild(c, item, x, y, width, height);
+	if (ItemColorState.simpleMode) {
+		ItemColorOpenPicker(ItemColorState.layerGroups[0]);
+	}
 }
 
 function ItemColorDraw(c, group, x, y, width, height) {
@@ -215,7 +219,11 @@ function ItemColorPickerCancel() {
 function ItemColorCloseColorPicker() {
 	ElementRemove("InputColor");
 	ColorPickerHide();
-	ItemColorCurrentMode = ItemColorMode.DEFAULT;
+	if (ItemColorState.simpleMode) {
+		ItemColorExitListeners.forEach(listener => listener());
+	} else {
+		ItemColorCurrentMode = ItemColorMode.DEFAULT;
+	}
 }
 
 function ItemColorGetColorIndices(layerGroup) {
@@ -276,13 +284,12 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 	}
 
 	ItemColorStateKey = itemKey;
-	const groupMap = item.Asset.Layer
-		.filter(layer => !layer.CopyLayerColor && layer.AllowColorize)
-		.reduce((groupLookup, layer) => {
-			const groupKey = layer.ColorGroup || layer.Name;
-			(groupLookup[groupKey] || (groupLookup[groupKey] = [])).push(layer);
-			return groupLookup;
-		}, {});
+	const colorableLayers = item.Asset.Layer.filter(layer => !layer.CopyLayerColor && layer.AllowColorize);
+	const groupMap = colorableLayers.reduce((groupLookup, layer) => {
+		const groupKey = layer.ColorGroup || layer.Name;
+		(groupLookup[groupKey] || (groupLookup[groupKey] = [])).push(layer);
+		return groupLookup;
+	}, {});
 
 	const layerGroups = Object.keys(groupMap)
 		.map(key => {
@@ -307,6 +314,8 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 		}
 	}
 
+	const simpleMode = colorableLayers.length === 1;
+
 	const colorPickerButtonWidth = ItemColorConfig.colorPickerButtonWidth;
 	const buttonSpacing = ItemColorConfig.buttonSpacing;
 	const colorDisplayWidth = ItemColorConfig.colorDisplayWidth;
@@ -327,6 +336,7 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 	ItemColorState = {
 		layerGroups,
 		colors,
+		simpleMode,
 		cancelButtonX,
 		saveButtonX,
 		colorPickerButtonX,

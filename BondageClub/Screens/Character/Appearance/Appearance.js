@@ -782,7 +782,7 @@ function AppearanceClick() {
                             CharacterAppearanceMode = "Color";
                             CharacterAppearanceColorPickerGroupName = AssetGroup[A].Name;
                             CharacterAppearanceColorPickerBackup = CharacterAppearanceGetCurrentValue(C, CharacterAppearanceColorPickerGroupName, "Color");
-                            ItemColorLoad(C, Item);
+                            ItemColorLoad(C, Item, 1300, 25, 675, 950);
                             ItemColorOnExit(() => CharacterAppearanceMode = "");
                         }
 					}
