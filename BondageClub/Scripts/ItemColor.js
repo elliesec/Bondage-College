@@ -214,7 +214,7 @@ function ItemColorCloseColorPicker() {
 
 function ItemColorGetColorIndices(layerGroup) {
 	if (layerGroup.layers.length === 1) {
-		return [layerGroup[0].ColorIndex];
+		return [layerGroup.layers[0].ColorIndex];
 	} else {
 		const layerPage = ItemColorLayerPages[layerGroup.name];
 		if (layerPage === 0) {
