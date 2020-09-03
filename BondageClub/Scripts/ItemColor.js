@@ -110,6 +110,7 @@ function ItemColorDrawDefault(x, y) {
 			}
 			buttonText = ItemColorGetColorButtonText(currentColors);
 			buttonColor = buttonText.startsWith("#") ? buttonText : "#fff";
+			isBackNextButton = true;
 		}
 		if (isBackNextButton) {
 			DrawBackNextButton(x, groupY, groupButtonWidth, buttonHeight, groupName, "#fff", null, () => "Previous", () => "Next");
@@ -196,31 +197,31 @@ function ItemColorExit() {
 		default:
 			Object.assign(ItemColorItem, AppearanceItemParse(ItemColorBackup));
 			CharacterLoadCanvas(ItemColorCharacter);
-			ItemColorExitListeners.forEach(listener => listener());
+			ItemColorFireExit(false);
 	}
 }
 
 function ItemColorSaveClick() {
 	switch (ItemColorCurrentMode) {
 		case ItemColorMode.COLOR_PICKER:
-			return ItemColorCloseColorPicker();
+			return ItemColorCloseColorPicker(true);
 		case ItemColorMode.DEFAULT:
 		default:
-			return ItemColorExitListeners.forEach(listener => listener());
+			ItemColorFireExit(true);
 	}
 }
 
 function ItemColorPickerCancel() {
 	Object.assign(ItemColorItem, AppearanceItemParse(ItemColorPickerBackup));
 	CharacterLoadCanvas(ItemColorCharacter);
-	ItemColorCloseColorPicker();
+	ItemColorCloseColorPicker(false);
 }
 
-function ItemColorCloseColorPicker() {
+function ItemColorCloseColorPicker(save) {
 	ElementRemove("InputColor");
 	ColorPickerHide();
 	if (ItemColorState.simpleMode) {
-		ItemColorExitListeners.forEach(listener => listener());
+		ItemColorFireExit(save);
 	} else {
 		ItemColorCurrentMode = ItemColorMode.DEFAULT;
 	}
@@ -306,6 +307,9 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 	let colors;
 	if (Array.isArray(item.Color)) {
 		colors = item.Color;
+		for (let i = colors.length; i < item.Asset.ColorableLayerCount; i++) {
+			colors.push("Default");
+		}
 	} else {
 		const colorStr = typeof item.Color === "string" ? item.Color : "Default";
 		colors = [];
@@ -362,4 +366,8 @@ function ItemColorGetColorButtonText(color) {
 
 function ItemColorOnExit(callback) {
 	ItemColorExitListeners.push(callback);
+}
+
+function ItemColorFireExit(save) {
+	ItemColorExitListeners.forEach(listener => listener(ItemColorCharacter, ItemColorItem, save));
 }
