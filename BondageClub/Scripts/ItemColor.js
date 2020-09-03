@@ -52,6 +52,9 @@ function ItemColorDraw(c, group, x, y, width, height) {
 	ItemColorStateBuild(c, item, x, y, width, height);
 
 	const headerButtonSize = ItemColorConfig.headerButtonSize;
+	if (ItemColorCurrentMode === ItemColorMode.DEFAULT && ItemColorState.pageCount > 1) {
+		DrawButton(ItemColorState.paginationButtonX, y, headerButtonSize, headerButtonSize, "", "#fff", "Icons/Next.png", "Next page");
+	}
 	DrawButton(ItemColorState.cancelButtonX, y, headerButtonSize, headerButtonSize, "", "#fff", "Icons/Cancel.png", TextGet("Cancel"));
 	DrawButton(ItemColorState.saveButtonX, y, headerButtonSize, headerButtonSize, "", "#fff", "Icons/Accept.png", TextGet("Accept"));
 
@@ -146,6 +149,14 @@ function ItemColorClick(c, group, x, y, width, height) {
 		return ItemColorSaveClick();
 	}
 
+	if (
+		ItemColorCurrentMode === ItemColorMode.DEFAULT &&
+		ItemColorState.pageCount > 1 &&
+		MouseIn(ItemColorState.paginationButtonX, y, headerButtonSize, headerButtonSize)
+	) {
+		return ItemColorPaginationClick();
+	}
+
 	if (ItemColorCurrentMode === ItemColorMode.DEFAULT) {
 		return ItemColorClickDefault(x, ItemColorState.contentY, width);
 	}
@@ -187,6 +198,10 @@ function ItemColorClickDefault(x, y, width) {
 			return true;
 		}
 	});
+}
+
+function ItemColorPaginationClick() {
+	ItemColorPage = (ItemColorPage + 1) % ItemColorState.pageCount;
 }
 
 function ItemColorExit() {
@@ -326,6 +341,7 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 	const buttonHeight = ItemColorConfig.buttonSize;
 	const headerButtonSize = ItemColorConfig.headerButtonSize;
 
+	const paginationButtonX = x + width - 3 * headerButtonSize - 2 * buttonSpacing;
 	const cancelButtonX = x + width - 2 * headerButtonSize - buttonSpacing;
 	const saveButtonX = x + width - headerButtonSize;
 	const colorPickerButtonX = x + width - colorPickerButtonWidth;
@@ -333,6 +349,7 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 	const contentY = y + ItemColorConfig.headerButtonSize + buttonSpacing;
 	const groupButtonWidth = colorDisplayButtonX - buttonSpacing - x;
 	const pageSize = Math.floor((height - headerButtonSize - buttonSpacing) / (buttonHeight + buttonSpacing));
+	const pageCount = Math.ceil(layerGroups.length / pageSize);
 	const colorInputWidth = Math.min(300, width - 3 * (headerButtonSize + buttonSpacing));
 	const colorInputX = x + 0.5 * colorInputWidth;
 	const colorInputY = y + 0.5 * headerButtonSize;
@@ -341,6 +358,7 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 		layerGroups,
 		colors,
 		simpleMode,
+		paginationButtonX,
 		cancelButtonX,
 		saveButtonX,
 		colorPickerButtonX,
@@ -348,6 +366,7 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 		contentY,
 		groupButtonWidth,
 		pageSize,
+		pageCount,
 		colorInputWidth,
 		colorInputX,
 		colorInputY,
