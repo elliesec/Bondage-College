@@ -137,12 +137,12 @@ function CommonDrawAppearanceBuild(C, {
 		if (!Layer.HasType) LayerType = "";
 		var BlinkExpression = (A.OverrideBlinking ? !AG.DrawingBlink : AG.DrawingBlink) ? "Closed/" : Expression;
 
-		// Check if we need to copy the color of another asset
 		var Color = CA.Color;
 		if (Array.isArray(Color)) {
 			Color = Color[Layer.ColorIndex] || AG.ColorSchema[0];
 		}
 
+		// Check if we need to copy the color of another asset
 		var InheritColor = Layer.InheritColor || (Color == "Default" ? (CA.Asset.InheritColor || CA.Asset.Group.InheritColor) : null);
 		if (InheritColor != null) {
 			var ParentAsset = InventoryGet(C, InheritColor);
