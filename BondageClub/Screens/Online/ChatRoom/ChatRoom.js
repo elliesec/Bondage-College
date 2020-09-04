@@ -740,6 +740,7 @@ function ChatRoomMessage(data) {
 					var ActivityName = null;
 					var GroupName = null;
 					var ActivityCounter = 1;
+					var Automatic = false;
 					for (let D = 0; D < dictionary.length; D++) {
 
 						// If there's a member number in the dictionary packet, we use that number to alter the chat message
@@ -762,7 +763,7 @@ function ChatRoomMessage(data) {
 							}
 
 							// Sets if the player is involved in the action
-							if (!IsPlayerInvolved && ((dictionary[D].Tag == "DestinationCharacter") || (dictionary[D].Tag == "DestinationCharacterName") || (dictionary[D].Tag == "TargetCharacter") || (dictionary[D].Tag == "TargetCharacterName") || (dictionary[D].Tag == "SourceCharacter")))
+							if (!IsPlayerInvolved && ((dictionary[D].Tag == "DestinationCharacter") || (dictionary[D].Tag == "DestinationCharacterName") || (dictionary[D].Tag == "TargetCharacter") || (dictionary[D].Tag == "TargetCharacterName") || (dictionary[D].Tag == "SourceCharacter" || dictionary[D].Tag === "ItemMemberNumber")))
 								if (dictionary[D].MemberNumber == Player.MemberNumber)
 									IsPlayerInvolved = true;
 
@@ -784,7 +785,13 @@ function ChatRoomMessage(data) {
 								}
 						}
 						else if (dictionary[D].ActivityCounter) ActivityCounter = dictionary[D].ActivityCounter;
+						else if (dictionary[D].Automatic) Automatic = true;
 						else if (msg != null) msg = msg.replace(dictionary[D].Tag, ChatRoomHTMLEntities(dictionary[D].Text));
+					}
+
+					// For automatic messages, do not show the message if the player is not involved, depending on their preferences
+					if (Automatic && !IsPlayerInvolved && !Player.ChatSettings.ShowAutomaticMessages) {
+						return;
 					}
 
 					// If another player is using an item which applies an activity on the current player, apply the effect here
@@ -1199,7 +1206,10 @@ function ChatRoomListManage(Operation, ListType) {
 		ServerSend("AccountUpdate", data);
 		setTimeout(() => ChatRoomCharacterUpdate(Player), 5000);
 	}
-	if (ListType == "GhostList") ChatRoomListManage(Operation, "BlackList");
+	if (ListType == "GhostList") {
+		CharacterRefresh(CurrentCharacter, false);
+		ChatRoomListManage(Operation, "BlackList");
+	}
 }
 
 // Modify the player FriendList/GhostList/WhiteList/BlackList based on typed message
@@ -1208,6 +1218,7 @@ function ChatRoomListManipulation(Add, Remove, Message) {
 	if (!isNaN(C) && (C > 0) && (C != Player.MemberNumber)) {
 		if ((Add != null) && (Add.indexOf(C) < 0)) Add.push(C);
 		if ((Remove != null) && (Remove.indexOf(C) >= 0)) Remove.splice(Remove.indexOf(C), 1);
+		if ((Player.GhostList == Add || Player.GhostList == Remove) && Character.find(Char => Char.MemberNumber == C)) CharacterRefresh(Character.find(Char => Char.MemberNumber == C), false);
 		ServerSend("AccountUpdate", { FriendList: Player.FriendList, GhostList: Player.GhostList, WhiteList: Player.WhiteList, BlackList: Player.BlackList });
 		setTimeout(() => ChatRoomCharacterUpdate(Player), 5000);
 	}

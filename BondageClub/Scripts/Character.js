@@ -90,7 +90,8 @@ function CharacterReset(CharacterID, CharacterAssetFamily) {
 		IsKneeling: function () { return ((this.Pose != null) && (this.Pose.indexOf("Kneel") >= 0)) },
 		IsNaked: function () { return CharacterIsNaked(this); },
 		IsDeaf: function () { return this.GetDeafLevel() > 0 },
-		HasNoItem: function () { return CharacterHasNoItem(this); }
+		HasNoItem: function () { return CharacterHasNoItem(this); },
+		IsEdged: function () { return this.Effect.includes("Edged") },
 	};
 
 	// If the character doesn't exist, we create it
@@ -402,6 +403,7 @@ function CharacterLoadOnline(data, SourceMemberNumber) {
 function CharacterDelete(NPCType) {
 	for (let C = 0; C < Character.length; C++)
 		if (Character[C].AccountName == NPCType) {
+			AnimationPurge(Character[C], true);
 			Character.splice(C, 1);
 			return;
 		}
@@ -539,6 +541,7 @@ function CharacterChangeMoney(C, Value) {
  * @returns {void} - Nothing
  */
 function CharacterRefresh(C, Push) {
+	AnimationPurge(C, false);
 	CharacterLoadEffect(C);
 	CharacterLoadPose(C);
 	CharacterLoadCanvas(C);
