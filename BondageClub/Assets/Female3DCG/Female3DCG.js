@@ -1823,8 +1823,8 @@ var AssetFemale3DCG = [
 			{
 				Name: "HighCollar", Fetish: ["Leather", "Metal"], Value: 50, Difficulty: 50, Time: 5, AllowLock: true,
 				Layer: [
-					{ Name: "Leather", AllowColorize: true },
-					{ Name: "Rings", AllowColorize: false }
+					{ Name: "Leather" },
+					{ Name: "Rings" }
 				]
 			},
 			{ Name: "LeatherChoker", Fetish: ["Leather"], Value: 10, Difficulty: 50, Time: 5, AllowLock: true },
@@ -1841,8 +1841,8 @@ var AssetFemale3DCG = [
 			{
 				Name: "OrnateCollar", Fetish: ["Metal"], Value: 80, Difficulty: 50, Time: 5, AllowLock: true,
 				Layer: [
-					{ Name: "Collar", AllowColorize: true },
-					{ Name: "Gem", AllowColorize: false }
+					{ Name: "Collar" },
+					{ Name: "Gem" }
 				]
 			},
 			{ Name: "SlenderSteelCollar", Fetish: ["Metal"], Value: 30, Difficulty: 50, Time: 5, AllowLock: true },
@@ -2395,8 +2395,8 @@ var AssetFemale3DCG = [
 		Asset: [
 			{
 				Name: "NoseHook", Fetish: ["Metal"], Priority: 26, Value: 25, Difficulty: 20, Time: 15, Random: false, AllowLock: true, Layer: [
-					{ Name: "Band", AllowColorize: true },
-					{ Name: "Hook", AllowColorize: false },
+					{ Name: "Band" },
+					{ Name: "Hook" },
 				]
 			},
 			{ Name: "NoseRing", Priority: 43, Fetish: ["Metal"], Value: 25, Difficulty: 50, Time: 15, Random: false, AllowLock: true, Left: 50, AllowEffect: ["Tethered", "Freeze", "ForceKneel", "IsChained"], AllowType: ["Base", "ChainShort", "ChainLong", "Leash"], AllowPose: ["Kneel"], Extended: true },
@@ -2559,15 +2559,15 @@ var AssetFemale3DCG = [
 			},
 			{
 				Name: "X-Cross", Priority: 1, Value: 200, Left: 0, Top: -50, Difficulty: 9, SelfBondage: 1, Time: 15, AllowLock: true, Prerequisite: ["CuffedArms", "CuffedFeet", "AllFours", "NotSuspended", "NotHogtied", "LegsOpen", "NotKneeling"], SetPose: ["OverTheHead", "Spread"], Hide: ["ItemBoots"], HideItem: ["PencilSkirt", "Gown2Skirt", "ShoesMistressBoots", "ShoesPonyBoots", "ShoesThighHighLatexHeels"], Effect: ["Prone", "Freeze", "Block", "Mounted"], Block: ["ItemArms", "ItemFeet", "ItemLegs", "ItemBoots"], Layer: [
-					{ Name: "Cross", AllowColorize: false },
-					{ Name: "Padding", AllowColorize: true }
+					{ Name: "Cross" },
+					{ Name: "Padding" }
 				],
 				RemoveAtLogin: true
 			},
 			{
 				Name: "ChangingTable", Fetish: ["ABDL"], Priority: 1, Value: 100, Difficulty: 0, SelfBondage: 1, Time: 15, RemoveTime: 10, IsRestraint: true, AllowLock: false, Left: -30, Top: -235, Effect: ["Freeze"], RemoveAtLogin: true, Prerequisite: ["NotSuspended", "NotHogtied"], Layer: [
-					{ Name: "Frame", AllowColorize: false },
-					{ Name: "Table", AllowColorize: true }
+					{ Name: "Frame" },
+					{ Name: "Table" }
 				]
 			},
 			{ Name: "Locker", Value: 50, Difficulty: -2, SelfBondage: 5, Time: 15, RemoveTime: 10, Top: 0, AllowLock: true, Prerequisite: ["NotSuspended", "NotHogtied"], Effect: ["Prone", "Enclose", "BlindLight", "Freeze"], Alpha: [{ Masks: [[1, 1, 125, 999],[360, 1, 140, 999]] }], Extended: true, RemoveAtLogin: true, AllowType:["Seethrough", "Opaque"] },
@@ -2576,9 +2576,9 @@ var AssetFemale3DCG = [
 			{ Name: "SmallVentlessLocker", Value: 40, Difficulty: -2, SelfBondage: 5, Time: 15, RemoveTime: 10, Top: 0, AllowLock: true, Prerequisite: ["NotSuspended", "NotHogtied", "NotMounted", "NotKneelingSpread", "NoFeetSpreader", "CanKneel"], SetPose: ["Kneel"], Effect: ["ForceKneel", "Prone", "Enclose", "BlindHeavy", "GagLight", "Freeze"], Alpha: [{ Masks: [[1, 1, 125, 999], [360, 1, 140, 999]] }], Extended: true, RemoveAtLogin: true, AllowType: ["Seethrough", "Opaque"] },
 			{
 				Name: "ConcealingCloak", Value: 75, Difficulty: 0, Top: 0, SelfBondage: 5, Time: 7, AllowLock: true, Prerequisite: ["NotSuspended", "AllFours", "Notkneeling", "NotHogtied", "NotYoked", "NotMounted", "NotKneelingSpread"], Hide: [ "Suit", "ItemArms", "ItemButt", "TailStraps", "Wings", "ItemNipplesPiercings"], HideItem: ["ItemVulvaFullLatexSuitWand"], Effect: ["Prone"], Block: ["ItemArms", "ItemBreast", "ItemButt", "ItemHands", "ItemLegs", "ItemMisc", "ItemNipples", "ItemNipplesPiercings", "ItemPelvis", "ItemTorso", "ItemVulva", "ItemVulvaPiercings"], Layer: [
-					{ Name: "Front", Priority: 48, AllowColorize: true },
-					{ Name: "Back", Priority: 3, AllowColorize: true},
-					{ Name: "Strap", Priority: 52, AllowColorize: false}
+					{ Name: "Front", Priority: 48 },
+					{ Name: "Back", Priority: 3, CopyLayerColor: "Front" },
+					{ Name: "Strap", Priority: 52 }
 				]
 			}
 		],
@@ -2677,15 +2677,15 @@ var AssetFemale3DCG = [
 			{
 				Name: "LockingBoots1", Value: 30, Difficulty: 6, Time: 7, RemoveTime: 14, AllowLock: true, Height: 9,
 				Layer: [
-					{ Name: "Boots", AllowColorize: true },
-					{ Name: "Straps", AllowColorize: false }
+					{ Name: "Boots" },
+					{ Name: "Straps" }
 				]
 			},
 			{
 				Name: "LeatherFootMitts1", Fetish: ["Leather"], Value: 35, Difficulty: 4, Time: 6, RemoveTime: 7, AllowLock: true, Hide: ["Shoes", "Socks"],
 				Layer: [
-					{ Name: "Mitts", AllowColorize: true },
-					{ Name: "Straps", AllowColorize: false }
+					{ Name: "Mitts" },
+					{ Name: "Straps" }
 				]
 			},
 			{ Name: "ToeTape", Fetish: ["Tape"], Extended: true, Value: 50, BuyGroup: "DuctTape", Difficulty: 2, Time: 10, RemoveTime: 5, Prerequisite: "ToeTied", SetPose: ["LegsClosed"], AllowType: ["Full"] },
