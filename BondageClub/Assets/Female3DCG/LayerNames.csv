@@ -161,6 +161,8 @@ ItemMouthMedicalMaskInner,Inner
 ItemMouthMedicalMaskOuter,Outer
 ItemMouthPrisonLockdownGagMask,Mask
 ItemMouthPrisonLockdownGagStraps,Straps
+ItemMouthCarrotGagCarrot,Carrot
+ItemMouthCarrotGagStraps,Straps
 ItemMouth2WiffleGagStrap,Strap
 ItemMouth2WiffleGagBall,Ball
 ItemMouth2HarnessBallGagBall,Ball
@@ -180,6 +182,8 @@ ItemMouth2MedicalMaskInner,Inner
 ItemMouth2MedicalMaskOuter,Outer
 ItemMouth2PrisonLockdownGagMask,Mask
 ItemMouth2PrisonLockdownGagStraps,Straps
+ItemMouth2CarrotGagCarrot,Carrot
+ItemMouth2CarrotGagStraps,Straps
 ItemMouth3WiffleGagStrap,Strap
 ItemMouth3WiffleGagBall,Ball
 ItemMouth3HarnessBallGagBall,Ball
@@ -199,3 +203,5 @@ ItemMouth3MedicalMaskInner,Inner
 ItemMouth3MedicalMaskOuter,Outer
 ItemMouth3PrisonLockdownGagMask,Mask
 ItemMouth3PrisonLockdownGagStraps,Straps
+ItemMouth3CarrotGagCarrot,Carrot
+ItemMouth3CarrotGagStraps,Straps
