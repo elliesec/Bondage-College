@@ -466,11 +466,11 @@ function VibratorModeStateUpdateDeny(C, Arousal, TimeSinceLastChange, OldIntensi
 	var OneMinute = 60000;
 	var State = VibratorModeState.DENY;
 	var Intensity = OldIntensity;
-	if (Arousal > 95 && TimeSinceLastChange > OneMinute && Math.random() < 0.2) {
+	if (Arousal >= 95 && TimeSinceLastChange > OneMinute && Math.random() < 0.2) {
 		// In deny mode, there's a small chance to change to rest mode after a minute
 		State = VibratorModeState.REST;
 		Intensity = -1;
-	} else if (Arousal > 95) {
+	} else if (Arousal >= 95) {
 		// If arousal is too high, change intensity back down to tease
 		Intensity = 0;
 	} else if (TimeSinceLastChange > OneMinute && Math.random() < 0.1) {
