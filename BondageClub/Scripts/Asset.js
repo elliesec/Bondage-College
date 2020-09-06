@@ -9,6 +9,9 @@ var Pose = [];
  * @typedef {Object} Layer
  * @property {string | null} Name - the name of the layer - may be null if the asset only contains a single default layer
  * @property {boolean} AllowColorize - whether or not this layer can be colored
+ * @property {string | null} CopyLayerColor - if not null, specifies that this layer should always copy the color of the named layer
+ * @property {string} [ColorGroup] - specifies the name of a color group that this layer belongs to. Any layers within the same color group
+ * can be colored together via the item color UI
  * @property {string[] | null} AllowTypes - A list of allowed extended item types that this layer permits - the layer will only be drawn if
  * the item type matches one of these types. If null, the layer is considered to permit all extended types.
  * @property {boolean} HasType - whether or not the layer has separate assets per type. If not, the extended type will not be included in
@@ -18,7 +21,7 @@ var Pose = [];
  * @property {string[] | null} OverrideAllowPose - An array of poses that this layer permits. If set, it will override the poses permitted
  * by the parent asset/group.
  * @property {number} Priority - The drawing priority of this layer. Inherited from the parent asset/group if not specified in the layer
- *     definition.
+ * definition.
  * @property {Asset} Asset - The asset that this layer belongs to
  * @property {number} ColorIndex - The coloring index for this layer
  */
