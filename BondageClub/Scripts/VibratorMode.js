@@ -283,7 +283,9 @@ function VibratorModeSetDynamicProperties(Property) {
 }
 
 /**
- * Common dynamic script draw function for vibrators. This function is called every frame.
+ * Common dynamic script draw function for vibrators. This function is called every frame. TO make use of dynamic script draw on vibrators,
+ * ensure your item has a `Assets<AssetGroup><AssetName>ScriptDraw` function defined that calls this function, and that your asset
+ * definition in Female3DCG.js has `DynamicScriptDraw: true` set. See the Heart Piercings for examples.
  * @param {{ C: Character, Item: Item, PersistentData: function }} Data - The script draw data for the item
  * @returns {void} - Nothing
  */
@@ -546,7 +548,7 @@ function VibratorModePublish(C, Item, OldIntensity, Intensity) {
 	];
 	if (Item.Property.ItemMemberNumber) Dictionary.push({ Tag: "ItemMemberNumber", MemberNumber: Item.Property.ItemMemberNumber });
 	if (CurrentScreen == "ChatRoom") {
-		ServerSend("ChatRoomChat", { Content: "Egg" + Direction + "To" + Intensity, Type: "Action", Dictionary });
+		ServerSend("ChatRoomChat", { Content: "Vibe" + Direction + "To" + Intensity, Type: "Action", Dictionary });
 		ChatRoomCharacterItemUpdate(C, Item.Asset.Group.Name);
 		ActivityChatRoomArousalSync(C);
 	}
