@@ -163,6 +163,9 @@ ItemMouthPrisonLockdownGagMask,Mask
 ItemMouthPrisonLockdownGagStraps,Straps
 ItemMouthCarrotGagCarrot,Carrot
 ItemMouthCarrotGagStraps,Straps
+ItemMouthPumpkinGagPumpkin,Pumpkin
+ItemMouthPumpkinGagStraps,Straps
+ItemMouthPumpkinGagRings,Rings
 ItemMouth2WiffleGagStrap,Strap
 ItemMouth2WiffleGagBall,Ball
 ItemMouth2HarnessBallGagBall,Ball
@@ -184,6 +187,9 @@ ItemMouth2PrisonLockdownGagMask,Mask
 ItemMouth2PrisonLockdownGagStraps,Straps
 ItemMouth2CarrotGagCarrot,Carrot
 ItemMouth2CarrotGagStraps,Straps
+ItemMouth2PumpkinGagPumpkin,Pumpkin
+ItemMouth2PumpkinGagStraps,Straps
+ItemMouth2PumpkinGagRings,Rings
 ItemMouth3WiffleGagStrap,Strap
 ItemMouth3WiffleGagBall,Ball
 ItemMouth3HarnessBallGagBall,Ball
@@ -205,3 +211,6 @@ ItemMouth3PrisonLockdownGagMask,Mask
 ItemMouth3PrisonLockdownGagStraps,Straps
 ItemMouth3CarrotGagCarrot,Carrot
 ItemMouth3CarrotGagStraps,Straps
+ItemMouth3PumpkinGagPumpkin,Pumpkin
+ItemMouth3PumpkinGagStraps,Straps
+ItemMouth3PumpkinGagRings,Rings
