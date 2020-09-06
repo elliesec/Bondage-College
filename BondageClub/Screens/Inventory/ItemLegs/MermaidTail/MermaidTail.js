@@ -12,6 +12,6 @@ function InventoryItemLegsMermaidTailClick() {
 	VibratorModeClick([VibratorModeSet.STANDARD, VibratorModeSet.ADVANCED]);
 }
 
-function AssetItemLegsMermaidTailScriptDraw(data) {
+function AssetsItemLegsMermaidTailScriptDraw(data) {
 	VibratorModeScriptDraw(data);
 }
