@@ -298,11 +298,11 @@ function VibratorModeScriptDraw(Data) {
 
 	var PersistentData = Data.PersistentData();
 	var ModeChanged = Item.Property.Mode !== PersistentData.Mode;
-	if (ModeChanged || typeof PersistentData.ChangeTime !== "number") PersistentData.ChangeTime = CurrentTime + 60000;
-	if (ModeChanged || typeof PersistentData.LastChange !== "number") PersistentData.LastChange = CurrentTime;
+	if (ModeChanged || typeof PersistentData.ChangeTime !== "number") PersistentData.ChangeTime = CommonTime() + 60000;
+	if (ModeChanged || typeof PersistentData.LastChange !== "number") PersistentData.LastChange = CommonTime();
 	if (ModeChanged) PersistentData.Mode = Item.Property.Mode;
 
-	if (CurrentTime > PersistentData.ChangeTime) {
+	if (CommonTime() > PersistentData.ChangeTime) {
 		CommonCallFunctionByName("VibratorModeUpdate" + Item.Property.Mode, Item, C, PersistentData);
 		PersistentData.Mode = Item.Property.Mode;
 	}
@@ -322,7 +322,7 @@ function VibratorModeUpdateRandom(Item, C, PersistentData) {
 	var Effect = Intensity === -1 ? ["Egged"] : ["Egged", "Vibrating"];
 	Object.assign(Item.Property, { Intensity, Effect });
 	// Next update in 30 - 120 seconds
-	PersistentData.ChangeTime = Math.floor(CurrentTime + ThirtySeconds + Math.random() * 4 * ThirtySeconds);
+	PersistentData.ChangeTime = Math.floor(CommonTime() + ThirtySeconds + Math.random() * 4 * ThirtySeconds);
 	VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
 
@@ -340,7 +340,7 @@ function VibratorModeUpdateEscalate(Item, C, PersistentData) {
 	var TimeFactor = Math.pow((5 - Intensity), 1.6);
 	var TimeToNextUpdate = (8000 + Math.random() * 4000) * TimeFactor;
 	Object.assign(Item.Property, { Intensity, Effect: ["Egged", "Vibrating"] });
-	PersistentData.ChangeTime = Math.floor(CurrentTime + TimeToNextUpdate);
+	PersistentData.ChangeTime = Math.floor(CommonTime() + TimeToNextUpdate);
 	VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
 
@@ -385,7 +385,7 @@ function VibratorModeUpdateEdge(Item, C, PersistentData) {
 		PersistentData.ChangeTime = Infinity;
 	} else {
 		// Next update 30-60 seconds from now
-		PersistentData.ChangeTime = Math.floor(CurrentTime + ThirtySeconds + Math.random() * ThirtySeconds);
+		PersistentData.ChangeTime = Math.floor(CommonTime() + ThirtySeconds + Math.random() * ThirtySeconds);
 	}
 	VibratorModePublish(C, Item, OldIntensity, Intensity);
 }
@@ -401,7 +401,7 @@ function VibratorModeUpdateEdge(Item, C, PersistentData) {
  */
 function VibratorModeUpdateStateBased(Item, C, PersistentData, TransitionsFromDefault) {
 	var Arousal = C.ArousalSettings.Progress;
-	var TimeSinceLastChange = CurrentTime - PersistentData.LastChange;
+	var TimeSinceLastChange = CommonTime() - PersistentData.LastChange;
 	var OldState = Item.Property.State || VibratorModeState.DEFAULT;
 	var OldIntensity = Item.Property.Intensity;
 
@@ -425,8 +425,8 @@ function VibratorModeUpdateStateBased(Item, C, PersistentData, TransitionsFromDe
 
 	Object.assign(Item.Property, { State, Intensity, Effect });
 	Object.assign(PersistentData, {
-		ChangeTime: CurrentTime + 5000,
-		LastChange: Intensity !== OldIntensity ? CurrentTime : PersistentData.LastChange,
+		ChangeTime: CommonTime() + 5000,
+		LastChange: Intensity !== OldIntensity ? CommonTime() : PersistentData.LastChange,
 	});
 
 	VibratorModePublish(C, Item, OldIntensity, Intensity);
