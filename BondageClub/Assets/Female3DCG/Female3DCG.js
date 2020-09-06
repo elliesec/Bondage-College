@@ -1555,7 +1555,16 @@ var AssetFemale3DCG = [
 					{ Name: "Bars" },
 				]
 			},
-			{ Name: "Pillory", Fetish: ["Metal"], Priority: 46, Value: -1, Difficulty: 12, SelfBondage: 5, Time: 20, Random: false, AllowLock: true, Prerequisite: ["NotMasked"], SetPose: ["Yoked"], Effect: ["Block", "Prone"] },
+			{
+				Name: "Pillory", Fetish: ["Metal"], Priority: 46, Value: -1, Difficulty: 12, SelfBondage: 5, Time: 20, Random: false, AllowLock: true, ParentGroup: null,
+				Prerequisite: ["NotMasked"],
+				SetPose: ["Yoked"],
+				Effect: ["Block", "Prone"],
+				Layer: [
+					{ Name: "Wood" },
+					{ Name: "Metal" },
+				]
+			},
 			{
 				Name: "FullLatexSuit", Fetish: ["Leather", "Latex"], Value: 200, Difficulty: 15, SelfBondage: 8, Time: 40, RemoveTime: 30, Random: false, AllowLock: true, DefaultColor: "#888888", Prerequisite: ["NotSuspended", "NotKneeling", "NotHogtied", "NotMounted", "NotKneelingSpread", "NoFeetSpreader", "NotShackled", "CannotBeSuited"],
 				Hide: ["Socks", "BodyLower", "Cloth", "ClothLower", "Bra", "Shoes", "ItemBoots", "ItemLegs", "ItemFeet", "Suit", "SuitLower"],
