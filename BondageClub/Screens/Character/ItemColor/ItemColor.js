@@ -1,5 +1,33 @@
 "use strict";
 
+/**
+ * An object defining a group of layers which can be colored together
+ * @typedef {object} ColorGroup
+ * @property {string} name - The name of the color group
+ * @property {Layer[]} layers - The layers contained within the color group
+ * @property {number} colorIndex - The color index for the color group - this is the lowest color index of any of the layers within the
+ * color group
+ */
+
+/**
+ * A callback function that is called when the item color UI exits
+ * @callback itemColorExitListener
+ * @param {Character} c - The character being colored
+ * @param {Item} item - The item being colored
+ * @param {boolean} save - Whether the item's appearance changes should be saved
+ */
+
+/**
+ * A configuration object containing constants used by the ItemColor UI scripts
+ * @constant {{
+ *     colorPickerButtonWidth: number,
+ *     colorInputHeight: number,
+ *     colorDisplayWidth: number,
+ *     buttonSpacing: number,
+ *     headerButtonSize: number,
+ *     buttonSize: number,
+ * }}
+ */
 const ItemColorConfig = {
 	buttonSpacing: 26,
 	buttonSize: 65,
@@ -9,6 +37,11 @@ const ItemColorConfig = {
 	colorInputHeight: 45,
 };
 
+/**
+ * An enum for the possible item color UI modes
+ * @readonly
+ * @enum {string}
+ */
 const ItemColorMode = {
 	DEFAULT: "Default",
 	COLOR_PICKER: "ColorPicker",
@@ -29,6 +62,16 @@ let ItemColorText = new TextCache("Screens/Character/ItemColor/ItemColor.csv");
 let ItemColorLayerNames;
 let ItemColorGroupNames;
 
+/**
+ * Loads the item color UI with the provided character, item and positioning parameters.
+ * @param {Character} c - The character being colored
+ * @param {Item} item - The item being colored
+ * @param {number} x - The x-coordinate at which to draw the UI
+ * @param {number} y - The y-coordinate at which to draw the UI
+ * @param {number} width - The width the UI should be drawn at
+ * @param {number} height - The height the UI should be drawn at
+ * @returns {void} - Nothing
+ */
 function ItemColorLoad(c, item, x, y, width, height) {
 	ItemColorCharacter = c;
 	ItemColorItem = item;
@@ -43,12 +86,22 @@ function ItemColorLoad(c, item, x, y, width, height) {
 	ItemColorBackup = AppearanceItemStringify(item);
 	ItemColorStateBuild(c, item, x, y, width, height);
 	if (ItemColorState.simpleMode) {
-		ItemColorOpenPicker(ItemColorState.layerGroups[0]);
+		ItemColorOpenPicker(ItemColorState.colorGroups[0]);
 	}
 	ItemColorLayerNames = new TextCache(`Assets/${c.AssetFamily}/LayerNames.csv`);
 	ItemColorGroupNames = new TextCache(`Assets/${c.AssetFamily}/ColorGroups.csv`);
 }
 
+/**
+ * Draws the item color UI according to its current state
+ * @param {Character} c - The character being colored
+ * @param {string} group - The name of the item group being colored
+ * @param {number} x - The x-coordinate at which to draw the UI
+ * @param {number} y - The y-coordinate at which to draw the UI
+ * @param {number} width - The width the UI should be drawn at
+ * @param {number} height - The height the UI should be drawn at
+ * @returns {void} - Nothing
+ */
 function ItemColorDraw(c, group, x, y, width, height) {
 	const item = InventoryGet(c, group);
 	if (!item) {
@@ -87,6 +140,12 @@ function ItemColorDraw(c, group, x, y, width, height) {
 	}
 }
 
+/**
+ * Draws the item color UI in default mode
+ * @param {number} x - The x-coordinate at which to draw the default UI
+ * @param {number} y - The y-coordinate at which to draw the default UI
+ * @returns {void} - Nothing
+ */
 function ItemColorDrawDefault(x, y) {
 	const colorPickerButtonWidth = ItemColorConfig.colorPickerButtonWidth;
 	const buttonSpacing = ItemColorConfig.buttonSpacing;
@@ -96,33 +155,33 @@ function ItemColorDrawDefault(x, y) {
 	const colorDisplayButtonX = ItemColorState.colorDisplayButtonX;
 	const groupButtonWidth = ItemColorState.groupButtonWidth;
 	const pageStart = ItemColorPage * ItemColorState.pageSize;
-	const layerGroups = ItemColorState.layerGroups.slice(pageStart, pageStart + ItemColorState.pageSize);
+	const colorGroups = ItemColorState.colorGroups.slice(pageStart, pageStart + ItemColorState.pageSize);
 	const colors = ItemColorState.colors;
 
-	layerGroups.forEach((layerGroup, i) => {
+	colorGroups.forEach((colorGroup, i) => {
 		const groupY = y + (i * (buttonHeight + buttonSpacing));
 		const asset = ItemColorItem.Asset;
 		let groupName, buttonText, buttonColor;
 		let isBackNextButton = false;
-		if (layerGroup.name === null) {
+		if (colorGroup.name === null) {
 			groupName = ItemColorText.get("WholeItem");
 			buttonText = ItemColorGetColorButtonText(colors);
 			buttonColor = buttonText.startsWith("#") ? buttonText : "#fff";
-		} else if (layerGroup.layers.length === 1) {
-			groupName = ItemColorLayerNames.get(asset.Group.Name + asset.Name + layerGroup.name);
-			buttonText = colors[layerGroup.layers[0].ColorIndex];
+		} else if (colorGroup.layers.length === 1) {
+			groupName = ItemColorLayerNames.get(asset.Group.Name + asset.Name + colorGroup.name);
+			buttonText = colors[colorGroup.layers[0].ColorIndex];
 			buttonColor = buttonText.startsWith("#") ? buttonText : "#fff";
 		} else {
 			let currentColors;
-			const layerPage = ItemColorLayerPages[layerGroup.name];
-			const layerGroupName = ItemColorGroupNames.get(layerGroup.name);
+			const layerPage = ItemColorLayerPages[colorGroup.name];
+			const colorGroupName = ItemColorGroupNames.get(colorGroup.name);
 			if (layerPage === 0) {
-				currentColors = layerGroup.layers.map(layer => colors[layer.ColorIndex]);
-				groupName = layerGroupName + ": " + ItemColorText.get("All");
+				currentColors = colorGroup.layers.map(layer => colors[layer.ColorIndex]);
+				groupName = colorGroupName + ": " + ItemColorText.get("All");
 			} else {
-				const layer = layerGroup.layers[layerPage - 1];
+				const layer = colorGroup.layers[layerPage - 1];
 				currentColors = colors[layer.ColorIndex];
-				groupName = layerGroupName + ": " + ItemColorLayerNames.get(asset.Group.Name + asset.Name + layer.Name);
+				groupName = colorGroupName + ": " + ItemColorLayerNames.get(asset.Group.Name + asset.Name + layer.Name);
 			}
 			buttonText = ItemColorGetColorButtonText(currentColors);
 			buttonColor = buttonText.startsWith("#") ? buttonText : "#fff";
@@ -138,6 +197,11 @@ function ItemColorDrawDefault(x, y) {
 	});
 }
 
+/**
+ * A debounced callback for when the item color picker changes its value. This sets the color for the currently selected set of color
+ * indices
+ * @const {function(): void}
+ */
 const ItemColorOnPickerChange = CommonDebounce((color) => {
 	const newColors = ItemColorState.colors.slice();
 	ItemColorPickerIndices.forEach(i => newColors[i] = color);
@@ -145,6 +209,16 @@ const ItemColorOnPickerChange = CommonDebounce((color) => {
 	CharacterLoadCanvas(ItemColorCharacter);
 });
 
+/**
+ * Click handler for the item color UI according to its current state
+ * @param {Character} c - The character being colored
+ * @param {string} group - The name of the item group being colored
+ * @param {number} x - The x-coordinate at which the UI was drawn
+ * @param {number} y - The y-coordinate at which the UI was drawn
+ * @param {number} width - The width with which the UI was drawn
+ * @param {number} height - The height with which the UI was drawn
+ * @returns {void} - Nothing
+ */
 function ItemColorClick(c, group, x, y, width, height) {
 	const item = InventoryGet(c, group);
 	if (!item) {
@@ -175,9 +249,16 @@ function ItemColorClick(c, group, x, y, width, height) {
 	}
 }
 
+/**
+ * Click handler for the item color UI when it's in default mode
+ * @param {number} x - The x-coordinate at which the default UI was drawn
+ * @param {number} y - The y-coordinate at which the default UI was drawn
+ * @param {number} width - The width with which the default UI was drawn
+ * @returns {void} - Nothing
+ */
 function ItemColorClickDefault(x, y, width) {
 	const pageStart = ItemColorPage * ItemColorState.pageSize;
-	const layerGroups = ItemColorState.layerGroups.slice(pageStart, pageStart + ItemColorState.pageSize);
+	const colorGroups = ItemColorState.colorGroups.slice(pageStart, pageStart + ItemColorState.pageSize);
 	const colorPickerButtonWidth = ItemColorConfig.colorPickerButtonWidth;
 	const colorDisplayWidth = ItemColorConfig.colorDisplayWidth;
 	const colorPickerButtonX = ItemColorState.colorPickerButtonX;
@@ -185,27 +266,27 @@ function ItemColorClickDefault(x, y, width) {
 	const groupButtonWidth = ItemColorState.groupButtonWidth;
 	const buttonHeight = ItemColorConfig.buttonSize;
 	const rowHeight = buttonHeight + ItemColorConfig.buttonSpacing;
-	const clickZoneHeight = layerGroups.length * (rowHeight);
+	const clickZoneHeight = colorGroups.length * (rowHeight);
 
 	if (!MouseIn(x, y, width, clickZoneHeight)) {
 		return;
 	}
 
-	layerGroups.some((layerGroup, i) => {
+	colorGroups.some((colorGroup, i) => {
 		if (MouseYIn(y + i * rowHeight, buttonHeight)) {
 			if (MouseXIn(colorPickerButtonX, colorPickerButtonWidth)) {
 				// Color picker button
-				ItemColorOpenPicker(layerGroup);
+				ItemColorOpenPicker(colorGroup);
 			} else if (MouseXIn(colorDisplayButtonX, colorDisplayWidth)) {
 				// Cycle through the color schema
-				ItemColorNextColor(layerGroup);
-			} else if (layerGroup.layers.length > 1) {
+				ItemColorNextColor(colorGroup);
+			} else if (colorGroup.layers.length > 1) {
 				if (MouseXIn(x, groupButtonWidth / 2)) {
 					// Previous layer button
-					ItemColorPreviousLayer(layerGroup);
+					ItemColorPreviousLayer(colorGroup);
 				} else if (MouseXIn(x + groupButtonWidth / 2, x + groupButtonWidth)) {
 					// Next layer button
-					ItemColorNextLayer(layerGroup);
+					ItemColorNextLayer(colorGroup);
 				}
 			}
 			return true;
@@ -213,10 +294,18 @@ function ItemColorClickDefault(x, y, width) {
 	});
 }
 
+/**
+ * Handles pagination clicks on the item color UI
+ * @returns {void} - Nothing
+ */
 function ItemColorPaginationClick() {
 	ItemColorPage = (ItemColorPage + 1) % ItemColorState.pageCount;
 }
 
+/**
+ *  Handles exit button clicks on the item color UI
+ *  @returns {void} - Nothing
+ */
 function ItemColorExit() {
 	switch (ItemColorCurrentMode) {
 		case ItemColorMode.COLOR_PICKER:
@@ -229,6 +318,10 @@ function ItemColorExit() {
 	}
 }
 
+/**
+ * Handles save button clicks on the item color UI
+ * @returns {void} - Nothing
+ */
 function ItemColorSaveClick() {
 	switch (ItemColorCurrentMode) {
 		case ItemColorMode.COLOR_PICKER:
@@ -239,12 +332,22 @@ function ItemColorSaveClick() {
 	}
 }
 
+/**
+ * Handles color picker cancellation clicks when the item color UI is in color picker mode
+ * @returns {void} - Nothing
+ */
 function ItemColorPickerCancel() {
 	Object.assign(ItemColorItem, AppearanceItemParse(ItemColorPickerBackup));
 	CharacterLoadCanvas(ItemColorCharacter);
 	ItemColorCloseColorPicker(false);
 }
 
+/**
+ * Takes the item color UI out of color picker mode. If the item being colored only has a single color index, this function calls any
+ * registered item color exit handlers
+ * @param {boolean} save - Whether or not changes should be saved on exiting color picker mode
+ * @returns {void} - Nothing
+ */
 function ItemColorCloseColorPicker(save) {
 	ElementRemove("InputColor");
 	ColorPickerHide();
@@ -255,33 +358,49 @@ function ItemColorCloseColorPicker(save) {
 	}
 }
 
-function ItemColorGetColorIndices(layerGroup) {
-	if (layerGroup.name === null) {
+/**
+ * Gets the color indices that belong in the provided color group
+ * @param {ColorGroup} colorGroup - The color group to fetch color indices for
+ * @returns {number[]} - A list of color indices for any layers within the provided color group
+ */
+function ItemColorGetColorIndices(colorGroup) {
+	if (colorGroup.name === null) {
 		return ItemColorState.colors.map((c, i) => i);
-	} else if (layerGroup.layers.length === 1) {
-		return [layerGroup.layers[0].ColorIndex];
+	} else if (colorGroup.layers.length === 1) {
+		return [colorGroup.layers[0].ColorIndex];
 	} else {
-		const layerPage = ItemColorLayerPages[layerGroup.name];
+		const layerPage = ItemColorLayerPages[colorGroup.name];
 		if (layerPage === 0) {
-			return layerGroup.layers.map(layer => layer.ColorIndex);
-		} else if (layerPage <= layerGroup.layers.length) {
-			return [layerGroup.layers[layerPage - 1].ColorIndex];
+			return colorGroup.layers.map(layer => layer.ColorIndex);
+		} else if (layerPage <= colorGroup.layers.length) {
+			return [colorGroup.layers[layerPage - 1].ColorIndex];
 		}
 	}
 	return [];
 }
 
-function ItemColorOpenPicker(layerGroup) {
+/**
+ * Toggles the item color UI into color picker mode
+ * @param {ColorGroup} colorGroup - The color group that is being colored
+ * @returns {void} - Nothing
+ */
+function ItemColorOpenPicker(colorGroup) {
 	ItemColorCurrentMode = ItemColorMode.COLOR_PICKER;
 	ItemColorPickerBackup = AppearanceItemStringify(ItemColorItem);
-	ItemColorPickerIndices = ItemColorGetColorIndices(layerGroup);
+	ItemColorPickerIndices = ItemColorGetColorIndices(colorGroup);
 	const groupColors = ItemColorState.colors.filter((c, i) => ItemColorPickerIndices.includes(i));
 	const colorText = ItemColorGetColorButtonText(groupColors);
 	ElementCreateInput("InputColor", "text", colorText.startsWith("#") ? colorText : "#", "7");
 }
 
-function ItemColorNextColor(layerGroup) {
-	const colorIndicesToSet = ItemColorGetColorIndices(layerGroup);
+/**
+ * Cycles a color group's color to the next color in the asset group's color schema, or to "Default" if the color group is not currently
+ * colored with a single color from the color schema
+ * @param {ColorGroup} colorGroup - The color group that is being colored
+ * @returns {void} - Nothing
+ */
+function ItemColorNextColor(colorGroup) {
+	const colorIndicesToSet = ItemColorGetColorIndices(colorGroup);
 	const groupColors = ItemColorState.colors.filter((c, i) => colorIndicesToSet.includes(i));
 	const colorTextKey = ItemColorGetColorButtonTextKey(groupColors);
 	const schema = ItemColorItem.Asset.Group.ColorSchema;
@@ -293,17 +412,38 @@ function ItemColorNextColor(layerGroup) {
 	CharacterLoadCanvas(ItemColorCharacter);
 }
 
-function ItemColorNextLayer(layerGroup) {
-	const currentPage = ItemColorLayerPages[layerGroup.name];
-	ItemColorLayerPages[layerGroup.name] = (currentPage + 1) % (layerGroup.layers.length + 1);
+/**
+ * Switches the item color UI to the next layer within the provided color group
+ * @param {ColorGroup} colorGroup - The color group whose layers to cycle
+ * @returns {void} - Nothing
+ */
+function ItemColorNextLayer(colorGroup) {
+	const currentPage = ItemColorLayerPages[colorGroup.name];
+	ItemColorLayerPages[colorGroup.name] = (currentPage + 1) % (colorGroup.layers.length + 1);
 }
 
-function ItemColorPreviousLayer(layerGroup) {
-	const currentPage = ItemColorLayerPages[layerGroup.name];
-	const totalPages = layerGroup.layers.length + 1;
-	ItemColorLayerPages[layerGroup.name] = (currentPage + totalPages - 1) % totalPages;
+/**
+ * Switches the item color UI to the previous layer within the provided color group
+ * @param {ColorGroup} colorGroup - The color group whose layers to cycle
+ * @returns {void} - Nothing
+ */
+function ItemColorPreviousLayer(colorGroup) {
+	const currentPage = ItemColorLayerPages[colorGroup.name];
+	const totalPages = colorGroup.layers.length + 1;
+	ItemColorLayerPages[colorGroup.name] = (currentPage + totalPages - 1) % totalPages;
 }
 
+/**
+ * Builds the item color UI's current state based on the provided character, item and position parameters. This only rebuilds the state if
+ * needed.
+ * @param {Character} c - The character being colored
+ * @param {Item} item - The item being colored
+ * @param {number} x - The x-coordinate at which to draw the UI
+ * @param {number} y - The y-coordinate at which to draw the UI
+ * @param {number} width - The width the UI should be drawn at
+ * @param {number} height - The height the UI should be drawn at
+ * @returns {void} - Nothing
+ */
 function ItemColorStateBuild(c, item, x, y, width, height) {
 	ItemColorCharacter = c;
 	ItemColorItem = item;
@@ -320,7 +460,7 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 		return groupLookup;
 	}, {});
 
-	const layerGroups = Object.keys(groupMap)
+	const colorGroups = Object.keys(groupMap)
 		.map(key => {
 			ItemColorLayerPages[key] = ItemColorLayerPages[key] || 0;
 			return {
@@ -330,7 +470,7 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 			};
 		})
 		.sort((g1, g2) => g1.colorIndex = g2.colorIndex);
-	layerGroups.unshift({ name: null, layers: [], colorIndex: -1 });
+	colorGroups.unshift({ name: null, layers: [], colorIndex: -1 });
 
 	let colors;
 	if (Array.isArray(item.Color)) {
@@ -362,13 +502,13 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 	const contentY = y + ItemColorConfig.headerButtonSize + buttonSpacing;
 	const groupButtonWidth = colorDisplayButtonX - buttonSpacing - x;
 	const pageSize = Math.floor((height - headerButtonSize - buttonSpacing) / (buttonHeight + buttonSpacing));
-	const pageCount = Math.ceil(layerGroups.length / pageSize);
+	const pageCount = Math.ceil(colorGroups.length / pageSize);
 	const colorInputWidth = Math.min(300, width - 3 * (headerButtonSize + buttonSpacing));
 	const colorInputX = x + 0.5 * colorInputWidth;
 	const colorInputY = y + 0.5 * headerButtonSize;
 
 	ItemColorState = {
-		layerGroups,
+		colorGroups,
 		colors,
 		simpleMode,
 		paginationButtonX,
@@ -386,6 +526,12 @@ function ItemColorStateBuild(c, item, x, y, width, height) {
 	};
 }
 
+/**
+ * Fetches the color button text key for the provided item color. If the item's color is already a string, the color string is returned.
+ * Otherwise, returns "Many" or "Default" as appropriate.
+ * @param {string|string[]} color - The item color
+ * @returns {string} - The appropriate color button key for the provided item color(s)
+ */
 function ItemColorGetColorButtonTextKey(color) {
 	let text = color;
 	if (Array.isArray(color)) {
@@ -397,16 +543,33 @@ function ItemColorGetColorButtonTextKey(color) {
 	return text;
 }
 
+/**
+ * Fetches the color button text for the provided item color. If the item's color is already a string, the color string is returned.
+ * Otherwise, returns "Many" or "Default" as appropriate.
+ * @param {string|string[]} color - The item color
+ * @returns {string} - The appropriate color button text for the provided item color(s), translated to the current game language
+ */
 function ItemColorGetColorButtonText(color) {
 	return ItemColorText.get(ItemColorGetColorButtonTextKey(color)).trim();
 }
 
+/**
+ * Registers an exit callback to the item color UI which will be called when the UI is exited.
+ * @param {itemColorExitListener} callback - The exit listener to register
+ * @returns {void} - Nothing
+ */
 function ItemColorOnExit(callback) {
 	ItemColorExitListeners.push(callback);
 }
 
+/**
+ * Handles exiting the item color UI. Appropriate text caches are dropped, and any registered exit listeners are called.
+ * @param {boolean} save - Whether or not the appearance changes applied by the item color UI should be saved
+ * @returns {void} - Nothing
+ */
 function ItemColorFireExit(save) {
 	ItemColorExitListeners.forEach(listener => listener(ItemColorCharacter, ItemColorItem, save));
+	ItemColorExitListeners = [];
 	ItemColorLayerNames = null;
 	ItemColorGroupNames = null;
 }

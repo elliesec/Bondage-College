@@ -102,6 +102,7 @@ class TextCache {
 
 	/**
 	 * Kicks off a build of the text lookup cache
+	 * @returns {void} - Nothing
 	 */
 	buildCache() {
 		this.fetchCsv()
@@ -130,6 +131,7 @@ class TextCache {
 	/**
 	 * Stores the contents of a CSV file in the TextCache's internal cache
 	 * @param {string[][]} lines - An array of string arrays corresponding to lines in the CSV file
+	 * @returns {void} - Nothing
 	 */
 	cacheLines(lines) {
 		lines.forEach((line) => (this.cache[line[0]] = line[1]));
@@ -138,7 +140,7 @@ class TextCache {
 	/**
 	 * Translates the contents of a CSV file into the current game language
 	 * @param {string[][]} lines - An array of string arrays corresponding to lines in the CSV file
-	 * @return {Promise<string[][]>} - A promise resolving to an array of string arrays corresponding to lines in the CSV file with the
+	 * @returns {Promise<string[][]>} - A promise resolving to an array of string arrays corresponding to lines in the CSV file with the
 	 * values translated to the current game language
 	 */
 	translate(lines) {
@@ -166,7 +168,7 @@ class TextCache {
 	 * Maps lines of a CSV to equivalent CSV lines with values translated according to the corresponding translation file
 	 * @param {string[][]} lines - An array of string arrays corresponding to lines in the CSV file
 	 * @param {string[]} translations - An array of strings in translation file format (with EN and translated values on alternate lines)
-	 * @return {string[][]} - An array of string arrays corresponding to lines in the CSV file with the
+	 * @returns {string[][]} - An array of string arrays corresponding to lines in the CSV file with the
 	 * values translated to the current game language
 	 */
 	buildTranslations(lines, translations) {
