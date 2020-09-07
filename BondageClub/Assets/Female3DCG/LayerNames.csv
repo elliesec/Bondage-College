@@ -170,6 +170,8 @@ ItemMouthFoxyHarnessPanelGagPanel,Panel
 ItemMouthFoxyHarnessPanelGagStraps,Straps
 ItemMouthBitGagBit,Bit
 ItemMouthBitGagStraps,Straps
+ItemMouthBoneGagBone,Bone
+ItemMouthBoneGagStraps,Straps
 ItemMouth2WiffleGagStrap,Strap
 ItemMouth2WiffleGagBall,Ball
 ItemMouth2HarnessBallGagBall,Ball
@@ -196,6 +198,8 @@ ItemMouth2PumpkinGagStraps,Straps
 ItemMouth2PumpkinGagRings,Rings
 ItemMouth2BitGagBit,Bit
 ItemMouth2BitGagStraps,Straps
+ItemMouth2BoneGagBone,Bone
+ItemMouth2BoneGagStraps,Straps
 ItemMouth3WiffleGagStrap,Strap
 ItemMouth3WiffleGagBall,Ball
 ItemMouth3HarnessBallGagBall,Ball
@@ -222,3 +226,5 @@ ItemMouth3PumpkinGagStraps,Straps
 ItemMouth3PumpkinGagRings,Rings
 ItemMouth3BitGagBit,Bit
 ItemMouth3BitGagStraps,Straps
+ItemMouth3BoneGagBone,Bone
+ItemMouth3BoneGagStraps,Straps
