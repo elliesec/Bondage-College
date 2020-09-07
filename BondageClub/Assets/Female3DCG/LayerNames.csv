@@ -168,6 +168,8 @@ ItemMouthPumpkinGagStraps,Straps
 ItemMouthPumpkinGagRings,Rings
 ItemMouthFoxyHarnessPanelGagPanel,Panel
 ItemMouthFoxyHarnessPanelGagStraps,Straps
+ItemMouthBitGagBit,Bit
+ItemMouthBitGagStraps,Straps
 ItemMouth2WiffleGagStrap,Strap
 ItemMouth2WiffleGagBall,Ball
 ItemMouth2HarnessBallGagBall,Ball
@@ -192,6 +194,8 @@ ItemMouth2CarrotGagStraps,Straps
 ItemMouth2PumpkinGagPumpkin,Pumpkin
 ItemMouth2PumpkinGagStraps,Straps
 ItemMouth2PumpkinGagRings,Rings
+ItemMouth2BitGagBit,Bit
+ItemMouth2BitGagStraps,Straps
 ItemMouth3WiffleGagStrap,Strap
 ItemMouth3WiffleGagBall,Ball
 ItemMouth3HarnessBallGagBall,Ball
@@ -216,3 +220,5 @@ ItemMouth3CarrotGagStraps,Straps
 ItemMouth3PumpkinGagPumpkin,Pumpkin
 ItemMouth3PumpkinGagStraps,Straps
 ItemMouth3PumpkinGagRings,Rings
+ItemMouth3BitGagBit,Bit
+ItemMouth3BitGagStraps,Straps
