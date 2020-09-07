@@ -172,6 +172,8 @@ ItemMouthBitGagBit,Bit
 ItemMouthBitGagStraps,Straps
 ItemMouthBoneGagBone,Bone
 ItemMouthBoneGagStraps,Straps
+ItemMouthXLBoneGagBone,Bone
+ItemMouthXLBoneGagStraps,Straps
 ItemMouth2WiffleGagStrap,Strap
 ItemMouth2WiffleGagBall,Ball
 ItemMouth2HarnessBallGagBall,Ball
@@ -200,6 +202,8 @@ ItemMouth2BitGagBit,Bit
 ItemMouth2BitGagStraps,Straps
 ItemMouth2BoneGagBone,Bone
 ItemMouth2BoneGagStraps,Straps
+ItemMouth2XLBoneGagBone,Bone
+ItemMouth2XLBoneGagStraps,Straps
 ItemMouth3WiffleGagStrap,Strap
 ItemMouth3WiffleGagBall,Ball
 ItemMouth3HarnessBallGagBall,Ball
@@ -228,3 +232,5 @@ ItemMouth3BitGagBit,Bit
 ItemMouth3BitGagStraps,Straps
 ItemMouth3BoneGagBone,Bone
 ItemMouth3BoneGagStraps,Straps
+ItemMouth3XLBoneGagBone,Bone
+ItemMouth3XLBoneGagStraps,Straps
