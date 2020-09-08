@@ -888,8 +888,8 @@ function ChatRoomSync(data) {
 				if (ChatRoomPlayerJoiningAsAdmin) {
 					ChatRoomPlayerJoiningAsAdmin = false;
 					// Check if we should push banned members
-					if (Player.ChatSettings && data.Character.length == 1) {
-						var BanList = ChatRoomConcatenateBanList(Player.ChatSettings.AutoBanBlackList, Player.ChatSettings.AutoBanGhostList);
+					if (Player.OnlineSettings && data.Character.length == 1) {
+						var BanList = ChatRoomConcatenateBanList(Player.OnlineSettings.AutoBanBlackList, Player.OnlineSettings.AutoBanGhostList);
 						if (BanList.length > 0) {
 							data.Ban = BanList;
 							data.Limit = data.Limit.toString();
