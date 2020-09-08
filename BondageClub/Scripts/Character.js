@@ -92,6 +92,7 @@ function CharacterReset(CharacterID, CharacterAssetFamily) {
 		IsDeaf: function () { return this.GetDeafLevel() > 0 },
 		HasNoItem: function () { return CharacterHasNoItem(this); },
 		IsEdged: function () { return this.Effect.includes("Edged") },
+		WearsNoOuterClothes: function () { return !(InventoryGet(Player, "ClothLower") || InventoryGet(Player, "Cloth")) },
 	};
 
 	// If the character doesn't exist, we create it
