@@ -776,11 +776,12 @@ function CharacterSetActivePose(C, NewPose) {
 }
 
 /**
- * Sets a specific facial expression for the character's specified AssetGroup, if there's a timer, the expression will expire after it, a timed expression cannot override another one.
+ * Sets a specific facial expression for the character's specified AssetGroup, if there's a timer, the expression will expire after it, a
+ * timed expression cannot override another one.
  * @param {Character} C - Character for which to set the expression of
  * @param {group} AssetGroup - Asset group for the expression
  * @param {string} Expression - Name of the expression to use
- * @param {number} [Timer] - Optional: time the expression will last 
+ * @param {number} [Timer] - Optional: time the expression will last
  * @returns {void} - Nothing
  */
 function CharacterSetFacialExpression(C, AssetGroup, Expression, Timer) {
@@ -848,7 +849,8 @@ function CharacterCompressWardrobe(Wardrobe) {
 }
 
 /**
- * Decompresses a character wardrobe from a LZ String to an array if it was previously compressed (For backward compatibility with old wardrobes)
+ * Decompresses a character wardrobe from a LZ String to an array if it was previously compressed (For backward compatibility with old
+ * wardrobes)
  * @param {Array.<Array.<*>> | string} Wardrobe - The current wardrobe
  * @returns {Array.<Array.<*>>} - The array of wardrobe items decompressed
  */
@@ -891,13 +893,13 @@ function CharacterIsEdged(C) {
 	if (C.ID !== 0 || !C.Effect.includes("Edged")) {
 		return false;
 	}
-	return C.ArousalSettings.Zone.every(Zone => {
-		if (Zone.Orgasm) {
-			const Item = InventoryGet(C, Zone.Name);
-			if (!Item || !Item.Property) return true;
-			return typeof Item.Property.Intensity !== "number" || Item.Property.Intensity === -1 ||
-			       (Item.Property.Effect && Item.Property.Effect).includes("Edged");
-		}
-		return true;
-	});
+
+	// Get every vibrating item on an orgasm zone
+	const VibratingItems = C.ArousalSettings.Zone
+		.filter(Zone => Zone.Orgasm)
+		.map(Zone => InventoryGet(C, Zone.Name))
+		.filter(Item => Item && Item.Property && typeof Item.Property.Intensity === "number" && Item.Property.Intensity >= 0);
+
+	// Return true if every vibrating item on an orgasm zone has the "Edged" effect
+	return !!VibratingItems.length && VibratingItems.every(Item => Item.Property.Effect && Item.Property.Effect.includes("Edged"));
 }
