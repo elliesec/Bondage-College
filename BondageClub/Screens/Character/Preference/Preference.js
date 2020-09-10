@@ -194,14 +194,13 @@ function PreferenceLoadFetishFactor() {
 function PreferenceInit(C) {
 
 	// If the settings aren't set before, construct them to replicate the default behavior
-	if (!C.ChatSettings) C.ChatSettings = { DisplayTimestamps: true, ColorNames: true, ColorActions: true, ColorEmotes: true, ShowActivities: true, AutoBanGhostList: true, AutoBanBlackList: false, SearchShowsFullRooms: true, SearchFriendsFirst: false, DisableAnimations: false, ShowAutomaticMessages: false };
+	if (!C.ChatSettings) C.ChatSettings = { DisplayTimestamps: true, ColorNames: true, ColorActions: true, ColorEmotes: true, ShowActivities: true, AutoBanGhostList: true, AutoBanBlackList: false, SearchShowsFullRooms: true, SearchFriendsFirst: false, ShowAutomaticMessages: false };
 	if (C.ChatSettings.DisplayTimestamps == null) C.ChatSettings.DisplayTimestamps = true;
 	if (C.ChatSettings.ColorNames == null) C.ChatSettings.ColorNames = true;
 	if (C.ChatSettings.ColorActions == null) C.ChatSettings.ColorActions = true;
 	if (C.ChatSettings.ColorEmotes == null) C.ChatSettings.ColorEmotes = true;
 	if (C.ChatSettings.ShowActivities == null) C.ChatSettings.ShowActivities = true;
 	if (C.ChatSettings.ShowAutomaticMessages == null) C.ChatSettings.ShowAutomaticMessages = false;
-	if (C.ChatSettings.DisableAnimations == null) C.ChatSettings.DisableAnimations = false;
 	if (!C.VisualSettings) C.VisualSettings = { ForceFullHeight: false };
 
 	if (!C.OnlineSettings) C.OnlineSettings = {};
@@ -545,7 +544,6 @@ function PreferenceSubscreenChatRun() {
 	DrawCheckbox(500, 732, 64, 64, TextGet("ColorEmotes"), Player.ChatSettings.ColorEmotes);
 	DrawCheckbox(500, 812, 64, 64, TextGet("ShowActivities"), Player.ChatSettings.ShowActivities);
 	DrawCheckbox(1200, 492, 64, 64, TextGet("ShowAutomaticMessages"), Player.ChatSettings.ShowAutomaticMessages);
-	DrawCheckbox(1200, 812, 64, 64, TextGet("DisableAnimations"), Player.ChatSettings.DisableAnimations);
 	MainCanvas.textAlign = "center";
 	DrawBackNextButton(1000, 190, 350, 70, TextGet(PreferenceChatColorThemeSelected), "White", "",
 		() => TextGet((PreferenceChatColorThemeIndex == 0) ? PreferenceChatColorThemeList[PreferenceChatColorThemeList.length - 1] : PreferenceChatColorThemeList[PreferenceChatColorThemeIndex - 1]),
@@ -738,7 +736,6 @@ function PreferenceSubscreenChatClick() {
 	}
 
 	if (MouseIn(1200, 492, 64, 64)) Player.ChatSettings.ShowAutomaticMessages = !Player.ChatSettings.ShowAutomaticMessages;
-		if ((MouseY >= 812) && (MouseY <= 876)) Player.ChatSettings.DisableAnimations = !Player.ChatSettings.DisableAnimations;
 
 	// If the user used one of the BackNextButtons
 	if ((MouseX >= 1000) && (MouseX < 1350) && (MouseY >= 190) && (MouseY < 270)) {
