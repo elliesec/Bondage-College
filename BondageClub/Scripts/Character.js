@@ -91,7 +91,7 @@ function CharacterReset(CharacterID, CharacterAssetFamily) {
 		IsNaked: function () { return CharacterIsNaked(this); },
 		IsDeaf: function () { return this.GetDeafLevel() > 0 },
 		HasNoItem: function () { return CharacterHasNoItem(this); },
-		IsEdged: function () { return this.Effect.includes("Edged") },
+		IsEdged: function () { return CharacterIsEdged(this); },
 	};
 
 	// If the character doesn't exist, we create it
@@ -880,4 +880,24 @@ function CharacterHasItemForActivity(C, Activity) {
 		if ((C.Appearance[A].Asset != null) && (C.Appearance[A].Asset.AllowActivity != null) && (C.Appearance[A].Asset.AllowActivity.indexOf(Activity) >= 0))
 			return true;
 	return false;
+}
+
+/**
+ * Checks if the character is edged or not. The character is edged if every equipped vibrating item on an orgasm zone has the "Edged" effect
+ * @param {Character} C - The character to check
+ * @returns {boolean} - TRUE if the character is edged, FALSE otherwise
+ */
+function CharacterIsEdged(C) {
+	if (C.ID !== 0 || !C.Effect.includes("Edged")) {
+		return false;
+	}
+	return C.ArousalSettings.Zone.every(Zone => {
+		if (Zone.Orgasm) {
+			const Item = InventoryGet(C, Zone.Name);
+			if (!Item || !Item.Property) return true;
+			return typeof Item.Property.Intensity !== "number" || Item.Property.Intensity === -1 ||
+			       (Item.Property.Effect && Item.Property.Effect).includes("Edged");
+		}
+		return true;
+	});
 }
