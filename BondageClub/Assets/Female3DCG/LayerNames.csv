@@ -121,9 +121,11 @@ ItemArmsWristShacklesCuffs,Cuffs
 ItemArmsWristShacklesChain,Chain
 ItemArmsPilloryWood,Wood
 ItemArmsPilloryMetal,Metal
+ItemArmsLeatherArmbindernull,Binder
+ItemArmsLeatherArmbinderStrap,Straps
 ItemArmsArmbinderJacketJacket,Jacket
 ItemArmsArmbinderJacketStraps,Straps
-ItemArmsArmbinderJacketBuckles,Buckles
+ItemArmsArmbinderJacketRings,Buckles
 ItemNeckHighCollarLeather,Leather
 ItemNeckHighCollarRings,Rings
 ItemNeckOrnateCollarCollar,Collar
