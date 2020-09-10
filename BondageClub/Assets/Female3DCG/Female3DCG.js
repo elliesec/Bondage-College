@@ -1505,9 +1505,9 @@ var AssetFemale3DCG = [
 			{
 				Name: "LeatherArmbinder", Fetish: ["Leather"], Priority: 6, Value: 80, Difficulty: 10, SelfBondage: 7, Time: 25, RemoveTime: 10, AllowLock: true, DefaultColor: "#404040", SetPose: ["BackElbowTouch"], Effect: ["Block", "Prone"], Block: ["ItemHands"], Extended: true, AllowType: ["Strap", "WrapStrap"], SelfUnlock: false,
 				Layer: [
-					{ Name: "", HasType: false },
-					{ Name: "Strap", HasType: false, Priority: 31, ParentGroup: "", AllowTypes: ["Strap"], OverrideAllowPose: [], Left: 0, Top: 0, HideAs: { Group: "ItemHidden", Asset: "LeatherArmbinderStrap" } },
-					{ Name: "WrapStrap", CopyLayerColor: "Strap", HasType: false, Priority: 31, ParentGroup: "", AllowTypes: ["WrapStrap"], OverrideAllowPose: [], Left: 0, Top: 0, HideAs: { Group: "ItemHidden", Asset: "LeatherArmbinderWrapStrap" } },
+					{ Name: "Binder", HasType: false, ParentGroup: null },
+					{ Name: "Strap", HasType: false, Priority: 31, ParentGroup: null, AllowTypes: ["Strap"], OverrideAllowPose: [], Left: 0, Top: 0, HideAs: { Group: "ItemHidden", Asset: "LeatherArmbinderStrap" } },
+					{ Name: "WrapStrap", CopyLayerColor: "Strap", HasType: false, Priority: 31, ParentGroup: null, AllowTypes: ["WrapStrap"], OverrideAllowPose: [], Left: 0, Top: 0, HideAs: { Group: "ItemHidden", Asset: "LeatherArmbinderWrapStrap" } },
 				]
 			},
 			{
