@@ -105,3 +105,9 @@ function AssetsItemNeckAccessoriesCollarShockUnitScriptDraw(data) {
 		AnimationRequestDraw(data.C);
 	}
 }
+
+function InventoryItemNeckAccessoriesCollarShockUnitDynamicAudio(data) { 
+	var Modifier = parseInt(data.Content.substr(data.Content.length - 1));
+	if (isNaN(Modifier)) Modifier = 0;
+	return ["Shocks", Modifier * 3];
+}
