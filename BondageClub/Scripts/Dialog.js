@@ -789,7 +789,7 @@ function DialogProgressStart(C, PrevItem, NextItem) {
 	// Applying or removing specific items can trigger an audio sound to play
 	if ((PrevItem && PrevItem.Asset) || (NextItem && NextItem.Asset)) {
 		var AudioFile = (NextItem && NextItem.Asset) ? NextItem.Asset.Audio : PrevItem.Asset.Audio;
-		if (AudioFile != null) AudioDialogStart("Audio/" + AudioFile + ".mp3");
+		if (AudioFile != null) AudioDialogStart("Audio/" + AudioGetFileName(AudioFile) + ".mp3");
 	}
 
 }
