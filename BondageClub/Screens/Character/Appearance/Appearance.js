@@ -520,9 +520,9 @@ function AppearanceRun() {
 					DrawButton(1300, 145 + (A - CharacterAppearanceOffset) * 95, 400, 65, AssetGroup[A].Description + ": " + CharacterAppearanceGetCurrentValue(C, AssetGroup[A].Name, "Description"), "White");
 				var Color = CharacterAppearanceGetCurrentValue(C, AssetGroup[A].Name, "Color", "");
 				const ColorButtonText = ItemColorGetColorButtonText(Color);
-				const ButtonColor = ColorButtonText.startsWith("#") ? ColorButtonText : "#fff";
+				const ColorButtonColor = ColorButtonText.startsWith("#") ? ColorButtonText : "#fff";
 				const CanColor = AssetGroup[A].AllowColorize && !!Item;
-				DrawButton(1725, 145 + (A - CharacterAppearanceOffset) * 95, 160, 65, ColorButtonText, CanColor ? ButtonColor : "#aaa");
+				DrawButton(1725, 145 + (A - CharacterAppearanceOffset) * 95, 160, 65, ColorButtonText, CanColor ? ColorButtonColor : "#aaa");
 				DrawButton(1910, 145 + (A - CharacterAppearanceOffset) * 95, 65, 65, "", CanColor ? "#fff" : "#aaa", CanColor ? "Icons/Color.png" : "Icons/ColorBlocked.png");
 			}
 	}
