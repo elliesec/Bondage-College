@@ -1170,7 +1170,7 @@ function DialogClick() {
 	}
 
 
-	if (DialogColor != null && CurrentCharacter.FocusGroup && InventoryGet(CurrentCharacter, CurrentCharacter.FocusGroup.Name)) {
+	if (DialogColor != null && CurrentCharacter.FocusGroup && InventoryGet(CurrentCharacter, CurrentCharacter.FocusGroup.Name) && MouseIn(1300, 25, 675, 950)) {
 		return ItemColorClick(CurrentCharacter, CurrentCharacter.FocusGroup.Name, 1300, 25, 675, 950);
 	}
 
