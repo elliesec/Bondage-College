@@ -1,10 +1,8 @@
-2f229fd1f72e46618544055120fc0c4684cdd6ec
-
 # Bondage Club - Changelog
 
 This changelog follows the format outlined in [keepachangelog.com](https://keepachangelog.com/), with some slight differences. The change categories we use are:
 
-* Added - for new features
+* Added - for new features (#1)
 * Removed - for now removed features
 * Changed - for changes in existing functionality
 * Fixed - for any bug fixes
