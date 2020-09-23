@@ -2,7 +2,7 @@
 
 This changelog follows the format outlined in [keepachangelog.com](https://keepachangelog.com/), with some slight differences. The change categories we use are:
 
-* Added - for new features (#1)
+* Added - for new features
 * Removed - for now removed features
 * Changed - for changes in existing functionality
 * Fixed - for any bug fixes
