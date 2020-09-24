@@ -54,7 +54,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
     * Added an online preference to allow other players to change your whole appearance
     * Added an online preference to prevent other players from changing or removing cosplay items (ears, tail, wings)
 * Nina - Added a new multi-color button to indicate when an item supports multi-coloring ([#1447](https://github.com/Ben987/Bondage-College/pull/1447))
-* Ellie - Added this changelog!
+* Ellie - Added this changelog ([#1473](https://github.com/Ben987/Bondage-College/pull/1473))!
     
 ### [Removed]
 * Rui - Removed the deafness effect from the Pony Hood ([#1377](https://github.com/Ben987/Bondage-College/pull/1377))
