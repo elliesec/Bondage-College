@@ -42,7 +42,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
     * A snorkel mask
 * Gnarp - Added a new pair of Rhinestone Sandals ([#1427](https://github.com/Ben987/Bondage-College/pull/1427))
 * Ben - Added the ability for player subs to turn the tables on their NPC owner
-* Ayesha - Added 2 new handheld items:
+* Ayesha - Added 2 new handheld items ([1433](https://github.com/Ben987/Bondage-College/pull/1433), [1446](https://github.com/Ben987/Bondage-College/pull/1446))
     * A shock wand
     * A lotion bottle
 * Ben - Added the ability for a player's NPC subs to turn the tables and enslave the player if they aren't already owned
