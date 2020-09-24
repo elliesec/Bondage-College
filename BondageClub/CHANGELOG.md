@@ -22,7 +22,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 * Rui - Added several new items ([#1373](https://github.com/Ben987/Bondage-College/pull/1373), [#1445](https://github.com/Ben987/Bondage-College/pull/1445))
     * A new leather bolero clothing item
     * A new studded harness item, available in both the torso item and bra slots
-    * Made a version of the leather corset top available in the bra slot 
+* Ace - Made a version of the leather corset top available in the bra slot ([#1373](https://github.com/Ben987/Bondage-College/pull/1373), [#1445](https://github.com/Ben987/Bondage-College/pull/1445))
 * Ace - Added the ability to view locked wardrobe groups (so you can view other peoples' hair etc. in a read-only mode) ([#1362](https://github.com/Ben987/Bondage-College/pull/1362))
 * gatetrek - Added several new assets ([#1366](https://github.com/Ben987/Bondage-College/pull/1366), [#1426](https://github.com/Ben987/Bondage-College/pull/1426))
     * A pair of jean shorts
