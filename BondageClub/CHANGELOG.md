@@ -42,7 +42,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
     * A snorkel mask
 * Gnarp - Added a new pair of Rhinestone Sandals ([#1427](https://github.com/Ben987/Bondage-College/pull/1427))
 * Ben - Added the ability for player subs to turn the tables on their NPC owner
-* Ayesha - Added 2 new handheld items ([1433](https://github.com/Ben987/Bondage-College/pull/1433), [1446](https://github.com/Ben987/Bondage-College/pull/1446))
+* Ayesha - Added 2 new handheld items ([#1433](https://github.com/Ben987/Bondage-College/pull/1433), [#1446](https://github.com/Ben987/Bondage-College/pull/1446))
     * A shock wand
     * A lotion bottle
 * Ben - Added the ability for a player's NPC subs to turn the tables and enslave the player if they aren't already owned
@@ -73,7 +73,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 * Ace - Fix for an incorrect chatroom message on the Old Gas Mask ([#1381](https://github.com/Ben987/Bondage-College/pull/1381))
 * Ace - Fix for rooms with a member count over their size limit not showing up as greyed out ([#1428](https://github.com/Ben987/Bondage-College/pull/1428))
 * Ace - Fixed an issue where character refreshes would boot the player out of the lock inventory screen ([#1411](https://github.com/Ben987/Bondage-College/pull/1411))
-* Ace - Fix for text overflowing the boundaries of a chat message
+* Ace - Fix for text overflowing the boundaries of a chat message ([#1437](https://github.com/Ben987/Bondage-College/pull/1437))
 * Ace - Fixed several issues in the club management screen around collar changing ([#1364](https://github.com/Ben987/Bondage-College/pull/1364))
 * Ace - Fix for "ghost legs" when wearing catsuits ([#1419](https://github.com/Ben987/Bondage-College/pull/1419))
 * Ellie - Fixed a bug where Bondage College NPCs would have random head colors ([#1448](https://github.com/Ben987/Bondage-College/pull/1448))
