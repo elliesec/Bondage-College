@@ -197,22 +197,22 @@ var AssetFemale3DCG = [
 		AllowPose: ["TapedHands", "BackBoxTie", "BackCuffs", "BackElbowTouch", "Bolero", "Yoked", "Hogtied", "OverTheHead"],
 		Asset: [
 			{
-				Name: "Catsuit", Fetish: ["Nylon"], Value: 100, BuyGroup: "Catsuit", Hide: ["ItemNipplesPiercings"], HideItem: ["ItemNipplesChopStickNippleClamps"], Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"],
+				Name: "Catsuit", Fetish: ["Latex"], Value: 100, BuyGroup: "Catsuit", Hide: ["ItemNipplesPiercings"], HideItem: ["ItemNipplesChopStickNippleClamps"], Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"],
 				Layer: [
 					{ Name: "Base" },
 					{ Name: "Zip" }
 				]
 			},
-			{ Name: "SeamlessCatsuit", Fetish: ["Nylon"], Value: -1, BuyGroup: "Catsuit", Hide: ["ItemNipplesPiercings"], HideItem: ["ItemNipplesChopStickNippleClamps"] },
-			{ Name: "SeethroughSuit", Fetish: ["Nylon"], Value: 100, BuyGroup: "SeethroughSuit", HideItem: ["ItemNipplesChopStickNippleClamps"] },
+			{ Name: "SeamlessCatsuit", Fetish: ["Latex"], Value: -1, BuyGroup: "Catsuit", Hide: ["ItemNipplesPiercings"], HideItem: ["ItemNipplesChopStickNippleClamps"], Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"] },
+			{ Name: "SeethroughSuit", Fetish: ["Latex"], Value: 100, BuyGroup: "SeethroughSuit", HideItem: ["ItemNipplesChopStickNippleClamps"], Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"] },
 			{
-				Name: "SeethroughSuitZip", Fetish: ["Nylon"], Value: -1, BuyGroup: "SeethroughSuit", HideItem: ["ItemNipplesChopStickNippleClamps"], Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"],
+				Name: "SeethroughSuitZip", Fetish: ["Latex"], Value: -1, BuyGroup: "SeethroughSuit", HideItem: ["ItemNipplesChopStickNippleClamps"], Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"],
 				Layer: [
 					{ Name: "Base" },
 					{ Name: "Zip" }
 				]
 			},
-			{ Name: "ReverseBunnySuit", Fetish: ["Nylon", "Pet"], Value: 100, BuyGroup: "ReverseBunnySuit", Expose: ["ItemNipples", "ItemNipplesPiercings", "ItemBreast", "ItemTorso"] }
+			{ Name: "ReverseBunnySuit", Fetish: ["Latex", "Pet"], Value: 100, BuyGroup: "ReverseBunnySuit", Expose: ["ItemNipples", "ItemNipplesPiercings", "ItemBreast", "ItemTorso"] }
 		],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"]
 	},
@@ -283,22 +283,22 @@ var AssetFemale3DCG = [
 		AllowPose: ["LegsClosed", "Kneel", "StraitDressOpen", "Horse", "KneelingSpread", "Spread"],
 		Asset: [
 			{
-				Name: "Catsuit", Fetish: ["Nylon"], Value: -1, BuyGroup: "Catsuit", Hide: ["ItemVulvaPiercings"], HideItem: ["SocksPantyhose1"], Expose: ["ItemVulva", "ItemVulvaPiercings", "ItemButt"],
+				Name: "Catsuit", Fetish: ["Latex"], Value: -1, BuyGroup: "Catsuit", Hide: ["ItemVulvaPiercings"], HideItem: ["SocksPantyhose1"], Expose: ["ItemVulva", "ItemVulvaPiercings", "ItemButt"],
 				Layer: [
 					{ Name: "Base" },
 					{ Name: "Zip" }
 				]
 			},
-			{ Name: "SeamlessCatsuit", Fetish: ["Nylon"], Value: -1, BuyGroup: "Catsuit", Hide: ["ItemVulvaPiercings"], HideItem: ["SocksPantyhose1"] },
-			{ Name: "SeethroughSuit", Fetish: ["Nylon"], Value: -1, BuyGroup: "SeethroughSuit", HideItem: ["SocksPantyhose1"] },
+			{ Name: "SeamlessCatsuit", Fetish: ["Latex"], Value: -1, BuyGroup: "Catsuit", Hide: ["ItemVulvaPiercings"], HideItem: ["SocksPantyhose1"], Expose: ["ItemVulva", "ItemVulvaPiercings", "ItemButt"] },
+			{ Name: "SeethroughSuit", Fetish: ["Latex"], Value: -1, BuyGroup: "SeethroughSuit", HideItem: ["SocksPantyhose1"], Expose: ["ItemVulva", "ItemVulvaPiercings", "ItemButt"] },
 			{
-				Name: "SeethroughSuitZip", Fetish: ["Nylon"], Value: -1, BuyGroup: "SeethroughSuit", HideItem: ["SocksPantyhose1"], Expose: ["ItemVulva", "ItemVulvaPiercings", "ItemButt"],
+				Name: "SeethroughSuitZip", Fetish: ["Latex"], Value: -1, BuyGroup: "SeethroughSuit", HideItem: ["SocksPantyhose1"], Expose: ["ItemVulva", "ItemVulvaPiercings", "ItemButt"],
 				Layer: [
 					{ Name: "Base" },
 					{ Name: "Zip" }
 				]
 			},
-			{ Name: "ReverseBunnySuit", Fetish: ["Nylon", "Pet"], Value: -1, BuyGroup: "ReverseBunnySuit", Expose: ["ItemVulva", "ItemVulvaPiercings", "ItemButt"] }
+			{ Name: "ReverseBunnySuit", Fetish: ["Latex", "Pet"], Value: -1, BuyGroup: "ReverseBunnySuit", Expose: ["ItemVulva", "ItemVulvaPiercings", "ItemButt"] }
 		],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"]
 	},
@@ -1611,7 +1611,7 @@ var AssetFemale3DCG = [
 			},
 			{ Name: "StraitLeotard", Fetish: ["Latex"], Value: 120, Priority: 23, Difficulty: 13, SelfBondage: 7, Time: 35, RemoveTime: 20, AllowLock: true, DefaultColor: "#70C0C0", Hide: ["Cloth", "ItemNipplesPiercings", "ItemVulvaPiercings"], HideItem: ["ItemButtAnalBeads2", "ItemVulvaVibratingDildo", "ItemVulvaInflatableVibeDildo", "ItemVulvaClitSuctionCup", "ItemNipplesLactationPump"], SetPose: ["BackElbowTouch"], Effect: ["Block", "Prone"], Block: ["ItemNipples", "ItemNipplesPiercings", "ItemVulva", "ItemVulvaPiercings", "ItemButt", "ItemPelvis", "ItemTorso", "ItemBreast", "ItemHands"], SelfUnlock: false },
 			{ Name: "StraitJacket", Value: 150, Difficulty: 6, SelfBondage: 8, Time: 35, RemoveTime: 20, AllowLock: true, DefaultColor: "#A0A0A0", Hide: ["Cloth", "ItemNipplesPiercings"], HideItem: ["ClothLowerSkirt1", "ClothLowerSkirt2", "ClothLowerSkirt3", "ClothLowerTennisSkirt1", "ClothLowerGown2Skirt", "ClothLowerWaspie1", "ClothLowerWaspie2", "ClothLowerWaspie3", "ClothLowerLatexSkirt1", "ClothLowerLatexSkirt2", "ClothLowerClothSkirt1", "ClothLowerChineseSkirt1", "ClothLowerAdmiralSkirt", "ClothLowerJeanSkirt", "ClothLowerPencilSkirt"], SetPose: ["BackElbowTouch"], Effect: ["Block", "Prone"], AllowType: ["Normal", "Snug", "Tight"], Block: ["ItemNipples", "ItemNipplesPiercings", "ItemTorso", "ItemBreast", "ItemHands"], Extended: true, SelfUnlock: false, HasType: false },
-			{ Name: "CollarCuffs", Fetish: ["Leather"], Value: 60, Difficulty: 9, SelfBondage: 3, Time: 35, RemoveTime: 20, Visible: false, Random: false, AllowLock: true, Prerequisite: "Collared", SetPose: ["BackBoxTie"], Effect: ["Block", "Prone"], Block: ["ItemHands", "ItemNeck"], Extended: true, SelfUnlock: false },
+			{ Name: "CollarCuffs", Fetish: ["Leather"], Value: 60, Difficulty: 6, SelfBondage: 3, Time: 35, RemoveTime: 20, Visible: false, Random: false, AllowLock: true, Prerequisite: "Collared", SetPose: ["BackBoxTie"], Effect: ["Block", "Prone"], Block: ["ItemHands", "ItemNeck"], AllowType: ["Loose", "Normal", "Snug", "Tight"], Extended: true, SelfUnlock: false },
 			{ Name: "LeatherStraitJacket", Fetish: ["Leather"], Value: 200, Difficulty: 7, SelfBondage: 8, Time: 45, RemoveTime: 30, AllowLock: true, Hide: ["Cloth", "ItemNipplesPiercings"], HideItem: ["ClothLowerSkirt1", "ClothLowerSkirt2", "ClothLowerSkirt3", "ClothLowerTennisSkirt1", "ClothLowerGown2Skirt", "ClothLowerWaspie1", "ClothLowerWaspie2", "ClothLowerWaspie3", "ClothLowerLatexSkirt1", "ClothLowerLatexSkirt2", "ClothLowerClothSkirt1", "ClothLowerChineseSkirt1", "ClothLowerAdmiralSkirt", "ClothLowerJeanSkirt", "ClothLowerPencilSkirt", "ItemNipplesLactationPump"], SetPose: ["BackElbowTouch"], Effect: ["Block", "Prone"], AllowType: ["Normal", "Snug", "Tight"], Block: ["ItemNipples", "ItemNipplesPiercings", "ItemTorso", "ItemBreast", "ItemHands"], Extended: true, SelfUnlock: false },
 			{
 				Name: "Bolero", Fetish: ["Leather"], Priority: 33, Value: 100, Difficulty: 11, SelfBondage: 7, Time: 35, RemoveTime: 20, AllowLock: true, DefaultColor: ["#E080A0", "Default"], SetPose: ["BackElbowTouch", "Bolero"], Effect: ["Block", "Prone"], Block: ["ItemHands"], Layer: [
@@ -2102,7 +2102,7 @@ var AssetFemale3DCG = [
 				]
 			},
 			{ Name: "HarnessPonyBits", Fetish: ["Leather", "Pony"], Value: -1, Difficulty: 4, Time: 20, Random: false, AllowLock: true, BuyGroup: "HarnessPonyBits", Prerequisite: "GagUnique", SetPose: ["GagUnique"], Effect: ["BlockMouth", "GagNormal"] },
-			{ Name: "PumpGag", Fetish: ["Leather"], Value: 100, Time: 20, Random: false, AllowLock: true, DefaultColor: "#404040", BuyGroup: "PumpGag", Prerequisite: "GagUnique", Hide: ["Mouth"], SetPose: ["GagUnique"], Effect: ["BlockMouth"], AllowEffect: ["BlockMouth", "GagLight", "GagEasy", "GagMedium", "GagVeryHeavy"], ExpressionTrigger: [{ Name: "Soft", Group: "Eyebrows", Timer: 10 }], Extended: true },
+			{ Name: "PumpGag", Fetish: ["Leather"], Value: 100, Time: 20, Random: false, AllowLock: true, DefaultColor: "#404040", BuyGroup: "PumpGag", Prerequisite: "GagUnique", Hide: ["Mouth"], SetPose: ["GagUnique"], Effect: ["BlockMouth"], AllowEffect: ["BlockMouth", "GagLight", "GagEasy", "GagMedium", "GagVeryHeavy"], AllowType: ["Light", "Inflated", "Bloated", "Maximum"], ExpressionTrigger: [{ Name: "Soft", Group: "Eyebrows", Timer: 10 }], Extended: true, HasType: false },
 			{ Name: "KittyGag", Fetish: ["Pet"], Value: 20, Difficulty: -4, Time: 10, Random: false, DefaultColor: "#A0A0A0", BuyGroup: "KittyGag", Prerequisite: "GagFlat", Hide: ["Mouth"], SetPose: ["GagFlat"], Effect: ["BlockMouth", "GagLight"], ExpressionTrigger: [{ Name: "Light", Group: "Blush", Timer: 5 }, { Name: "Closed", Group: "Eyes", Timer: 5 }] },
 			{ Name: "KittenHarnessPanelGag", Fetish: ["Leather", "Pet"], Value: 80, Difficulty: 6, Time: 20, Random: false, AllowLock: true, DefaultColor: "#A0A0A0", BuyGroup: "KittenHarnessPanelGag", Prerequisite: "GagFlat", Hide: ["Mouth"], SetPose: ["GagFlat"], Effect: ["BlockMouth", "GagEasy"] },
 			{
@@ -2840,12 +2840,9 @@ var AssetFemale3DCG = [
 				Prerequisite: ["NotKneeling", "AllFours", "NotSuspended", "NotHogtied", "NoFeetSpreader"],
 				SetPose: ["BaseLower"],
 				Layer: [
-					{ Name: "CoverOuter", ColorGroup: "Upper" },
-					{ Name: "CoverInner", ColorGroup: "Lower" },
-					{ Name: "TopPillow", ColorGroup: "Upper" },
-					{ Name: "BottomPillow", ColorGroup: "Lower" },
-					{ Name: "Mattress", ColorGroup: "Lower" },
-					{ Name: "Headboard", ColorGroup: "Lower" },
+				{ Name: "BedFrame"},
+				{ Name: "Mattress"},
+				{ Name: "Pillow"}
 				]
 				
 			},
