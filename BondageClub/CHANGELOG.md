@@ -11,6 +11,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
 Changelog last updated: 2020-09-25
+
 Last recorded PR: [#1464](https://github.com/Ben987/Bondage-College/pull/1464)
 
 ## [Unreleased] - Release Date
