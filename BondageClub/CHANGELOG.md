@@ -10,9 +10,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2020-09-25
+Changelog last updated: 2020-09-26
 
-Last recorded PR: [#1417](https://github.com/Ben987/Bondage-College/pull/1417)
+Last recorded PR: [#1465](https://github.com/Ben987/Bondage-College/pull/1465)
 
 ## [Unreleased] - Release Date
 
@@ -62,6 +62,8 @@ Last recorded PR: [#1417](https://github.com/Ben987/Bondage-College/pull/1417)
 * Nina - Added a new multi-color button to indicate when an item supports multi-coloring ([#1447](https://github.com/Ben987/Bondage-College/pull/1447))
 * Sekkmer - Added a chatroom preference to preserve whitespace in chat ([#1459](https://github.com/Ben987/Bondage-College/pull/1459))
     * You can now use Shift + Enter in the chat box to send multi-line chat messages
+* Ace - Added a permission system for extended items ([#1465](https://github.com/Ben987/Bondage-College/pull/1465))
+    * Individual item type permissions can be set for most extended items in the game - not supported by all items yet
 * Ellie - Added this changelog ([#1473](https://github.com/Ben987/Bondage-College/pull/1473))!
     
 ### [Removed]
