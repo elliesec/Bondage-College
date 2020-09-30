@@ -12,7 +12,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 Changelog last updated: 2020-09-30
 
-Last recorded PR: [#1510](https://github.com/Ben987/Bondage-College/pull/1510)
+Last recorded PR: [#1513](https://github.com/Ben987/Bondage-College/pull/1513)
 
 ## [Unreleased] - Release Date
 
@@ -67,6 +67,7 @@ Last recorded PR: [#1510](https://github.com/Ben987/Bondage-College/pull/1510)
 * Ellie - Added a new chatroom preference for coloring activities in the chat ([#1486](https://github.com/Ben987/Bondage-College/pull/1486))
 * Ace - Added lots of French translations ([#1488](https://github.com/Ben987/Bondage-College/pull/1488))
 * ZFreak - Added a new Inflatable Strait Leotard restraint ([#1342](https://github.com/Ben987/Bondage-College/pull/1342))
+* Emily - Added 3 new chatroom backgrounds ([#1513](https://github.com/Ben987/Bondage-College/pull/1513))
 * Ellie - Added this changelog ([#1473](https://github.com/Ben987/Bondage-College/pull/1473))!
     
 ### [Removed]
