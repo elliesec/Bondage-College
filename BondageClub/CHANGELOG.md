@@ -12,7 +12,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 Changelog last updated: 2020-09-30
 
-Last recorded PR: [#1503](https://github.com/Ben987/Bondage-College/pull/1503)
+Last recorded PR: [#1509](https://github.com/Ben987/Bondage-College/pull/1509)
 
 ## [Unreleased] - Release Date
 
@@ -44,9 +44,10 @@ Last recorded PR: [#1503](https://github.com/Ben987/Bondage-College/pull/1503)
     * A mermaid tail item (with built in vibrator)
     * A clam shell bra
     * A snorkel mask
-* Gnarp - Added three new items ([#1427](https://github.com/Ben987/Bondage-College/pull/1427), [#1471](https://github.com/Ben987/Bondage-College/pull/1471))
+* Gnarp - Added several new items ([#1427](https://github.com/Ben987/Bondage-College/pull/1427), [#1471](https://github.com/Ben987/Bondage-College/pull/1471), [#1509](https://github.com/Ben987/Bondage-College/pull/1509))
     * A pair of Rhinestone Sandals
     * Long and short leggings, with multi-colour support
+    * Sets of wooden cuffs for the wrists and ankles
 * Ben - Added the ability for player subs to turn the tables on their NPC owner
 * Ayesha - Added 2 new handheld items ([#1433](https://github.com/Ben987/Bondage-College/pull/1433), [#1446](https://github.com/Ben987/Bondage-College/pull/1446))
     * A shock wand
