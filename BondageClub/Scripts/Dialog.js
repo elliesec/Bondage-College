@@ -538,7 +538,7 @@ function DialogCanUseRemote(C, Item) {
  * @returns {boolean} - TRUE if the player is able to color the item, FALSE otherwise
  */
 function DialogCanColor(Item) {
-	const CanUnlock = InventoryGetItemProperty(Item, "LockedBy") ? DialogCanUnlock(Player, Item) : true;
+	const CanUnlock = InventoryItemHasEffect(Item, "Lock", true) ? DialogCanUnlock(Player, Item) : true;
 	return (Player.CanInteract() && CanUnlock) || DialogAlwaysAllowRestraint()
 }
 
