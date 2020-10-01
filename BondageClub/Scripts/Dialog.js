@@ -539,7 +539,7 @@ function DialogCanUseRemote(C, Item) {
  */
 function DialogCanColor(Item) {
 	const CanUnlock = InventoryItemHasEffect(Item, "Lock", true) ? DialogCanUnlock(Player, Item) : true;
-	return (Player.CanInteract() && CanUnlock) || DialogAlwaysAllowRestraint()
+	return (Player.CanInteract() && CanUnlock) || DialogAlwaysAllowRestraint();
 }
 
 /**
