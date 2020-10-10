@@ -379,7 +379,7 @@ function AssetCleanArray(AssetArray) {
 /**
  * Gets an asset group by the asset family name and group name
  * @param {string} Family - The asset family that the group belongs to
- * @param Group - The name of the asset group to find
+ * @param {string} Group - The name of the asset group to find
  * @returns {*} - The asset group matching the provided family and group name
  */
 function AssetGroupGet(Family, Group) {
