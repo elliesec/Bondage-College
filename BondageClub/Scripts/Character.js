@@ -661,8 +661,9 @@ function CharacterRefresh(C, Push) {
 			}
 			ActivityDialogBuild(C);
 		}
-		if (DialogColor != null) { 
-			if (ItemColorItem == null || InventoryGet(C, ItemColorItem.Asset.Group.Name) == null || InventoryGet(C, ItemColorItem.Asset.Group.Name).Asset.Name != ItemColorItem.Asset.Name)
+		if (DialogColor != null) {
+			const FocusItem = C && C.FocusGroup ? InventoryGet(C, C.FocusGroup.Name): null;
+			if (ItemColorItem == null || FocusItem == null || FocusItem.Asset.Name != ItemColorItem.Asset.Name)
 				ItemColorExit();
 		}
 	}
