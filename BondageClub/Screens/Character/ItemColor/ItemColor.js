@@ -312,8 +312,10 @@ function ItemColorExit() {
 			return ItemColorPickerCancel();
 		case ItemColorMode.DEFAULT:
 		default:
-			Object.assign(ItemColorItem, AppearanceItemParse(ItemColorBackup));
-			CharacterLoadCanvas(ItemColorCharacter);
+			if (ItemColorBackup && ItemColorCharacter) {
+				Object.assign(ItemColorItem, AppearanceItemParse(ItemColorBackup));
+				CharacterLoadCanvas(ItemColorCharacter);
+			}
 			ItemColorFireExit(false);
 	}
 }
