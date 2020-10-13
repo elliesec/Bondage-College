@@ -662,9 +662,14 @@ function CharacterRefresh(C, Push) {
 			ActivityDialogBuild(C);
 		}
 		if (DialogColor != null) {
-			const FocusItem = C && C.FocusGroup ? InventoryGet(C, C.FocusGroup.Name): null;
-			if (ItemColorItem == null || FocusItem == null || FocusItem.Asset.Name != ItemColorItem.Asset.Name)
+			const FocusItem = C && C.FocusGroup ? InventoryGet(C, C.FocusGroup.Name) : null;
+			if ((ItemColorItem && !FocusItem) || (!ItemColorItem && FocusItem) || InventoryGetItemProperty(ItemColorItem, "Name") !== InventoryGetItemProperty(FocusItem, "Name")) {
 				ItemColorExit();
+				DialogColor = null;
+				DialogColorSelect = null;
+				ElementRemove("InputColor");
+				DialogMenuButtonBuild(C);
+			}
 		}
 	}
 }
