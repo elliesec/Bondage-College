@@ -104,8 +104,7 @@ function MovieStudioProcessDecay() {
  * @returns {void} - Nothing
  */
 function MovieStudioLoad() {
-	if (MovieStudioOriginalClothes == null) MovieStudioOriginalClothes = Player.Appearance.slice(0);
-	if (MovieStudioDirector == null) {		
+	if (MovieStudioDirector == null) {
 		MovieStudioDirector = CharacterLoadNPC("NPC_MovieStudio_Director");
 		InventoryWear(MovieStudioDirector, "Beret1", "Hat");
 		InventoryWear(MovieStudioDirector, "SunGlasses1", "Glasses");
@@ -185,16 +184,22 @@ function MovieStudioClick() {
  * @returns {void} - Nothing
  */
 function MovieStudioPlayerDressBack() {
-	Player.Appearance = MovieStudioOriginalClothes.slice(0);
+	if (MovieStudioOriginalClothes) {
+		CharacterAppearanceRestore(Player, MovieStudioOriginalClothes);
+	}
 	CharacterRefresh(Player);
 }
 
 /**
  * When the player needs to change clothes for a role in the movie
  * @param {string} Cloth - The clothes to wear
+ * @param {string} [Backup] - Whether or not to backup the player's current clothes
  * @returns {void} - Nothing
  */
-function MovieStudioChange(Cloth) {
+function MovieStudioChange(Cloth, Backup) {
+	if (Backup === "true") {
+		MovieStudioOriginalClothes = CharacterAppearanceStringify(Player);
+	}
 	if (Cloth == "Journalist") {
 		CharacterNaked(Player);
 		InventoryWear(Player, "Camera1", "ClothAccessory", "Default");

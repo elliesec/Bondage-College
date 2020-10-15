@@ -40,7 +40,7 @@ FailIntro3,,,Cut!  That doesn't work hun.  You forgot to spice up your play.,,
 1024,1025,I'll be the greatest journalist!,"This is wonderful hun, you'll become a star.  Go get changed and we'll start filming when you get back.","DialogChangeReputation(""Dominant"", 2)",
 1024,1025,I will try my best Miss Director.,"This is wonderful hun, you'll become a star.  Go get changed and we'll start filming when you get back.","DialogChangeReputation(""Dominant"", -2)",
 1024,0,I've changed my mind.,"Fine, make some room for the next movie star then.",,
-1025,1026,(Go change.),You look fabulous.  Now enter the room and we'll start recording.  Remember to be curious and sexy my star!,"Change(""Journalist"")",
+1025,1026,(Go change.),You look fabulous.  Now enter the room and we'll start recording.  Remember to be curious and sexy my star!,"Change(""Journalist"", true)",
 1026,,(Start the movie.),,"Progress(""Interview"", ""1"", ""Journalist"")",
 1030,1040,(Struggles happily.),(The crew releases you and help you to dress back up.  The full team celebrates with you.),PlayerDressBack(),Player.IsRestrained()
 1030,1040,(Give a thumbs up.),(The crew helps you to dress back up.  The full team celebrates with you.),PlayerDressBack(),!Player.IsRestrained()
