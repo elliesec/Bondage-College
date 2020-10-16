@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Welcome to the Bondage College!",
   "scripts": {
-    "lint": "eslint --config ./.eslintrc.js ../../Assets/Female3DCG/Female3DCG.js",
-    "lint:fix": "eslint --fix --config ./.eslintrc.js ../../Assets/Female3DCG/Female3DCG.js",
+    "changelog": "marked -o ../changelog.html ",
+    "lint": "eslint --config ESLint/.eslintrc.js ../../Assets/Female3DCG/Female3DCG.js",
+    "lint:fix": "eslint --fix --config ESLint/.eslintrc.js ../../Assets/Female3DCG/Female3DCG.js",
     "test": "echo \\\"Error: no test specified\\\" && exit 1"
   },
   "repository": {
@@ -19,6 +20,7 @@
   "homepage": "https://github.com/Ben987/Bondage-College#readme",
   "devDependencies": {
     "eslint": "^6.8.0",
-    "eslint-plugin-sort-keys-custom": "^2.0.0"
+    "eslint-plugin-sort-keys-custom": "^2.0.0",
+    "marked": "^1.2.0"
   }
 }
