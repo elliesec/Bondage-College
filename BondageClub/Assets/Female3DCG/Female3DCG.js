@@ -3146,7 +3146,20 @@ var AssetFemale3DCG = [
 					{ Name: "Back", Priority: 3, CopyLayerColor: "Front" },
 					{ Name: "Strap", Priority: 52 }
 				]
-			}
+			},
+			{
+				Name: "VacCube", Fetish: ["Latex"], Value: 300, Difficulty: 50, Top: -70, Left: 0, SelfBondage: 4, Time: 20,
+				Prerequisite: ["NotKneeling", "AllFours", "NotSuspended", "NotHogtied", "NotKneelingSpread", "NoItemArms", "LegsOpen", "NoItemHands", "NoItemLegs", "NoHorse", "NoItemFeet"],
+				Hide: ["ItemNeckAccessories", "ItemNeckRestraints", "HairBack"],
+				SetPose: ["Yoked", "BaseLower"],
+				Effect: ["Prone", "Freeze", "Block", "Mounted"],
+				Block: ["ItemArms", "ItemBoots", "ItemBreast", "ItemButt", "ItemFeet", "ItemHands", "ItemLegs", "ItemMisc", "ItemAddon", "ItemNeck", "ItemNeckAccessories", "ItemNeckRestraints", "ItemNipples", "ItemNipplesPiercings", "ItemPelvis", "ItemTorso", "ItemVulva", "ItemVulvaPiercings"],
+				RemoveAtLogin: true,
+				Layer: [
+					{ Name: "Latex", ParentGroup: "BodyUpper" },
+					{ Name: "Highlights", ParentGroup: null, AllowColorize: false },
+				]
+			},
 		],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"]
 	},
