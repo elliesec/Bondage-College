@@ -152,8 +152,7 @@ function VibratorModeLoad(Options) {
 	if (!Property || !Property.Mode) {
 		Options = (Options && Options.length) ? Options : [VibratorModeSet.STANDARD];
 		var FirstOption = VibratorModeOptions[Options[0]][0] || VibratorModeOptions[VibratorModeSet.STANDARD][0];
-		DialogFocusItem.Property = Object.assign({}, Property, FirstOption.Property);
-		VibratorModeSetDynamicProperties(DialogFocusItem.Property);
+		VibratorModeSetProperty(DialogFocusItem, FirstOption.Property);
 		var C = CharacterGetCurrent();
 		CharacterRefresh(C);
 		ChatRoomCharacterItemUpdate(C, DialogFocusItem.Asset.Group.Name);
@@ -277,9 +276,11 @@ function VibratorModeSetMode(Option) {
  * @returns {void} - Nothing
  */
 function VibratorModeSetDynamicProperties(Property) {
-	if (typeof Property.Intensity === "function") Property.Intensity = Property.Intensity();
-	if (typeof Property.Effect === "function") Property.Effect = Property.Effect(Property.Intensity);
-	else Property.Effect = JSON.parse(JSON.stringify(Property.Effect));
+	const NewProperty = Object.assign({}, Property);
+	if (typeof NewProperty.Intensity === "function") NewProperty.Intensity = NewProperty.Intensity();
+	if (typeof NewProperty.Effect === "function") NewProperty.Effect = NewProperty.Effect(NewProperty.Intensity);
+	else NewProperty.Effect = JSON.parse(JSON.stringify(Property.Effect || []))
+	return NewProperty;
 }
 
 /**
@@ -535,8 +536,7 @@ function VibratorModeStateUpdateRest(C, Arousal, TimeSinceLastChange, OldIntensi
  * @returns {void} - Nothing
  */
 function VibratorModeSetProperty(Item, Property) {
-	VibratorModeSetDynamicProperties(Property);
-	Property.Effect = Property.Effect || [];
+	Property = VibratorModeSetDynamicProperties(Property);
 	if (Array.isArray(Item.Property.Effect)) {
 		Item.Property.Effect.forEach(Effect => {
 			if (!["Egged", "Vibrating", "Edged"].includes(Effect)) {
