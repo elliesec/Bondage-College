@@ -247,7 +247,7 @@ function ExtendedItemSetType(C, Options, Option, IsCloth) {
 	} else {
 		let Asset = DialogFocusItem.Asset;
 		let OldOption = InventoryGet(C, Asset.Group.Name);
-		if (OldOption.Property.Effect && OldOption.Property.Effect.indexOf("Lock") >= 0 && !Option.Property.AllowLock) {
+		if (OldOption.Property.Effect && OldOption.Property.Effect.indexOf("Lock") >= 0 && Option.Property.AllowLock === false) {
 			DialogExtendedMessage = DialogFind(Player, "ExtendedItemUnlockBeforeChange");
 			return;
 		}
