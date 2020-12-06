@@ -224,7 +224,7 @@ function CommonDrawAppearanceBuild(C, {
 		if (Color === "Default" && A.DefaultColor) {
 			Color = Array.isArray(A.DefaultColor) ? A.DefaultColor[Layer.ColorIndex] : A.DefaultColor;
 		}
-		if (Color && typeof Color !== "string") {
+		if (Color != null && typeof Color !== "string") {
 			Color = "Default";
 		}
 
