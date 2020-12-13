@@ -1254,6 +1254,14 @@ var AssetFemale3DCG = [
 				], RemoveAtLogin: true, ArousalZone: "ItemVulva"
 			},
 			{ Name: "WoodenCuffs", Priority: 24, Value: 30, Difficulty: 2, Time: 5, Random: false, Left: 74, AllowLock: true, Audio: "WoodenCuffs", BuyGroup: "WoodenCuffs", Prerequisite: ["LegsOpen", "NotKneeling"], SetPose: ["LegsOpen"], Effect: ["Freeze", "Prone"], Block: ["ItemLegs"], RemoveAtLogin: false },
+			{
+				Name: "MedicalBedRestraints", Value: -1, Difficulty: 6, Time: 5, RemoveTime: 5, AllowLock: true, BuyGroup: "MedicalBedRestraints", Left: 0, Top: 0,
+				Prerequisite: ["OnBed", "LegsOpen"], SetPose: ["LegsOpen"], Effect: ["Prone", "BlockKneel"],
+				Layer: [
+					{ Name: "Base", Priority: 1, ParentGroup: null },
+					{ Name: "Straps"}
+				],
+			},
 			AssetSpankingToys
 		],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"]
@@ -1329,6 +1337,14 @@ var AssetFemale3DCG = [
 				AllowEffect: ["Egged", "Vibrating", "FillVulva", "Edged"],
 				AllowPose: ["BackBoxTie", "BackCuffs", "BackElbowTouch", "TapedHands", "Yoked", "OverTheHead"],
 				Block: ["ItemFeet", "ItemBoots", "ItemPelvis", "ItemVulva", "ItemVulvaPiercings", "ItemButt"],
+			},
+			{
+				Name: "MedicalBedRestraints", Value: -1, Difficulty: 6, Time: 5, RemoveTime: 5, AllowLock: true, BuyGroup: "MedicalBedRestraints", Left: 0, Top: 0,
+				Prerequisite: ["OnBed", "LegsOpen"], SetPose: ["LegsOpen"], Effect: ["Prone", "BlockKneel"],
+				Layer: [
+					{ Name: "Base", Priority: 1, ParentGroup: null },
+					{ Name: "Straps", Priority: 26 },
+				],
 			},
 			AssetSpankingToys
 		],
@@ -2105,6 +2121,16 @@ var AssetFemale3DCG = [
 				Effect: ["Block", "Prone"], AllowEffect: ["Block", "Prone", "Freeze"],
 				AllowType: ["Light", "Inflated", "Bloated", "Max"], 
 				Block: ["ItemBreast", "ItemButt", "ItemHands", "ItemNipples", "ItemNipplesPiercings", "ItemPelvis", "ItemTorso", "ItemVulva", "ItemVulvaPiercings"], SelfUnlock: false, Extended:true},
+			{
+				Name: "MedicalBedRestraints", Value: -1, Difficulty: 6, Time: 5, RemoveTime: 5, AllowLock: true, Left: 0, BuyGroup: "MedicalBedRestraints",
+				Prerequisite: ["OnBed"], SetPose: ["Yoked"], Effect: ["Block", "Prone"],
+				Hide: ["ClothLower"],
+				HideItem: ["ClothBabydollDress1", "ClothBondageDress1", "ClothBondageDress2", "ClothBridesmaidDress1", "ClothChineseDress1", "ClothChineseDress2", "ClothDressFur", "ClothFlowerDress", "ClothDress2", "ClothDress3", "ClothGown1", "ClothGown3", "ClothWeddingDress2", "ClothStudentOutfit1", "ClothStudentOutfit2", "ClothTeacherOutfit1", "ClothWeddingDress1", "ClothYukata1"],
+				Layer: [
+					{ Name: "Base", Priority: 2, ParentGroup: null },
+					{ Name: "Straps"}
+				],
+			},
 			AssetSpankingToys
 		],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"],
