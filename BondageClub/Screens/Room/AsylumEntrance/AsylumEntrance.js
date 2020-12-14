@@ -482,3 +482,32 @@ function AsylumEntranceGiveNurseUniform() {
 	ItemsToEarn.push({Name: "NurseCap", Group: "Hat"});
 	InventoryAddMany(Player, ItemsToEarn);
 }
+
+function AsylumEntrancePatientCannotGetRestraints() {
+	const reputation = ReputationGet("Asylum");
+	return reputation <= -1 && reputation > -100 && !LogQuery("ReputationMaxed", "Asylum");
+}
+
+function AsylumEntrancePatientCanGetRestraints() {
+	const reputation = ReputationGet("Asylum");
+	return reputation <= -100 && !LogQuery("ReputationMaxed", "Asylum");
+}
+
+function AsylumEntranceNurseCannotGetRestraints() {
+	const reputation = ReputationGet("Asylum");
+	return reputation >= 1 && reputation < 100 && !LogQuery("ReputationMaxed", "Asylum");
+}
+
+function AsylumEntranceNurseCanGetRestraints() {
+	const reputation = ReputationGet("Asylum");
+	return reputation >= 100 && !LogQuery("ReputationMaxed", "Asylum");
+}
+
+function AsylumEntranceGiveRestraints() {
+	LogAdd("ReputationMaxed", "Asylum");
+	InventoryAddMany(Player, [
+		{Name: "MedicalBedRestraints", Group: "ItemArms"},
+		{Name: "MedicalBedRestraints", Group: "ItemLegs"},
+		{Name: "MedicalBedRestraints", Group: "ItemFeet"},
+	]);
+}
