@@ -161,7 +161,7 @@ function InventoryPrerequisiteMessage(C, Prerequisite) {
 		case "NotShackled": return C.Effect.includes("Shackled") ? "RemoveShacklesFirst" : "";
 		case "Collared": return (InventoryGet(C, "ItemNeck") == null) ? "MustCollaredFirst" : "";
 		case "CannotHaveWand": return InventoryIsItemInList(C, "ItemArms", ["FullLatexSuit"]) ? "CannotHaveWand" : "";
-		case "CannotBeSuited": return InventoryIsItemInList(C, "ItemVulva", ["WandBelt"]) ? "CannotHaveWand" : "";
+		case "CannotBeSuited": return InventoryIsItemInList(C, "ItemVulva", ["WandBelt", "HempRopeBelt"]) ? "CannotHaveWand" : "";
 		case "CannotBeHogtiedWithAlphaHood": return InventoryDoesItemHavePrerequisite(C, "ItemHood", "CanUseAlphaHood") ? Prerequisite : "";
 		case "AllFours": return CharacterItemsHavePose(C, "AllFours") ? "CannotUse" : "";
 		case "OnBed": return !C.Effect.includes("OnBed") ? "MustBeOnBed" : "";
@@ -171,11 +171,11 @@ function InventoryPrerequisiteMessage(C, Prerequisite) {
 		case "NoMaidTray": return InventoryIsItemInList(C, "ItemMisc", ["WoodenMaidTray", "WoodenMaidTrayFull"]) ? "CannotBeUsedWhileServingDrinks" : "";
 
 		// Checks for torso access based on clothes
-		case "AccessTorso": return InventoryDoesItemExposeGroup(C, "Cloth", "ItemTorso") ? "" : "RemoveClothesForItem";
+		case "AccessTorso": return !InventoryDoesItemExposeGroup(C, "Cloth", "ItemTorso") ? "RemoveClothesForItem" : "";
 
 		// Breast items can be blocked by clothes
-		case "AccessBreast": return InventoryDoesItemExposeGroup(C, "Cloth", "ItemBreast") && InventoryDoesItemExposeGroup(C, "Bra", "ItemBreast") ? "" : "RemoveClothesForItem";
-		case "AccessBreastSuitZip": return InventoryDoesItemExposeGroup(C, "Cloth", "ItemNipplesPiercings") && InventoryDoesItemExposeGroup(C, "Suit", "ItemNipplesPiercings") ? "" : "UnZipSuitForItem";
+		case "AccessBreast": return !InventoryDoesItemExposeGroup(C, "Cloth", "ItemBreast") || !InventoryDoesItemExposeGroup(C, "Bra", "ItemBreast") ? "RemoveClothesForItem" : "";
+		case "AccessBreastSuitZip": return !InventoryDoesItemExposeGroup(C, "Cloth", "ItemNipplesPiercings") || !InventoryDoesItemExposeGroup(C, "Suit", "ItemNipplesPiercings") ? "UnZipSuitForItem" : "";
 
 		// Vulva/Butt items can be blocked by clothes, panties and some socks
 		case "AccessVulva": return InventoryDoesItemBlockGroup(C, "Cloth", "ItemVulva")
