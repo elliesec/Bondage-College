@@ -3,7 +3,7 @@
 // Loads the item extension properties
 function InventoryItemNeckFuturisticCollarLoad() {
 	var C = (Player.FocusGroup != null) ? Player : CurrentCharacter;
-	if (!InventoryItemMouthFuturisticPanelGagValidate(C)) {
+	if (InventoryItemMouthFuturisticPanelGagValidate(C) !== "") {
 		InventoryItemMouthFuturisticPanelGagLoadAccessDenied()
 	} else {
 		if (DialogFocusItem.Property == null) DialogFocusItem.Property = { OpenPermission: false };
@@ -17,7 +17,7 @@ function InventoryItemNeckFuturisticCollarLoad() {
 // Draw the item extension screen
 function InventoryItemNeckFuturisticCollarDraw() {
 	var C = (Player.FocusGroup != null) ? Player : CurrentCharacter;
-	if (!InventoryItemMouthFuturisticPanelGagValidate(C)) {
+	if (InventoryItemMouthFuturisticPanelGagValidate(C) !== "") {
 		InventoryItemMouthFuturisticPanelGagDrawAccessDenied()
 	} else {
 		DrawRect(1387, 175, 225, 275, "white");
@@ -73,7 +73,7 @@ function InventoryItemNeckFuturisticCollarExit() {
 function InventoryItemNeckFuturisticCollarClick() {
 	
 	var C = (Player.FocusGroup != null) ? Player : CurrentCharacter;
-	if (!InventoryItemMouthFuturisticPanelGagValidate(C)) {
+	if (InventoryItemMouthFuturisticPanelGagValidate(C) !== "") {
 		InventoryItemMouthFuturisticPanelGagClickAccessDenied()
 	} else {
 		
@@ -195,7 +195,7 @@ function InventoryItemNeckFuturisticCollarLockdown(C, LockType) {
 		var Message;
 		var Dictionary = [
 			{ Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber },
-			{ Tag: "DestinationCharacter", Text: C.Name, MemberNumber: C.MemberNumber },
+			{ Tag: "DestinationCharacterName", Text: C.Name, MemberNumber: C.MemberNumber },
 		];
 
 		Message = "FuturisticCollarTriggerLockdown";
@@ -219,7 +219,7 @@ function InventoryItemNeckFuturisticCollarUnlock(C) {
 		var Message;
 		var Dictionary = [
 			{ Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber },
-			{ Tag: "DestinationCharacter", Text: C.Name, MemberNumber: C.MemberNumber },
+			{ Tag: "DestinationCharacterName", Text: C.Name, MemberNumber: C.MemberNumber },
 		];
 
 		Message = "FuturisticCollarTriggerUnlock";
@@ -259,7 +259,7 @@ function InventoryItemNeckFuturisticCollarColor(C, Item) {
 		var Message;
 		var Dictionary = [
 			{ Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber },
-			{ Tag: "DestinationCharacter", Text: C.Name, MemberNumber: C.MemberNumber },
+			{ Tag: "DestinationCharacterName", Text: C.Name, MemberNumber: C.MemberNumber },
 		];
 
 		Message = "FuturisticCollarTriggerColor";
@@ -282,7 +282,7 @@ function InventoryItemNeckFuturisticCollarTogglePermission(C, Item) {
 			var Message;
 			var Dictionary = [
 				{ Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber },
-				{ Tag: "DestinationCharacter", Text: C.Name, MemberNumber: C.MemberNumber },
+				{ Tag: "DestinationCharacterName", Text: C.Name, MemberNumber: C.MemberNumber },
 			];
 
 			Message = "FuturisticCollarSetOpenPermission";
