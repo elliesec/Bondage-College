@@ -10,9 +10,70 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2020-12-16
+Changelog last updated: 2020-12-23
 
-Last recorded PR: [#1793](https://github.com/Ben987/Bondage-College/pull/1793)
+Last recorded PR: [#1823](https://github.com/Ben987/Bondage-College/pull/1823)
+
+## [R64]
+
+### [Added]
+
+* Rui - Added several new items ([#1808](https://github.com/Ben987/Bondage-College/pull/1808), [#1814](https://github.com/Ben987/Bondage-College/pull/1814), [#1815](https://github.com/Ben987/Bondage-College/pull/1815), [#1805](https://github.com/Ben987/Bondage-College/pull/1805))
+    * Latex Ankle Shoes
+    * Strict Leather Pet Crawler
+    * Elegant Heart Necklace
+    * Noble Corset
+* Emily R - Added a new whisper emoticon ([#1807](https://github.com/Ben987/Bondage-College/pull/1807))
+* Rui - Moved corset clothing items into a new dedicated corset slot ([#1804](https://github.com/Ben987/Bondage-College/pull/1804))
+    * Unfortunately this means that any corsets you previously owned in the bra slot will need to be purchased again
+* Gnarp - Added spread eagle variations to the arm and feet hemp rope items, available when on a bed ([#1796](https://github.com/Ben987/Bondage-College/pull/1796))
+* Nina - Added the ability to scroll to the bottom of the chat in a chatroom by pressing the `Esc` key ([#1792](https://github.com/Ben987/Bondage-College/pull/1792))
+* Ada - Extended the ball gag, harness ball gag, and wiffle gag with additional visual options ([#1788](https://github.com/Ben987/Bondage-College/pull/1788))
+* Ace - Added the ability to customize the degree of blindness that occurs when both eyes are closed ([#1784](https://github.com/Ben987/Bondage-College/pull/1784))
+* Ada - Added several more new items ([#1756](https://github.com/Ben987/Bondage-College/pull/1756), [#1757](https://github.com/Ben987/Bondage-College/pull/1757), [#1758](https://github.com/Ben987/Bondage-College/pull/1758))
+    * Futuristic Chastity Panties
+    * Futuristic Breast Harness
+    * Futuristic Harness
+* Emily R - Added a new Funnel Gag item ([#1817](https://github.com/Ben987/Bondage-College/pull/1817))
+* Nina - Allowed the pose menu to be used inside the photography room, and the ability to pose the photography room NPC ([#1764](https://github.com/Ben987/Bondage-College/pull/1764), [#1772](https://github.com/Ben987/Bondage-College/pull/1772))
+* Sekkmer/Ellie - Added the ability for owners to add lover locks to subs with lovers ([#1387](https://github.com/Ben987/Bondage-College/pull/1387))
+    * Players can now enforce some rules upon their lover(s), similar to owner rules
+    * Lover rule: prevent/allow a lover from using lover locks on themselves - allowed by default
+    * Lover rule: prevent/allow a lover's owner from using lover locks on her - allowed by default
+* Ace - Added the ability inside your private room to choose the background of your private room or the main hall ([#1786](https://github.com/Ben987/Bondage-College/pull/1786))
+* Cecilia/Ellie - Added a new set of medical bed restraints, which can be obtained (as either a nurse or a patient) from the Asylum ([#1778](https://github.com/Ben987/Bondage-College/pull/1778))
+
+### [Removed]
+
+* Nothing this release
+
+### [Changed]
+
+* Sandrine - Most extended items have now been modified so that incompatible types are displayed in red ([#1511](https://github.com/Ben987/Bondage-College/pull/1511))
+* Jomshir - Offline friends will no long appear in the first tab, but can still be seen in the third tab, where the delete buttons are ([#1773](https://github.com/Ben987/Bondage-College/pull/1773))
+
+### [Fixed]
+
+* Wultir - Fixed an issue where being enclosed would not prevent you from being leashed out of a room ([#1810](https://github.com/Ben987/Bondage-College/pull/1810))
+* Ellie - Fixed an issue with the login credits scrolling too fast at higher framerates ([#1809](https://github.com/Ben987/Bondage-College/pull/1809))
+* Nina - Fixed an issue where a game crash on the login screen would cause your character's appearance to be randomized on next login ([#1789](https://github.com/Ben987/Bondage-College/pull/1789))
+* Ellie - Fixed an issue that would cause the friends list not to work for new players until a relog ([#1816](https://github.com/Ben987/Bondage-College/pull/1816))
+* Nina - Fixed a bug where the "( Character Actions )" dialogue option would not always show up when it should ([#1820](https://github.com/Ben987/Bondage-College/pull/1820))
+* Sandrine - Fixed an issue with the magic club where equipping the adult baby harness with mitten chain could leave characters in an inconsistent state ([#1037](https://github.com/Ben987/Bondage-College/pull/1037))
+* Ace - Fixed an issue where players' preferences would not get initialised until after visiting the preferences page ([#1743](https://github.com/Ben987/Bondage-College/pull/1743))
+
+### [Technical]
+
+* Sandrine - Added a major performance enhancement to extended item screens ([#1511](https://github.com/Ben987/Bondage-College/pull/1511))
+* Lots of technical changes, fixes and improvements:
+    * Ellie - [#1798](https://github.com/Ben987/Bondage-College/pull/1798), [#1813](https://github.com/Ben987/Bondage-College/pull/1813), [#1821](https://github.com/Ben987/Bondage-College/pull/1821), [#1823](https://github.com/Ben987/Bondage-College/pull/1823)
+    * Ada - [#1812](https://github.com/Ben987/Bondage-College/pull/1812)
+    * Sandrine - [#1818](https://github.com/Ben987/Bondage-College/pull/1818)
+    * Rui - [#1822](https://github.com/Ben987/Bondage-College/pull/1822)
+
+### [Beta Fixes]
+
+* None... yet!
 
 ## [R63]
 
@@ -102,8 +163,8 @@ Last recorded PR: [#1793](https://github.com/Ben987/Bondage-College/pull/1793)
 
 ### [Beta Fixes]
 
-* Ace - [#1741](https://github.com/Ben987/Bondage-College/pull/1741), [#1745](https://github.com/Ben987/Bondage-College/pull/1745), [#1754](https://github.com/Ben987/Bondage-College/pull/1754), [#1759](https://github.com/Ben987/Bondage-College/pull/1759), [#1763](https://github.com/Ben987/Bondage-College/pull/1763), [#1765](https://github.com/Ben987/Bondage-College/pull/1765), [#1768](https://github.com/Ben987/Bondage-College/pull/1768), [#1769](https://github.com/Ben987/Bondage-College/pull/1769), [#1771](https://github.com/Ben987/Bondage-College/pull/1771), [#1767](https://github.com/Ben987/Bondage-College/pull/1767), [#1774](https://github.com/Ben987/Bondage-College/pull/1774), [#1779](https://github.com/Ben987/Bondage-College/pull/1779), [#1787](https://github.com/Ben987/Bondage-College/pull/1787)
-* Ada - [#1742](https://github.com/Ben987/Bondage-College/pull/1742), [#1744](https://github.com/Ben987/Bondage-College/pull/1744), [#1746](https://github.com/Ben987/Bondage-College/pull/1746), [#1747](https://github.com/Ben987/Bondage-College/pull/1747), [#1755](https://github.com/Ben987/Bondage-College/pull/1755), [#1760](https://github.com/Ben987/Bondage-College/pull/1760), [#1761](https://github.com/Ben987/Bondage-College/pull/1761)
+* Ace - [#1741](https://github.com/Ben987/Bondage-College/pull/1741), [#1745](https://github.com/Ben987/Bondage-College/pull/1745), [#1754](https://github.com/Ben987/Bondage-College/pull/1754), [#1759](https://github.com/Ben987/Bondage-College/pull/1759), [#1763](https://github.com/Ben987/Bondage-College/pull/1763), [#1765](https://github.com/Ben987/Bondage-College/pull/1765), [#1768](https://github.com/Ben987/Bondage-College/pull/1768), [#1769](https://github.com/Ben987/Bondage-College/pull/1769), [#1771](https://github.com/Ben987/Bondage-College/pull/1771), [#1767](https://github.com/Ben987/Bondage-College/pull/1767), [#1774](https://github.com/Ben987/Bondage-College/pull/1774), [#1779](https://github.com/Ben987/Bondage-College/pull/1779), [#1787](https://github.com/Ben987/Bondage-College/pull/1787), [#1803](https://github.com/Ben987/Bondage-College/pull/1803)
+* Ada - [#1742](https://github.com/Ben987/Bondage-College/pull/1742), [#1744](https://github.com/Ben987/Bondage-College/pull/1744), [#1746](https://github.com/Ben987/Bondage-College/pull/1746), [#1747](https://github.com/Ben987/Bondage-College/pull/1747), [#1755](https://github.com/Ben987/Bondage-College/pull/1755), [#1760](https://github.com/Ben987/Bondage-College/pull/1760), [#1761](https://github.com/Ben987/Bondage-College/pull/1761), [#1802](https://github.com/Ben987/Bondage-College/pull/1802)
 * Ellie - [#1749](https://github.com/Ben987/Bondage-College/pull/1749), [#1750](https://github.com/Ben987/Bondage-College/pull/1750), [#1753](https://github.com/Ben987/Bondage-College/pull/1753), [#1776](https://github.com/Ben987/Bondage-College/pull/1776), [#1781](https://github.com/Ben987/Bondage-College/pull/1781), [#1783](https://github.com/Ben987/Bondage-College/pull/1783)
 * Emily R - [#1780](https://github.com/Ben987/Bondage-College/pull/1780)
 * Jomshir - [#1748](https://github.com/Ben987/Bondage-College/pull/1748), [#1793](https://github.com/Ben987/Bondage-College/pull/1793)
