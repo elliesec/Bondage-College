@@ -18,7 +18,7 @@ var CutsceneStage = 0;
  * @constant
  * @type {Object.<String, [String[], String]>}
  */
-var CommonFontStacks = {
+const CommonFontStacks = {
 	Arial: [["Arial"], "sans-serif"],
 	TimesNewRoman: [["Times New Roman", "Times"], "serif"],
 	Papyrus: [["Papyrus", "Ink Free", "Segoe Script", "Gabriola"], "fantasy"],
