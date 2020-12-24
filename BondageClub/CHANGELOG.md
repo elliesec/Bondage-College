@@ -10,9 +10,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2020-12-23
+Changelog last updated: 2020-12-24
 
-Last recorded PR: [#1823](https://github.com/Ben987/Bondage-College/pull/1823)
+Last recorded PR: [#1794](https://github.com/Ben987/Bondage-College/pull/1794)
 
 ## [R64]
 
@@ -42,6 +42,7 @@ Last recorded PR: [#1823](https://github.com/Ben987/Bondage-College/pull/1823)
     * Lover rule: prevent/allow a lover's owner from using lover locks on her - allowed by default
 * Ace - Added the ability inside your private room to choose the background of your private room or the main hall ([#1786](https://github.com/Ben987/Bondage-College/pull/1786))
 * Cecilia/Ellie - Added a new set of medical bed restraints, which can be obtained (as either a nurse or a patient) from the Asylum ([#1778](https://github.com/Ben987/Bondage-College/pull/1778))
+* Saya - Added the ability for players to change the game font through their graphical preference page ([#1799](https://github.com/Ben987/Bondage-College/pull/1799))
 
 ### [Removed]
 
@@ -61,15 +62,19 @@ Last recorded PR: [#1823](https://github.com/Ben987/Bondage-College/pull/1823)
 * Nina - Fixed a bug where the "( Character Actions )" dialogue option would not always show up when it should ([#1820](https://github.com/Ben987/Bondage-College/pull/1820))
 * Sandrine - Fixed an issue with the magic club where equipping the adult baby harness with mitten chain could leave characters in an inconsistent state ([#1037](https://github.com/Ben987/Bondage-College/pull/1037))
 * Ace - Fixed an issue where players' preferences would not get initialised until after visiting the preferences page ([#1743](https://github.com/Ben987/Bondage-College/pull/1743))
+* Wultir - Fixed an issue where players with owner/lover locked leashes could be leashed out of rooms by non-owners/lovers ([#1801](https://github.com/Ben987/Bondage-College/pull/1801))
+* Ace - Fixed some edge case issues in the pose system which would allow incorrect poses under certain conditions ([#1806](https://github.com/Ben987/Bondage-College/pull/1806))
 
 ### [Technical]
 
 * Sandrine - Added a major performance enhancement to extended item screens ([#1511](https://github.com/Ben987/Bondage-College/pull/1511))
 * Lots of technical changes, fixes and improvements:
     * Ellie - [#1798](https://github.com/Ben987/Bondage-College/pull/1798), [#1813](https://github.com/Ben987/Bondage-College/pull/1813), [#1821](https://github.com/Ben987/Bondage-College/pull/1821), [#1823](https://github.com/Ben987/Bondage-College/pull/1823)
-    * Ada - [#1812](https://github.com/Ben987/Bondage-College/pull/1812)
+    * Ada - [#1812](https://github.com/Ben987/Bondage-College/pull/1812), [#1790](https://github.com/Ben987/Bondage-College/pull/1790)
     * Sandrine - [#1818](https://github.com/Ben987/Bondage-College/pull/1818)
     * Rui - [#1822](https://github.com/Ben987/Bondage-College/pull/1822)
+    * Nina - [#1825](https://github.com/Ben987/Bondage-College/pull/1825)
+    * Ace - [#1791](https://github.com/Ben987/Bondage-College/pull/1791)
 
 ### [Beta Fixes]
 
@@ -138,6 +143,7 @@ Last recorded PR: [#1823](https://github.com/Ben987/Bondage-College/pull/1823)
 * Ada - Changed the player arousal indicator to disappear when arousal reaches 0 ([#1712](https://github.com/Ben987/Bondage-College/pull/1712))
 * Ada - Edited the Bolero Straitjacket and the Armbinder Jacket to improve coloring ([#1719](https://github.com/Ben987/Bondage-College/pull/1719))
 * Wultir - Changed the Maid Quarters so that players can now do maid work in the exposed version of the maid outfit ([#1714](https://github.com/Ben987/Bondage-College/pull/1714))
+* Ace - Changed posture collar items to block the nod/wiggle activities on the head ([#1794](https://github.com/Ben987/Bondage-College/pull/1794))
 
 ### [Fixed]
 
