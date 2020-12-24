@@ -81,6 +81,7 @@ class TextCache {
 		this.path = path;
 		this.language = TranslationLanguage;
 		this.cache = {};
+		this.rebuildListeners = [];
 		this.buildCache();
 	}
 
@@ -99,13 +100,26 @@ class TextCache {
 	}
 
 	/**
+	 * Adds a callback function as a rebuild listener. Rebuild listeners will
+	 * be called whenever the cache has completed a rebuild (either after
+	 * initial construction, or after a language change).
+	 * @param {Function} callback - The callback to register
+	 */
+	onRebuild(callback) {
+		if (typeof callback === "function") {
+			this.rebuildListeners.push(callback);
+		}
+	}
+
+	/**
 	 * Kicks off a build of the text lookup cache
 	 * @returns {void} - Nothing
 	 */
 	buildCache() {
 		this.fetchCsv()
 			.then((lines) => this.translate(lines))
-			.then((lines) => this.cacheLines(lines));
+			.then((lines) => this.cacheLines(lines))
+			.then(() => this.rebuildListeners.forEach((listener) => listener(this)));
 	}
 
 	/**
