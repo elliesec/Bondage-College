@@ -210,6 +210,7 @@ function MainHallRun() {
 		DrawButton(25, 145, 90, 90, "", "White", "Icons/Horse.png", TextGet("Stable"));
 
 		// Cafe
+		DrawButton(145, 265, 90, 90, "", "White", "Icons/Library.png", TextGet("Library"));
 		DrawButton(25, 265, 90, 90, "", "White", "Icons/Refreshsments.png", TextGet("Cafe"));
 
 	} else {
@@ -347,6 +348,7 @@ function MainHallClick() {
 
 		// Cafe
 		if ((MouseX >=   25) && (MouseX <  115) && (MouseY >= 265) && (MouseY < 355)) MainHallWalk("Cafe");
+		if ((MouseX >=   145) && (MouseX <  235) && (MouseY >= 265) && (MouseY < 355)) MainHallWalk("Library");
 
 	} else {
 
