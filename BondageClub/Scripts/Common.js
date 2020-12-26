@@ -308,6 +308,10 @@ function CommonColorIsValid(Color) {
 	return false;
 }
 
+function CommonRandomInt(Min, Max) {
+	return Math.floor(Min + Math.random() * (Max - Min + 1));
+}
+
 /**
  * Get a random item from a list while making sure not to pick the previous one.
  * @param {*} ItemPrevious - Previously selected item from the given list

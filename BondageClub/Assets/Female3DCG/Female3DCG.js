@@ -1166,7 +1166,7 @@ var AssetFemale3DCG = [
 		Top: 100,
 		AllowNone: false,
 		AllowColorize: true,
-		AllowCustomize: true,
+		// AllowCustomize: true,
 		AllowExpression: ["Low", "Medium", "High", "VeryHigh", "Extreme", "ShortBreath"],
 		Asset: ["Blush"]
 	},
@@ -1178,7 +1178,7 @@ var AssetFemale3DCG = [
 		Top: 145,
 		AllowNone: false,
 		AllowColorize: true,
-		AllowCustomize: true,
+		// AllowCustomize: true,
 		AllowExpression: ["DroolLow", "DroolMedium", "DroolHigh", "DroolSides", "DroolMessy", "DroolTearsLow", "DroolTearsMedium", "DroolTearsHigh", "DroolTearsMessy", "DroolTearsSides", "TearsHigh", "TearsMedium", "TearsLow"],
 		Asset: ["Fluids"]
 	},
@@ -1190,7 +1190,7 @@ var AssetFemale3DCG = [
 		Top: 0,
 		AllowNone: false,
 		AllowColorize: true,
-		AllowCustomize: true,
+		// AllowCustomize: true,
 		AllowExpression: ["Afk", "Whisper", "Sleep", "Hearts", "Tear", "Hearing", "Confusion", "Exclamation", "Annoyed", "Read", "RaisedHand", "Spectator", "ThumbsDown", "ThumbsUp", "LoveRope", "LoveGag", "LoveLock", "Wardrobe"],
 		Asset: ["Emoticon"]
 	},

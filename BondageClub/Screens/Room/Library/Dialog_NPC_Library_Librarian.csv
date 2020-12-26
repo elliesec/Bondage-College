@@ -1,0 +1,4 @@
+0,,,(The librarian smiles as you approach) Nice to see you Mistress DialogPlayerName.,,"DialogLogQuery(""ClubMistress"", ""Management"")"
+0,,,(The librarian looks up from a book on her desk and gives you a curteous nod),,"DialogReputationGreater("Dominant", 50)"
+0,,,(The librarian gives you a stern look) Welcome to the library.,,
+0,100,"Um, h-hello...",,,
