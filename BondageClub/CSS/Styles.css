@@ -183,3 +183,10 @@ TextArea {
     font-family: 'Calligraffitti';
     src: url('../Fonts/Calligraffitti/Calligraffitti-Regular.ttf');
 }
+
+#BookBox {
+    box-sizing: border-box;
+    overflow: auto;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+}
