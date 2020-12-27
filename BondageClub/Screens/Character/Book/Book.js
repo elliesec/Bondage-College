@@ -5,7 +5,6 @@ var BookBackground = "Book";
 let BookReturn = null;
 
 function BookLoad() {
-    console.log("BookLoad");
     ElementCreateDiv("BookBox");
     ElementPositionFix("BookBox", 36, 500, 40, 1000, 890);
 }
@@ -20,6 +19,7 @@ function BookClick() {
 }
 
 function BookExit() {
+    ElementRemove("BookBox");
     if (typeof BookReturn === "function") {
         BookReturn();
         BookReturn = null;

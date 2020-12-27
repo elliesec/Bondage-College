@@ -2,17 +2,24 @@
 
 var LibraryBackground = "Library";
 
+let LibraryCharacter = null;
 let LibraryLibrarian = null;
 
 function LibraryLoad() {
-    if (!LibraryLibrarian) {
-        LibraryLoadNPCLibrarian();
+    const roll = Math.random();
+    if (roll < 0.1) {
+        LibraryCharacter = LibraryLoadNPCLibrarian();
+    } else {
+        LibraryCharacter = null;
     }
 }
 
 function LibraryRun() {
     DrawCharacter(Player, 0, 0, 1);
-    DrawCharacter(LibraryLibrarian, 500, 0, 1);
+
+    if (LibraryCharacter) {
+        DrawCharacter(LibraryCharacter, 500, 0, 1);
+    }
 
     DrawButton(1885, 25, 90, 90, "", "#fff", "Icons/Exit.png", TextGet("Exit"));
     DrawButton(1885, 145, 90, 90, "", "#fff", "Icons/Book.png", TextGet("Read"));
@@ -24,7 +31,7 @@ function LibraryClick() {
     // Read a book
     else if (MouseIn(1889, 145, 90, 90)) LibrarySetBookSelectionScreen();
     // Librarian
-    if (MouseIn(500, 0, 500, 1000)) CharacterSetCurrent(LibraryLibrarian);
+    if (LibraryCharacter && MouseIn(500, 0, 500, 1000)) CharacterSetCurrent(LibraryCharacter);
 }
 
 function LibrarySetBookSelectionScreen() {
@@ -33,7 +40,11 @@ function LibrarySetBookSelectionScreen() {
 }
 
 function LibraryLoadNPCLibrarian() {
-    LibraryLibrarian = CharacterLoadNPC("NPC_Library_Librarian");
-    CharacterAppearanceFullRandom(LibraryLibrarian);
-    InventoryWear(LibraryLibrarian, `Glasses${CommonRandomInt(1, 4)}`, "Glasses");
+    if (!LibraryLibrarian) {
+        LibraryLibrarian = CharacterLoadNPC("NPC_Library_Librarian");
+        LibraryLibrarian.Name = "Librarian " + LibraryLibrarian.Name;
+        CharacterAppearanceFullRandom(LibraryLibrarian);
+        InventoryWear(LibraryLibrarian, `Glasses${CommonRandomInt(1, 4)}`, "Glasses");
+    }
+    return LibraryLibrarian;
 }

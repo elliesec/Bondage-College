@@ -1,16 +1,15 @@
 "use strict";
 
-var BookSelectionBackground = "WoodTable";
+var BookSelectionBackground = "BookShelves";
 
 let BookSelectionReturn = null;
 
 function BookSelectionLoad() {
-    console.log("BookSelectionLoad");
 }
 
 function BookSelectionRun() {
     DrawButton(1885, 25, 90, 90, "", "#fff", "Icons/Exit.png", TextGet("Exit"));
-    DrawTextFit(TextGet("Tags"), 200, 70, 350, "#fff");
+    DrawTextFit(TextGet("Tags"), 200, 70, 350, "#fff", "#000");
 
     Object.keys(BookTag).forEach((key, i) => {
         DrawButton(25, 140 + 90 * i, 350, 65, BookTags.get(BookTag[key]), "#fff", null, null, false);
