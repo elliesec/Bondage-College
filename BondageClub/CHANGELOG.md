@@ -10,9 +10,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2020-12-24
+Changelog last updated: 2020-12-28
 
-Last recorded PR: [#1794](https://github.com/Ben987/Bondage-College/pull/1794)
+Last recorded PR: [#1827](https://github.com/Ben987/Bondage-College/pull/1827)
 
 ## [R64]
 
@@ -43,6 +43,7 @@ Last recorded PR: [#1794](https://github.com/Ben987/Bondage-College/pull/1794)
 * Ace - Added the ability inside your private room to choose the background of your private room or the main hall ([#1786](https://github.com/Ben987/Bondage-College/pull/1786))
 * Cecilia/Ellie - Added a new set of medical bed restraints, which can be obtained (as either a nurse or a patient) from the Asylum ([#1778](https://github.com/Ben987/Bondage-College/pull/1778))
 * Saya - Added the ability for players to change the game font through their graphical preference page ([#1799](https://github.com/Ben987/Bondage-College/pull/1799))
+* Ada - Added functionality to allow room owners to block the use of player leashing within their rooms ([#1831](https://github.com/Ben987/Bondage-College/pull/1831))
 
 ### [Removed]
 
@@ -64,12 +65,14 @@ Last recorded PR: [#1794](https://github.com/Ben987/Bondage-College/pull/1794)
 * Ace - Fixed an issue where players' preferences would not get initialised until after visiting the preferences page ([#1743](https://github.com/Ben987/Bondage-College/pull/1743))
 * Wultir - Fixed an issue where players with owner/lover locked leashes could be leashed out of rooms by non-owners/lovers ([#1801](https://github.com/Ben987/Bondage-College/pull/1801))
 * Ace - Fixed some edge case issues in the pose system which would allow incorrect poses under certain conditions ([#1806](https://github.com/Ben987/Bondage-College/pull/1806))
+* Ada - Fixed some graphical issues with lock icons on the Futuristic Ankle Cuffs ([#1832](https://github.com/Ben987/Bondage-College/pull/1832))
+* Ellie - Fixed clipping issues with the Open Crotch Straitdress when worn over lower body clothing ([#1829](https://github.com/Ben987/Bondage-College/pull/1829))
 
 ### [Technical]
 
 * Sandrine - Added a major performance enhancement to extended item screens ([#1511](https://github.com/Ben987/Bondage-College/pull/1511))
 * Lots of technical changes, fixes and improvements:
-    * Ellie - [#1798](https://github.com/Ben987/Bondage-College/pull/1798), [#1813](https://github.com/Ben987/Bondage-College/pull/1813), [#1821](https://github.com/Ben987/Bondage-College/pull/1821), [#1823](https://github.com/Ben987/Bondage-College/pull/1823)
+    * Ellie - [#1798](https://github.com/Ben987/Bondage-College/pull/1798), [#1813](https://github.com/Ben987/Bondage-College/pull/1813), [#1821](https://github.com/Ben987/Bondage-College/pull/1821), [#1823](https://github.com/Ben987/Bondage-College/pull/1823), [#1830](https://github.com/Ben987/Bondage-College/pull/1830), [#1827](https://github.com/Ben987/Bondage-College/pull/1827)
     * Ada - [#1812](https://github.com/Ben987/Bondage-College/pull/1812), [#1790](https://github.com/Ben987/Bondage-College/pull/1790)
     * Sandrine - [#1818](https://github.com/Ben987/Bondage-College/pull/1818)
     * Rui - [#1822](https://github.com/Ben987/Bondage-College/pull/1822)
