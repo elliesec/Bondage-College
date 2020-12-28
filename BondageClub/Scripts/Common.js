@@ -185,6 +185,37 @@ function CommonGet(Path, Callback) {
 }
 
 /**
+ * Dynamically loads and executes a script. Can be used for lazy-loading
+ * external dependencies as and when they are needed.
+ * @param {string} url - The URL identifying the script to be loaded
+ * @param {number} [retries] - Optionally, the number of times the request
+ * should be retried if it fails. After this many retries, the returned promise
+ * will reject. Defaults to 5.
+ * @returns {Promise<void>} - A promise that will resolve once the requested
+ * script has been successfully loaded and run. If the script load fails after
+ * the provided number of retries, the promise will reject.
+ */
+function CommonLoadScript(url, retries) {
+	retries = typeof retries === "number" ? retries : 5;
+	return new Promise((resolve, reject) => {
+		const script = document.createElement("script");
+		script.setAttribute("src", url);
+		script.onload = () => resolve();
+		script.onerror = () => {
+			document.body.removeChild(script);
+			if (retries <= 0) {
+				console.error(`Dynamic script load failed for URL "${url}"`);
+				reject();
+			} else {
+				console.warn(`Dynamic script load failed for URL "${url}". Retrying...`);
+				resolve(CommonLoadScript(url, retries - 1));
+			}
+		};
+		document.body.appendChild(script);
+	});
+}
+
+/**
  * Catches the clicks on the main screen and forwards it to the current screen click function if it exists, otherwise it sends it to the dialog click function
  * @returns {void} - Nothing
  */

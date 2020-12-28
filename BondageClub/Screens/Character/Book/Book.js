@@ -36,16 +36,11 @@ function BookExit() {
 }
 
 function BookLoadMarked() {
-    return new Promise((resolve) => {
-        if (typeof window.marked === "function") {
-            resolve(marked);
-        } else {
-            const script = document.createElement("script");
-            script.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/marked/1.2.7/marked.min.js");
-            script.onload = () => resolve(window.marked);
-            document.body.appendChild(script);
-        }
-    });
+    if (typeof window.marked === "function") {
+        return Promise.resolve();
+    } else {
+        return CommonLoadScript("https://cdnjs.cloudflare.com/ajax/libs/marked/1.2.7/marked.min.js");
+    }
 }
 
 function BookLoadCurrent() {
