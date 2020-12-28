@@ -189,6 +189,7 @@ function ElementCreateDiv(ID) {
 		Div.addEventListener("keydown", KeyDown);
 		Div.className = "HideOnPopup";
 		document.body.appendChild(Div);
+		return Div;
 	}
 }
 

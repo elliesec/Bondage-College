@@ -35,6 +35,7 @@ function LibraryClick() {
 }
 
 function LibrarySetBookSelectionScreen() {
+    BookSelectionAvailableBooks = Books;
     BookSelectionReturn = () => CommonSetScreen("Room", "Library");
     CommonSetScreen("Character", "BookSelection");
 }

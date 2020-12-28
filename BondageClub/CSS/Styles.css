@@ -188,5 +188,27 @@ TextArea {
     box-sizing: border-box;
     overflow: auto;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 0.5rem;
+	font-size: 1.4rem;
+    padding: 1em;
+	line-height: 1.5;
+}
+
+#BookBox h1, #BookBox h2, #BookBox h3, #BookBox h4 {
+    margin: 0 0 1em;
+}
+
+#BookBox h1 {
+    font-size: 1.8em;
+}
+
+#BookBox h2 {
+    font-size: 1.6em;
+}
+
+#BookBox h3 {
+    font-size: 1.4em;
+}
+
+#BookBox h4 {
+    font-size: 1.2em;
 }

@@ -11,6 +11,7 @@ class Book {
         this.description = "";
         this.authorKey = bookDefinition.author;
         this.author = "";
+        this.tags = Array.isArray(bookDefinition.tags) ? bookDefinition.tags : [];
     }
 }
 

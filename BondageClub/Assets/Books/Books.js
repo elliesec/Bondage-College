@@ -1,7 +1,7 @@
 const BookTag = {
     INFO: "Info",
     FICTION: "Fiction"
-}
+};
 
 const BookDefinitions = [
     {

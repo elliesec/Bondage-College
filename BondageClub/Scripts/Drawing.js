@@ -706,12 +706,17 @@ function DrawTextWrap(Text, X, Y, Width, Height, ForeColor, BackColor, MaxLine) 
  * @param {number} Width - Width in which the text has to fit
  * @param {string} Color - Color of the text
  * @param {string} BackColor - Color of the background
+ * @param {string} FontStyle - Additional style/weight strings to prepend to
+ * @param {string} InitialFontSize - The maximum font size that will be used
+ * the font string
  * @returns {void} - Nothing
  */
-function DrawTextFit(Text, X, Y, Width, Color, BackColor) {
+function DrawTextFit(Text, X, Y, Width, Color, BackColor, FontStyle, InitialFontSize) {
 
-	for (let S = 36; S >= 10; S = S - 2) {
-		MainCanvas.font = CommonGetFont(S.toString());
+	if (typeof InitialFontSize !== "number") InitialFontSize = 36;
+	if (InitialFontSize % 2) InitialFontSize = Math.floor(InitialFontSize / 2) * 2;
+	for (let S = InitialFontSize; S >= 10; S = S - 2) {
+		MainCanvas.font = `${FontStyle ? FontStyle.trim() + " " : ""}${CommonGetFont(S.toString())}`;
 		var metrics = MainCanvas.measureText(Text);
 		if (metrics.width <= Width)
 			break;
