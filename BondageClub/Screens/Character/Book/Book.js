@@ -5,11 +5,32 @@ var BookBackground = "Book";
 let BookReturn = null;
 let BookCurrent = null;
 let BookMarkdown = null;
+let BookDefaultMarkedRenderer = null;
+
+const BookRenderer = {
+    heading(text, level, raw, slugger) {
+        const slug = slugger.slug(text);
+        return `
+            <h${level}>
+              <a id="${slug}" class="anchor" href="#${slug}"></a>
+              ${text}
+            </h${level}>`;
+    },
+    link(href, title, text) {
+        const externalLink = typeof href === "string" && !href.startsWith("#");
+        let linkText = BookDefaultMarkedRenderer.link(href, title, text);
+        if (externalLink) {
+            linkText = linkText.replace(/^<a/, "<a target=\"_blank\"");
+        }
+        return linkText;
+    }
+};
 
 function BookLoad() {
     const bookBox = ElementCreateDiv("BookBox");
     if (BookCurrent) {
         Promise.all([BookLoadMarked(), BookLoadCurrent()]).then(() => {
+            marked.use({renderer: BookRenderer});
             bookBox.innerHTML = marked(BookMarkdown);
         });
     }
@@ -33,13 +54,16 @@ function BookExit() {
     }
     BookCurrent = null;
     BookReturn = null;
+
+    location.hash = "";
 }
 
 function BookLoadMarked() {
     if (typeof window.marked === "function") {
         return Promise.resolve();
     } else {
-        return CommonLoadScript("https://cdnjs.cloudflare.com/ajax/libs/marked/1.2.7/marked.min.js");
+        return CommonLoadScript("https://cdnjs.cloudflare.com/ajax/libs/marked/1.2.7/marked.min.js")
+            .then(() => (BookDefaultMarkedRenderer = new marked.Renderer()));
     }
 }
 
