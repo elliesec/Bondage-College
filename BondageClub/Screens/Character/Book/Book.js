@@ -27,6 +27,7 @@ const BookRenderer = {
 };
 
 function BookLoad() {
+    location.hash = "";
     const bookBox = ElementCreateDiv("BookBox");
     if (BookCurrent) {
         Promise.all([BookLoadMarked(), BookLoadCurrent()]).then(() => {
@@ -54,7 +55,6 @@ function BookExit() {
     }
     BookCurrent = null;
     BookReturn = null;
-
     location.hash = "";
 }
 

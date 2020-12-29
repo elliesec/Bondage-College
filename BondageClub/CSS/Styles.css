@@ -188,13 +188,13 @@ TextArea {
     box-sizing: border-box;
     overflow: auto;
     border: 1px solid rgba(0, 0, 0, 0.1);
-	font-size: 1.4rem;
+	font-size: 1.5rem;
     padding: 1em;
-	line-height: 1.5;
+	line-height: 1.6;
 }
 
-#BookBox h1, #BookBox h2, #BookBox h3, #BookBox h4 {
-    margin: 0 0 1em;
+#BookBox h1, #BookBox h2, #BookBox h3, #BookBox h4, #BookBox h5, #BookBox h6 {
+    margin: 0 0 0.5em;
 }
 
 #BookBox h1 {
@@ -211,4 +211,12 @@ TextArea {
 
 #BookBox h4 {
     font-size: 1.2em;
+}
+
+#BookBox h5 {
+    font-size: 1em;
+}
+
+#BookBox h6 {
+    font-size: 0.9em;
 }

@@ -1,18 +1,24 @@
-# Bondage Club - Changelog
+# Bondage Club Through The Ages
 
-This changelog follows the format outlined in [keepachangelog.com](https://keepachangelog.com/), with some slight differences. The change categories we use are:
+***
 
-* Added - for new features
-* Removed - for now removed features
-* Changed - for changes in existing functionality
-* Fixed - for any bug fixes
-* Technical - for any changes not visible to players
+_A brief history of the Bondage Club_
 
-**Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
+##### Table of Contents
 
-Changelog last updated: 2020-12-16
+* [R63 (Current)](#r63)
+* [R62](#r62)
+* [R61](#r61)
 
-Last recorded PR: [#1793](https://github.com/Ben987/Bondage-College/pull/1793)
+***
+
+## Introduction
+
+The Bondage Club has adapted and evolved over the years as it has welcomed more and more members through its doors, with an ever-growing variety of interests and kinks. New rooms in the club have been built, existing rooms and areas expanded, and the club's services have improved and increased in number.
+
+This book has been compiled to record the history of the club, and to recognise the members and benefactors that have helped it to grow into the esteemed establishment that it is today.
+
+***
 
 ## [R63]
 
@@ -23,7 +29,7 @@ Last recorded PR: [#1793](https://github.com/Ben987/Bondage-College/pull/1793)
 * wildsj - Added multi-color support to the Puffy Dress ([#1678](https://github.com/Ben987/Bondage-College/pull/1678))
 * Jomshir - Reworked the facial expression menu to make selecting facial expressions easier ([#1683](https://github.com/Ben987/Bondage-College/pull/1683))
 * Sandrine - Added multi-color support to the Bit Gag ([#1697](https://github.com/Ben987/Bondage-College/pull/1697))
-* Ada - Several improvements to the Futuristic Panel Gag ([#1687](https://github.com/Ben987/Bondage-College/pull/1687), [#1689](https://github.com/Ben987/Bondage-College/pull/1689)):
+* Ada - Several improvements to the Futuristic Panel Gag ([#1687](https://github.com/Ben987/Bondage-College/pull/1687), [#1689](https://github.com/Ben987/Bondage-College/pull/1689)): 
     * It now deflates one level at a time instead of all at once
     * Players can now change the deflation timer on the gag
     * Players can now manually pump the gag up by one inflation level
@@ -110,6 +116,8 @@ Last recorded PR: [#1793](https://github.com/Ben987/Bondage-College/pull/1793)
 * Nina - [#1751](https://github.com/Ben987/Bondage-College/pull/1751), [#1766](https://github.com/Ben987/Bondage-College/pull/1766), [#1770](https://github.com/Ben987/Bondage-College/pull/1770), [#1775](https://github.com/Ben987/Bondage-College/pull/1775), [#1777](https://github.com/Ben987/Bondage-College/pull/1777), [#1782](https://github.com/Ben987/Bondage-College/pull/1782)
 * Wultir - [#1762](https://github.com/Ben987/Bondage-College/pull/1762), [#1785](https://github.com/Ben987/Bondage-College/pull/1785)
 
+***
+
 ## [R62]
 
 ### [Added]
@@ -172,7 +180,7 @@ Last recorded PR: [#1793](https://github.com/Ben987/Bondage-College/pull/1793)
 * Ada - Moved some player preferences into a new Immersion preferences screen ([#1627](https://github.com/Ben987/Bondage-College/pull/1627)))
 
 ### [Fixed]
-* Ada - Fixed an issue where the Interactive Visor prevented players from changing clothes whilst untinted ([#1583](https://github.com/Ben987/Bondage-College/pull/1583))
+* Ada - Fixed an issue where the Interactive Visor prevented players from changing clothes whilst untinted ([#1583](https://github.com/Ben987/Bondage-College/pull/1583)) 
 * Ellie - Fixed a bug where players were unable to change their skin color ([#1584](https://github.com/Ben987/Bondage-College/pull/1584))
 * Ace - Fixed an issue that prevented players from kneeling when wearing the Concealing Cloak ([#1587](https://github.com/Ben987/Bondage-College/pull/1587))
 * Ellie - Fixed some issues with gag effects on the Futuristic Panel Gags ([#1585](https://github.com/Ben987/Bondage-College/pull/1585))
@@ -205,6 +213,8 @@ Last recorded PR: [#1793](https://github.com/Ben987/Bondage-College/pull/1793)
 * Ellie - [#1647](https://github.com/Ben987/Bondage-College/pull/1647), [#1657](https://github.com/Ben987/Bondage-College/pull/1657), [#1664](https://github.com/Ben987/Bondage-College/pull/1664)
 * jomshir98 - [#1648](https://github.com/Ben987/Bondage-College/pull/1648), [#1654](https://github.com/Ben987/Bondage-College/pull/1654)
 * Ada - [#1650](https://github.com/Ben987/Bondage-College/pull/1650), [#1651](https://github.com/Ben987/Bondage-College/pull/1651), [#1652](https://github.com/Ben987/Bondage-College/pull/1652), [#1661](https://github.com/Ben987/Bondage-College/pull/1661)
+
+***
 
 ## [R61]
 
@@ -278,7 +288,7 @@ Last recorded PR: [#1793](https://github.com/Ben987/Bondage-College/pull/1793)
 * Ellie - Added this changelog ([#1473](https://github.com/Ben987/Bondage-College/pull/1473))!
 * Ace, Gnarp - Added a new wooden sign item with customisable text ([#1477](https://github.com/Ben987/Bondage-College/pull/1477))
 * Nina - Added a ruler to the handheld toys ([#1497](https://github.com/Ben987/Bondage-College/pull/1497))
-
+    
 ### [Removed]
 * Rui - Removed the deafness effect from the Pony Hood ([#1377](https://github.com/Ben987/Bondage-College/pull/1377))
 
@@ -294,7 +304,7 @@ Last recorded PR: [#1793](https://github.com/Ben987/Bondage-College/pull/1793)
 * Ace - Fix for the red currently worn indicator in the wardrobe not updating ([#1291](https://github.com/Ben987/Bondage-College/pull/1291))
 * Ace - Fix for incorrect hitboxes in the Asylum therapy game ([#1363](https://github.com/Ben987/Bondage-College/pull/1363))
 * Ace - Fix to lock validation on NPCs ([#1380](https://github.com/Ben987/Bondage-College/pull/1380))
-* Rui - Fix for incorrect fetish on the pencil skirt ([#1377](https://github.com/Ben987/Bondage-College/pull/1377))
+* Rui - Fix for incorrect fetish on the pencil skirt ([#1377](https://github.com/Ben987/Bondage-College/pull/1377)) 
 * Ace - Fix for an incorrect chatroom message on the Old Gas Mask ([#1381](https://github.com/Ben987/Bondage-College/pull/1381))
 * Ace - Fix for rooms with a member count over their size limit not showing up as greyed out ([#1428](https://github.com/Ben987/Bondage-College/pull/1428))
 * Ace - Fixed an issue where character refreshes would boot the player out of the lock inventory screen ([#1411](https://github.com/Ben987/Bondage-College/pull/1411))
