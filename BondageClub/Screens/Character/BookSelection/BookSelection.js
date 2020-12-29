@@ -41,7 +41,7 @@ function BookSelectionRun() {
         DrawTextFit(book.title, xOffset + BookSelectionBoxWidth / 2, yOffset + 60, BookSelectionBoxWidth - 20, "#000", null, "bold");
         DrawRect(xOffset + 150, yOffset + 100, BookSelectionBoxWidth - 300, 1, "rgba(0, 0, 0, 0.35)");
         MainCanvas.font = `italic ${CommonGetFont(24)}`;
-        DrawTextWrap(book.description, xOffset + 10, yOffset + 120, BookSelectionBoxWidth - 20, BookSelectionBoxHeight - 265, "rgba(0, 0, 0, 0.7)", null, 3);
+        DrawTextWrap(book.description, xOffset + 10, yOffset + 120, BookSelectionBoxWidth - 20, BookSelectionBoxHeight - 265, "rgba(0, 0, 0, 0.75)", null, 3);
         DrawRect(xOffset + 150, yOffset + BookSelectionBoxHeight - 105, BookSelectionBoxWidth - 300, 1, "rgba(0, 0, 0, 0.35)");
         MainCanvas.font = CommonGetFont(20);
         DrawText("by", xOffset + BookSelectionBoxWidth / 2, yOffset + BookSelectionBoxHeight - 80, "#000");

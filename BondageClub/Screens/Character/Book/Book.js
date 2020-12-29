@@ -23,7 +23,7 @@ const BookRenderer = {
             linkText = linkText.replace(/^<a/, "<a target=\"_blank\"");
         }
         return linkText;
-    }
+    },
 };
 
 function BookLoad() {
@@ -69,7 +69,7 @@ function BookLoadMarked() {
 
 function BookLoadCurrent() {
     return new Promise((resolve) => {
-        CommonGet(`Assets/Books/Markdown/${BookCurrent.name}.md`, (xhr) => {
+        CommonGet(`Assets/Books/Markdown/${BookCurrent.name}/${BookCurrent.name}.md`, (xhr) => {
             BookMarkdown = xhr.responseText;
             resolve(BookMarkdown);
         });

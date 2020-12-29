@@ -512,7 +512,6 @@ function ChatRoomTarget() {
  * @returns {void} - Nothing.
  */
 function ChatRoomRun() {
-
 	// Draws the chat room controls
 	ChatRoomCreateElement();
 	ChatRoomFirstTimeHelp();
@@ -566,7 +565,7 @@ function ChatRoomRun() {
 	DrawButton(1875, 2, 120, 60, "", "White", "Icons/Rectangle/Preference.png", TextGet("MenuAdmin"));
 
 	// In orgasm mode, we add a pink filter and different controls depending on the stage.  The pink filter shows a little above 90
-	if ((Player.ArousalSettings != null) && (Player.ArousalSettings.Active != null) && (Player.ArousalSettings.Active != "Inactive") && (Player.ArousalSettings.Active != "NoMeter")) {	
+	if ((Player.ArousalSettings != null) && (Player.ArousalSettings.Active != null) && (Player.ArousalSettings.Active != "Inactive") && (Player.ArousalSettings.Active != "NoMeter")) {
 		if ((Player.ArousalSettings.OrgasmTimer != null) && (typeof Player.ArousalSettings.OrgasmTimer === "number") && !isNaN(Player.ArousalSettings.OrgasmTimer) && (Player.ArousalSettings.OrgasmTimer > 0)) {
 			DrawRect(0, 0, 1003, 1000, "#FFB0B0B0");
 			DrawRect(1003, 0, 993, 63, "#FFB0B0B0");
