@@ -22,14 +22,17 @@ function LibraryRun() {
     }
 
     DrawButton(1885, 25, 90, 90, "", "#fff", "Icons/Exit.png", TextGet("Exit"));
-    DrawButton(1885, 145, 90, 90, "", "#fff", "Icons/Book.png", TextGet("Read"));
+    DrawButton(1885, 145, 90, 90, "", "#fff", "Icons/Character.png", TextGet("Profile"));
+    DrawButton(1885, 265, 90, 90, "", "#fff", "Icons/Book.png", TextGet("Read"));
 }
 
 function LibraryClick() {
     // Exit Button
     if (MouseIn(1885, 25, 90, 90)) CommonSetScreen("Room", "MainHall");
+    // Profile Button
+    else if (MouseIn(1889, 145, 90, 90)) InformationSheetLoadCharacter(Player);
     // Read a book
-    else if (MouseIn(1889, 145, 90, 90)) LibrarySetBookSelectionScreen();
+    else if (MouseIn(1889, 265, 90, 90)) LibrarySetBookSelectionScreen();
     // Librarian
     if (LibraryCharacter && MouseIn(500, 0, 500, 1000)) CharacterSetCurrent(LibraryCharacter);
 }
