@@ -19,7 +19,7 @@ async function generateChangelogs() {
     const versions = parseVersionsFromMarkdown(sourceMarkdown);
     await Promise.all([
         generateChangelogHtml(trimmedMarkdown, versions),
-        generateBookMarkdown(trimmedMarkdown, versions)
+        generateBookMarkdown(trimmedMarkdown, versions),
     ]);
 }
 
@@ -38,11 +38,12 @@ async function generateChangelogHtml(trimmedMarkdown, versions) {
 }
 
 async function generateBookMarkdown(trimmedMarkdown, versions) {
-    const bookPath = path.join(bcRoot, "Assets/Books/Markdown/BondageClubThroughTheAges.md");
+    const bookPath = path.join(bcRoot, "Assets/Books/Markdown/BondageClubThroughTheAges/BondageClubThroughTheAges.md");
     const bookMarkdown = "# Bondage Club Through The Ages\n\n"
         + "***\n\n"
         + "_A brief history of the Bondage Club_\n\n"
         + "##### Table of Contents\n\n"
+        + "* [Introduction](#introduction)\n"
         + `${generateMarkdownToc(versions)}\n\n`
         + "***\n\n"
         + `## Introduction\n\n`

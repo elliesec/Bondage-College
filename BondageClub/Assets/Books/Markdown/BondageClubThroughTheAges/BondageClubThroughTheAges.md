@@ -6,6 +6,7 @@ _A brief history of the Bondage Club_
 
 ##### Table of Contents
 
+* [Introduction](#introduction)
 * [R63 (Current)](#r63)
 * [R62](#r62)
 * [R61](#r61)
