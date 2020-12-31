@@ -19,9 +19,9 @@ function BookLoadAll() {
     BookDefinitions.forEach((bookDef) => Books.push(new Book(bookDef)));
 
     // Initialise the text caches for book names, authors and tags
-    BookNames = new TextCache("Assets/Books/Books.csv");
-    BookAuthors = new TextCache("Assets/Books/Authors.csv");
-    BookTags = new TextCache("Assets/Books/Tags.csv");
+    BookNames = new TextCache("Books/Books.csv");
+    BookAuthors = new TextCache("Books/Authors.csv");
+    BookTags = new TextCache("Books/Tags.csv");
 
     // Register cache rebuild listeners so that books are translated on language changes
     BookNames.onRebuild(BookLoadNames);

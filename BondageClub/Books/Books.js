@@ -21,7 +21,7 @@ const BookDefinitions = [
     },
     {
         name: "BoundToTheFuture",
-        author: "BCDevTeam",
+        author: "KCorp",
         tags: [BookTag.INFO],
     },
 ];

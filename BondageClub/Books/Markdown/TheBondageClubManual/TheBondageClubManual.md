@@ -52,7 +52,7 @@ Once again, welcome to the Bondage Club, and we hope you enjoy your membership!
 
 Every member of the club receives their own club account which can be accessed via the club's intranet. Whilst browsing the club's pages, you will frequently see the following icon:
 
-![Character Profile Icon](../../../../Icons/Character.png)
+![Character Profile Icon](../../../Icons/Character.png)
 
 Clicking this icon will take you to your personal club profile, where you will be able to see:
 
@@ -74,7 +74,7 @@ As a new club member, your title options will be limited, but as you work on you
 
 You can view or change your current title from your club profile page by clicking the following icon:
 
-![Club Titles Icon](../../../../Icons/Title.png)
+![Club Titles Icon](../../../Icons/Title.png)
 
 Under certain circumstances, the club's systems may automatically change club members' titles. For example, registering yourself as a club slave will automatically give you the "Club Slave" title for the duration of your service. Similarly, when a patient escapes from the Asylum, their title will be changed to "Escaped Patient" in order to help Asylum nurses to identify and apprehend the patient.
 
@@ -88,7 +88,7 @@ Similarly, the club contains a number of additional services and groups that cat
 
 Your skills and reputations are tracked by the club's system, and you are able to view your current values on the second page of your member profile. You can switch pages in your profile using the "Next" button in the bottom right of your profile:
 
-![Next Page Icon](../../../../Icons/Next.png)
+![Next Page Icon](../../../Icons/Next.png)
 
 The next section goes into some details on the skills that we monitor at the club, and how you can improve them.
 
@@ -138,7 +138,7 @@ You don't need to fill out your biography, but we do encourage all members to fi
 
 You can view and edit your biography from your member profile page, by clicking the following button:
 
-![Biography Button Icon](../../../../Icons/Introduction.png)
+![Biography Button Icon](../../../Icons/Introduction.png)
 
 ***
 
@@ -146,13 +146,21 @@ You can view and edit your biography from your member profile page, by clicking 
 
 [Back to the contents](#table-of-contents)
 
+The Bondage Club prides itself on providing for each of its members' specific needs and kinks, and you can customize your club experience by filling out your member preferences forms, available to access by clicking this button in your member profile page:
+
+![Preferences Icon](../../../Icons/Preference.png)
+
+The forms are split into individual categories to make it easy for you to find and modify the preferences that you want. We know that form-filling can be boring, but we strongly encourage members to take the time to express their preferences, as this will allow us to tailor your Bondage Club experience to better suit your needs and kinks.
+
+In this section, we will cover each of the preference categories in detail, and give you an overview of how each preference will affect your club experience.
+
 * Cover each of the preference screens, and fully describe what each of the preferences do in each screen
 
-### General Preferences
+### ![General Preferences Icon](../../../Icons/General.png) General Preferences
 
 [Back to the contents](#table-of-contents)
 
-### Difficulty Preferences
+### ![Difficulty Preferences Icon](../../../Icons/Difficulty.png) Difficulty Preferences
 
 [Back to the contents](#table-of-contents)
 

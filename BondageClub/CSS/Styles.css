@@ -197,6 +197,11 @@ TextArea {
     margin: 0 0 0.5em;
 }
 
+#BookBox h1 img, #BookBox h2 img, #BookBox h3 img, #BookBox h4 img, #BookBox h5 img, #BookBox h6 img {
+	height: 1em;
+	vertical-align: middle;
+}
+
 #BookBox h1 {
     font-size: 1.8em;
 }

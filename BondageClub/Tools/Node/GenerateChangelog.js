@@ -38,7 +38,7 @@ async function generateChangelogHtml(trimmedMarkdown, versions) {
 }
 
 async function generateBookMarkdown(trimmedMarkdown, versions) {
-    const bookPath = path.join(bcRoot, "Assets/Books/Markdown/BondageClubThroughTheAges/BondageClubThroughTheAges.md");
+    const bookPath = path.join(bcRoot, "Books/Markdown/BondageClubThroughTheAges/BondageClubThroughTheAges.md");
     const bookMarkdown = "# Bondage Club Through The Ages\n\n"
         + "***\n\n"
         + "_A brief history of the Bondage Club_\n\n"
