@@ -72,7 +72,7 @@ Club titles are a way to let other members know a little bit about you (as well 
 
 As a new club member, your title options will be limited, but as you work on your skills and improve your reputation with the various club services (see [Skills and Reputation](#skills-and-reputation)), more titles will become available to you.
 
-You view or change your current title from your club profile page by clicking the following icon:
+You can view or change your current title from your club profile page by clicking the following icon:
 
 ![Club Titles Icon](../../../../Icons/Title.png)
 
@@ -82,9 +82,9 @@ Under certain circumstances, the club's systems may automatically change club me
 
 [Back to the contents](#table-of-contents)
 
-Aside from being fun, bondage and escape artistry can be art forms in their own right, and at the club, we encourage members to learn and hone their skills. As you improve in these skills, we will continually assess and track your skills on your user profile.
+Aside from being fun, bondage and escape artistry can be art forms in their own right, and at the club we encourage members to learn and hone these skills. As your skills progress, we will continually assess them and they will be recorded on your user profile.
 
-Similarly, the club contains a number of additional services and groups that cater to a wide variety of kinks. As you get involved in these various groups, your reputation in these groups will change. As we get to know our club members, we will also get a better gauge of their dominance or submissiveness.
+Similarly, the club contains a number of additional services and groups that cater to a wide variety of kinks. As you get involved in these various groups, your reputation in within them will change. As we get to know our club members, we will also get a better gauge of their dominance or submissiveness, and keep track of these in order to better serve your needs.
 
 Your skills and reputations are tracked by the club's system, and you are able to view your current values on the second page of your member profile. You can switch pages in your profile using the "Next" button in the bottom right of your profile:
 
@@ -112,7 +112,7 @@ There are two main ways of improving your evasion skill:
 
 #### The Self-Bondage Skill
 
-The self-bondage skill represents your skill at applying bondage to yourself. AS you improve your self-bondage, you will be able to bind yourself with a wider variety of items, and more advanced techniques will become available to you.
+The self-bondage skill represents your skill at applying bondage to yourself. AS you improve your self-bondage, you will be able to bind yourself with a wider variety of items, and more advanced techniques will become available to you. Remember that it's often easier to bind yourself than it is to escape! If you ever find yourself stuck in bondage, the Maid Sorority offers a rescue service - just ring the bell in the main hall.
 
 There are two main ways of improving your self-bondage skill:
 
@@ -131,6 +131,14 @@ There are two main ways to improve your willpower skill:
 ### Your club biography
 
 [Back to the contents](#table-of-contents)
+
+The club also offers you a place to write a little bit about yourself: your club biography. Members' biographies are publicly viewable, and intended to help members to get to know a bit about each other before engaging in play.
+
+You don't need to fill out your biography, but we do encourage all members to fill them out if they get the chance. If you're not sure what to write in there - a summary of your kinks and limits is always a good starting point!
+
+You can view and edit your biography from your member profile page, by clicking the following button:
+
+![Biography Button Icon](../../../../Icons/Introduction.png)
 
 ***
 
