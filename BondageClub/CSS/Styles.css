@@ -234,3 +234,9 @@ TextArea {
 	padding: 0.5em 1em;
 	border: 1px solid rgba(0, 0, 0, 0.1);
 }
+
+#BookBox code {
+	padding: 0.1em 0.25em;
+	background-color: rgba(0,0,0,0.1);
+	border: 1px solid rgba(0,0,0,0.1);
+}

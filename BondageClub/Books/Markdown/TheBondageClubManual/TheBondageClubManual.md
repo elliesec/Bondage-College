@@ -158,6 +158,8 @@ In this section, we will cover each of the preference categories in detail, and 
 
 [Back to the contents](#table-of-contents)
 
+The preferences on this page cover a variety of options to help you to customize your club experience.
+
 #### Character label color
 
 This determines the color in which your member name will appear beneath your character, as well as in chatroom logs. You directly enter a hexadecimal color code (e.g. `#d81f1f` or `#86F`), or you can use the color picker tool by clicking this button:
@@ -201,7 +203,7 @@ Unchecking this option can save you the hassle of having your kinky activities d
 
 #### Cannot enter single-player rooms when restrained
 
-We know some of our club members enjoy feeling truly helpless, and whilst the club's staff strive to be as helpful as possible, this can sometimes take away from that feeling of helplessness. Therefore, selecting this option in your member preferences will bar you from entering most club rooms and getting help from club staff when you're bound. Instead, you'll have to rely on other club members by visiting [the chatrooms](#the-chatrooms).
+We know some of our club members enjoy feeling truly helpless, and whilst the club's staff strive to be as helpful as possible, this can sometimes take away from that feeling of helplessness. Therefore, selecting this option in your member preferences will bar you from entering most club rooms and getting help from club staff when you're bound. Instead, you'll have to rely on other club members by visiting [the chatrooms](#the-chatrooms) (the maid rescue service will still be available from the main hall however).
 
 ### ![Difficulty Preferences Icon](../../../Icons/Difficulty.png) Difficulty Preferences
 

@@ -33,6 +33,8 @@ function LibraryClick() {
     else if (MouseIn(1889, 145, 90, 90)) InformationSheetLoadCharacter(Player);
     // Read a book
     else if (MouseIn(1889, 265, 90, 90)) LibrarySetBookSelectionScreen();
+    // Player
+    else if (MouseIn(0, 0, 500, 1000)) CharacterSetCurrent(Player);
     // Librarian
     if (LibraryCharacter && MouseIn(500, 0, 500, 1000)) CharacterSetCurrent(LibraryCharacter);
 }
