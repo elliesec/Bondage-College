@@ -225,3 +225,12 @@ TextArea {
 #BookBox h6 {
     font-size: 0.9em;
 }
+
+#BookBox table {
+	border-collapse: collapse;
+}
+
+#BookBox table td, #BookBox table th {
+	padding: 0.5em 1em;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+}

@@ -9,7 +9,7 @@ let BookDefaultMarkedRenderer = null;
 
 const BookRenderer = {
     heading(text, level, raw, slugger) {
-        const slug = slugger.slug(text);
+        const slug = slugger.slug(text).trim().replaceAll(/(^-+|-+$)/g, "");
         return `
             <h${level}>
               <a id="${slug}" class="anchor" href="#${slug}"></a>

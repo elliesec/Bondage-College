@@ -26,7 +26,7 @@ _Everything you ever needed to know about the Bondage Club_
 * [Clothes and Equipment](#clothes-and-equipment)
 * [Earning Money](#earning-money)
 * [Relationships](#relationships)
-* [The Chat Rooms](#the-chat-rooms)
+* [The Chat Rooms](#the-chatrooms)
 * [Private Rooms](#private-rooms)
 * [The College](#the-college)
 
@@ -154,49 +154,92 @@ The forms are split into individual categories to make it easy for you to find a
 
 In this section, we will cover each of the preference categories in detail, and give you an overview of how each preference will affect your club experience.
 
-* Cover each of the preference screens, and fully describe what each of the preferences do in each screen
-
 ### ![General Preferences Icon](../../../Icons/General.png) General Preferences
 
 [Back to the contents](#table-of-contents)
+
+#### Character label color
+
+This determines the color in which your member name will appear beneath your character, as well as in chatroom logs. You directly enter a hexadecimal color code (e.g. `#d81f1f` or `#86F`), or you can use the color picker tool by clicking this button:
+
+![Color Picker Icon](../../../Icons/Color.png)
+
+#### Item Permission
+
+This is your global item permissions, and determines who in the club will be able to interact with you. The various options are hopefully fairly self-explanatory. Anyone not covered by these options will be unable to add, remove or modify items on you, change your clothes or initiate sexual activities with you. The available permission levels are:
+
+| Permission Level | Description |
+| --- | --- |
+| Everyone, no exceptions | Any other club member may modify your clothes and items or initiate activities, even members on your blacklist  |
+| Everyone, except blacklist | Any club member that is not on your blacklist may modify your clothes and items or initiate activities with you |
+| Owner, Lover, whitelist & Dominants | Only your club members who have a more dominant reputation than you (at least 25 points higher than yours) or who are on your whitelist may modify your clothes and items or initiate activities with you, along with your owner and lover(s), if you have the |
+| Owner, Lover and whitelist only | Only your owner, lover(s) or members on your whitelist may modify your clothes and items or initiate activities with you |
+| Owner and Lover only | Only your owner and lover(s) may modify your clothes and items or initiate activities with you |
+| Owner only | The only club member that may modify your clothes and items or initiate activities with you is your owner |
+
+If you are unfamiliar with any of the terms above, please refer to the relevant sections of this book for further information:
+* [Owner & Lover Relationships](#relationships)
+* [Member lists, including your blacklist & whitelist](#member-lists)
+
+#### Display all characters at maximum height
+
+Checking this option will ignore character height differences when displaying characters, and all characters will appear at the same height.
+
+#### Allow Safeword use
+
+Unchecking this will disable your ability to use your safeword inside chatrooms (see [Your Safeword](#your-safeword) for details).
+
+**Warning:** Disabling this preference will prevent you from being able to get out of potentially unwanted situations, including those caused by trolls and abusive club members. Be absolutely sure this is what you want before unchecking it.
+
+#### Maids come automatically when restrained
+
+The Maid Sorority monitors the main hall and will dispatch maids to rescue club members who have managed to get themselves stuck in bondage. However, if you uncheck this option, they will not immediately dispatch a maid when seeing you in trouble in the main hall.
+
+Unchecking this option can save you the hassle of having your kinky activities disturbed by the maids, and saves the sorority from wasting time dispatching maids when they aren't needed. Note that even if you have unchecked this preference, you can still call a maid when you're in trouble by ringing the bell in the main hall, which looks something like this:
+
+![Maid Service Icon](../../../Icons/ServiceBell.png)
+
+#### Cannot enter single-player rooms when restrained
+
+We know some of our club members enjoy feeling truly helpless, and whilst the club's staff strive to be as helpful as possible, this can sometimes take away from that feeling of helplessness. Therefore, selecting this option in your member preferences will bar you from entering most club rooms and getting help from club staff when you're bound. Instead, you'll have to rely on other club members by visiting [the chatrooms](#the-chatrooms).
 
 ### ![Difficulty Preferences Icon](../../../Icons/Difficulty.png) Difficulty Preferences
 
 [Back to the contents](#table-of-contents)
 
-### Restriction Preferences
+### ![Restriction Preferences Icon](../../../Icons/Restriction.png) Restriction Preferences
 
 [Back to the contents](#table-of-contents)
 
-### Chat Preferences
+### ![Chat Preferences Icon](../../../Icons/Chat.png) Chat Preferences
 
 [Back to the contents](#table-of-contents)
 
-### Audio Preferences
+### ![Audio Preferences Icon](../../../Icons/Audio.png) Audio Preferences
 
 [Back to the contents](#table-of-contents)
 
-### Arousal Preferences
+### ![Arousal Preferences Icon](../../../Icons/Arousal.png) Arousal Preferences
 
 [Back to the contents](#table-of-contents)
 
-### Security Preferences
+### ![Security Preferences Icon](../../../Icons/Security.png) Security Preferences
 
 [Back to the contents](#table-of-contents)
 
-### Online Preferences
+### ![Online Preferences Icon](../../../Icons/Online.png) Online Preferences
 
 [Back to the contents](#table-of-contents)
 
-### Item Visibility Preferences
+### ![Item Visibility Preferences Icon](../../../Icons/Visibility.png) Item Visibility Preferences
 
 [Back to the contents](#table-of-contents)
 
-### Immersion Preferences
+### ![Immersion Preferences Icon](../../../Icons/Immersion.png) Immersion Preferences
 
 [Back to the contents](#table-of-contents)
 
-### Graphics Preferences
+### ![Graphics Preferences Icon](../../../Icons/Graphics.png) Graphics Preferences
 
 [Back to the contents](#table-of-contents)
 
@@ -222,12 +265,28 @@ In this section, we will cover each of the preference categories in detail, and 
 
 [Back to the contents](#table-of-contents)
 
+### Owner/sub Relationships
+
+### Lover Relationships
+
 * D/s relationships
 * Collaring, owner rules
 * Lover relationships
 * Lover rules
 
-## The Chat Rooms
+## The Chatrooms
+
+### Your Safeword
+
+### Member Lists
+
+#### Your Friend List
+
+#### Your Whitelist
+
+#### Your Blacklist
+
+#### Your Ghostlist
 
 * Chat basics - normal chat, whispers, emotes, OOC
 * Chat room commands
