@@ -60,6 +60,7 @@ Clicking this icon will take you to your personal club profile, where you will b
 * Your club member number
 * Your club title (see [Club Titles](#club-titles))
 * Your current account balance
+* Your current difficulty mode (see [Difficulty Preferences](#difficulty-preferences))
 * Details of your registered relationships (see [Relationships](#relationships))
 * Your club reputations
 * Your club skills
@@ -209,6 +210,40 @@ We know some of our club members enjoy feeling truly helpless, and whilst the cl
 
 [Back to the contents](#table-of-contents)
 
+The Difficulty Preferences page gives club members a selection of preset experiences to choose from. Each difficulty preference encompasses a wide range of changes to your club experience. Some of the difficulty choices on this page will allow you to fine-tune your club experience in the other preference pages. However, the more intense difficulties will lock you into certain choices. 
+
+Your choice of difficulty is not something to be taken lightly, so we encourage members to read the descriptions below and ensure they fully understand everything that a given difficulty entails before committing to it. Be aware that after changing difficulty, you may not be able to change back immediately (see [Changing Difficulties](#changing-difficulties)).
+
+#### Roleplay Difficulty
+
+Roleplay difficulty is intended for members that want a more relaxed Bondage Club experience. This mode will allow you to freely customize your club experience, and bypass certain restrictions (see [Restriction Preferences](#restriction-preferences)).
+
+#### Regular Difficulty
+
+Regular Difficulty is the default Bondage Club experience. Basic restrictions (see [Restriction Preferences](#restriction-preferences)) are enforced, but you are otherwise able to customize your club experience to your liking.
+
+#### Hardcore Difficulty
+
+Hardcore difficulty is for members that want a stricter Bondage Club experience. When you choose this difficulty:
+* The Maid Sorority's rescue service will no longer release you
+* Club staff in the various club rooms won't help you when you're bound - you'll have to rely on other members by visiting [the chatrooms](#the-chatrooms).
+* You won't have access to [your safeword](#your-safeword) when in chatrooms
+
+#### Extreme Difficulty
+
+Extreme difficulty is for members that want the strictest Bondage Club experience possible. This difficulty includes all of the restrictions of [Hardcore difficulty](#hardcore-difficulty), and in addition:
+* You cannot block the use of individual items with [item permissions](#item-permissions)
+* If you have been [fully collared](#full-collaring), you will not be allowed to break your collar
+
+#### Changing Difficulties
+
+To encourage members to think carefully about their selection of difficulty, we have some restrictions in place around changing difficulty:
+* The Roleplay and Regular difficulties may be selected at any time without restriction
+* The Hardcore and Extreme difficulties are only available to members that have been with the club for at least 7 days
+* You _may not_ switch to Hardcore or Extreme difficulty if you have changed your difficulty within the last 7 days
+
+Remember that the length of time that you have had been in your current difficulty will be automatically tracked and recorded on your [club member profile](#your-club-account-and-records), and changing difficulty will reset this count.
+
 ### ![Restriction Preferences Icon](../../../Icons/Restriction.png) Restriction Preferences
 
 [Back to the contents](#table-of-contents)
@@ -256,6 +291,8 @@ We know some of our club members enjoy feeling truly helpless, and whilst the cl
 * Complex items - vibrators & futuristic items (reference other books)
 * Unique/gated gear - what it is, and where to find it
 
+### Item Permissions
+
 ## Earning money
 
 [Back to the contents](#table-of-contents)
@@ -268,6 +305,10 @@ We know some of our club members enjoy feeling truly helpless, and whilst the cl
 [Back to the contents](#table-of-contents)
 
 ### Owner/sub Relationships
+
+#### Ownership Trials
+
+#### Full Collaring
 
 ### Lover Relationships
 
