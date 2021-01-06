@@ -163,7 +163,7 @@ The preferences on this page cover a variety of options to help you to customize
 
 #### Character label color
 
-This determines the color in which your member name will appear beneath your character, as well as in chatroom logs. You directly enter a hexadecimal color code (e.g. `#d81f1f` or `#86F`), or you can use the color picker tool by clicking this button:
+This determines the color in which your member name will appear beneath your character, as well as in chatroom logs. You can directly enter a hexadecimal color code (e.g. `#d81f1f` or `#86F`) or use the color picker tool by clicking this button:
 
 ![Color Picker Icon](../../../Icons/Color.png)
 
@@ -248,9 +248,37 @@ Remember that the length of time that you have had been in your current difficul
 
 [Back to the contents](#table-of-contents)
 
+The Restriction Preferences section allows you to bypass some of the restrictions that are normally placed on you when inside the club. Generally, the club enforces these restrictions on all members, but members that have selected the [Roleplay Difficulty](#roleplay-difficulty) may disable the restrictions in this section for a more relaxed club experience.
+
+#### Bypass the struggling mini-game
+
+This will make struggling out of items much easier. Be aware that if an item would usually be inescapable for you (challenge rating 7 or higher), you will still be unable to escape it. However, items with a challenge rating of 6 or below will be trivial to escape.
+
+#### Cannot be slowed down from leaving a room
+
+Under some conditions (for example when wearing items like hobble skirts and some ankle restraints), you may be slowed down from leaving a chatroom. Selecting this preference will allow you to leave chatrooms immediately, regardless of whether you have been slowed down or not.
+
 ### ![Chat Preferences Icon](../../../Icons/Chat.png) Chat Preferences
 
 [Back to the contents](#table-of-contents)
+
+The Chat Preferences allow you to customize the way that you view chatrooms, and also to filter out certain types of chatroom message.
+
+| Preference | Description |
+| --- | --- |
+| Color theme | Allows you to change the color theme for the chat log |
+| Enter/Leave message style | Allows you to change the style of (or hide completely) chatroom messages that are triggered when another club member enters or leaves the chatroom |
+| Display member numbers | Allows you to change how and if club member numbers are displayed next to chatroom messages |
+| Display timestamps | Toggles whether or not timestamps will be displayed alongside chatroom messages |
+| Color names\* | Toggles whether or not names should be colored (using the sender's [label color](#character-label-color)) |
+| Color actions\* | Toggles whether or not action messages (like equipping/removing items) should be colored |
+| Color emotes\* | Toggles whether or not [emotes](#chat-basics) should be colored |
+| Show sexual activities & orgasms | Toggles whether or not sexual activities and orgasms should be displayed in the chat log |
+| Show all automatic messages | If toggled off, automated messages (for example from automatic vibrator modes) will not be shown in the chat log unless they directly concern you |
+| Preserve whitespace in messages | Determines whether multiple consecutive spaces should be truncated to a single space in the chat log |
+| Color activities\* | Toggles whether or not sexual activities (e.g. spanking/cuddling/kissing) should be colored |
+
+\* **Note:** Under certain circumstances (notably with certain sensory deprivation preferences) chatroom messages may not be colored regardless of your preferences here.
 
 ### ![Audio Preferences Icon](../../../Icons/Audio.png) Audio Preferences
 
@@ -318,6 +346,8 @@ Remember that the length of time that you have had been in your current difficul
 * Lover rules
 
 ## The Chatrooms
+
+### Chat Basics
 
 ### Your Safeword
 
