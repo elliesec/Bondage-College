@@ -446,7 +446,7 @@ function CommonMemoize(func) {
 	var memoized = function () {
 		var index = [];
 		for (var i = 0; i < arguments.length; i++) {
-			if (typeof arguments[i] !== "object") {
+			if (typeof arguments[i] === "object") {
 				index.push(JSON.stringify(arguments[i]));
 			} else {
 				index.push(String(arguments[i]));
