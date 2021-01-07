@@ -442,15 +442,14 @@ function CommonDebounce(func, wait) {
  */
 function CommonMemoize(func) {
 	var memo = {};
-	var slice = Array.prototype.slice;
 
 	var memoized = function () {
 		var index = [];
 		for (var i = 0; i < arguments.length; i++) {
-			if (typeof arguments[i] === "object") {
+			if (typeof arguments[i] !== "object") {
 				index.push(JSON.stringify(arguments[i]));
 			} else {
-				index.push(slice.call(arguments[i]));
+				index.push(String(arguments[i]));
 			}
 		} // for
 		if (!(index in memo)) {
