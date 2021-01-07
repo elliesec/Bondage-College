@@ -308,6 +308,8 @@ The Chat Preferences allow you to customize the way that you view chatrooms, and
 
 [Back to the contents](#table-of-contents)
 
+***
+
 ## Clothes and Equipment
 
 [Back to the contents](#table-of-contents)
@@ -321,12 +323,16 @@ The Chat Preferences allow you to customize the way that you view chatrooms, and
 
 ### Item Permissions
 
+***
+
 ## Earning money
 
 [Back to the contents](#table-of-contents)
 
 * List of places you can earn money
 * Point out unique opportunities for subs/dommes
+
+***
 
 ## Relationships
 
@@ -345,6 +351,8 @@ The Chat Preferences allow you to customize the way that you view chatrooms, and
 * Lover relationships
 * Lover rules
 
+***
+
 ## The Chatrooms
 
 ### Chat Basics
@@ -361,13 +369,17 @@ The Chat Preferences allow you to customize the way that you view chatrooms, and
 
 #### Your Ghostlist
 
+### Private Chatrooms
+
 * Chat basics - normal chat, whispers, emotes, OOC
 * Chat room commands
 * Friend/White/Black/Ghost lists
-* Private chat rooms
+* Private chatrooms
 * Beeping & leashing
 
 [Back to the contents](#table-of-contents)
+
+***
 
 ## Private Rooms
 
@@ -375,6 +387,8 @@ The Chat Preferences allow you to customize the way that you view chatrooms, and
 
 * What is a private room?
 * Wardrobes
+
+***
 
 ## The College
 
