@@ -4,6 +4,7 @@ var DialogTextDefault = "";
 var DialogTextDefaultTimer = -1;
 var DialogProgress = -1;
 var DialogColor = null;
+var DialogExpressionColor = null;
 var DialogColorSelect = null;
 var DialogPreviousCharacterData = {};
 var DialogProgressStruggleCount = 0;
@@ -460,7 +461,7 @@ function DialogLeaveItemMenu() {
 	AudioDialogStop();
 	ColorPickerEndPick();
 	ColorPickerRemoveEventListener();
-	ItemColorExit();
+	ItemColorCancelAndExit();
 }
 
 /**
@@ -1812,12 +1813,12 @@ function DialogDrawExpressionMenu() {
  * @returns {void} - Nothing
  */
 function DialogClickExpressionMenu() {
-	if (DialogColor != null) ItemColorCloseColorPicker(true);
 	if (MouseIn(20, 50, 90, 90)) {
 		DialogFacialExpressions.forEach(FE => {
 			CharacterSetFacialExpression(Player, FE.Group);
 			FE.CurrentExpression = null;
 		});
+		if (DialogExpressionColor != null) ItemColorSaveAndExit();
 	} else if (MouseIn(120, 50, 90, 90)) {
 		const CurrentExpression = DialogFacialExpressions.find(FE => FE.Group == "Eyes").CurrentExpression;
 		const EyesExpression = WardrobeGetExpression(Player);
@@ -1838,9 +1839,11 @@ function DialogClickExpressionMenu() {
 			const originalColor = Item.Color;
 			Player.FocusGroup = AssetGroupGet(Player.AssetFamily, GroupName);
 			DialogColor = "";
+			DialogExpressionColor = "";
 			ItemColorLoad(Player, Item, 1300, 25, 675, 950);
 			ItemColorOnExit((save) => {
 				DialogColor = null;
+				DialogExpressionColor = null;
 				Player.FocusGroup = null;
 				if (save && !CommonColorsEqual(originalColor, Item.Color)) {
 					ServerPlayerAppearanceSync();
@@ -1853,6 +1856,7 @@ function DialogClickExpressionMenu() {
 		for (let I = 0; I < DialogFacialExpressions.length; I++) {
 			if (MouseIn(20, 185 + 100 * I, 90, 90)) {
 				DialogFacialExpressionsSelected = I;
+				if (DialogExpressionColor != null) ItemColorSaveAndExit();
 			}
 		}
 
