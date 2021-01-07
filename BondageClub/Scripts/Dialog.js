@@ -1775,6 +1775,9 @@ function DialogDrawExpressionMenu() {
 
 	// Draw the expression groups
 	DrawText(DialogFind(Player, "FacialExpression"), 165, 25, "White", "Black");
+	if (typeof DialogFacialExpressionsSelected === 'number' && DialogFacialExpressionsSelected >= 0 && DialogFacialExpressionsSelected < DialogFacialExpressions.length && DialogFacialExpressions[DialogFacialExpressionsSelected].Appearance.Asset.Group.AllowColorize && DialogFacialExpressions[DialogFacialExpressionsSelected].Group !== "Eyes") {
+		DrawButton(420, 50, 90, 90, "", "White", "Icons/ColorPick.png", DialogFind(Player, "ColorChange"));
+	}
 	DrawButton(320, 50, 90, 90, "", "White", "Icons/BlindToggle" + DialogFacialExpressionsSelectedBlindnessLevel + ".png", DialogFind(Player, "BlindToggleFacialExpressions"));
 	DrawButton(220, 50, 90, 90, "", "White", "Icons/WinkL.png", DialogFind(Player, "WinkLFacialExpressions"));
 	DrawButton(120, 50, 90, 90, "", "White", "Icons/WinkR.png", DialogFind(Player, "WinkRFacialExpressions"));
@@ -1819,6 +1822,22 @@ function DialogClickExpressionMenu() {
 		DialogFacialExpressionsSelectedBlindnessLevel += 1;
 		if (DialogFacialExpressionsSelectedBlindnessLevel > 3)
 			DialogFacialExpressionsSelectedBlindnessLevel = 1;
+	} else if (MouseIn(420, 50, 90, 90)) {
+		if (typeof DialogFacialExpressionsSelected === 'number' && DialogFacialExpressionsSelected >= 0 && DialogFacialExpressionsSelected < DialogFacialExpressions.length && DialogFacialExpressions[DialogFacialExpressionsSelected].Appearance.Asset.Group.AllowColorize && DialogFacialExpressions[DialogFacialExpressionsSelected].Group !== "Eyes") {
+			const GroupName = DialogFacialExpressions[DialogFacialExpressionsSelected].Appearance.Asset.Group.Name;
+			const Item = InventoryGet(Player, GroupName);
+			const originalColor = Item.Color;
+			Player.FocusGroup = AssetGroupGet(Player.AssetFamily, GroupName);
+			DialogColor = "";
+			ItemColorLoad(Player, Item, 1300, 25, 675, 950);
+			ItemColorOnExit((save) => {
+				DialogColor = null;
+				Player.FocusGroup = null;
+				if (save && !CommonColorsEqual(originalColor, Item.Color)) {
+					ServerPlayerAppearanceSync();
+				}
+			});
+		}
 	} else {
 		// Expression category buttons
 		for (let I = 0; I < DialogFacialExpressions.length; I++) {
