@@ -460,6 +460,7 @@ function DialogLeaveItemMenu() {
 	AudioDialogStop();
 	ColorPickerEndPick();
 	ColorPickerRemoveEventListener();
+	ItemColorExit();
 }
 
 /**
