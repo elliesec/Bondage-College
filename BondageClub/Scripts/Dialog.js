@@ -1836,6 +1836,7 @@ function DialogClickExpressionMenu() {
 				Player.FocusGroup = null;
 				if (save && !CommonColorsEqual(originalColor, Item.Color)) {
 					ServerPlayerAppearanceSync();
+					ChatRoomCharacterItemUpdate(Player, GroupName);
 				}
 			});
 		}
