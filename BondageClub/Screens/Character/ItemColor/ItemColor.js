@@ -332,6 +332,10 @@ function ItemColorExitClick() {
 	}
 }
 
+/**
+ * Saves any item color changes and exits the item color screen completely
+ * @returns {void} - Nothing
+ */
 function ItemColorSaveAndExit() {
 	if (ItemColorCurrentMode === ItemColorMode.COLOR_PICKER) {
 		ElementRemove("InputColor");
@@ -340,6 +344,10 @@ function ItemColorSaveAndExit() {
 	ItemColorFireExit(true);
 }
 
+/**
+ * Discards any item color changes and exits the item color screen completely
+ * @returns {void} - Nothing
+ */
 function ItemColorCancelAndExit() {
 	if (ItemColorBackup && ItemColorCharacter) {
 		Object.assign(ItemColorItem, AppearanceItemParse(ItemColorBackup));
