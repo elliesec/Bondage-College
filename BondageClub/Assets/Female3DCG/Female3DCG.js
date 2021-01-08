@@ -3589,13 +3589,14 @@ var AssetFemale3DCG = [
 				{ Name: "Wheels" }
 			] },
 			{
-				Name: "VacCube", Fetish: ["Latex"], Value: 300, Difficulty: 50, Top: -70, Left: 0, SelfBondage: 4, Time: 20,
-				Prerequisite: ["NotKneeling", "AllFours", "NotSuspended", "NotHogtied", "NotKneelingSpread", "NoItemArms", "LegsOpen", "NoItemHands", "NoItemLegs", "NoHorse", "NoItemFeet"],
-				Hide: ["ItemNeckAccessories", "ItemNeckRestraints", "HairBack"],
-				SetPose: ["Yoked", "BaseLower"],
-				Effect: ["Prone", "Freeze", "Block", "Mounted"],
-				Block: ["ItemArms", "ItemBoots", "ItemBreast", "ItemButt", "ItemFeet", "ItemHands", "ItemLegs", "ItemMisc", "ItemAddon", "ItemNeck", "ItemNeckAccessories", "ItemNeckRestraints", "ItemNipples", "ItemNipplesPiercings", "ItemPelvis", "ItemTorso", "ItemVulva", "ItemVulvaPiercings"],
-				RemoveAtLogin: true,
+				Name: "VacCube", Fetish: ["Latex"], Value: 250, Difficulty: 50, Priority: 36, Top: -70, Left: 0, SelfBondage: 4, Time: 20, RemoveAtLogin: true, DefaultColor: "#480000",
+				Prerequisite: ["NoItemArms", "NoItemLegs", "AllFours", "NotSuspended", "NotHogtied", "NotKneelingSpread", "NotYoked", "LegsOpen", "NoHorse", "NoItemFeet"],
+				Hide: ["BodyLower", "Hands", "HairBack", "Cloth", "ClothLower", "ClothAccessory", "Necklace", "Suit", "SuitLower", "Bra", "Panties", "Socks", "RightAnklet", "LeftAnklet", "Shoes", "Gloves", "TailStraps", "Wings", "ItemFeet", "ItemLegs", "ItemVulva", "ItemVulvaPiercings", "ItemButt", "ItemPelvis", "ItemTorso", "ItemNipples", "ItemNipplesPiercings", "ItemBreast", "ItemArms", "ItemHands", "ItemBoots"],
+				SetPose: ["BaseUpper", "BaseLower"],
+				Effect: ["Prone", "Freeze", "Block"],
+				Block: ["ItemArms", "ItemBoots", "ItemBreast", "ItemButt", "ItemFeet", "ItemHands", "ItemLegs", "ItemNipples", "ItemNipplesPiercings", "ItemPelvis", "ItemTorso", "ItemVulva", "ItemVulvaPiercings", "ItemAddon"],
+				OverrideHeight: { Height: -570, Priority: 60, HeightRatioProportion: 0.95 },
+				Alpha: [{Group: ["BodyUpper"], Masks: [[0, 225, 500, 775]]}],
 				Layer: [
 					{ Name: "Latex", ParentGroup: "BodyUpper" },
 					{ Name: "Highlights", ParentGroup: null, AllowColorize: false },
