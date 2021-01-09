@@ -10,9 +10,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-01-07
+Changelog last updated: 2021-01-09
 
-Last recorded PR: [#1853](https://github.com/Ben987/Bondage-College/pull/1853)
+Last recorded PR: [#1858](https://github.com/Ben987/Bondage-College/pull/1858)
 
 ## [R64]
 
@@ -34,9 +34,10 @@ Last recorded PR: [#1853](https://github.com/Ben987/Bondage-College/pull/1853)
     * Futuristic Chastity Panties
     * Futuristic Breast Harness
     * Futuristic Harness
-* Emily R - Added 2 new items ([#1817](https://github.com/Ben987/Bondage-College/pull/1817), [#1843](https://github.com/Ben987/Bondage-College/pull/1843)) 
+* Emily R - Added 3 new items ([#1817](https://github.com/Ben987/Bondage-College/pull/1817), [#1843](https://github.com/Ben987/Bondage-College/pull/1843), [#1857](https://github.com/Ben987/Bondage-College/pull/1857)) 
     * Funnel Gag
     * Headphones
+    * Flippers
 * Nina - Allowed the pose menu to be used inside the photography room, and the ability to pose the photography room NPC ([#1764](https://github.com/Ben987/Bondage-College/pull/1764), [#1772](https://github.com/Ben987/Bondage-College/pull/1772))
 * Sekkmer/Ellie - Added the ability for owners to add lover locks to subs with lovers ([#1387](https://github.com/Ben987/Bondage-College/pull/1387))
     * Players can now enforce some rules upon their lover(s), similar to owner rules
@@ -83,6 +84,8 @@ Last recorded PR: [#1853](https://github.com/Ben987/Bondage-College/pull/1853)
 * Nina - Fixed an issue when players get banned/kicked from a chatoom whilst in another screen ([#1841](https://github.com/Ben987/Bondage-College/pull/1841))
 * Ellie - Fixed an issue with the Deny and Edge vibrator modes not working in combination with some items ([#1842](https://github.com/Ben987/Bondage-College/pull/1842))
 * Nina - Fixed the longstanding issue of tails not being visible when hogtied ([#1847](https://github.com/Ben987/Bondage-College/pull/1847))
+* Jomshir - Fixed an issue where disconnects would sometimes result in the relog screen not working properly ([#1856](https://github.com/Ben987/Bondage-College/pull/1856))
+* Nina - Fixed a bug where the photography studio NPC wouldn't pose correctly when telling her to relax her arms ([#1858](https://github.com/Ben987/Bondage-College/pull/1858))
 
 ### [Technical]
 
