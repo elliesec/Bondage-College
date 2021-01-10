@@ -407,9 +407,10 @@ function ServerValidateProperties(C, Item, Validation) {
 	}
 
 	// Removes any type that's not allowed on the item
-	if ((Item.Property != null) && (Item.Property.Type != null))
-		if ((Item.Asset.AllowType == null) || (Item.Asset.AllowType.indexOf(Item.Property.Type) < 0))
-			delete Item.Property.Type;
+	if ((Item.Property != null) && (Item.Property.Type != null) && !AssetIsAssetTypeAllowed(Item.Asset, Item.Property.Type)) {
+		if (Item.Asset.DefaultType) Item.Property.Type = Item.Asset.DefaultType;
+		else delete Item.Property.Type;
+	}
 
 	// Remove impossible combinations
 	if ((Item.Property != null) && (Item.Property.Type == null) && (Item.Property.Restrain == null))

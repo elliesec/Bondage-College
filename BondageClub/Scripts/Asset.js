@@ -164,6 +164,7 @@ function AssetAdd(NewAsset) {
 		AllowColorizeAll: typeof NewAsset.AllowColorizeAll === 'boolean' ? NewAsset.AllowColorizeAll : true,
 		AvailableLocations: NewAsset.AvailableLocations || [],
 		OverrideHeight: NewAsset.OverrideHeight,
+		DefaultType: NewAsset.DefaultType,
 	}
 	A.Layer = AssetBuildLayer(NewAsset, A);
 	AssetAssignColorIndices(A);
@@ -391,5 +392,53 @@ function AssetCleanArray(AssetArray) {
  * @returns {*} - The asset group matching the provided family and group name
  */
 function AssetGroupGet(Family, Group) {
-    return AssetGroup.find(g => g.Family === Family && g.Name === Group);
+	return AssetGroup.find(g => g.Family === Family && g.Name === Group);
+}
+
+/**
+ * Validates a type string against an allowed type list.
+ * @param {Array.<string|object>} AllowedTypes - The list of allowed types. These can be strings or regular expression
+ * objects. For strings, exact matches are checked. For regular expressions, the type is allowed if it matches the
+ * regular expression.
+ * @param {string} Type - The type string to check
+ * @param {boolean} [AllowByDefault] - Whether or not to allow by default if the allowed type array is empty or not an
+ * array
+ * @returns {boolean} - Returns true if the provided type matches one of the allowed types, false otherwise. If
+ * AllowByDefault is true, the type will be allowed if AllowedTypes is not an array, or is empty. Will always return
+ * false if Type is not a valid string.
+ */
+function AssetIsTypeAllowed(AllowedTypes, Type, AllowByDefault) {
+	if (typeof Type !== "string") {
+		return false;
+	}
+	if (Array.isArray(AllowedTypes) && AllowedTypes.length) {
+		return AllowedTypes.some((AllowedType) => {
+			if (typeof AllowedType === "string") return Type === AllowedType;
+			else if (AllowedType instanceof RegExp) return AllowedType.test(Type);
+			return false;
+		});
+	}
+	return !!AllowByDefault;
+}
+
+/**
+ * Checks whether the provided asset permits the given type.
+ * @param {Asset} A - The asset whose allowed types should be checked against
+ * @param {string} Type - The type string to check
+ * @return {boolean} - Returns true if the provided type is valid for the given asset, false otherwise. Returns false
+ * if the asset does not have an AllowType array.
+ */
+function AssetIsAssetTypeAllowed(A, Type) {
+	return AssetIsTypeAllowed(A && A.AllowType, Type);
+}
+
+/**
+ * Checks whether the provided layer permits the given type.
+ * @param {Layer} Layer - The layer whose allowed types should be checked against
+ * @param {string} Type - The type string to check
+ * @return {boolean} - Returns true if the provided type is valid for the given layer, false otherwise. Returns true if
+ * the layer does not have an AllowTypes array.
+ */
+function AssetIsLayerTypeAllowed(Layer, Type) {
+	return AssetIsTypeAllowed(Layer && Layer.AllowTypes, Type, true);
 }
