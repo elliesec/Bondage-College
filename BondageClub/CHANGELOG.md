@@ -10,9 +10,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-01-10
+Changelog last updated: 2021-01-11
 
-Last recorded PR: [#1868](https://github.com/Ben987/Bondage-College/pull/1868)
+Last recorded PR: [#1870](https://github.com/Ben987/Bondage-College/pull/1870)
 
 ## [R64]
 
@@ -110,7 +110,7 @@ Last recorded PR: [#1868](https://github.com/Ben987/Bondage-College/pull/1868)
 
 ### [Beta Fixes]
 
-* None... yet!
+* Ellie - [#1870](https://github.com/Ben987/Bondage-College/pull/1870)
 
 ## [R63]
 
