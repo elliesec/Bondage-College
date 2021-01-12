@@ -44,7 +44,7 @@ function CharacterReset(CharacterID, CharacterAssetFamily) {
 		HasHiddenItems: false,
 		CanTalk: function () { return ((this.Effect.indexOf("GagVeryLight") < 0) && (this.Effect.indexOf("GagLight") < 0) && (this.Effect.indexOf("GagEasy") < 0) && (this.Effect.indexOf("GagNormal") < 0) && (this.Effect.indexOf("GagMedium") < 0) && (this.Effect.indexOf("GagHeavy") < 0) && (this.Effect.indexOf("GagVeryHeavy") < 0) && (this.Effect.indexOf("GagTotal") < 0) && (this.Effect.indexOf("GagTotal2") < 0) && (this.Effect.indexOf("GagTotal3") < 0) && (this.Effect.indexOf("GagTotal4") < 0)) },
 		CanWalk: function () { return ((this.Effect.indexOf("Freeze") < 0) && (this.Effect.indexOf("Tethered") < 0) && ((this.Pose == null) || (this.Pose.indexOf("Kneel") < 0) || (this.Effect.indexOf("KneelFreeze") < 0))) },
-		CanKneel: function () { return ((this.Effect.indexOf("Freeze") < 0) && (this.Effect.indexOf("ForceKneel") < 0) && ((this.Pose == null) || (CharacterItemsHavePoseAvailable(this, "BodyLower", "Kneel") && (this.Pose.indexOf("Supension") < 0) && (this.Pose.indexOf("Hogtied") < 0)))) },
+		CanKneel: function () { return CharacterCanKneel(this); },
 		CanInteract: function () { return (this.Effect.indexOf("Block") < 0) },
 		CanChange: function () { return ((this.Effect.indexOf("Freeze") < 0) && (this.Effect.indexOf("Block") < 0) && (this.Effect.indexOf("Prone") < 0) && !ManagementIsClubSlave() && !LogQuery("BlockChange", "Rule") && (!LogQuery("BlockChange", "OwnerRule") || (Player.Ownership == null) || (Player.Ownership.Stage != 1))) },
 		IsProne: function () { return (this.Effect.indexOf("Prone") >= 0) },
@@ -467,18 +467,17 @@ function CharacterAddPose(C, NewPose) {
 function CharacterItemsHavePoseAvailable(C, Type, Pose) {
 	var PossiblePoses = PoseFemale3DCG.filter(P => P.Category == Type || P.Category == "BodyFull").map(P => P.Name);
 
-	for (let A = 0; A < C.Appearance.length; A++) {
-		if (C.Appearance[A].Asset.WhitelistActivePose != null && C.Appearance[A].Asset.WhitelistActivePose.includes(Pose)) continue;
-		if (C.Appearance[A].Asset.AllowActivePose != null && (C.Appearance[A].Asset.AllowActivePose.find(P => PossiblePoses.includes(P) && C.AllowedActivePose.includes(P))))
-			return false;
-		if ((C.Appearance[A].Property != null) && (C.Appearance[A].Property.SetPose != null) && (C.Appearance[A].Property.SetPose.find(P => PossiblePoses.includes(P))))
-			return false;
-		else
-			if (C.Appearance[A].Asset.SetPose != null && (C.Appearance[A].Asset.SetPose.find(P => PossiblePoses.includes(P))))
-				return false;
-			else
-				if (C.Appearance[A].Asset.Group.SetPose != null && (C.Appearance[A].Asset.Group.SetPose.find(P => PossiblePoses.includes(P))))
-					return false;
+	for (let i = 0, Item = null; i < C.Appearance.length; i++) {
+		Item = C.Appearance[i];
+
+		const WhitelistActivePose = InventoryGetItemProperty(Item, "WhitelistActivePose");
+		if (WhitelistActivePose != null && WhitelistActivePose.includes(Pose)) continue;
+
+		const AllowActivePose = InventoryGetItemProperty(Item, "AllowActivePose");
+		if (AllowActivePose != null && AllowActivePose.find(P => PossiblePoses.includes(P) && C.AllowedActivePose.includes(P))) return false;
+
+		const SetPose = InventoryGetItemProperty(Item, "SetPose", true);
+		if (SetPose != null && SetPose.find(P => PossiblePoses.includes(P))) return false;
 	}
 	return true;
 }
@@ -1146,4 +1145,16 @@ function CharacterGetLoversNumbers(C, MembersOnly) {
  */
 function CharacterAppearsInverted(C) {
 	return Player.GraphicsSettings && Player.GraphicsSettings.InvertRoom ? Player.IsInverted() != C.IsInverted() : C.IsInverted();
+}
+
+/**
+ * Checks whether the given character can kneel unaided
+ * @param C
+ * @return {boolean}
+ */
+function CharacterCanKneel(C) {
+	if (C.Effect.includes("Freeze") || C.Effect.includes("ForceKneel")) return false;
+	if (C.Pose == null) return true;
+	if (C.Pose.includes("Suspension") || C.Pose.includes("Hogtied")) return false;
+	return CharacterItemsHavePoseAvailable(C, "BodyLower", "Kneel");
 }
