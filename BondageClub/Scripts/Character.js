@@ -538,16 +538,11 @@ function CharacterLoadPose(C) {
 	C.AllowedActivePose = [];
 	
 	for (let A = 0; A < C.Appearance.length; A++) {
-		if (C.Appearance[A].Asset.AllowActivePose != null)
-			C.Appearance[A].Asset.AllowActivePose.forEach(Pose => C.AllowedActivePose.push(Pose));
-		if ((C.Appearance[A].Property != null) && (C.Appearance[A].Property.SetPose != null))
-			CharacterAddPose(C, C.Appearance[A].Property.SetPose);
-		else
-			if (C.Appearance[A].Asset.SetPose != null)
-				CharacterAddPose(C, C.Appearance[A].Asset.SetPose);
-			else
-				if (C.Appearance[A].Asset.Group.SetPose != null)
-					CharacterAddPose(C, C.Appearance[A].Asset.Group.SetPose);
+		const AllowActivePose = InventoryGetItemProperty(Item, "AllowActivePose");
+		if (Array.isArray(AllowActivePose)) AllowActivePose.forEach(Pose => C.AllowedActivePose.push(Pose));
+
+		const SetPose = InventoryGetItemProperty(C.Appearance[A], "SetPose", true);
+		if (SetPose != null) CharacterAddPose(C, SetPose);
 	}
 	
 	// Add possible active poses (Bodyfull can only be alone, and cannot have two of upperbody or bodylower)
