@@ -22,11 +22,10 @@ function InventoryItemDevicesWoodenBoxLoad() {
 	}
 	if (typeof Property.Opacity !== "number") {
 		Property.Opacity = 0;
+		InventoryItemDevicesWoodenBoxSetOpacity(Property, Property.Opacity);
 		mustRefresh = true;
 	}
 
-	if (Property.Opacity < 0.15) Property.Effect = ["Prone", "Enclose", "Freeze"];
-	else Property.Effect = ["Prone", "Enclose", "BlindNormal", "GagLight", "Freeze"];
 
 	if (mustRefresh) {
 		CharacterRefresh(C);
@@ -91,7 +90,7 @@ function InventoryItemDevicesWoodenBoxExit() {
 	const C = CharacterGetCurrent();
 	const item = DialogFocusItem;
 
-	item.Property.Opacity = InventoryItemDevicesWoodenBoxGetInputOpacity();
+	InventoryItemDevicesWoodenBoxSetOpacity(item.Property, InventoryItemDevicesWoodenBoxGetInputOpacity());
 	const text = InventoryItemDevicesWoodenBoxGetText();
 	if (InventoryItemDevicesWoodenBoxAllowedChars.test(text)) item.Property.Text = text;
 
@@ -106,9 +105,6 @@ function InventoryItemDevicesWoodenBoxExit() {
 		ChatRoomPublishCustomAction(msg, false, dictionary);
 	}
 
-	if (item.Property.Opacity < 0.15) item.Property.Effect = ["Prone", "Enclose", "Freeze"];
-	else item.Property.Effect = ["Prone", "Enclose", "BlindNormal", "GagLight", "Freeze"];
-
 	CharacterRefresh(C);
 	ChatRoomCharacterItemUpdate(C, item.Asset.Group.Name);
 
@@ -118,6 +114,19 @@ function InventoryItemDevicesWoodenBoxExit() {
 	PreferenceMessage = "";
 	DialogFocusItem = null;
 	if (DialogInventory != null) DialogMenuButtonBuild(CharacterGetCurrent());
+}
+
+function InventoryItemDevicesWoodenBoxSetOpacity(property, opacity) {
+	if (opacity !== property.opacity) property.Opacity = opacity;
+	if (!Array.isArray(property.Effect)) property.Effect = [];
+	const transparent = property.Opacity < 0.15;
+	const effectsToApply = transparent ? ["Prone", "Enclose", "Freeze"] : ["Prone", "Enclose", "BlindNormal", "GagLight", "Freeze"];
+	const effectsToRemoves = transparent ? ["BlindNormal", "GagLight"] : [];
+	property.Effect = property.Effect.filter(e => !effectsToRemoves.includes(e));
+	effectsToApply.forEach(e => {
+		if (!property.Effect.includes(e)) property.Effect.push(e);
+	});
+	console.log(opacity, property.Effect);
 }
 
 /**
