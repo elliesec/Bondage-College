@@ -33,7 +33,6 @@ function InventoryItemDevicesWoodenBoxLoad() {
 	}
 
 	if (InventoryItemDevicesWoodenBoxOriginalText == null) {
-		console.log("Resetting text");
 		InventoryItemDevicesWoodenBoxOriginalText = Property.Text;
 	}
 
@@ -46,7 +45,7 @@ function InventoryItemDevicesWoodenBoxLoad() {
 
 	const opacitySlider = ElementCreateRangeInput(InventoryItemDevicesWoodenBoxOpacityInputId, Property.Opacity, item.Asset.MinOpacity, item.Asset.MaxOpacity, 0.01, "blindfold");
 	if (opacitySlider) {
-		opacitySlider.addEventListener("change", (e) => InventoryItemDevicesWoodenBoxOpacityChange(C, item, e.target.value));
+		opacitySlider.addEventListener("input", (e) => InventoryItemDevicesWoodenBoxOpacityChange(C, item, e.target.value));
 	}
 }
 
@@ -116,6 +115,12 @@ function InventoryItemDevicesWoodenBoxExit() {
 	if (DialogInventory != null) DialogMenuButtonBuild(CharacterGetCurrent());
 }
 
+/**
+ * Sets the opacity of the wooden box based, and applies effects based on its opacity value
+ * @param {Property} property - The item's Property object
+ * @param {number} opacity - The opacity to set on the item's Property
+ * @returns {void} - Nothing
+ */
 function InventoryItemDevicesWoodenBoxSetOpacity(property, opacity) {
 	if (opacity !== property.opacity) property.Opacity = opacity;
 	if (!Array.isArray(property.Effect)) property.Effect = [];
@@ -126,7 +131,6 @@ function InventoryItemDevicesWoodenBoxSetOpacity(property, opacity) {
 	effectsToApply.forEach(e => {
 		if (!property.Effect.includes(e)) property.Effect.push(e);
 	});
-	console.log(opacity, property.Effect);
 }
 
 /**
