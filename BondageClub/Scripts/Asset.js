@@ -219,7 +219,7 @@ function AssetMapLayer(Layer, AssetDefinition, A, I) {
 		DrawingTop: Layer.Top,
 		HideAs: Layer.HideAs,
 		HasImage: typeof Layer.HasImage === "boolean" ? Layer.HasImage : true,
-		Opacity: typeof Layer.Opacity === "number" ? AssetParseOpacity(Layer.Opacity) : A.Opacity,
+		Opacity: typeof Layer.Opacity === "number" ? AssetParseOpacity(Layer.Opacity) : 1,
 		MinOpacity: typeof Layer.MinOpacity === "number" ? AssetParseOpacity(Layer.Opacity) : A.MinOpacity,
 		MaxOpacity: typeof Layer.MaxOpacity === "number" ? AssetParseOpacity(Layer.Opacity) : A.MaxOpacity,
 	};
