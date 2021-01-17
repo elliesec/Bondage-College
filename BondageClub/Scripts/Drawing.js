@@ -67,7 +67,7 @@ function DrawLoad() {
 	MainCanvas.textBaseline = "middle";
 
 	// Loads the 3D engine as well
-	// Draw3DLoad();
+	Draw3DLoad();
 
 }
 
