@@ -236,10 +236,18 @@ input[type=range] {
   -webkit-appearance: none;
   width: 100%;
   background-color: transparent;
+  cursor: pointer;
+  /* Increases the hitbox of the slider to make it easier to select */
+  padding: 1% 0;
+  margin: -1% 0;
 }
 
 input[type=range]:focus {
   outline: none;
+}
+
+input[type=range].Vertical {
+  transform: rotate(270deg);
 }
 
 input[type=range]::-webkit-slider-runnable-track {
@@ -272,6 +280,10 @@ input[type=range][data-thumb=blindfold]::-webkit-slider-thumb {
   border: 0;
   font-size: 1.5em;
   border-radius: 0;
+}
+input[type=range][data-thumb=lock].Vertical::-webkit-slider-thumb,
+input[type=range][data-thumb=blindfold].Vertical::-webkit-slider-thumb {
+  transform: rotate(90deg);
 }
 
 input[type=range][data-thumb=lock]::-webkit-slider-thumb {
@@ -313,6 +325,11 @@ input[type=range][data-thumb=blindfold]::-moz-range-thumb {
   border: 0;
   font-size: 1.5em;
   border-radius: 0;
+}
+
+input[type=range][data-thumb=lock].Vertical::-moz-range-thumb,
+input[type=range][data-thumb=blindfold].Vertical::-moz-range-thumb {
+  transform: rotate(90deg);
 }
 
 input[type=range][data-thumb=lock]::-moz-range-thumb {

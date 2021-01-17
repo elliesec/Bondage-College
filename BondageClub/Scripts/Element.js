@@ -82,7 +82,7 @@ function ElementCreateInput(ID, Type, Value, MaxLength) {
  * or "blindfold". If not set, the slider will have a default appearance with no custom thumb.
  * @returns {HTMLInputElement} - The created HTML input element
  */
-function ElementCreateRangeInput(id, value, min, max, step, thumbIcon) {
+function ElementCreateRangeInput(id, value, min, max, step, thumbIcon, vertical) {
 	if (document.getElementById(id) == null) {
 		const input = document.createElement("input");
 		input.setAttribute("id", id);
@@ -96,7 +96,8 @@ function ElementCreateRangeInput(id, value, min, max, step, thumbIcon) {
 		if (thumbIcon) input.setAttribute("data-thumb", thumbIcon);
 		input.setAttribute("onfocus", "this.removeAttribute('readonly');");
 		input.addEventListener("keydown", KeyDown);
-		input.className = "HideOnPopup";
+		input.classList.add("HideOnPopup");
+		if (vertical) input.classList.add("Vertical");
 		document.body.appendChild(input);
 		return input;
 	}
@@ -246,6 +247,15 @@ function ElementRemove(ID) {
  */
 function ElementPosition(ElementID, X, Y, W, H) {
 
+	var E = document.getElementById(ElementID);
+
+	// For a vertical slider, swap the width and the height (the transformation is handled by CSS)
+	if (E.tagName.toLowerCase() === "input" && E.getAttribute("type") === "range" && E.classList.contains("Vertical")) {
+		var tmp = W;
+		W = H;
+		H = tmp;
+	}
+
 	// Different positions based on the width/height ratio
 	var Font;
 	var Height;
@@ -267,7 +277,6 @@ function ElementPosition(ElementID, X, Y, W, H) {
 	}
 
 	// Sets the element style
-	var E = document.getElementById(ElementID);
 	if (E) {
 		Object.assign(E.style, {
 			fontSize: Font + "px",
