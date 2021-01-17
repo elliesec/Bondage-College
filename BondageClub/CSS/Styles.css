@@ -276,7 +276,7 @@ input[type=range][data-thumb=blindfold]::-webkit-slider-thumb {
 
 input[type=range][data-thumb=lock]::-webkit-slider-thumb {
   background-image: url("../Assets/Female3DCG/ItemMisc/Preview/MetalPadlock.png");
-  width: 26px;
+  width: 0.5em;
 }
 
 input[type=range][data-thumb=blindfold]::-webkit-slider-thumb {
@@ -317,7 +317,7 @@ input[type=range][data-thumb=blindfold]::-moz-range-thumb {
 
 input[type=range][data-thumb=lock]::-moz-range-thumb {
   background-image: url("../Assets/Female3DCG/ItemMisc/Preview/MetalPadlock.png");
-  width: 26px;
+  width: 0.5em;
 }
 
 input[type=range][data-thumb=blindfold]::-moz-range-thumb {
