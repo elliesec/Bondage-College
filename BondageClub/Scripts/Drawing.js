@@ -67,7 +67,7 @@ function DrawLoad() {
 	MainCanvas.textBaseline = "middle";
 
 	// Loads the 3D engine as well
-	Draw3DLoad();
+	// Draw3DLoad();
 
 }
 
@@ -422,7 +422,7 @@ function DrawImageCanvas(Source, Canvas, X, Y, AlphaMasks, Opacity) {
 		AlphaMasks.forEach(([x, y, w, h]) => ctx.clearRect(x - X, y - Y, w, h));
 		Canvas.drawImage(tmpCanvas, X, Y);
 	}
-	Opacity = Opacity == null ? 1 : Opacity;
+	Opacity = typeof Opacity === "number" ? Opacity : 1;
 	Canvas.save();
 	Canvas.globalAlpha = Opacity;
 	Canvas.drawImage(SourceImage, X, Y);
@@ -562,7 +562,7 @@ function DrawImageCanvasColorize(Source, Canvas, X, Y, Zoom, HexColor, FullAlpha
 	if (AlphaMasks && AlphaMasks.length) {
 		AlphaMasks.forEach(([x, y, w, h]) => ctx.clearRect(x - X, y - Y, w, h));
 	}
-	Opacity = Opacity == null ? 1 : Opacity;
+	Opacity = typeof Opacity === "number" ? Opacity : 1;
 	Canvas.save();
 	Canvas.globalAlpha = Opacity;
 	Canvas.drawImage(ctx.canvas, 0, 0, Img.width, Img.height, X, Y, Img.width * Zoom, Img.height * Zoom);

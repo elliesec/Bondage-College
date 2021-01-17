@@ -15,6 +15,7 @@
  * @param {number} x - The x coordinate to draw the image at
  * @param {number} y - The y coordinate to draw the image at
  * @param {number[][]} alphaMasks - A list of alpha masks to apply to the image when drawing
+ * @param {number} opacity - The opacity to draw the image with
  */
 
 /**
@@ -34,6 +35,7 @@
  * @param {string} color - The color to apply to the image
  * @param {boolean} fullAlpha - Whether or not to apply colour to the entire image
  * @param {number[][]} alphaMasks - A list of alpha masks to apply to the image when drawing
+ * @param {number} opacity - The opacity to draw the image with
  */
 
 /**
