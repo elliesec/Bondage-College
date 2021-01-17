@@ -80,6 +80,7 @@ function ElementCreateInput(ID, Type, Value, MaxLength) {
  * @param {number} step - The increment size of the input
  * @param {string} [thumbIcon] - The icon to use for the range input's "thumb" (handle). Can currently be set to "lock"
  * or "blindfold". If not set, the slider will have a default appearance with no custom thumb.
+ * @param {boolean} [vertical] - Whether this range input is a vertical slider (defaults to false)
  * @returns {HTMLInputElement} - The created HTML input element
  */
 function ElementCreateRangeInput(id, value, min, max, step, thumbIcon, vertical) {
