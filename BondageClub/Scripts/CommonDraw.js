@@ -106,6 +106,8 @@ function CommonDrawAppearanceBuild(C, {
 		if (C.Pose && C.Pose.length) {
 			if (Layer.OverrideAllowPose) {
 				Pose = CommonDrawFindPose(C, Layer.OverrideAllowPose);
+			} else if (A.OverrideAllowPose) {
+				Pose = CommonDrawFindPose(C, A.OverrideAllowPose);
 			} else {
 				Pose = CommonDrawFindPose(C, A.AllowPose);
 				if (!Pose) Pose = CommonDrawFindPose(C, AG.AllowPose);
@@ -270,8 +272,8 @@ function CommonDrawAppearanceBuild(C, {
 
 			// If we just drew the last drawable layer for this asset, draw the lock too (never colorized)
 			if (DrawableLayerCount === LayerCounts[CountKey]) {
-				drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + (A.HasType ? Type : "") + "_Lock.png", X, Y, AlphaMasks);
-				drawImageBlink("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + (A.HasType ? Type : "") + "_Lock.png", X, Y, AlphaMasks);
+				drawImage("Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + (A.HasType ? Type : "") + "_Lock.png", X, Y, AlphaMasks);
+				drawImageBlink("Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + (A.HasType ? Type : "") + "_Lock.png", X, Y, AlphaMasks);
 			}
 		}
 		
