@@ -177,13 +177,15 @@ function CommonDrawAppearanceBuild(C, {
 				ColorInherited = true;
 			}
 		}
-		
+
+		let GroupName = A.DynamicGroupName;
+
 		// Before drawing hook, receives all processed data. Any of them can be overriden if returned inside an object.
 		// CAREFUL! The dynamic function should not contain heavy computations, and should not have any side effects. 
 		// Watch out for object references.
 		if (A.DynamicBeforeDraw && (!Player.GhostList || Player.GhostList.indexOf(C.MemberNumber) == -1)) {
 			const DrawingData = {
-				C, X, Y, CA, Color, Property, A, G, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, AlphaMasks, PersistentData: () => AnimationPersistentDataGet(C, A)
+				C, X, Y, CA, GroupName, Color, Property, A, G, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, AlphaMasks, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
 			const OverridenData = window["Assets" + A.Group.Name + A.Name + "BeforeDraw"](DrawingData);
 			if (typeof OverridenData == "object") {
@@ -195,6 +197,10 @@ function CommonDrawAppearanceBuild(C, {
 						}
 						case "CA": { 
 							CA = OverridenData[key];
+							break;
+						}
+						case "GroupName": {
+							GroupName = OverridenData[key];
 							break;
 						}
 						case "Color": {
@@ -241,19 +247,19 @@ function CommonDrawAppearanceBuild(C, {
 		// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
 		if ((Color != null) && (Color.indexOf("#") == 0) && Layer.AllowColorize) {
 			drawImageColorize(
-				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, Color,
+				"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, Color,
 				AG.DrawingFullAlpha, AlphaMasks
 			);
 			drawImageColorizeBlink(
-				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y, Color,
+				"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y, Color,
 				AG.DrawingFullAlpha, AlphaMasks
 			);
 		} else {
 			var ColorName = ((Color == null) || (Color == "Default") || (Color == "") || (Color.length == 1) ||
 							 (Color.indexOf("#") == 0)) ? "" : "_" + Color;
-			drawImage("Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + Expression + A.Name + G + LayerType + ColorName + L + ".png", X, Y, AlphaMasks);
+			drawImage("Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + ColorName + L + ".png", X, Y, AlphaMasks);
 			drawImageBlink(
-				"Assets/" + AG.Family + "/" + AG.Name + "/" + Pose + BlinkExpression + A.Name + G + LayerType + ColorName + L + ".png", X, Y, AlphaMasks);
+				"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + ColorName + L + ".png", X, Y, AlphaMasks);
 		}
 
 		// If the item has been locked
