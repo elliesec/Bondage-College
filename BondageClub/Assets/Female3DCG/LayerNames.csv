@@ -111,8 +111,6 @@ ItemLegsFuturisticLegCuffsCuffs,Cuffs
 ItemLegsFuturisticLegCuffsDisplay,Display
 ItemLegsCeilingShacklesChain,Chain
 ItemLegsCeilingShacklesCuffs,Cuffs
-ItemLegsFuturisticCuffsCuffs,Cuffs
-ItemLegsFuturisticCuffsDisplay,Display
 ItemLegsOrnateLegCuffsGems,Gems
 ItemLegsLegBinderLatex,Binder
 ItemLegsLegBinderBelts,Belts
@@ -200,6 +198,8 @@ ItemArmsFuturisticArmbinderBand,Band
 ItemArmsFuturisticArmbinderStraps,Straps
 ItemArmsMedicalBedRestraintsBase,Bed Straps
 ItemArmsMedicalBedRestraintsStraps,Cuffs
+ItemArmsFuturisticCuffsCuffs,Cuffs
+ItemArmsFuturisticCuffsDisplay,Display
 ItemHandsFuturisticMittensBody,Body
 ItemHandsFuturisticMittensMesh,Mesh
 ItemHandsFuturisticMittensDisplay,Display
