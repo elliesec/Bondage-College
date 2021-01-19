@@ -438,11 +438,11 @@ var AssetFemale3DCG = [
 			{ Name: "Corset4", Fetish: ["Lingerie"], Priority: 22, Value: 15, BuyGroup: "Corset4", Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"], OverrideAllowPose: ["Hogtied"] },
 			{ Name: "Corset5", Fetish: ["Lingerie"], Priority: 22, Value: 20, BuyGroup: "Corset5", Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"], OverrideAllowPose: ["Hogtied"] },
 			{ 
-				Name: "LatexCorset1", Fetish: ["Lingerie", "Latex"], Priority: 21, Value: 40, BuyGroup: "LatexCorset1", AllowType: ["", "Garterless"], Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"], Extended: true, HasType: false,
+				Name: "LatexCorset1", Fetish: ["Lingerie", "Latex"], Priority: 21, Value: 40, BuyGroup: "LatexCorset1", AllowType: ["", "Garterless"], Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"], OverrideAllowPose: ["Hogtied"], Extended: true, HasType: false,
 				Layer:[
 			        { Name: "Base", HasType: false },
 					{ Name: "Garter", CopyLayerColor: "Base", HasType: false, AllowTypes: [""] }
-				]
+				],
 			},
 			{ Name: "LeatherCorsetTop1", Fetish: ["Leather"], Left: 0, Top: 0, BuyGroup: "LeatherCorsetTop1", Priority: 25, Value: 60, HideItem: ["ItemNipplesPiercingsRoundPiercing", "ItemNipplesPiercingsWeightedPiercing", "ItemNipplesLactationPump"] },
 			{Name: "Corset6", Fetish: ["Lingerie"], Value: 40, DefaultColor:["#435331","#363535","#A08759"], Hide: ["ItemNipples", "ItemNipplesPiercings"], 
@@ -1723,7 +1723,7 @@ var AssetFemale3DCG = [
 			{ Name: "Corset5", Fetish: ["Lingerie"], Priority: 22, Value: 20, Difficulty: 8, Time: 15, RemoveTime: 10, AllowLock: true, Left: 150, BuyGroup: "Corset5", Prerequisite: "AccessTorso", Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"], OverrideAllowPose: ["Hogtied"], DynamicGroupName: "Corset" },
 			{ Name: "LeatherBreastBinder", Fetish: ["Leather"], Value: 30, Difficulty: 50, Time: 15, RemoveTime: 10, AllowLock: true, Prerequisite: "AccessTorso" },
 			{ 
-				Name: "LatexCorset1", Fetish: ["Lingerie", "Latex"], Priority: 21, Value: 40, Difficulty: 8, Time: 15, RemoveTime: 10, AllowLock: true, AllowType: ["", "Garterless"], BuyGroup: "LatexCorset1", Prerequisite: "AccessTorso", Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"], Extended: true, HasType: false,
+				Name: "LatexCorset1", Fetish: ["Lingerie", "Latex"], Priority: 21, Value: 40, Difficulty: 8, Time: 15, RemoveTime: 10, AllowLock: true, Left: 150, AllowType: ["", "Garterless"], BuyGroup: "LatexCorset1", Prerequisite: "AccessTorso", Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"], OverrideAllowPose: ["Hogtied"], DynamicGroupName: "Corset", Extended: true, HasType: false,
 				Layer:[
 					{ Name: "Base", HasType: false },
         			{ Name: "Garter", CopyLayerColor: "Base", HasType: false, AllowTypes: [""] }
