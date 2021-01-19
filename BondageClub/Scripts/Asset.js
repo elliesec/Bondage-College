@@ -106,6 +106,7 @@ function AssetAdd(NewAsset) {
 		Require: NewAsset.Require,
 		SetPose: (NewAsset.SetPose == null) ? AssetCurrentGroup.SetPose : NewAsset.SetPose,
 		AllowPose: Array.isArray(NewAsset.AllowPose) ? NewAsset.AllowPose : AssetCurrentGroup.AllowPose,
+		HideForPose: Array.isArray(NewAsset.HideForPose) ? NewAsset.HideForPose : [],
 		OverrideAllowPose: NewAsset.OverrideAllowPose,
 		AllowActivePose: (NewAsset.AllowActivePose == null) ? AssetCurrentGroup.AllowActivePose : NewAsset.AllowActivePose,
 		WhitelistActivePose: (NewAsset.WhitelistActivePose == null) ? AssetCurrentGroup.WhitelistActivePose : NewAsset.WhitelistActivePose,

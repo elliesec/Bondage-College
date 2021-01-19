@@ -246,34 +246,48 @@ function CommonDrawAppearanceBuild(C, {
 		Y += CanvasUpperOverflow;
 		AlphaMasks = AlphaMasks.map(([x, y, w, h]) => [x, y + CanvasUpperOverflow, w, h]);
 
-		// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
-		if ((Color != null) && (Color.indexOf("#") == 0) && Layer.AllowColorize) {
-			drawImageColorize(
-				"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, Color,
-				AG.DrawingFullAlpha, AlphaMasks
-			);
-			drawImageColorizeBlink(
-				"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y, Color,
-				AG.DrawingFullAlpha, AlphaMasks
-			);
-		} else {
-			var ColorName = ((Color == null) || (Color == "Default") || (Color == "") || (Color.length == 1) ||
-							 (Color.indexOf("#") == 0)) ? "" : "_" + Color;
-			drawImage("Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + ColorName + L + ".png", X, Y, AlphaMasks);
-			drawImageBlink(
-				"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + ColorName + L + ".png", X, Y, AlphaMasks);
-		}
+		const HideForPose = !!Pose && A.HideForPose.find(P => Pose === P + "/");
 
-		// If the item has been locked
-		if (Property && Property.LockedBy) {
+		if (!HideForPose) {
+			// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
+			if ((Color != null) && (Color.indexOf("#") == 0) && Layer.AllowColorize) {
+				drawImageColorize(
+					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, Color,
+					AG.DrawingFullAlpha, AlphaMasks
+				);
+				drawImageColorizeBlink(
+					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y,
+					Color,
+					AG.DrawingFullAlpha, AlphaMasks
+				);
+			} else {
+				var ColorName = ((Color == null) || (Color == "Default") || (Color == "") || (Color.length == 1) ||
+				                 (Color.indexOf("#") == 0)) ? "" : "_" + Color;
+				drawImage(
+					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + ColorName + L + ".png", X,
+					Y, AlphaMasks
+				);
+				drawImageBlink(
+					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + ColorName + L +
+					".png", X, Y, AlphaMasks);
+			}
 
-			// How many layers should be drawn for the asset
-			var DrawableLayerCount = C.AppearanceLayers.filter(AL => AL.Asset === A).length;
+			// If the item has been locked
+			if (Property && Property.LockedBy) {
 
-			// If we just drew the last drawable layer for this asset, draw the lock too (never colorized)
-			if (DrawableLayerCount === LayerCounts[CountKey]) {
-				drawImage("Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + (A.HasType ? Type : "") + "_Lock.png", X, Y, AlphaMasks);
-				drawImageBlink("Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + (A.HasType ? Type : "") + "_Lock.png", X, Y, AlphaMasks);
+				// How many layers should be drawn for the asset
+				var DrawableLayerCount = C.AppearanceLayers.filter(AL => AL.Asset === A).length;
+
+				// If we just drew the last drawable layer for this asset, draw the lock too (never colorized)
+				if (DrawableLayerCount === LayerCounts[CountKey]) {
+					drawImage(
+						"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + (A.HasType ? Type : "") + "_Lock.png",
+						X, Y, AlphaMasks
+					);
+					drawImageBlink(
+						"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + (A.HasType ? Type : "") +
+						"_Lock.png", X, Y, AlphaMasks);
+				}
 			}
 		}
 		
