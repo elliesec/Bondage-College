@@ -196,8 +196,8 @@ function CommonGet(Path, Callback, RetriesLeft) {
  * retries up to a maximum of 10 times.
  * @param {string} Path - The path of the resource to request
  * @param {function} Callback - Callback to execute once the resource is received
- * @param {number} [RetriesLeft]
- * @returns {void} - How many more times to retry - after this hits zero, an error will be logged
+ * @param {number} [RetriesLeft] - How many more times to retry - after this hits zero, an error will be logged
+ * @returns {void} - Nothing
  */
 function CommonGetRetry(Path, Callback, RetriesLeft) {
 	if (typeof RetriesLeft !== "number") RetriesLeft = 10;
