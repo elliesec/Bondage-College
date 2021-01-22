@@ -13,26 +13,39 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 Changelog last updated: 2021-01-22
 
-Last recorded PR: [#1943](https://github.com/Ben987/Bondage-College/pull/1943)
+Last recorded PR: [#1926](https://github.com/Ben987/Bondage-College/pull/1926)
 
 ## [R65]
 
 ### [Added]
 
 * wildsj - Added a new Hollow Butt Plug item ([#1947](https://github.com/Ben987/Bondage-College/pull/1947))
+* Emily R - Added a new option to the Vacbed to allow hair/accessories to be visible ([#1940](https://github.com/Ben987/Bondage-College/pull/1940))
+* Ellie - Added 5 new backgrounds ([#1932](https://github.com/Ben987/Bondage-College/pull/1932))
 
 ### [Removed]
+
+* Nothing in this release
 
 ### [Changed]
 
 * Nina - Changed the positioning of names in chatrooms to prevent letters with descenders (e.g. "g", "j", "q", "y") from being cut off ([#1945](https://github.com/Ben987/Bondage-College/pull/1945))
 * wildsj - Tweaked the positions of several tail/butt plug items to make more sense ([#1943](https://github.com/Ben987/Bondage-College/pull/1943))
+* Sandrine - Changed the wooden sign so that it now displays above most items ([#1926](https://github.com/Ben987/Bondage-College/pull/1926))
 
 ### [Fixed]
 
-* Added resource retry logic, which should substantially reduce the chances of seeing "MISSING VALUE FOR TAG" and similar errors ([#1948](https://github.com/Ben987/Bondage-College/pull/1948))
+* Ellie - Added resource retry logic, which should substantially reduce the chances of seeing "MISSING VALUE FOR TAG" and similar errors ([#1948](https://github.com/Ben987/Bondage-College/pull/1948))
+* Emily R - Fixed some visual issues with the Flippers in combination with most full-body items ([#1940](https://github.com/Ben987/Bondage-College/pull/1940))
 
 ### [Technical]
+
+* Lots of technical changes, fixes and improvements:
+    * Nina - [#1940](https://github.com/Ben987/Bondage-College/pull/1940)
+
+* [Beta Fixes]
+
+* None... yet
 
 ###
 
