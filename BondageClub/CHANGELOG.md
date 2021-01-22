@@ -7,12 +7,34 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 * Changed - for changes in existing functionality
 * Fixed - for any bug fixes
 * Technical - for any changes not visible to players
+* Beta Fixes - for any fixes that occur during the beta/hotfix period
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-01-16
+Changelog last updated: 2021-01-22
 
-Last recorded PR: [#1927](https://github.com/Ben987/Bondage-College/pull/1927)
+Last recorded PR: [#1943](https://github.com/Ben987/Bondage-College/pull/1943)
+
+## [R65]
+
+### [Added]
+
+* wildsj - Added a new Hollow Butt Plug item ([#1947](https://github.com/Ben987/Bondage-College/pull/1947))
+
+### [Removed]
+
+### [Changed]
+
+* Nina - Changed the positioning of names in chatrooms to prevent letters with descenders (e.g. "g", "j", "q", "y") from being cut off ([#1945](https://github.com/Ben987/Bondage-College/pull/1945))
+* wildsj - Tweaked the positions of several tail/butt plug items to make more sense ([#1943](https://github.com/Ben987/Bondage-College/pull/1943))
+
+### [Fixed]
+
+* Added resource retry logic, which should substantially reduce the chances of seeing "MISSING VALUE FOR TAG" and similar errors ([#1948](https://github.com/Ben987/Bondage-College/pull/1948))
+
+### [Technical]
+
+###
 
 ## [R64]
 
@@ -114,10 +136,11 @@ Last recorded PR: [#1927](https://github.com/Ben987/Bondage-College/pull/1927)
 
 ### [Beta Fixes]
 
-* Ellie - [#1870](https://github.com/Ben987/Bondage-College/pull/1870), [#1871](https://github.com/Ben987/Bondage-College/pull/1871), [#1872](https://github.com/Ben987/Bondage-College/pull/1872), [#1882](https://github.com/Ben987/Bondage-College/pull/1882), [#1886](https://github.com/Ben987/Bondage-College/pull/1886), [#1897](https://github.com/Ben987/Bondage-College/pull/1897), [#1898](https://github.com/Ben987/Bondage-College/pull/1898), [#1901](https://github.com/Ben987/Bondage-College/pull/1901), [#1905](https://github.com/Ben987/Bondage-College/pull/1905), [#1906](https://github.com/Ben987/Bondage-College/pull/1906), [#1907](https://github.com/Ben987/Bondage-College/pull/1907), [#1919](https://github.com/Ben987/Bondage-College/pull/1919), [#1920](https://github.com/Ben987/Bondage-College/pull/1920), [#1924](https://github.com/Ben987/Bondage-College/pull/1924)
-* Ada - [#1874](https://github.com/Ben987/Bondage-College/pull/1874), [#1875](https://github.com/Ben987/Bondage-College/pull/1875), [#1876](https://github.com/Ben987/Bondage-College/pull/1876), [#1877](https://github.com/Ben987/Bondage-College/pull/1877), [#1880](https://github.com/Ben987/Bondage-College/pull/1880), [#1887](https://github.com/Ben987/Bondage-College/pull/1887), [#1902](https://github.com/Ben987/Bondage-College/pull/1902), [#1917](https://github.com/Ben987/Bondage-College/pull/1917), [#1927](https://github.com/Ben987/Bondage-College/pull/1927)
-* Nina - [#1878](https://github.com/Ben987/Bondage-College/pull/1878), [#1879](https://github.com/Ben987/Bondage-College/pull/1879), [#1881](https://github.com/Ben987/Bondage-College/pull/1881), [#1883](https://github.com/Ben987/Bondage-College/pull/1883), [#1892](https://github.com/Ben987/Bondage-College/pull/1892), [#1894](https://github.com/Ben987/Bondage-College/pull/1894), [#1900](https://github.com/Ben987/Bondage-College/pull/1900), [#1912](https://github.com/Ben987/Bondage-College/pull/1912), [#1921](https://github.com/Ben987/Bondage-College/pull/1921)
+* Ellie - [#1870](https://github.com/Ben987/Bondage-College/pull/1870), [#1871](https://github.com/Ben987/Bondage-College/pull/1871), [#1872](https://github.com/Ben987/Bondage-College/pull/1872), [#1882](https://github.com/Ben987/Bondage-College/pull/1882), [#1886](https://github.com/Ben987/Bondage-College/pull/1886), [#1897](https://github.com/Ben987/Bondage-College/pull/1897), [#1898](https://github.com/Ben987/Bondage-College/pull/1898), [#1901](https://github.com/Ben987/Bondage-College/pull/1901), [#1905](https://github.com/Ben987/Bondage-College/pull/1905), [#1906](https://github.com/Ben987/Bondage-College/pull/1906), [#1907](https://github.com/Ben987/Bondage-College/pull/1907), [#1919](https://github.com/Ben987/Bondage-College/pull/1919), [#1920](https://github.com/Ben987/Bondage-College/pull/1920), [#1924](https://github.com/Ben987/Bondage-College/pull/1924), [#1934](https://github.com/Ben987/Bondage-College/pull/1934), [#1937](https://github.com/Ben987/Bondage-College/pull/1937), [#1938](https://github.com/Ben987/Bondage-College/pull/1938), [#1939](https://github.com/Ben987/Bondage-College/pull/1939), [#1942](https://github.com/Ben987/Bondage-College/pull/1942)
+* Ada - [#1874](https://github.com/Ben987/Bondage-College/pull/1874), [#1875](https://github.com/Ben987/Bondage-College/pull/1875), [#1876](https://github.com/Ben987/Bondage-College/pull/1876), [#1877](https://github.com/Ben987/Bondage-College/pull/1877), [#1880](https://github.com/Ben987/Bondage-College/pull/1880), [#1887](https://github.com/Ben987/Bondage-College/pull/1887), [#1902](https://github.com/Ben987/Bondage-College/pull/1902), [#1917](https://github.com/Ben987/Bondage-College/pull/1917), [#1927](https://github.com/Ben987/Bondage-College/pull/1927), [#1946](https://github.com/Ben987/Bondage-College/pull/1946), [#1950](https://github.com/Ben987/Bondage-College/pull/1950)
+* Nina - [#1878](https://github.com/Ben987/Bondage-College/pull/1878), [#1879](https://github.com/Ben987/Bondage-College/pull/1879), [#1881](https://github.com/Ben987/Bondage-College/pull/1881), [#1883](https://github.com/Ben987/Bondage-College/pull/1883), [#1892](https://github.com/Ben987/Bondage-College/pull/1892), [#1894](https://github.com/Ben987/Bondage-College/pull/1894), [#1900](https://github.com/Ben987/Bondage-College/pull/1900), [#1912](https://github.com/Ben987/Bondage-College/pull/1912), [#1921](https://github.com/Ben987/Bondage-College/pull/1921), [#1944](https://github.com/Ben987/Bondage-College/pull/1944), [#1941](https://github.com/Ben987/Bondage-College/pull/1941)
 * Jomshir - [#1889](https://github.com/Ben987/Bondage-College/pull/1889)
+* Sandrine - [#1933](https://github.com/Ben987/Bondage-College/pull/1933)
 
 ## [R63]
 
