@@ -504,6 +504,11 @@ function ChatRoomFirstTimeHelp() {
 	}
 }
 
+/**
+ * Sets the current whisper target and flags a target update
+ * @param {number} MemberNumber - The target member number to set
+ * @returns {void} - Nothing
+ */
 function ChatRoomSetTarget(MemberNumber) {
 	if (MemberNumber !== ChatRoomTargetMemberNumber) {
 		ChatRoomTargetMemberNumber = MemberNumber;
@@ -512,7 +517,7 @@ function ChatRoomSetTarget(MemberNumber) {
 }
 
 /**
- * Sets the whisper target.
+ * Updates the chat input's placeholder text to reflect the current whisper target
  * @returns {void} - Nothing.
  */
 function ChatRoomTarget() {
