@@ -641,8 +641,10 @@ function ChatRoomRun() {
 		ChatRoomSlowStop = false;
 	}
 
+	const PlayerIsSlow = Player.IsSlow();
+
 	// If the player is slow (ex: ball & chains), she can leave the room with a timer and can be blocked by others
-	if (Player.IsSlow() && ChatRoomCanLeave() && (ChatRoomSlowStop == false)) {
+	if (PlayerIsSlow && ChatRoomCanLeave() && (ChatRoomSlowStop == false)) {
 		if (ChatRoomSlowtimer == 0) DrawButton(1005, 2, 120, 60, "", "#FFFF00", "Icons/Rectangle/Exit.png", TextGet("MenuLeave"));
 		if ((CurrentTime < ChatRoomSlowtimer) && (ChatRoomSlowtimer != 0)) DrawButton(1005, 2, 120, 60, "", "White", "Icons/Rectangle/Cancel.png", TextGet("MenuCancel"));
 		if ((CurrentTime > ChatRoomSlowtimer) && (ChatRoomSlowtimer != 0)) {
@@ -656,7 +658,7 @@ function ChatRoomRun() {
 	}
 
 	// If the player is slow and was stopped from leaving by another player
-	if ((ChatRoomSlowStop == true) && Player.IsSlow()) {
+	if ((ChatRoomSlowStop == true) && PlayerIsSlow) {
 		DrawButton(1005, 2, 120, 60, "", "Pink", "Icons/Rectangle/Exit.png", TextGet("MenuLeave"));
 		if (CurrentTime > ChatRoomSlowtimer) {
 			 ChatRoomSlowtimer = 0;
@@ -665,7 +667,7 @@ function ChatRoomRun() {
 	}
 
 	// Draws the top buttons in pink if they aren't available
-	if (!Player.IsSlow() || (ChatRoomSlowtimer == 0 && !ChatRoomCanLeave())){
+	if (!PlayerIsSlow || (ChatRoomSlowtimer == 0 && !ChatRoomCanLeave())){
 		if (ChatRoomSlowtimer != 0) ChatRoomSlowtimer = 0;
 		DrawButton(1005, 2, 120, 60, "", (ChatRoomCanLeave()) ? "White" : "Pink", "Icons/Rectangle/Exit.png", TextGet("MenuLeave"));
 	}
@@ -726,8 +728,10 @@ function ChatRoomClick() {
 	// When the user chats or clicks on a character
 	if (MouseIn(0, 0, 1000, 1000)) ChatRoomDrawCharacter(true);
 
+	const PlayerIsSlow = Player.IsSlow();
+
 	// When the user leaves
-	if (MouseIn(1005, 0, 120, 62) && ChatRoomCanLeave() && !Player.IsSlow()) {
+	if (MouseIn(1005, 0, 120, 62) && ChatRoomCanLeave() && !PlayerIsSlow) {
 		ChatRoomClearAllElements();
 		ServerSend("ChatRoomLeave", "");
 		ChatRoomSetLastChatRoom("")		
@@ -738,7 +742,7 @@ function ChatRoomClick() {
 	}
 
 	// When the player is slow and attempts to leave
-	if (MouseIn(1005, 0, 120, 62) && ChatRoomCanLeave() && Player.IsSlow()) {
+	if (MouseIn(1005, 0, 120, 62) && ChatRoomCanLeave() && PlayerIsSlow) {
 
 		// If the player clicked to leave, we start a timer based on evasion level and send a chat message
 		if ((ChatRoomSlowtimer == 0) && (ChatRoomSlowStop == false)) {
