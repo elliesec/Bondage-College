@@ -533,13 +533,13 @@ function ItemColorStateBuild(c, item, x, y, width, height, includeResetButton) {
 	let colors;
 	if (Array.isArray(item.Color)) {
 		colors = item.Color;
-		for (let i = colors.length; i < item.Asset.ColorableLayerCount; i++) {
+		for (let i = colors.length; i < item.Asset.DynamicColorAsset(item).ColorableLayerCount; i++) {
 			colors.push("Default");
 		}
 	} else {
 		const colorStr = typeof item.Color === "string" ? item.Color : "Default";
 		colors = [];
-		for (let i = 0; i < item.Asset.ColorableLayerCount; i++) {
+		for (let i = 0; i < item.Asset.DynamicColorAsset(item).ColorableLayerCount; i++) {
 			colors.push(colorStr);
 		}
 	}
@@ -606,7 +606,7 @@ function ItemColorStateBuild(c, item, x, y, width, height, includeResetButton) {
  * @returns {Layer[]} - The colourable layers
  */
 function ItemColorGetColorableLayers(item) {
-	return item.Asset.Layer.filter(layer => !layer.CopyLayerColor && layer.AllowColorize && !layer.HideColoring);
+	return item.Asset.DynamicColorAsset(item).Layer.filter(layer => !layer.CopyLayerColor && layer.AllowColorize && !layer.HideColoring);
 }
 
 /**
@@ -615,7 +615,8 @@ function ItemColorGetColorableLayers(item) {
  * @returns {boolean} - Whether the item only allows one color
  */
 function ItemColorIsSimple(item) {
-	if (item && item.Asset && item.Asset.Layer) {
+	const asset = item && item.Asset && item.Asset.DynamicColorAsset(item);
+	if (asset && asset.Layer) {
 		return ItemColorGetColorableLayers(item).length === 1;
 	}
 	else return true;

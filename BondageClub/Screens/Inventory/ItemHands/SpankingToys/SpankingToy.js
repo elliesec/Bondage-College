@@ -175,6 +175,12 @@ function InventorySpankingToysGetType(C) {
 	else return "Crop";
 }
 
+function InventorySpankingToysGetColorAsset(Toy) {
+	const Type = Toy && Toy.Property && Toy.Property.Type;
+	const A = AssetGet(Toy.Asset.Group.Family, "ItemHands", "SpankingToys" + Type);
+	return A || Toy.Asset;
+}
+
 // Get the description of the spanking toy that the character is holding
 function InventorySpankingToysGetDescription(C) {
 	var ToyDescription = null;

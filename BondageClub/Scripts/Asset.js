@@ -167,7 +167,8 @@ function AssetAdd(NewAsset) {
 		OverrideHeight: NewAsset.OverrideHeight,
 		FreezeActivePose: Array.isArray(NewAsset.FreezeActivePose) ? NewAsset.FreezeActivePose :
 			Array.isArray(AssetCurrentGroup.FreezeActivePose) ? AssetCurrentGroup.FreezeActivePose : [],
-	}
+		DynamicColorAsset: typeof NewAsset.DynamicColorAsset === 'function' ? NewAsset.DynamicColorAsset : function() { return this },
+	};
 	A.Layer = AssetBuildLayer(NewAsset, A);
 	AssetAssignColorIndices(A);
 	// Unwearable assets are not visible but can be overwritten

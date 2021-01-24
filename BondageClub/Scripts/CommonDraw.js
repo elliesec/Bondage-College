@@ -84,7 +84,7 @@ function CommonDrawAppearanceBuild(C, {
 	C.AppearanceLayers.forEach((Layer) => {
 		var A = Layer.Asset;
 		var AG = A.Group;
-		var CA = C.Appearance.find(item => item.Asset === A);
+		var CA = Layer.item;
 		var Property = CA.Property;
 		var CountKey = AG.Name + "/" + A.Name;
 
@@ -153,6 +153,7 @@ function CommonDrawAppearanceBuild(C, {
 		var LayerType = Type;
 		if (Layer.Name) L = "_" + Layer.Name;
 		if (!Layer.HasType) LayerType = "";
+		if (CA.Asset !== A) LayerType = "";
 		var BlinkExpression = (A.OverrideBlinking ? !AG.DrawingBlink : AG.DrawingBlink) ? "Closed/" : Expression;
 		var AlphaMasks = Layer.GroupAlpha
 			.filter(({Pose}) => !Pose || !Array.isArray(Pose) || !!CommonDrawFindPose(C, Pose))
