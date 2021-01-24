@@ -284,9 +284,20 @@ The Chat Preferences allow you to customize the way that you view chatrooms, and
 
 [Back to the contents](#table-of-contents)
 
+The Audio Preferences allow you to customize the sounds and audio notifications you'll come across around the club.
+
+| Preference | Description |
+| --- | --- |
+| Audio volume | The master audio volume for all sounds you'll hear in the club |
+| Audio alarm for beeps | If selected, you'll receive an audio notification when one of your friends in the club beeps you |
+| Play item sounds in chatrooms | If selected, items with audio effects will make sounds whilst you're inside [chatrooms](#the-chatrooms) |
+| Only play item sounds if you're involved | If selected, items with audio effects will only make sounds if you're using the item yourself, or if someone is using the item on you |
+
 ### ![Arousal Preferences Icon](../../../Icons/Arousal.png) Arousal Preferences
 
 [Back to the contents](#table-of-contents)
+
+
 
 ### ![Security Preferences Icon](../../../Icons/Security.png) Security Preferences
 
