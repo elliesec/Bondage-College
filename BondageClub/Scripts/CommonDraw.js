@@ -81,7 +81,7 @@ function CommonDrawAppearanceBuild(C, {
 	drawImageColorizeBlink,
 }) {
 	var LayerCounts = {};
-	
+
 	// Loop through all layers in the character appearance
 	C.AppearanceLayers.forEach((Layer) => {
 		var A = Layer.Asset;
@@ -120,7 +120,7 @@ function CommonDrawAppearanceBuild(C, {
 		Layer.Alpha.forEach(AlphaDef => {
 			// If no groups are defined and the character's pose matches one of the allowed poses (or no poses are defined)
 			if ((!AlphaDef.Group || !AlphaDef.Group.length) &&
-				(!AlphaDef.Pose || !Array.isArray(AlphaDef.Pose) || !!CommonDrawFindPose(C, AlphaDef.Pose))) {
+			    (!AlphaDef.Pose || !Array.isArray(AlphaDef.Pose) || !!CommonDrawFindPose(C, AlphaDef.Pose))) {
 				AlphaDef.Masks.forEach(rect => {
 					clearRect(rect[0], rect[1] + CanvasUpperOverflow, rect[2], rect[3]);
 					clearRectBlink(rect[0], rect[1] + CanvasUpperOverflow, rect[2], rect[3]);
@@ -161,8 +161,8 @@ function CommonDrawAppearanceBuild(C, {
 		Opacity = Math.min(Layer.MaxOpacity, Math.max(Layer.MinOpacity, Opacity));
 		var BlinkExpression = (A.OverrideBlinking ? !AG.DrawingBlink : AG.DrawingBlink) ? "Closed/" : Expression;
 		var AlphaMasks = Layer.GroupAlpha
-			.filter(({Pose}) => !Pose || !Array.isArray(Pose) || !!CommonDrawFindPose(C, Pose))
-			.reduce((Acc, {Masks}) => {
+			.filter(({ Pose }) => !Pose || !Array.isArray(Pose) || !!CommonDrawFindPose(C, Pose))
+			.reduce((Acc, { Masks }) => {
 				Array.prototype.push.apply(Acc, Masks);
 				return Acc;
 			}, []);
@@ -191,17 +191,18 @@ function CommonDrawAppearanceBuild(C, {
 		// Watch out for object references.
 		if (A.DynamicBeforeDraw && (!Player.GhostList || Player.GhostList.indexOf(C.MemberNumber) == -1)) {
 			const DrawingData = {
-				C, X, Y, CA, GroupName, Color, Opacity, Property, A, G, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, AlphaMasks, PersistentData: () => AnimationPersistentDataGet(C, A)
+				C, X, Y, CA, GroupName, Color, Opacity, Property, A, G, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, AlphaMasks, PersistentData: () => AnimationPersistentDataGet(
+					C, A),
 			};
 			const OverriddenData = CommonCallFunctionByNameWarn(`Assets${A.Group.Name}${A.Name}BeforeDraw`, DrawingData);
 			if (typeof OverriddenData == "object") {
 				for (const key in OverriddenData) {
-					switch (key) { 
-						case "Property": { 
+					switch (key) {
+						case "Property": {
 							Property = OverriddenData[key];
 							break;
 						}
-						case "CA": { 
+						case "CA": {
 							CA = OverriddenData[key];
 							break;
 						}
@@ -217,23 +218,23 @@ function CommonDrawAppearanceBuild(C, {
 							Opacity = OverriddenData[key];
 							break;
 						}
-						case "X": { 
+						case "X": {
 							X = OverriddenData[key];
 							break;
 						}
-						case "Y": { 
+						case "Y": {
 							Y = OverriddenData[key];
 							break;
 						}
-						case "LayerType": { 
+						case "LayerType": {
 							LayerType = OverriddenData[key];
 							break;
 						}
-						case "L": { 
+						case "L": {
 							L = OverriddenData[key];
 							break;
 						}
-						case "AlphaMasks": { 
+						case "AlphaMasks": {
 							AlphaMasks = OverriddenData[key];
 							break;
 						}
@@ -257,30 +258,33 @@ function CommonDrawAppearanceBuild(C, {
 		const HideForPose = !!Pose && A.HideForPose.find(P => Pose === P + "/");
 
 		if (!HideForPose) {
-		if (Layer.HasImage) {
-			// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply
-			// that text)
-			if ((Color != null) && (Color.indexOf("#") == 0) && Layer.AllowColorize) {
-				drawImageColorize(
-					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, Color,
-					AG.DrawingFullAlpha, AlphaMasks, Opacity,
-				);
-				drawImageColorizeBlink(
-					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y,
-					Color, AG.DrawingFullAlpha, AlphaMasks, Opacity,
-				);
-			} else {
-				var ColorName = ((Color == null) || (Color == "Default") || (Color == "") || (Color.length == 1) ||
-				                 (Color.indexOf("#") == 0)) ? "" : "_" + Color;
-				drawImage(
-					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + ColorName + L + ".png", X, Y,
-					AlphaMasks, Opacity,
-				);
-				drawImageBlink(
-					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + ColorName + L + ".png",
-					X, Y, AlphaMasks, Opacity,
-				);
-			}
+			if (Layer.HasImage) {
+				// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply
+				// that text)
+				if ((Color != null) && (Color.indexOf("#") == 0) && Layer.AllowColorize) {
+					drawImageColorize(
+						"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y,
+						Color,
+						AG.DrawingFullAlpha, AlphaMasks, Opacity,
+					);
+					drawImageColorizeBlink(
+						"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y,
+						Color, AG.DrawingFullAlpha, AlphaMasks, Opacity,
+					);
+				} else {
+					var ColorName = ((Color == null) || (Color == "Default") || (Color == "") || (Color.length == 1) ||
+					                 (Color.indexOf("#") == 0)) ? "" : "_" + Color;
+					drawImage(
+						"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + ColorName + L + ".png",
+						X, Y,
+						AlphaMasks, Opacity,
+					);
+					drawImageBlink(
+						"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + ColorName + L +
+						".png",
+						X, Y, AlphaMasks, Opacity,
+					);
+				}
 			}
 
 			// If the item has been locked
@@ -293,7 +297,7 @@ function CommonDrawAppearanceBuild(C, {
 				if (DrawableLayerCount === LayerCounts[CountKey]) {
 					drawImage(
 						"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + (A.HasType ? Type : "") + "_Lock.png",
-						X, Y, AlphaMasks
+						X, Y, AlphaMasks,
 					);
 					drawImageBlink(
 						"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + (A.HasType ? Type : "") +
@@ -301,13 +305,14 @@ function CommonDrawAppearanceBuild(C, {
 				}
 			}
 		}
-		
+
 		// After drawing hook, receives all processed data.
 		// CAREFUL! The dynamic function should not contain heavy computations, and should not have any side effects. 
 		// Watch out for object references.
 		if (A.DynamicAfterDraw && (!Player.GhostList || Player.GhostList.indexOf(C.MemberNumber) == -1)) {
 			const DrawingData = {
-				C, X, Y, CA, Property, Color, Opacity, A, G, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, AlphaMasks, PersistentData: () => AnimationPersistentDataGet(C, A)
+				C, X, Y, CA, Property, Color, Opacity, A, G, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, AlphaMasks,
+				PersistentData: () => AnimationPersistentDataGet(C, A),
 			};
 			CommonCallFunctionByNameWarn(`Assets${A.Group.Name}${A.Name}AfterDraw`, DrawingData);
 		}
