@@ -3507,18 +3507,6 @@ var AssetFemale3DCG = [
 				Prerequisite: ["NotSuspended", "NotHogtied", "NotHorse"],
 				Effect: ["Prone", "Enclose", "Freeze"],
 				AllowEffect: ["Prone", "Enclose", "BlindNormal", "GagLight", "Freeze"],
-				Alpha: [{ Group: ["Cloth", "ClothLower", "TailStraps", "Wings", "ItemButt", "ItemArms"], Masks: [[0, 0, 90, 1000], [400, 0, 100, 1000]] }],
-				Layer: [
-					{ Name: "Back", Priority: 1, MinOpacity: 1 },
-					{ Name: "Panel", CopyLayerColor: "Back"},
-					{ Name: "Text", HasImage: false }
-				],
-			},
-			{
-				Name: "WoodenBox", Value: 60, Difficulty: -2, SelfBondage: 5, Time: 15, RemoveTime: 10, AllowLock: true, Audio: "LockLarge", RemoveAtLogin: true, DefaultColor: ["Default", "#600"], SetPose: ["BaseLower"], Extended: true, DynamicAfterDraw: true, MinOpacity: 0, Opacity: 0,
-				Prerequisite: ["NotSuspended", "NotHogtied", "NotHorse"],
-				Effect: ["Prone", "Enclose", "Freeze"],
-				AllowEffect: ["Prone", "Enclose", "BlindNormal", "GagLight", "Freeze"],
 				HideItem: ["ShoesFlippers"],
 				Alpha: [{ Group: ["Cloth", "ClothLower", "TailStraps", "Wings", "ItemButt", "ItemArms"], Masks: [[0, 0, 90, 1000], [400, 0, 100, 1000]] }],
 				Layer: [
