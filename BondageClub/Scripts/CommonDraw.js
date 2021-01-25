@@ -15,6 +15,7 @@
  * @param {number} x - The x coordinate to draw the image at
  * @param {number} y - The y coordinate to draw the image at
  * @param {number[][]} alphaMasks - A list of alpha masks to apply to the image when drawing
+ * @param {number} opacity - The opacity to draw the image with
  */
 
 /**
@@ -34,6 +35,7 @@
  * @param {string} color - The color to apply to the image
  * @param {boolean} fullAlpha - Whether or not to apply colour to the entire image
  * @param {number[][]} alphaMasks - A list of alpha masks to apply to the image when drawing
+ * @param {number} opacity - The opacity to draw the image with
  */
 
 /**
@@ -155,6 +157,8 @@ function CommonDrawAppearanceBuild(C, {
 		var LayerType = Type;
 		if (Layer.Name) L = "_" + Layer.Name;
 		if (!Layer.HasType) LayerType = "";
+		var Opacity = (Property && typeof Property.Opacity === "number") ? Property.Opacity : Layer.Opacity;
+		Opacity = Math.min(Layer.MaxOpacity, Math.max(Layer.MinOpacity, Opacity));
 		var BlinkExpression = (A.OverrideBlinking ? !AG.DrawingBlink : AG.DrawingBlink) ? "Closed/" : Expression;
 		var AlphaMasks = Layer.GroupAlpha
 			.filter(({Pose}) => !Pose || !Array.isArray(Pose) || !!CommonDrawFindPose(C, Pose))
@@ -187,18 +191,18 @@ function CommonDrawAppearanceBuild(C, {
 		// Watch out for object references.
 		if (A.DynamicBeforeDraw && (!Player.GhostList || Player.GhostList.indexOf(C.MemberNumber) == -1)) {
 			const DrawingData = {
-				C, X, Y, CA, GroupName, Color, Property, A, G, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, AlphaMasks, PersistentData: () => AnimationPersistentDataGet(C, A)
+				C, X, Y, CA, GroupName, Color, Opacity, Property, A, G, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, AlphaMasks, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
-			const OverridenData = window["Assets" + A.Group.Name + A.Name + "BeforeDraw"](DrawingData);
-			if (typeof OverridenData == "object") {
-				for (const key in OverridenData) {
+			const OverriddenData = CommonCallFunctionByNameWarn(`Assets${A.Group.Name}${A.Name}BeforeDraw`, DrawingData);
+			if (typeof OverriddenData == "object") {
+				for (const key in OverriddenData) {
 					switch (key) { 
 						case "Property": { 
-							Property = OverridenData[key];
+							Property = OverriddenData[key];
 							break;
 						}
 						case "CA": { 
-							CA = OverridenData[key];
+							CA = OverriddenData[key];
 							break;
 						}
 						case "GroupName": {
@@ -206,27 +210,31 @@ function CommonDrawAppearanceBuild(C, {
 							break;
 						}
 						case "Color": {
-							Color = OverridenData[key];
+							Color = OverriddenData[key];
+							break;
+						}
+						case "Opacity": {
+							Opacity = OverriddenData[key];
 							break;
 						}
 						case "X": { 
-							X = OverridenData[key];
+							X = OverriddenData[key];
 							break;
 						}
 						case "Y": { 
-							Y = OverridenData[key];
+							Y = OverriddenData[key];
 							break;
 						}
 						case "LayerType": { 
-							LayerType = OverridenData[key];
+							LayerType = OverriddenData[key];
 							break;
 						}
 						case "L": { 
-							L = OverridenData[key];
+							L = OverriddenData[key];
 							break;
 						}
 						case "AlphaMasks": { 
-							AlphaMasks = OverridenData[key];
+							AlphaMasks = OverriddenData[key];
 							break;
 						}
 					}
@@ -249,27 +257,30 @@ function CommonDrawAppearanceBuild(C, {
 		const HideForPose = !!Pose && A.HideForPose.find(P => Pose === P + "/");
 
 		if (!HideForPose) {
-			// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply that text)
+		if (Layer.HasImage) {
+			// Draw the item on the canvas (default or empty means no special color, # means apply a color, regular text means we apply
+			// that text)
 			if ((Color != null) && (Color.indexOf("#") == 0) && Layer.AllowColorize) {
 				drawImageColorize(
 					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + L + ".png", X, Y, Color,
-					AG.DrawingFullAlpha, AlphaMasks
+					AG.DrawingFullAlpha, AlphaMasks, Opacity,
 				);
 				drawImageColorizeBlink(
 					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + L + ".png", X, Y,
-					Color,
-					AG.DrawingFullAlpha, AlphaMasks
+					Color, AG.DrawingFullAlpha, AlphaMasks, Opacity,
 				);
 			} else {
 				var ColorName = ((Color == null) || (Color == "Default") || (Color == "") || (Color.length == 1) ||
 				                 (Color.indexOf("#") == 0)) ? "" : "_" + Color;
 				drawImage(
-					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + ColorName + L + ".png", X,
-					Y, AlphaMasks
+					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + Expression + A.Name + G + LayerType + ColorName + L + ".png", X, Y,
+					AlphaMasks, Opacity,
 				);
 				drawImageBlink(
-					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + ColorName + L +
-					".png", X, Y, AlphaMasks);
+					"Assets/" + AG.Family + "/" + GroupName + "/" + Pose + BlinkExpression + A.Name + G + LayerType + ColorName + L + ".png",
+					X, Y, AlphaMasks, Opacity,
+				);
+			}
 			}
 
 			// If the item has been locked
@@ -296,9 +307,9 @@ function CommonDrawAppearanceBuild(C, {
 		// Watch out for object references.
 		if (A.DynamicAfterDraw && (!Player.GhostList || Player.GhostList.indexOf(C.MemberNumber) == -1)) {
 			const DrawingData = {
-				C, X, Y, CA, Property, Color, A, G, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, AlphaMasks, PersistentData: () => AnimationPersistentDataGet(C, A)
+				C, X, Y, CA, Property, Color, Opacity, A, G, AG, L, Pose, LayerType, BlinkExpression, drawCanvas, drawCanvasBlink, AlphaMasks, PersistentData: () => AnimationPersistentDataGet(C, A)
 			};
-			window["Assets" + A.Group.Name + A.Name + "AfterDraw"](DrawingData);
+			CommonCallFunctionByNameWarn(`Assets${A.Group.Name}${A.Name}AfterDraw`, DrawingData);
 		}
 	});
 }
