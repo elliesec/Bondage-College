@@ -11,9 +11,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-01-22
+Changelog last updated: 2021-01-25
 
-Last recorded PR: [#1926](https://github.com/Ben987/Bondage-College/pull/1926)
+Last recorded PR: [#1931](https://github.com/Ben987/Bondage-College/pull/1931)
 
 ## [R65]
 
@@ -22,6 +22,11 @@ Last recorded PR: [#1926](https://github.com/Ben987/Bondage-College/pull/1926)
 * wildsj - Added a new Hollow Butt Plug item ([#1947](https://github.com/Ben987/Bondage-College/pull/1947))
 * Emily R - Added a new option to the Vacbed to allow hair/accessories to be visible ([#1940](https://github.com/Ben987/Bondage-College/pull/1940))
 * Ellie - Added 5 new backgrounds ([#1932](https://github.com/Ben987/Bondage-College/pull/1932))
+* Ada - Added a new Timer Password Padlock ([#1925](https://github.com/Ben987/Bondage-College/pull/1925))
+* Sandrine - Refactored all remaining "simple" vibrators to use the new advanced vibrator modes ([#1918](https://github.com/Ben987/Bondage-College/pull/1918), [#1916](https://github.com/Ben987/Bondage-College/pull/1916), [#1915](https://github.com/Ben987/Bondage-College/pull/1915), [#1913](https://github.com/Ben987/Bondage-College/pull/1913), [#1911](https://github.com/Ben987/Bondage-College/pull/1911), [#1910](https://github.com/Ben987/Bondage-College/pull/1910), [#1909](https://github.com/Ben987/Bondage-College/pull/1909), [#1908](https://github.com/Ben987/Bondage-College/pull/1908), [#1903](https://github.com/Ben987/Bondage-College/pull/1903))
+* Ayesha - Added ceiling rope & ceiling chain items ([#1899](https://github.com/Ben987/Bondage-College/pull/1899))
+* Ada - Added a new feature to the Futuristic Collar to allow it to prevent remotes from being used on the wearer ([#1890](https://github.com/Ben987/Bondage-College/pull/1890))
+* Added support for variable opacity & custom text to the Wooden Box ([#1931](https://github.com/Ben987/Bondage-College/pull/1931))
 
 ### [Removed]
 
@@ -37,11 +42,19 @@ Last recorded PR: [#1926](https://github.com/Ben987/Bondage-College/pull/1926)
 
 * Ellie - Added resource retry logic, which should substantially reduce the chances of seeing "MISSING VALUE FOR TAG" and similar errors ([#1948](https://github.com/Ben987/Bondage-College/pull/1948))
 * Emily R - Fixed some visual issues with the Flippers in combination with most full-body items ([#1940](https://github.com/Ben987/Bondage-College/pull/1940))
+* Ellie - Fixed some graphical issues with the medium collar chain ([#1952](https://github.com/Ben987/Bondage-College/pull/1952))
+* Sandrine - Changed the "up" button for kneeling/hogtied characters to line up with the expression menu buttons ([#1935](https://github.com/Ben987/Bondage-College/pull/1935))
+* Ellie - Fixed an issue which would allow non-owners/lovers to add owner/lover padlocks to others via the console ([#1959](https://github.com/Ben987/Bondage-College/pull/1959))
+* Ellie - Fixed a visual issue with the lock asset for the Futuristic Arm Cuffs in the yoked pose ([#1957](https://github.com/Ben987/Bondage-College/pull/1957))
+* Ayesha - Reinstated default colors to several collars ([#1893](https://github.com/Ben987/Bondage-College/pull/1893))
 
 ### [Technical]
 
+* Jomshir - Added an asset-checking script to help identify and fix asset definition errors ([#1955](https://github.com/Ben987/Bondage-College/pull/1955))
+* Ellie - Added support for variable item opacity, and new slider controls ([#1931](https://github.com/Ben987/Bondage-College/pull/1931))
 * Lots of technical changes, fixes and improvements:
     * Nina - [#1940](https://github.com/Ben987/Bondage-College/pull/1940)
+    * Ellie - [#1953](https://github.com/Ben987/Bondage-College/pull/1953)
 
 * [Beta Fixes]
 
