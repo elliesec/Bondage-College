@@ -70,7 +70,7 @@ function InventoryHairAccessory3HaloDraw() {
 		const isSelected = property.Type === option.Property.Type;
 
 		DrawButton(x, y, 225, 275, "", isSelected ? "#888" : "#fff", null, null, isSelected);
-		DrawImage("Screens/Inventory/" + asset.Group.Name + "/" + asset.Name + "/" + option.Name + ".png", x + 2, y);
+		DrawImage("Screens/Inventory/" + asset.DynamicGroupName + "/" + asset.Name + "/" + option.Name + ".png", x + 2, y);
 		DrawTextFit(DialogFind(Player, "InventoryHairAccessory3HaloType" + option.Name), x + 112, y + 250, 225, "#000");
 	});
 }
