@@ -1077,11 +1077,11 @@ function DrawProcess() {
  * @param {Asset} Asset - The asset to draw the preview for
  * @returns {void} - Nothing
  */
-function DrawAssetPreview(X, Y, Asset) {
+function DrawAssetPreview(X, Y, Asset, Background, Vibrating) {
 	const C = CharacterGetCurrent();
 	const DynamicPreviewIcon = C ? Asset.DynamicPreviewIcon(C) : "";
-	const Path = `Asset/${Asset.Group.Family}/${Asset.DynamicGroupName}/Preview/${Asset.Name}${DynamicPreviewIcon}.png`;
-	DrawPreviewBox(Path);
+	const Path = `Assets/${Asset.Group.Family}/${Asset.DynamicGroupName}/Preview/${Asset.Name}${DynamicPreviewIcon}.png`;
+	DrawPreviewBox(X, Y, Path, Asset.Description, Background, Vibrating);
 }
 
 /**
@@ -1089,10 +1089,16 @@ function DrawAssetPreview(X, Y, Asset) {
  * @param {number} X - Position of the preview box on the X axis
  * @param {number} Y - Position of the preview box on the Y axis
  * @param {string} Path - The path of the image to draw
+ * @param {string} Description - The preview box description
+ * @param {string} [Background] - The background color to draw the preview box in - defaults to white
+ * @param {boolean} [Vibrating] - Whether or not to add vibration effects to the item - defaults to false
  * @returns {void} - Nothing
  */
-function DrawPreviewBox(X, Y, Path) {
-	DrawRect(X, Y, 225, 275, "#fff");
-	DrawImageResize(Path, X + 2, Y + 2, 221, 221);
-	DrawTextFit(Asset.Description, X + 110, Y + 250, 221, "#000");
+function DrawPreviewBox(X, Y, Path, Description, Background, Vibrating) {
+	Background = Background || "#fff";
+	DrawRect(X, Y, 225, 275, Background);
+	const ImageX = Vibrating ? X + 1 + Math.floor(Math.random() * 3) : X + 2;
+	const ImageY = Vibrating ? Y + 1 + Math.floor(Math.random() * 3) : Y + 2;
+	DrawImageResize(Path, ImageX, ImageY, 221, 221);
+	DrawTextFit(Description, X + 110, Y + 250, 221, "#000");
 }
