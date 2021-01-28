@@ -1078,7 +1078,7 @@ function DrawProcess() {
  * @returns {void} - Nothing
  */
 function DrawAssetPreview(X, Y, Asset) {
-	DrawRect(X, Y, 225, 275, "white");
+	DrawRect(X, Y, 225, 275, "#fff");
 	DrawImageResize("Assets/" + Asset.Group.Family + "/" + Asset.DynamicGroupName + "/Preview/" + Asset.Name + Asset.DynamicPreviewIcon(CharacterGetCurrent()) + ".png", X + 2, Y + 2, 221, 221);
-	DrawTextFit(Asset.Description, X + 110, Y + 250, 221, "black");
+	DrawTextFit(Asset.Description, X + 110, Y + 250, 221, "#000");
 }
