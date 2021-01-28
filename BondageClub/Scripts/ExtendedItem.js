@@ -78,8 +78,7 @@ var ExtendedItemPermissionMode = false;
 
 /**
  * Loads the item extension properties
- * @param {ExtendedItemOption[]} Options - An Array of type definitions for each allowed extended type. The first item in the array should
- *     be the default option.
+ * @param {ExtendedItemOption[]} Options - An Array of type definitions for each allowed extended type. The first item in the array should be the default option.
  * @param {string} DialogKey - The dialog key for the message to display prompting the player to select an extended type
  * @returns {void} Nothing
  */
@@ -88,22 +87,12 @@ function ExtendedItemLoad(Options, DialogKey) {
 		// Default to the first option if no property is set
 		DialogFocusItem.Property = JSON.parse(JSON.stringify(Options[0].Property));
 		//Refresh the character if the base properties of the items do not correspond with its base type.
-		var MustRefresh = false;
-		if (DialogFocusItem.Asset.Effect == null && Array.isArray(Options[0].Property.Effect) && Options[0].Property.Effect.length > 0) MustRefresh = true;
-		if (!MustRefresh && Array.isArray(DialogFocusItem.Asset.Effect) && Array.isArray(Options[0].Property.Effect))
-			for (var E = 0; E <  Options[0].Property.Effect.length; E++)
-				if (!DialogFocusItem.Asset.Effect.includes(Options[0].Property.Effect[E])) { 
-					MustRefresh = true;
-					break;
-				}
-		if (!MustRefresh && DialogFocusItem.Asset.Block == null && Array.isArray(Options[0].Property.Block) && Options[0].Property.Block.length > 0) MustRefresh = true;
-		if (!MustRefresh && Array.isArray(DialogFocusItem.Asset.Block) && Array.isArray(Options[0].Property.Block))
-			for (var E = 0; E <  Options[0].Property.Block.length; E++)
-				if (!DialogFocusItem.Asset.Block.includes(Options[0].Property.Block[E])) { 
-					MustRefresh = true;
-					break;
-					}
-		if (MustRefresh) { 
+		let MustRefresh = ExtendedItemCheckArrayForRefresh(Options, "Effect") ||
+		                  ExtendedItemCheckArrayForRefresh(Options, "Block") ||
+		                  ExtendedItemCheckArrayForRefresh(Options, "Hide") ||
+		                  ExtendedItemCheckArrayForRefresh(Options, "Expose");
+
+		if (MustRefresh) {
 			var C = CharacterGetCurrent() || CharacterAppearanceSelection;
 			CharacterRefresh(C);
 			ChatRoomCharacterItemUpdate(C, DialogFocusItem.Asset.Group.Name);
@@ -113,6 +102,31 @@ function ExtendedItemLoad(Options, DialogKey) {
 	if (ExtendedItemOffsets[ExtendedItemOffsetKey()] == null) ExtendedItemSetOffset(0);
 
 	DialogExtendedMessage = DialogFind(Player, DialogKey);
+}
+
+/**
+ * Checks an asset's base array property against that of its initial extended option to determine whether a refresh is
+ * needed on item load.
+ * @param {ExtendedItemOption[]} options - An Array of type definitions for each allowed extended type. The first item
+ * in the array should be the default option.
+ * @param {string} propName - the property name to check against
+ * @returns {boolean} - Returns true if the initial option's property differs from that on the base asset, false
+ * otherwise
+ */
+function ExtendedItemCheckArrayForRefresh(options, propName) {
+	const assetArray = DialogFocusItem.Asset[propName];
+	const optionArray = options[0].Property[propName];
+	// If the base asset does not declare the property, but the option does, refresh
+	if (!assetArray && Array.isArray(optionArray) && optionArray.length) return true;
+	// If the option doesn't declare the property, don't refresh
+	if (!optionArray && Array.isArray(assetArray) && assetArray.length) return false;
+	else if (Array.isArray(assetArray) && Array.isArray(optionArray)) {
+		// Otherwise, if both arrays exist, refresh if the arrays are not equal, ignoring order
+		return assetArray.length !== optionArray.length ||
+		       optionArray.some(item => !assetArray.includes(item)) ||
+		       assetArray.some(item => !optionArray.includes(item));
+	}
+	return false;
 }
 
 /**
