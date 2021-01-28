@@ -1796,9 +1796,9 @@ function DialogDrawActivityMenu(C) {
 function DialogDrawStruggleProgress(C) {
 	// Draw one or both items
 	if ((DialogProgressPrevItem != null) && (DialogProgressNextItem != null)) {
-		DrawItemPreview(1200, 250, DialogProgressPrevItem);
-		DrawItemPreview(1575, 250, DialogProgressNextItem);
-	} else DrawItemPreview(1387, 250, (DialogProgressPrevItem != null) ? DialogProgressPrevItem : DialogProgressNextItem);
+		DrawAssetPreview(1200, 250, DialogProgressPrevItem.Asset);
+		DrawAssetPreview(1575, 250, DialogProgressNextItem.Asset);
+	} else DrawAssetPreview(1387, 250, (DialogProgressPrevItem != null) ? DialogProgressPrevItem.Asset : DialogProgressNextItem.Asset);
 
 	// Add or subtract to the automatic progression, doesn't move in color picking mode
 	DialogProgress = DialogProgress + DialogProgressAuto;
@@ -2199,7 +2199,7 @@ function DialogDrawItemMenu(C) {
 			DrawImageResize("Assets/" + FocusItem.Asset.Group.Family + "/" + FocusItem.Asset.DynamicGroupName + "/Preview/" + FocusItem.Asset.Name + ".png", 1389 + Math.floor(Math.random() * 3) - 2, 252 + Math.floor(Math.random() * 3) - 2, 221, 221);
 			DrawTextFit(FocusItem.Asset.Description, 1497, 500, 221, "black");
 		}
-		else DrawItemPreview(1387, 250, FocusItem);
+		else DrawAssetPreview(1387, 250, FocusItem.Asset);
 	}
 
 	// Show the no access text

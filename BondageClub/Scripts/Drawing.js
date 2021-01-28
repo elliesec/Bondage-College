@@ -1074,11 +1074,11 @@ function DrawProcess() {
  * Draws the item preview box
  * @param {number} X - Position of the item on the X axis
  * @param {number} Y - Position of the item on the Y axis
- * @param {Item} Item - The item to draw the preview for
+ * @param {Asset} Asset - The asset to draw the preview for
  * @returns {void} - Nothing
  */
-function DrawItemPreview(X, Y, Item) {
+function DrawAssetPreview(X, Y, Asset) {
 	DrawRect(X, Y, 225, 275, "white");
-	DrawImageResize("Assets/" + Item.Asset.Group.Family + "/" + Item.Asset.DynamicGroupName + "/Preview/" + Item.Asset.Name + Item.Asset.DynamicPreviewIcon(CharacterGetCurrent()) + ".png", X + 2, Y + 2, 221, 221);
-	DrawTextFit(Item.Asset.Description, X + 110, Y + 250, 221, "black");
+	DrawImageResize("Assets/" + Asset.Group.Family + "/" + Asset.DynamicGroupName + "/Preview/" + Asset.Name + Asset.DynamicPreviewIcon(CharacterGetCurrent()) + ".png", X + 2, Y + 2, 221, 221);
+	DrawTextFit(Asset.Description, X + 110, Y + 250, 221, "black");
 }
