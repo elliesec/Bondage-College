@@ -1071,14 +1071,28 @@ function DrawProcess() {
 }
 
 /**
- * Draws the item preview box
- * @param {number} X - Position of the item on the X axis
- * @param {number} Y - Position of the item on the Y axis
+ * Draws an asset's preview box
+ * @param {number} X - Position of the preview box on the X axis
+ * @param {number} Y - Position of the preview box on the Y axis
  * @param {Asset} Asset - The asset to draw the preview for
  * @returns {void} - Nothing
  */
 function DrawAssetPreview(X, Y, Asset) {
+	const C = CharacterGetCurrent();
+	const DynamicPreviewIcon = C ? Asset.DynamicPreviewIcon(C) : "";
+	const Path = `Asset/${Asset.Group.Family}/${Asset.DynamicGroupName}/Preview/${Asset.Name}${DynamicPreviewIcon}.png`;
+	DrawPreviewBox(Path);
+}
+
+/**
+ * Draws an item preview box for the provided image path
+ * @param {number} X - Position of the preview box on the X axis
+ * @param {number} Y - Position of the preview box on the Y axis
+ * @param {string} Path - The path of the image to draw
+ * @returns {void} - Nothing
+ */
+function DrawPreviewBox(X, Y, Path) {
 	DrawRect(X, Y, 225, 275, "#fff");
-	DrawImageResize("Assets/" + Asset.Group.Family + "/" + Asset.DynamicGroupName + "/Preview/" + Asset.Name + Asset.DynamicPreviewIcon(CharacterGetCurrent()) + ".png", X + 2, Y + 2, 221, 221);
+	DrawImageResize(Path, X + 2, Y + 2, 221, 221);
 	DrawTextFit(Asset.Description, X + 110, Y + 250, 221, "#000");
 }
