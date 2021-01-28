@@ -76,12 +76,12 @@ function ShopRun() {
 		var X = 1000;
 		var Y = 125;
 		for (let A = ShopItemOffset; (A < ShopCart.length && A < ShopItemOffset + 12); A++) {
-			DrawRect(X, Y, 225, 275, ((MouseX >= X) && (MouseX < X + 225) && (MouseY >= Y) && (MouseY < Y + 275) && !CommonIsMobile) ? "cyan" : "white");
-			if (!CharacterAppearanceItemIsHidden(ShopCart[A].Name, ShopCart[A].Group.Name)) 
-                DrawImageResize("Assets/" + ShopCart[A].Group.Family + "/" + ShopCart[A].DynamicGroupName + "/Preview/" + ShopCart[A].Name + ".png", X + 2, Y + 2, 221, 221);
-			else 
-                DrawImageResize("Icons/HiddenItem.png", X + 2, Y + 2, 221, 221);
-			DrawTextFit(ShopCart[A].Description + " " + ShopCart[A].Value.toString() + " $", X + 112, Y + 250, 221, (InventoryAvailable(Player, ShopCart[A].Name, ShopCart[A].Group.Name)) ? "green" : "red");
+			const Hidden = CharacterAppearanceItemIsHidden(ShopCart[A].Name, ShopCart[A].Group.Name);
+			const Description = ShopCart[A].Description + " " + ShopCart[A].Value.toString() + " $";
+			const BackgroundColor = MouseIn(X, Y, 225, 275) && !CommonIsMobile ? "cyan" : "#fff";
+			const ForegroundColor = InventoryAvailable(Player, ShopCart[A].Name, ShopCart[A].Group.Name) ? "green" : "red";
+			if (Hidden) DrawPreviewBox(X, Y, "Icons/HiddenItem.png", Description, BackgroundColor, ForegroundColor);
+			else DrawAssetPreview(X, Y, ShopCart[A], Description, BackgroundColor, ForegroundColor);
 			X = X + 250;
 			if (X > 1800) {
 				X = 1000;

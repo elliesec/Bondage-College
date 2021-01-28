@@ -673,7 +673,7 @@ function AppearanceRun() {
 
 			const BackgroundColor = AppearanceGetPreviewImageColor(C, Item, Hover);
 			const IsVibrating = Item.Worn && InventoryItemHasEffect(InventoryGet(C, Item.Asset.Group.Name), "Vibrating", true);
-			DrawAssetPreview(X, Y, Item.Asset, BackgroundColor, IsVibrating);
+			DrawAssetPreview(X, Y, Item.Asset, null, BackgroundColor, null, IsVibrating);
 			if (Item.Icon != "") DrawImage("Icons/" + Item.Icon + ".png", X + 2, Y + 110);
 			X = X + 250;
 			if (X > 1800) {
