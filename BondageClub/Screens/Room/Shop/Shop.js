@@ -78,10 +78,10 @@ function ShopRun() {
 		for (let A = ShopItemOffset; (A < ShopCart.length && A < ShopItemOffset + 12); A++) {
 			const Hidden = CharacterAppearanceItemIsHidden(ShopCart[A].Name, ShopCart[A].Group.Name);
 			const Description = ShopCart[A].Description + " " + ShopCart[A].Value.toString() + " $";
-			const BackgroundColor = MouseIn(X, Y, 225, 275) && !CommonIsMobile ? "cyan" : "#fff";
-			const ForegroundColor = InventoryAvailable(Player, ShopCart[A].Name, ShopCart[A].Group.Name) ? "green" : "red";
-			if (Hidden) DrawPreviewBox(X, Y, "Icons/HiddenItem.png", Description, BackgroundColor, ForegroundColor);
-			else DrawAssetPreview(X, Y, ShopCart[A], null, Description, BackgroundColor, ForegroundColor);
+			const Background = MouseIn(X, Y, 225, 275) && !CommonIsMobile ? "cyan" : "#fff";
+			const Foreground = InventoryAvailable(Player, ShopCart[A].Name, ShopCart[A].Group.Name) ? "green" : "red";
+			if (Hidden) DrawPreviewBox(X, Y, "Icons/HiddenItem.png", Description, { Background, Foreground });
+			else DrawAssetPreview(X, Y, ShopCart[A], null, Description, Background, Foreground);
 			X = X + 250;
 			if (X > 1800) {
 				X = 1000;

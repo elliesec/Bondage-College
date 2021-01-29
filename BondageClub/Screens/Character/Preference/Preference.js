@@ -1152,7 +1152,7 @@ function PreferenceSubscreenVisibilityRun() {
 		DrawButton(500, PreferenceVisibilityResetClicked ? 780 : 700, 300, 64, TextGet("VisibilityReset"), "White", "");
 
 		// Preview icon
-		if (PreferenceVisibilityHideChecked) DrawPreviewBox(1200, 193, "Icons/HiddenItem.png", "", null, null, null, true);
+		if (PreferenceVisibilityHideChecked) DrawPreviewBox(1200, 193, "Icons/HiddenItem.png", "", { Border: true });
 		else DrawAssetPreview(1200, 193, PreferenceVisibilityPreviewAsset, "", null, null, null, true);
 	} else {
 		MainCanvas.textAlign = "center";

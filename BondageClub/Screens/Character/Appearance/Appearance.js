@@ -671,12 +671,12 @@ function AppearanceRun() {
 		for (let I = DialogInventoryOffset; (I < DialogInventory.length) && (I < DialogInventoryOffset + 9); I++) {
 			const Item = DialogInventory[I];
 			const Hover = MouseIn(X, Y, 225, 275) && !CommonIsMobile;
-			const BackgroundColor = AppearanceGetPreviewImageColor(C, Item, Hover);
+			const Background = AppearanceGetPreviewImageColor(C, Item, Hover);
 			const Vibrating = Item.Worn && InventoryItemHasEffect(InventoryGet(C, Item.Asset.Group.Name), "Vibrating", true);
 			const Hidden = CharacterAppearanceItemIsHidden(Item.Asset.Name, Item.Asset.Group.Name);
 
-			if (Hidden) DrawPreviewBox(X, Y, "Icons/HiddenItem.png", Item.Asset.Description, BackgroundColor);
-			else DrawAssetPreview(X, Y, Item.Asset, null, null, BackgroundColor, null, Vibrating);
+			if (Hidden) DrawPreviewBox(X, Y, "Icons/HiddenItem.png", Item.Asset.Description, { Background });
+			else DrawAssetPreview(X, Y, Item.Asset, null, null, Background, null, Vibrating);
 
 			if (Item.Icon != "") DrawImage("Icons/" + Item.Icon + ".png", X + 2, Y + 110);
 			X = X + 250;

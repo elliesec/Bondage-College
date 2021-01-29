@@ -154,7 +154,7 @@ function GameLARPRunProcess() {
 				const Item = GameLARPInventory[A];
 				const Hover = MouseIn(X, Y, 225, 275) && !CommonIsMobile;
 				const Hidden = CharacterAppearanceItemIsHidden(Item.Asset.Name, Item.Asset.Group.Name);
-				if (Hidden) DrawPreviewBox(X, Y, "Icons/HiddenItem.png", Item.Asset.Description, Hover ? "cyan" : "#fff");
+				if (Hidden) DrawPreviewBox(X, Y, "Icons/HiddenItem.png", Item.Asset.Description, { Background: Hover ? "cyan" : "#fff" });
 
 				X = X + 250;
 				if (X > 800) {

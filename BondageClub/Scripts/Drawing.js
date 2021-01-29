@@ -1080,14 +1080,14 @@ function DrawProcess() {
  * @param {string} [Background] - The background color to draw the preview box in - defaults to white
  * @param {string} [Foreground] - The foreground (text) color to draw the description in - defaults to black
  * @param {boolean} [Vibrating] - Whether or not to add vibration effects to the item - defaults to false
- * @param {boolean} [DrawBorder] - Whether or not to draw a border around the preview box
+ * @param {boolean} [Border] - Whether or not to draw a border around the preview box
  * @returns {void} - Nothing
  */
-function DrawAssetPreview(X, Y, Asset, C, Description, Background, Foreground, Vibrating, DrawBorder) {
+function DrawAssetPreview(X, Y, Asset, C, Description, Background, Foreground, Vibrating, Border) {
 	const DynamicPreviewIcon = C ? Asset.DynamicPreviewIcon(C) : "";
 	const Path = `Assets/${Asset.Group.Family}/${Asset.DynamicGroupName}/Preview/${Asset.Name}${DynamicPreviewIcon}.png`;
 	if (Description == null) Description = C ? Asset.DynamicDescription(C) : Asset.Description;
-	DrawPreviewBox(X, Y, Path, Description, Background, Foreground, Vibrating, DrawBorder);
+	DrawPreviewBox(X, Y, Path, Description, { Background, Foreground, Vibrating, Border });
 }
 
 /**
@@ -1096,18 +1096,20 @@ function DrawAssetPreview(X, Y, Asset, C, Description, Background, Foreground, V
  * @param {number} Y - Position of the preview box on the Y axis
  * @param {string} Path - The path of the image to draw
  * @param {string} Description - The preview box description
- * @param {string} [Background] - The background color to draw the preview box in - defaults to white
- * @param {string} [Foreground] - The foreground (text) color to draw the description in - defaults to black
- * @param {boolean} [Vibrating] - Whether or not to add vibration effects to the item - defaults to false
- * @param {boolean} [DrawBorder] - Whether or not to draw a border around the preview box
+ * @param {object} Options - Additional drawing options
+ * @param {string} Options.[Background] - The background color to draw the preview box in - defaults to white
+ * @param {string} Options.[Foreground] - The foreground (text) color to draw the description in - defaults to black
+ * @param {boolean} Options.[Vibrating] - Whether or not to add vibration effects to the item - defaults to false
+ * @param {boolean} Options.[Border] - Whether or not to draw a border around the preview box
  * @returns {void} - Nothing
  */
-function DrawPreviewBox(X, Y, Path, Description, Background, Foreground, Vibrating, DrawBorder) {
+function DrawPreviewBox(X, Y, Path, Description, Options) {
+	let {Background, Foreground, Vibrating, Border} = (Options || {});
 	Background = Background || "#fff";
 	Foreground = Foreground || "#000";
 	const Height = Description ? 275 : 225;
 	DrawRect(X, Y, 225, Height, Background);
-	if (DrawBorder) DrawEmptyRect(X, Y, 225, Height, "#000");
+	if (Border) DrawEmptyRect(X, Y, 225, Height, "#000");
 	const ImageX = Vibrating ? X + 1 + Math.floor(Math.random() * 3) : X + 2;
 	const ImageY = Vibrating ? Y + 1 + Math.floor(Math.random() * 3) : Y + 2;
 	DrawImageResize(Path, ImageX, ImageY, 221, 221);
