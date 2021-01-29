@@ -676,7 +676,7 @@ function AppearanceRun() {
 			const Hidden = CharacterAppearanceItemIsHidden(Item.Asset.Name, Item.Asset.Group.Name);
 
 			if (Hidden) DrawPreviewBox(X, Y, "Icons/HiddenItem.png", Item.Asset.Description, { Background });
-			else DrawAssetPreview(X, Y, Item.Asset, null, null, Background, null, Vibrating);
+			else DrawAssetPreview(X, Y, Item.Asset, {Background, Vibrating});
 
 			if (Item.Icon != "") DrawImage("Icons/" + Item.Icon + ".png", X + 2, Y + 110);
 			X = X + 250;

@@ -81,7 +81,7 @@ function ShopRun() {
 			const Background = MouseIn(X, Y, 225, 275) && !CommonIsMobile ? "cyan" : "#fff";
 			const Foreground = InventoryAvailable(Player, ShopCart[A].Name, ShopCart[A].Group.Name) ? "green" : "red";
 			if (Hidden) DrawPreviewBox(X, Y, "Icons/HiddenItem.png", Description, { Background, Foreground });
-			else DrawAssetPreview(X, Y, ShopCart[A], null, Description, Background, Foreground);
+			else DrawAssetPreview(X, Y, ShopCart[A], { Description, Background, Foreground });
 			X = X + 250;
 			if (X > 1800) {
 				X = 1000;

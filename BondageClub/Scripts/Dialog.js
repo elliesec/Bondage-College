@@ -1796,9 +1796,9 @@ function DialogDrawActivityMenu(C) {
 function DialogDrawStruggleProgress(C) {
 	// Draw one or both items
 	if ((DialogProgressPrevItem != null) && (DialogProgressNextItem != null)) {
-		DrawAssetPreview(1200, 250, DialogProgressPrevItem.Asset, null);
-		DrawAssetPreview(1575, 250, DialogProgressNextItem.Asset, null);
-	} else DrawAssetPreview(1387, 250, (DialogProgressPrevItem != null) ? DialogProgressPrevItem.Asset : DialogProgressNextItem.Asset, null);
+		DrawAssetPreview(1200, 250, DialogProgressPrevItem.Asset);
+		DrawAssetPreview(1575, 250, DialogProgressNextItem.Asset);
+	} else DrawAssetPreview(1387, 250, (DialogProgressPrevItem != null) ? DialogProgressPrevItem.Asset : DialogProgressNextItem.Asset);
 
 	// Add or subtract to the automatic progression, doesn't move in color picking mode
 	DialogProgress = DialogProgress + DialogProgressAuto;
@@ -2153,7 +2153,7 @@ function DialogDrawItemMenu(C) {
 			const Hidden = CharacterAppearanceItemIsHidden(Item.Asset.Name, Item.Asset.Group.Name);
 
 			if (Hidden) DrawPreviewBox(X, Y, "Icons/HiddenItem.png", Item.Asset.DynamicDescription(Player), { Background });
-			else DrawAssetPreview(X, Y, Item.Asset, Player, null, Background, null, Vibrating);
+			else DrawAssetPreview(X, Y, Item.Asset, { C: Player, Background, Vibrating });
 
 			if (Item.Icon != "") DrawImage("Icons/" + Item.Icon + ".png", X + 2, Y + 110);
 			X = X + 250;
@@ -2188,7 +2188,7 @@ function DialogDrawItemMenu(C) {
 	// If we must draw the current item from the group
 	if (FocusItem != null) {
 		const Vibrating = InventoryItemHasEffect(FocusItem, "Vibrating", true);
-		DrawAssetPreview(1387, 250, FocusItem.Asset, C, null, null, null, Vibrating);
+		DrawAssetPreview(1387, 250, FocusItem.Asset, { C, Vibrating });
 	}
 
 	// Show the no access text

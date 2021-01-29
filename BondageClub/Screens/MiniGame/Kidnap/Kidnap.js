@@ -412,8 +412,8 @@ function KidnapShowItem() {
 	for (let I = 0; I < DialogInventory.length; I++) {
 		const Item = DialogInventory[I];
 		const Hover = MouseIn(X, Y, 225, 275) && !CommonIsMobile;
-		const BackgroundColor = Hover ? "cyan" : DialogInventory[I].Worn ? "pink" : "#fff";
-		DrawAssetPreview(X, Y, Item.Asset, null, null, BackgroundColor);
+		const Background = Hover ? "cyan" : DialogInventory[I].Worn ? "pink" : "#fff";
+		DrawAssetPreview(X, Y, Item.Asset, { Background });
 
 		X = X + 250;
 		if (X > 1800) {

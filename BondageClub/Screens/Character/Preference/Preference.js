@@ -1153,7 +1153,8 @@ function PreferenceSubscreenVisibilityRun() {
 
 		// Preview icon
 		if (PreferenceVisibilityHideChecked) DrawPreviewBox(1200, 193, "Icons/HiddenItem.png", "", { Border: true });
-		else DrawAssetPreview(1200, 193, PreferenceVisibilityPreviewAsset, "", null, null, null, true);
+
+		else DrawAssetPreview(1200, 193, PreferenceVisibilityPreviewAsset, {Description: "", Border: true});
 	} else {
 		MainCanvas.textAlign = "center";
 		DrawText(TextGet("VisibilityLocked"), 1200, 500, "Red", "Gray");
