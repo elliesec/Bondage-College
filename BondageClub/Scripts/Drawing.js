@@ -1075,6 +1075,7 @@ function DrawProcess() {
  * @param {number} X - Position of the preview box on the X axis
  * @param {number} Y - Position of the preview box on the Y axis
  * @param {Asset} Asset - The asset to draw the preview for
+ * @param {Character} [C] - The character using the item (used to calculate dynamic item descriptions/previews)
  * @param {string} Description - The preview box description
  * @param {string} [Background] - The background color to draw the preview box in - defaults to white
  * @param {string} [Foreground] - The foreground (text) color to draw the description in - defaults to black
