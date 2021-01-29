@@ -1075,14 +1075,19 @@ function DrawProcess() {
  * @param {number} X - Position of the preview box on the X axis
  * @param {number} Y - Position of the preview box on the Y axis
  * @param {Asset} Asset - The asset to draw the preview for
+ * @param {string} Description - The preview box description
+ * @param {string} [Background] - The background color to draw the preview box in - defaults to white
+ * @param {string} [Foreground] - The foreground (text) color to draw the description in - defaults to black
+ * @param {boolean} [Vibrating] - Whether or not to add vibration effects to the item - defaults to false
+ * @param {boolean} [DrawBorder] - Whether or not to draw a border around the preview box
  * @returns {void} - Nothing
  */
-function DrawAssetPreview(X, Y, Asset, Description, Background, Foreground, Vibrating) {
+function DrawAssetPreview(X, Y, Asset, Description, Background, Foreground, Vibrating, DrawBorder) {
 	const C = CharacterGetCurrent();
 	const DynamicPreviewIcon = C ? Asset.DynamicPreviewIcon(C) : "";
 	const Path = `Assets/${Asset.Group.Family}/${Asset.DynamicGroupName}/Preview/${Asset.Name}${DynamicPreviewIcon}.png`;
-	Description = Description || Asset.Description;
-	DrawPreviewBox(X, Y, Path, Description, Background, Foreground, Vibrating);
+	Description = Description == null ? Asset.Description : "";
+	DrawPreviewBox(X, Y, Path, Description, Background, Foreground, Vibrating, DrawBorder);
 }
 
 /**
@@ -1094,14 +1099,17 @@ function DrawAssetPreview(X, Y, Asset, Description, Background, Foreground, Vibr
  * @param {string} [Background] - The background color to draw the preview box in - defaults to white
  * @param {string} [Foreground] - The foreground (text) color to draw the description in - defaults to black
  * @param {boolean} [Vibrating] - Whether or not to add vibration effects to the item - defaults to false
+ * @param {boolean} [DrawBorder] - Whether or not to draw a border around the preview box
  * @returns {void} - Nothing
  */
-function DrawPreviewBox(X, Y, Path, Description, Background, Foreground, Vibrating) {
+function DrawPreviewBox(X, Y, Path, Description, Background, Foreground, Vibrating, DrawBorder) {
 	Background = Background || "#fff";
 	Foreground = Foreground || "#000";
-	DrawRect(X, Y, 225, 275, Background);
+	const Height = Description ? 275 : 225;
+	DrawRect(X, Y, 225, Height, Background);
+	if (DrawBorder) DrawEmptyRect(X, Y, 225, Height, "#000");
 	const ImageX = Vibrating ? X + 1 + Math.floor(Math.random() * 3) : X + 2;
 	const ImageY = Vibrating ? Y + 1 + Math.floor(Math.random() * 3) : Y + 2;
 	DrawImageResize(Path, ImageX, ImageY, 221, 221);
-	DrawTextFit(Description, X + 110, Y + 250, 221, Foreground);
+	if (Description) DrawTextFit(Description, X + 110, Y + 250, 221, Foreground);
 }
