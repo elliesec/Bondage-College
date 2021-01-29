@@ -1082,11 +1082,10 @@ function DrawProcess() {
  * @param {boolean} [DrawBorder] - Whether or not to draw a border around the preview box
  * @returns {void} - Nothing
  */
-function DrawAssetPreview(X, Y, Asset, Description, Background, Foreground, Vibrating, DrawBorder) {
-	const C = CharacterGetCurrent();
+function DrawAssetPreview(X, Y, Asset, C, Description, Background, Foreground, Vibrating, DrawBorder) {
 	const DynamicPreviewIcon = C ? Asset.DynamicPreviewIcon(C) : "";
 	const Path = `Assets/${Asset.Group.Family}/${Asset.DynamicGroupName}/Preview/${Asset.Name}${DynamicPreviewIcon}.png`;
-	Description = Description == null ? Asset.Description : "";
+	if (Description == null) Description = C ? Asset.DynamicDescription(C) : Asset.Description;
 	DrawPreviewBox(X, Y, Path, Description, Background, Foreground, Vibrating, DrawBorder);
 }
 

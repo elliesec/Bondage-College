@@ -81,7 +81,7 @@ function ShopRun() {
 			const BackgroundColor = MouseIn(X, Y, 225, 275) && !CommonIsMobile ? "cyan" : "#fff";
 			const ForegroundColor = InventoryAvailable(Player, ShopCart[A].Name, ShopCart[A].Group.Name) ? "green" : "red";
 			if (Hidden) DrawPreviewBox(X, Y, "Icons/HiddenItem.png", Description, BackgroundColor, ForegroundColor);
-			else DrawAssetPreview(X, Y, ShopCart[A], Description, BackgroundColor, ForegroundColor);
+			else DrawAssetPreview(X, Y, ShopCart[A], null, Description, BackgroundColor, ForegroundColor);
 			X = X + 250;
 			if (X > 1800) {
 				X = 1000;
@@ -99,7 +99,8 @@ function ShopRun() {
 }
 
 /**
- * Checks if an asset is from the focus group and if it can be bought. An asset can be shown if it has a value greater than 0. (0 is a default item, -1 is a non-purchasable item)
+ * Checks if an asset is from the focus group and if it can be bought. An asset can be shown if it has a value greater than 0. (0 is a
+ * default item, -1 is a non-purchasable item)
  * @param {Asset} Asset - The asset to check for availability
  * @returns {boolean} - Returns TRUE if the item is purchasable and part of the focus group.
  */
@@ -108,7 +109,8 @@ function ShopAssetFocusGroup(Asset) {
 }
 
 /**
- * Checks if an asset can be bought. An asset is considered missing if it is not owned and has a value greater than 0. (0 is a default item, -1 is a non-purchasable item)
+ * Checks if an asset can be bought. An asset is considered missing if it is not owned and has a value greater than 0. (0 is a default
+ * item, -1 is a non-purchasable item)
  * @param {Asset} Asset - The asset to check for availability
  * @returns {boolean} - Returns TRUE if the item is purchasable and unowned.
  */
@@ -288,7 +290,8 @@ function ShopVendorBondage() {
 }
 
 /**
- * Restrains the player with a random shop item before the shop demo job starts. The customer will have a 50/50 chance of being willing to release the player
+ * Restrains the player with a random shop item before the shop demo job starts. The customer will have a 50/50 chance of being willing to
+ * release the player
  * @returns {void} - Nothing
  */
 function ShopJobRestrain() {

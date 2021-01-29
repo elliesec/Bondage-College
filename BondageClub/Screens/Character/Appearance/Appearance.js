@@ -353,7 +353,8 @@ function CharacterAppearanceSortLayers(C) {
  * @param {Character} C - The character whose assets are checked
  * @param {string} AssetName - The name of the asset to check
  * @param {string} GroupName - The name of the item group to check
- * @param {boolean} Recursive - If TRUE, then other items which are themselves hidden will not hide this item. Parameterising this prevents infinite loops.
+ * @param {boolean} Recursive - If TRUE, then other items which are themselves hidden will not hide this item. Parameterising this prevents
+ *     infinite loops.
  * @returns {boolean} - Returns TRUE if we can show the item or the item group
  */
 function CharacterAppearanceVisible(C, AssetName, GroupName, Recursive = true) {
@@ -507,8 +508,9 @@ function CharacterAppearanceXOffset(C, HeightRatio) {
 }
 
 /**
- * Repositions the character vertically towards the bottom of the canvas (the 'floor'), since shorter characters will be shrunk towards the top
- * HeightRatioProportion controls how much of this offset applies with 1 (max) positioning them on the "floor" and 0 (min) leaving them up at the 'ceiling'
+ * Repositions the character vertically towards the bottom of the canvas (the 'floor'), since shorter characters will be shrunk towards the
+ * top HeightRatioProportion controls how much of this offset applies with 1 (max) positioning them on the "floor" and 0 (min) leaving them
+ * up at the 'ceiling'
  * @param {Character} C - The character to reposition
  * @param {number} HeightRatio - The character's height ratio
  * @returns {number} - The amounnt to move the character along the Y co-ordinate
@@ -663,17 +665,19 @@ function AppearanceRun() {
 
 	// In cloth selection mode
 	if (CharacterAppearanceMode == "Cloth") {
-
 		// Prepares a 3x3 square of clothes to present all the possible options
 		let X = 1250;
 		let Y = 125;
 		for (let I = DialogInventoryOffset; (I < DialogInventory.length) && (I < DialogInventoryOffset + 9); I++) {
-			var Item = DialogInventory[I];
-			var Hover = MouseIn(X, Y, 225, 275);
-
+			const Item = DialogInventory[I];
+			const Hover = MouseIn(X, Y, 225, 275) && !CommonIsMobile;
 			const BackgroundColor = AppearanceGetPreviewImageColor(C, Item, Hover);
-			const IsVibrating = Item.Worn && InventoryItemHasEffect(InventoryGet(C, Item.Asset.Group.Name), "Vibrating", true);
-			DrawAssetPreview(X, Y, Item.Asset, null, BackgroundColor, null, IsVibrating);
+			const Vibrating = Item.Worn && InventoryItemHasEffect(InventoryGet(C, Item.Asset.Group.Name), "Vibrating", true);
+			const Hidden = CharacterAppearanceItemIsHidden(Item.Asset.Name, Item.Asset.Group.Name);
+
+			if (Hidden) DrawPreviewBox(X, Y, "Icons/HiddenItem.png", Item.Asset.Description, BackgroundColor);
+			else DrawAssetPreview(X, Y, Item.Asset, null, null, BackgroundColor, null, Vibrating);
+
 			if (Item.Icon != "") DrawImage("Icons/" + Item.Icon + ".png", X + 2, Y + 110);
 			X = X + 250;
 			if (X > 1800) {
@@ -681,9 +685,7 @@ function AppearanceRun() {
 				Y = Y + 300;
 			}
 		}
-
 	}
-
 }
 
 /**

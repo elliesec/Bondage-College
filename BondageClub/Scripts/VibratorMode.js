@@ -176,7 +176,7 @@ function VibratorModeDraw(Options) {
 function VibratorModeDrawHeader() {
 	const Asset = DialogFocusItem.Asset;
 	const Vibrating = DialogFocusItem.Property && DialogFocusItem.Property.Intensity != null && DialogFocusItem.Property.Intensity >= 0;
-	DrawAssetPreview(1387, 100, Asset, null, null, null, Vibrating);
+	DrawAssetPreview(1387, 100, Asset, null, null, null, null, Vibrating);
 }
 
 /**
