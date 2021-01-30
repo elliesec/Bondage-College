@@ -30,16 +30,16 @@ function InventoryItemButtInflVibeButtPlugDraw() {
 // Catches the item extension clicks
 function InventoryItemButtInflVibeButtPlugClick() {
 	if (MouseIn(1885, 25, 90, 90)) DialogFocusItem = null;
-	if (MouseIn(1200, 775, 200, 55) && (DialogFocusItem.Property.InflateLevel !== 0)) InventoryItemButtInflVibeButtPlugInflation(0 - DialogFocusItem.Property.InflateLevel);
-	if (MouseIn(1550, 775, 200, 55) && (DialogFocusItem.Property.InflateLevel !== 1)) InventoryItemButtInflVibeButtPlugInflation(1 - DialogFocusItem.Property.InflateLevel);
-	if (MouseIn(1200, 835, 200, 55) && (DialogFocusItem.Property.InflateLevel !== 2)) InventoryItemButtInflVibeButtPlugInflation(2 - DialogFocusItem.Property.InflateLevel);
-	if (MouseIn(1550, 835, 200, 55) && (DialogFocusItem.Property.InflateLevel !== 3)) InventoryItemButtInflVibeButtPlugInflation(3 - DialogFocusItem.Property.InflateLevel);
-	if (MouseIn(1375, 895, 200, 55) && (DialogFocusItem.Property.InflateLevel !== 4)) InventoryItemButtInflVibeButtPlugInflation(4 - DialogFocusItem.Property.InflateLevel);
-	if (MouseIn(1200, 550, 200, 55) && (DialogFocusItem.Property.Intensity !== -1)) InventoryItemButtInflVibeButtPlugSetIntensity(-1 - DialogFocusItem.Property.Intensity);
-	if (MouseIn(1550, 550, 200, 55) && (DialogFocusItem.Property.Intensity !== 0)) InventoryItemButtInflVibeButtPlugSetIntensity(0 - DialogFocusItem.Property.Intensity);
-	if (MouseIn(1200, 610, 200, 55) && (DialogFocusItem.Property.Intensity !== 1)) InventoryItemButtInflVibeButtPlugSetIntensity(1 - DialogFocusItem.Property.Intensity);
-	if (MouseIn(1550, 610, 200, 55) && (DialogFocusItem.Property.Intensity !== 2)) InventoryItemButtInflVibeButtPlugSetIntensity(2 - DialogFocusItem.Property.Intensity);
-	if (MouseIn(1375, 670, 200, 55) && (DialogFocusItem.Property.Intensity !== 3)) InventoryItemButtInflVibeButtPlugSetIntensity(3 - DialogFocusItem.Property.Intensity);
+	else if (MouseIn(1200, 775, 200, 55) && (DialogFocusItem.Property.InflateLevel !== 0)) InventoryItemButtInflVibeButtPlugInflation(0 - DialogFocusItem.Property.InflateLevel);
+	else if (MouseIn(1550, 775, 200, 55) && (DialogFocusItem.Property.InflateLevel !== 1)) InventoryItemButtInflVibeButtPlugInflation(1 - DialogFocusItem.Property.InflateLevel);
+	else if (MouseIn(1200, 835, 200, 55) && (DialogFocusItem.Property.InflateLevel !== 2)) InventoryItemButtInflVibeButtPlugInflation(2 - DialogFocusItem.Property.InflateLevel);
+	else if (MouseIn(1550, 835, 200, 55) && (DialogFocusItem.Property.InflateLevel !== 3)) InventoryItemButtInflVibeButtPlugInflation(3 - DialogFocusItem.Property.InflateLevel);
+	else if (MouseIn(1375, 895, 200, 55) && (DialogFocusItem.Property.InflateLevel !== 4)) InventoryItemButtInflVibeButtPlugInflation(4 - DialogFocusItem.Property.InflateLevel);
+	else if (MouseIn(1200, 550, 200, 55) && (DialogFocusItem.Property.Intensity !== -1)) InventoryItemButtInflVibeButtPlugSetIntensity(-1 - DialogFocusItem.Property.Intensity);
+	else if (MouseIn(1550, 550, 200, 55) && (DialogFocusItem.Property.Intensity !== 0)) InventoryItemButtInflVibeButtPlugSetIntensity(0 - DialogFocusItem.Property.Intensity);
+	else if (MouseIn(1200, 610, 200, 55) && (DialogFocusItem.Property.Intensity !== 1)) InventoryItemButtInflVibeButtPlugSetIntensity(1 - DialogFocusItem.Property.Intensity);
+	else if (MouseIn(1550, 610, 200, 55) && (DialogFocusItem.Property.Intensity !== 2)) InventoryItemButtInflVibeButtPlugSetIntensity(2 - DialogFocusItem.Property.Intensity);
+	else if (MouseIn(1375, 670, 200, 55) && (DialogFocusItem.Property.Intensity !== 3)) InventoryItemButtInflVibeButtPlugSetIntensity(3 - DialogFocusItem.Property.Intensity);
 }
 
 // Sets the inflatable vibe butt plug pump Level
