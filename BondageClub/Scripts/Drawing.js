@@ -1074,7 +1074,7 @@ function DrawProcess() {
  * Draws an asset's preview box
  * @param {number} X - Position of the preview box on the X axis
  * @param {number} Y - Position of the preview box on the Y axis
- * @param {Asset} Asset - The asset to draw the preview for
+ * @param {Asset} A - The asset to draw the preview for
  * @Param {object} [Options] - Additional optional drawing options
  * @param {Character} Options.[C] - The character using the item (used to calculate dynamic item descriptions/previews)
  * @param {string} [Options.Description] - The preview box description
@@ -1087,11 +1087,11 @@ function DrawProcess() {
  * @param {boolean} [Options.Disabled] - Whether or not the element is disabled (prevents hover functionality)
  * @returns {void} - Nothing
  */
-function DrawAssetPreview(X, Y, Asset, Options) {
+function DrawAssetPreview(X, Y, A, Options) {
 	let {C, Description, Background, Foreground, Vibrating, Border, Hover, HoverBackground, Disabled} = (Options || {});
-	const DynamicPreviewIcon = C ? Asset.DynamicPreviewIcon(C) : "";
-	const Path = `Assets/${Asset.Group.Family}/${Asset.DynamicGroupName}/Preview/${Asset.Name}${DynamicPreviewIcon}.png`;
-	if (Description == null) Description = C ? Asset.DynamicDescription(C) : Asset.Description;
+	const DynamicPreviewIcon = C ? A.DynamicPreviewIcon(C) : "";
+	const Path = `${AssetGetPreviewPath(A)}/${A.Name}${DynamicPreviewIcon}.png`;
+	if (Description == null) Description = C ? A.DynamicDescription(C) : A.Description;
 	DrawPreviewBox(X, Y, Path, Description, { Background, Foreground, Vibrating, Border, Hover, HoverBackground, Disabled });
 }
 
