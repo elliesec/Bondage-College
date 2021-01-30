@@ -1077,11 +1077,11 @@ function DrawProcess() {
  * @param {Asset} Asset - The asset to draw the preview for
  * @Param {object} [Options] - Additional optional drawing options
  * @param {Character} Options.[C] - The character using the item (used to calculate dynamic item descriptions/previews)
- * @param {string} Options.Description - The preview box description
- * @param {string} Options.[Background] - The background color to draw the preview box in - defaults to white
- * @param {string} Options.[Foreground] - The foreground (text) color to draw the description in - defaults to black
- * @param {boolean} Options.[Vibrating] - Whether or not to add vibration effects to the item - defaults to false
- * @param {boolean} Options.[Border] - Whether or not to draw a border around the preview box
+ * @param {string} [Options.Description] - The preview box description
+ * @param {string} [Options.Background] - The background color to draw the preview box in - defaults to white
+ * @param {string} [Options.Foreground] - The foreground (text) color to draw the description in - defaults to black
+ * @param {boolean} [Options.Vibrating] - Whether or not to add vibration effects to the item - defaults to false
+ * @param {boolean} [Options.Border] - Whether or not to draw a border around the preview box
  * @param {boolean} [Options.Hover] - Whether or not the button should enable hover behaviour (background color change)
  * @param {string} [Options.HoverBackground] - The background color that should be used on mouse hover, if any
  * @param {boolean} [Options.Disabled] - Whether or not the element is disabled (prevents hover functionality)
