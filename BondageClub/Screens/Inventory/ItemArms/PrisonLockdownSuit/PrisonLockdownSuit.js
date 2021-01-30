@@ -59,10 +59,10 @@ function InventoryItemArmsPrisonLockdownSuitDrawBase() {
 	DrawAssetPreview(1387, 55, A);
 	DrawText(DialogExtendedMessage, 1500, 375, "white", "gray");
 
-	DrawPreviewBox(1175, 550, `${AssetGetInventoryPath(A)}/${DialogFocusItem.Property.Type || "Free"}.png`, "", { HoverBackground: "cyan" });
+	DrawPreviewBox(1175, 550, `${AssetGetInventoryPath(A)}/${DialogFocusItem.Property.Type || "Free"}.png`, "", { Hover: true });
 	DrawText(DialogFindPlayer("ItemArmsPrisonLockdownSuitStraps"), 1288, 800, "white", "gray");
 
-	DrawPreviewBox(1600, 550, `${AssetGetInventoryPath(A)}/Shock.png`, "", { HoverBackground: "cyan" });
+	DrawPreviewBox(1600, 550, `${AssetGetInventoryPath(A)}/Shock.png`, "", { Hover: true });
 	DrawText(DialogFindPlayer("ItemArmsPrisonLockdownSuitShock"), 1713, 800, "white", "gray");
 }
 

@@ -24,10 +24,10 @@ function InventoryItemArmsFullLatexSuitDraw() {
 
 	// Draw the suits options
 	DrawText(DialogFindPlayer("FullLatexSuitTypeZipped"), 1263, 425, "white", "gray");
-	DrawPreviewBox(1150, 440, `${inventoryPath}/Latex.png`, "", { HoverBackground: "cyan", Disabled: property.Type === null });
+	DrawPreviewBox(1150, 440, `${inventoryPath}/Latex.png`, "", { Hover: true, Disabled: property.Type === null });
 
 	DrawText(DialogFindPlayer("FullLatexSuitTypeUnZip"), 1713, 425, "white", "gray");
-	DrawPreviewBox(1600, 440, `${inventoryPath}/UnZip.png`, "", { HoverBackground: "cyan", Disabled: property.Type === "UnZip" });
+	DrawPreviewBox(1600, 440, `${inventoryPath}/UnZip.png`, "", { Hover: true, Disabled: property.Type === "UnZip" });
 
 	if (InventoryGet(C, "ItemVulvaPiercings") == null ||
 		!InventoryGet(C, "ItemVulvaPiercings").Asset ||
@@ -35,7 +35,7 @@ function InventoryItemArmsFullLatexSuitDraw() {
 		InventoryGet(C, "ItemVulvaPiercings").Asset.Effect.indexOf("Chaste") == -1)
 		if (InventoryGet(C, "ItemVulva") == null) {
 			DrawText(DialogFindPlayer("FullLatexSuitTypeWand"), 1488, 725, "white", "gray");
-			DrawPreviewBox(1375, 750, `${inventoryPath}/Wand.png`, "", {	HoverBackground: "cyan" });
+			DrawPreviewBox(1375, 750, `${inventoryPath}/Wand.png`, "", {	Hover: true });
 		} else
 			DrawText(DialogFindPlayer("CheckVulvaForWand"), 1500, 690, "white", "gray");
 

@@ -1088,11 +1088,11 @@ function DrawProcess() {
  * @returns {void} - Nothing
  */
 function DrawAssetPreview(X, Y, Asset, Options) {
-	let {C, Description, Background, Foreground, Vibrating, Border, HoverBackground, Disabled} = (Options || {});
+	let {C, Description, Background, Foreground, Vibrating, Border, Hover, HoverBackground, Disabled} = (Options || {});
 	const DynamicPreviewIcon = C ? Asset.DynamicPreviewIcon(C) : "";
 	const Path = `Assets/${Asset.Group.Family}/${Asset.DynamicGroupName}/Preview/${Asset.Name}${DynamicPreviewIcon}.png`;
 	if (Description == null) Description = C ? Asset.DynamicDescription(C) : Asset.Description;
-	DrawPreviewBox(X, Y, Path, Description, { Background, Foreground, Vibrating, Border, HoverBackground, Disabled });
+	DrawPreviewBox(X, Y, Path, Description, { Background, Foreground, Vibrating, Border, Hover, HoverBackground, Disabled });
 }
 
 /**

@@ -68,7 +68,7 @@ function InventoryHairAccessory3HaloDraw() {
 
 		DrawPreviewBox(
 			x, y, `${AssetGetInventoryPath(asset)}/${option.Name}.png`, description,
-			{ Border: true, HoverBackground: "cyan", Disabled: isSelected },
+			{ Border: true, Hover: true, Disabled: isSelected },
 		);
 	});
 }

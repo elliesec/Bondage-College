@@ -129,7 +129,7 @@ function InventoryItemArmsHighSecurityStraitJacketDrawCommon(buttonDefinitions) 
 	buttonDefinitions.forEach((buttonDefinition, i) => {
 		var x = 1200 + (i % 2 * 387);
 		var y = 450 + (Math.floor(i / 2) * 300);
-		DrawPreviewBox(x, y, buttonDefinition[0], "", { Background: buttonDefinition[2], HoverBackground: "cyan" })
+		DrawPreviewBox(x, y, buttonDefinition[0], "", { Background: buttonDefinition[2], Hover: true })
 		DrawText(DialogFindPlayer(buttonDefinition[1]), x + 113, y - 20, "#fff", "#808080");
 	});
 }
