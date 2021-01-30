@@ -1082,7 +1082,8 @@ function DrawProcess() {
  * @param {string} Options.[Foreground] - The foreground (text) color to draw the description in - defaults to black
  * @param {boolean} Options.[Vibrating] - Whether or not to add vibration effects to the item - defaults to false
  * @param {boolean} Options.[Border] - Whether or not to draw a border around the preview box
- * @param {boolean} [Options.HoverBackground] - The background color that should be used on mouse hover, if any
+ * @param {boolean} [Options.Hover] - Whether or not the button should enable hover behaviour (background color change)
+ * @param {string} [Options.HoverBackground] - The background color that should be used on mouse hover, if any
  * @param {boolean} [Options.Disabled] - Whether or not the element is disabled (prevents hover functionality)
  * @returns {void} - Nothing
  */
@@ -1105,17 +1106,18 @@ function DrawAssetPreview(X, Y, Asset, Options) {
  * @param {string} [Options.Foreground] - The foreground (text) color to draw the description in - defaults to black
  * @param {boolean} [Options.Vibrating] - Whether or not to add vibration effects to the item - defaults to false
  * @param {boolean} [Options.Border] - Whether or not to draw a border around the preview box
- * @param {boolean} [Options.HoverBackground] - The background color that should be used on mouse hover, if any
+ * @param {boolean} [Options.Hover] - Whether or not the button should enable hover behaviour (background color change)
+ * @param {string} [Options.HoverBackground] - The background color that should be used on mouse hover, if any
  * @param {boolean} [Options.Disabled] - Whether or not the element is disabled (prevents hover functionality)
  * @returns {void} - Nothing
  */
 function DrawPreviewBox(X, Y, Path, Description, Options) {
-	let {Background, Foreground, Vibrating, Border, HoverBackground, Disabled} = (Options || {});
+	let {Background, Foreground, Vibrating, Border, Hover, HoverBackground, Disabled} = (Options || {});
 	const Height = Description ? 275 : 225;
 	Background = Background || "#fff";
 	Foreground = Foreground || "#000";
 	if (Disabled === true) Background = "#888";
-	else if (HoverBackground && MouseHovering(X, Y, 225, Height)) Background = HoverBackground;
+	else if (Hover && MouseHovering(X, Y, 225, Height)) Background = (HoverBackground || "cyan");
 	DrawRect(X, Y, 225, Height, Background);
 	if (Border) DrawEmptyRect(X, Y, 225, Height, Foreground);
 	const ImageX = Vibrating ? X + 1 + Math.floor(Math.random() * 3) : X + 2;
