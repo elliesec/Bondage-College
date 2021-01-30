@@ -13,8 +13,8 @@ var MainHallTip = 0;
 var MainHallMaidWasCalledManually = false;
 
 var MainHallBeingPunished = false;
-var firstFrame = false;
-var MainHallRemoveLockTypes = ["CombinationPadlock", "PasswordPadlock", "TimerPasswordPadlock"]
+var MainHallFirstFrame = false;
+var MainHallStrongLocks = [{ Name: "CombinationPadlock", Group: "ItemMisc", Type: null }, { Name: "PasswordPadlock", Group: "ItemMisc", Type: null }, { Name: "TimerPasswordPadlock", Group: "ItemMisc", Type: null }];
 
 var MainHallPunishmentList = [
 	{ItemMouth:"BallGag", ItemHead: "LeatherBlindfold", ItemHands: "DuctTape"},
@@ -23,13 +23,11 @@ var MainHallPunishmentList = [
 	{ItemMouth:"LatexBallMuzzleGag", ItemArms:"LatexBoxtieLeotard",ItemLegs:"LegBinder",ItemPelvis:"PolishedChastityBelt",ItemBreast:"PolishedChastityBra",ItemVulva:"WiredEgg",ItemBoots:"LockingHeels", ItemHead: "LatexBlindfold", ItemHands: "LeatherMittens"},
 	{ItemMouth:"StitchedMuzzleGag", ItemArms:"StraitDress",ItemLegs:"HobbleSkirt",ItemPelvis:"PolishedChastityBelt",ItemBreast:"PolishedChastityBra",ItemVulva:"WiredEgg",ItemBoots:"LockingHeels", ItemHead: "SlimLeatherMask", ItemHands: "LeatherMittens"},
 	{ItemMouth:"MuzzleGag", ItemArms:"BoxTieArmbinder",ItemLegs:"LeatherBelt",ItemPelvis:"PolishedChastityBelt",ItemBreast:"PolishedChastityBra",ItemVulva:"VibratingEgg",ItemBoots:"LockingHeels", ItemHead: "LeatherBlindfold", ItemHands: "LeatherMittens"},
-	{ItemMouth:"HarnessPanelGag", ItemArms:"OrnateCuffs",ItemLegs:"OrnateLegCuffs",ItemFeet:"OrnateAnkleCuffs",ItemPelvis:"OrnateChastityBelt",ItemBreast:"OrnateChastityBra",ItemVulva:"VibratingDildo",ItemBoots:"LockingHeels", ItemHead: "FullBlindfold", ItemHands: "PolishedMittens"},
-	
+	{ItemMouth:"HarnessPanelGag", ItemArms:"OrnateCuffs",ItemLegs:"OrnateLegCuffs",ItemFeet:"OrnateAnkleCuffs",ItemPelvis:"OrnateChastityBelt",ItemBreast:"OrnateChastityBra",ItemVulva:"VibratingDildo",ItemBoots:"LockingHeels", ItemHead: "FullBlindfold", ItemHands: "PolishedMittens"}
+];
 
-]
-
-var MainHallPunishmentChoice = 0
-var MainHallRopeColor = "Default"
+var MainHallPunishmentChoice = 0;
+var MainHallRopeColor = "Default";
 
 /**
  * Checks to see if the player needs help in any way
@@ -44,8 +42,9 @@ function MainHallPlayerNeedsHelpAndHasNoOwnerOrLoverItem() {
 			break;
 		}
 
-		for (let L = 0; L < MainHallRemoveLockTypes.length; L++) {
-			if (((Player.Appearance[E].Property != null) && (Player.Appearance[E].Property.LockedBy == MainHallRemoveLockTypes[L]))) {
+		let LockList = MainHallStrongLocks.map(L => L.Name);
+		for (let L = 0; L < LockList.length; L++) {
+			if (((Player.Appearance[E].Property != null) && (Player.Appearance[E].Property.LockedBy == LockList[L]))) {
 				needsHelp = true
 				break;
 			}
@@ -153,42 +152,43 @@ function MainHallLoad() {
  * @returns {void} - Nothing
  */
 function MainHallRun() {
-	
+
+	// Out of punishment mode
 	if (!MainHallBeingPunished) {
-		
-		
+
+		// We return to the last online chat room if possible
 		if (Player.ImmersionSettings && Player.LastChatRoom && Player.LastChatRoom != "" && MainHallMaid.Stage == "0") {
-			if (firstFrame) {
-			// We return to the chat room that the player was last in		
-			if (Player.ImmersionSettings.ReturnToChatRoom) {
-				ChatRoomStart("", "", "MainHall", "IntroductionDark", BackgroundsTagList);
+			if (MainHallFirstFrame) {
+				if (Player.ImmersionSettings.ReturnToChatRoom) {
+					ChatRoomStart("", "", "MainHall", "IntroductionDark", BackgroundsTagList);
+					return;
+				} else ChatRoomSetLastChatRoom("");
+			} else MainHallFirstFrame = true;
+		} else {
+
+			// If the player is dressed up while being a club slave, the maid intercepts her
+			if ((CurrentCharacter == null) && ManagementIsClubSlave() && LogQuery("BlockChange", "Rule") && !Player.IsNaked() && (MainHallMaid.Dialog != null) && (MainHallMaid.Dialog.length > 0)) {
+				MainHallMaid.Stage = "50";
+				MainHallMaid.CurrentDialog = DialogFind(MainHallMaid, "ClubSlaveMustBeNaked");
+				CharacterRelease(MainHallMaid);
+				CharacterSetCurrent(MainHallMaid);
+				MainHallStartEventTimer = null;
+				MainHallNextEventTimer = null;
 				return;
-			} else {
-				ChatRoomSetLastChatRoom("")
 			}
-			} else firstFrame = true
-		} else
 
-		// If the player is dressed up while being a club slave, the maid intercepts her
-		if ((CurrentCharacter == null) && ManagementIsClubSlave() && LogQuery("BlockChange", "Rule") && !Player.IsNaked() && (MainHallMaid.Dialog != null) && (MainHallMaid.Dialog.length > 0)) {
-			MainHallMaid.Stage = "50";
-			MainHallMaid.CurrentDialog = DialogFind(MainHallMaid, "ClubSlaveMustBeNaked");
-			CharacterRelease(MainHallMaid);
-			CharacterSetCurrent(MainHallMaid);
-			MainHallStartEventTimer = null;
-			MainHallNextEventTimer = null;
-			return;
-		} else
+			// If the player is a Mistress but her Dominant reputation has fallen & stage is not
+			if ((CurrentCharacter == null) && LogQuery("ClubMistress", "Management") && (ReputationGet("Dominant") < 50) && (CheatFactor("CantLoseMistress", 0) == 1) && Player.CanTalk() && (MainHallMaid.Dialog != null) && (MainHallMaid.Dialog.length > 0)) {
+				CommonSetScreen("Room", "Management");
+				CharacterSetCurrent(MainHallMaid);
+				CurrentScreen = "MainHall";
+				MainHallMaid.Stage = "60";
+				MainHallMaid.CurrentDialog = DialogFind(MainHallMaid, "MistressExpulsionIntro");
+				return;
+			}
 
-		// If the player is a Mistress but her Dominant reputation has fallen & stage is not 
-		if ((CurrentCharacter == null) && LogQuery("ClubMistress", "Management") && (ReputationGet("Dominant") < 50) && Player.CanTalk() && (MainHallMaid.Dialog != null) && (MainHallMaid.Dialog.length > 0)) {
-			CommonSetScreen("Room", "Management");
-			CharacterSetCurrent(MainHallMaid);
-			CurrentScreen = "MainHall";
-			MainHallMaid.Stage = "60";
-			MainHallMaid.CurrentDialog = DialogFind(MainHallMaid, "MistressExpulsionIntro");
-			return;
 		}
+
 	}
 
 	// Draws the character and main hall buttons
@@ -262,7 +262,7 @@ function MainHallRun() {
 		CharacterSetCurrent(MainHallMaid);
 		MainHallStartEventTimer = null;
 		MainHallNextEventTimer = null;
-		MainHallMaidWasCalledManually = false
+		MainHallMaidWasCalledManually = false;
 	}
 
 	// If we must show a progress bar for the rescue maid.  If not, we show the number of online players or a button to request the maid
@@ -274,12 +274,11 @@ function MainHallRun() {
 			DrawText(TextGet("OnlinePlayers") + " " + CurrentOnlinePlayers.toString(), 1650, 960, "White", "Black");
 			DrawButton(1885, 900, 90, 90, "", "White", "Icons/ServiceBell.png", TextGet("RequestMaid"));
 		}
-
-		MainHallMaidWasCalledManually = false
+		MainHallMaidWasCalledManually = false;
 	} else {
 		if (!MainHallMaidWasCalledManually && !((!Player.CanInteract() || !Player.CanWalk() || !Player.CanTalk() || Player.IsShackled()))) {
-			MainHallStartEventTimer = null
-			MainHallNextEventTimer = null
+			MainHallStartEventTimer = null;
+			MainHallNextEventTimer = null;
 		} else {
 			DrawText(TextGet("RescueIsComing"), 1750, 925, "White", "Black");
 			DrawProgressBar(1525, 955, 450, 35, (1 - ((MainHallNextEventTimer - CommonTime()) / (MainHallNextEventTimer - MainHallStartEventTimer))) * 100);
@@ -421,8 +420,9 @@ function MainHallMaidReleasePlayer() {
 			if ((MainHallMaid.Dialog[D].Stage == "0") && (MainHallMaid.Dialog[D].Option == null))
 				MainHallMaid.Dialog[D].Result = DialogFind(MainHallMaid, "AlreadyReleased");
 		CharacterRelease(Player);
-		for (let L = 0; L < MainHallRemoveLockTypes.length; L++) {
-			CharacterReleaseFromLock(Player, MainHallRemoveLockTypes[L]);
+		let LockList = MainHallStrongLocks.map(L => L.Name);
+		for (let L = 0; L < LockList.length; L++) {
+			CharacterReleaseFromLock(Player, LockList[L]);
 		}
 		// Added to remove maids being disabled
 		if (LogQuery("MaidsDisabled", "Maid")) {
@@ -706,7 +706,7 @@ function MainHallMistressExpulsion() {
 function MainHallMaidIntroduction() {
 	if (!LogQuery("IntroductionDone", "MainHall") && Player.CanTalk()) {
 		MainHallMaid.Stage = "1000";
-		MainHallMaid.CurrentDialog = DialogFind(Player, "IntroductionMaidGreetings");
+		MainHallMaid.CurrentDialog = DialogFindPlayer("IntroductionMaidGreetings");
 		CharacterSetCurrent(MainHallMaid);
 		MainHallMaid.AllowItem = false;
 	}

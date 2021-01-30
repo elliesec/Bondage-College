@@ -93,13 +93,13 @@ function FriendListLoadFriendList(data) {
 	FriendListNextCheck = CurrentTime + 30000;
 
 	// Loads the header caption
-	const BeepCaption = DialogFind(Player, "Beep");
-	const DeleteCaption = DialogFind(Player, "Delete");
-	const ConfirmDeleteCaption = DialogFind(Player, "ConfirmDelete");
-	const PrivateRoomCaption = DialogFind(Player, "PrivateRoom");
-	const SentCaption = DialogFind(Player, "SentBeep");
-	const ReceivedCaption = DialogFind(Player, "ReceivedBeep");
-	const SpaceAsylumCaption = DialogFind(Player, "ChatRoomSpaceAsylum");
+	const BeepCaption = DialogFindPlayer("Beep");
+	const DeleteCaption = DialogFindPlayer("Delete");
+	const ConfirmDeleteCaption = DialogFindPlayer("ConfirmDelete");
+	const PrivateRoomCaption = DialogFindPlayer("PrivateRoom");
+	const SentCaption = DialogFindPlayer("SentBeep");
+	const ReceivedCaption = DialogFindPlayer("ReceivedBeep");
+	const SpaceAsylumCaption = DialogFindPlayer("ChatRoomSpaceAsylum");
 	const FriendTypeCaption = {
 		Owner: TextGet("TypeOwner"),
 		Lover: TextGet("TypeLover"),
@@ -152,6 +152,7 @@ function FriendListLoadFriendList(data) {
 			FriendListContent += "<div class='FriendListTextColumn'>" + ((FriendListBeepLog[B].Sent) ? SentCaption : ReceivedCaption) + " " + TimerHourToString(FriendListBeepLog[B].Time) + "</div>";
 			FriendListContent += "</div>";
 		}
+		CommonNotificationReset("Beep");
 	} else if (mode === "Delete") {
 		// In Delete mode, we show the friend list and allow the user to remove them
 		for (const [k, v] of Array.from(Player.FriendNames).sort((a, b) => a[1].localeCompare(b[1]))) {
