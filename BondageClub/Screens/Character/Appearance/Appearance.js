@@ -911,6 +911,7 @@ function AppearanceClick() {
 							DialogInventoryBuild(C);
 							CharacterAppearanceCloth = InventoryGet(C, C.FocusGroup.Name);
 							CharacterAppearanceMode = "Cloth";
+							return;
 						} else CharacterAppearanceNextItem(C, AssetGroup[A].Name, (MouseX > 1500));
 		}
 
