@@ -355,6 +355,8 @@ function DialogHasKey(C, Item) {
 	if (InventoryGetLock(Item) && InventoryGetLock(Item).Asset.ExclusiveUnlock && ((!Item.Property.MemberNumberListKeys && Item.Property.LockMemberNumber != Player.MemberNumber) || (Item.Property.MemberNumberListKeys && CommonConvertStringToArray("" + Item.Property.MemberNumberListKeys).indexOf(Player.MemberNumber) < 0))) return false;
 	if (C.IsLoverOfPlayer() && InventoryAvailable(Player, "LoversPadlockKey", "ItemMisc") && Item.Asset.Enable && Item.Property && !Item.Property.LockedBy.startsWith("Owner")) return true;
 
+    if (InventoryGetLock(Item).Asset.ExclusiveUnlock) return true;
+
 	var UnlockName = "Unlock-" + Item.Asset.Name;
 	if ((Item != null) && (Item.Property != null) && (Item.Property.LockedBy != null)) UnlockName = "Unlock-" + Item.Property.LockedBy;
 	for (let I = 0; I < Player.Inventory.length; I++)
@@ -1819,8 +1821,12 @@ function DialogDrawStruggleProgress(C) {
 	if (DialogProgressAuto < 0) DrawText(DialogFindPlayer("Challenge") + " " + ((DialogProgressStruggleCount >= 50) ? DialogProgressChallenge.toString() : "???"), 1500, 150, "White", "Black");
 	DrawText(DialogProgressOperation, 1500, 650, "White", "Black");
 	DrawProgressBar(1200, 700, 600, 100, DialogProgress);
-	DrawText(DialogFindPlayer((CommonIsMobile) ? "ProgressClick" : "ProgressKeys"), 1500, 900, "White", "Black");
-
+	if (ControllerActive == false) {
+		DrawText(DialogFindPlayer((CommonIsMobile) ? "ProgressClick" : "ProgressKeys"), 1500, 900, "White", "Black");
+	}
+	if (ControllerActive == true) {
+		DrawText(DialogFindPlayer((CommonIsMobile) ? "ProgressClick" : "ProgressKeysController"), 1500, 900, "White", "Black");
+	}
 	// If the operation is completed
 	if (DialogProgress >= 100) {
 
