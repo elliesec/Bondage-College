@@ -64,12 +64,11 @@ function InventoryHairAccessory3HaloDraw() {
 		const x = ExtendedXY[InventoryHairAccessory3HaloOptions.length][i][0];
 		const y = ExtendedXY[InventoryHairAccessory3HaloOptions.length][i][1] + 80;
 		const isSelected = property.Type === option.Property.Type;
+		const description = DialogFindPlayer(`InventoryHairAccessory3HaloType${option.Name}`);
 
 		DrawPreviewBox(
-			x, y, `Screens/Inventory/${asset.DynamicGroupName}/${asset.Name}/${option.Name}.png`,
-			DialogFindPlayer("InventoryHairAccessory3HaloType" + option.Name), {
-				Border: true, HoverBackground: "cyan", Disabled: isSelected,
-			},
+			x, y, `${AssetGetInventoryPath(asset)}/${option.Name}.png`, description,
+			{ Border: true, HoverBackground: "cyan", Disabled: isSelected },
 		);
 	});
 }
