@@ -207,7 +207,7 @@ function CommonDrawAppearanceBuild(C, {
 							break;
 						}
 						case "GroupName": {
-							GroupName = OverridenData[key];
+							GroupName = OverriddenData[key];
 							break;
 						}
 						case "Color": {
