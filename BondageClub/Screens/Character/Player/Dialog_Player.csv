@@ -1745,3 +1745,4 @@ WoodenBoxTextChange,,,"SourceCharacter changes the text on DestinationCharacterN
 InventoryHairAccessory3HaloType,,,Select Halo Type,,
 InventoryHairAccessory3HaloTypeDefault,,,Full,,
 InventoryHairAccessory3HaloTypeBroken,,,Broken,,
+InventoryHairAccessory3HaloBrightness,,,Brightness,,
