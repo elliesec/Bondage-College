@@ -42,6 +42,8 @@ Congratulations! You've been accepted as an official member of the Bondage Club!
 
 Of course, we can't possibly document every tiny hidden secret about the club, and if you're a new member, we do encourage you to explore the club and discover what it can offer on your own initiative. But hopefully this guide will prove to be a useful reference for you throughout your time at the club.
 
+This is a large guide, so we encourage members to use the [table of contents](#table-of-contents) to assist in finding what they want.
+
 Once again, welcome to the Bondage Club, and we hope you enjoy your membership!
 
 ***
@@ -297,7 +299,42 @@ The Audio Preferences allow you to customize the sounds and audio notifications 
 
 [Back to the contents](#table-of-contents)
 
+Your Arousal Preferences allow you to register your likes and dislikes when it comes to sexual activities. There are lots of things you can configure in this screen, so we'll refer to this picture to help explain everything.
 
+Note that regardless of any settings on this screen, anyone that does not have appropriate [item permission](#item-permission) will not be able to initiate activities with you.
+
+![Arousal Preferences Screen](./ArousalPreferences.png)
+
+#### Arousal Zone Configuration
+
+On the left of the screen you will see a diagram of yourself, with a variety of boxes overlaid, which represent your arousal zones. Clicking on a zone will give you the option to configure how much you like activities on that zone, and whether or not you are capable of orgasming from activities on that zone.
+
+Note that if you set a zone's preference to "Block all activities on this zone", others will not be able to use activities on that zone when interacting with you.
+
+#### Meter Activation
+
+This determines the behaviour of your arousal meter, which is a measure of how aroused you are. There are several configurations available:
+
+| Activation | Description |
+| --- | --- |
+| Disable sexual activities | This will disable the arousal meter completely and prevent anyone from initiating activities with you at all |
+| Allow without a meter | This mode enables activities, but will not keep track of your arousal |
+| Allow with a manual meter | This mode enables activities, and an arousal meter will be displayed for you, but it will only change when you choose to do so (you can set arousal by clicking the meter) |
+| Allow with a hybrid meter | This mode enables activities, which will cause your arousal to increase (or decrease) according to your sexual preferences. You can also change the meter manually |
+| Allow with a locked meter | This mode enables activities, which will cause your arousal to increase (or decrease) according to your sexual preferences. However, you _cannot_ change the meter manually |
+
+#### Other Activity Configuration
+
+The page also contains several other ways to customize your sexual preferences, which are described below.
+
+| Preference | Description |
+| --- | --- |
+| Meter visibility | Allows you to choose who is allowed to see your arousal meter |
+| Show other characters meter | Determines whether or not you see other characters' meters (if they permit you to) |
+| Affect your facial expressions | Determines whether or not activities can affect your facial expressions (note that unchecking this _does not_ disable facial expression changes triggered by items) |
+| Speech stuttering | Determines whether vibrations, arousal (or both or neither) will cause you to stutter |
+| Fetish preferences | This allows you to cycle through the list of available fetishes and set your likes and dislikes. Your arousal will increase faster when a fetish that you like is in effect and vice versa |
+| Activity preferences | This allows you to cycle through the list of available activities and set your likes and dislikes. For each activity, you can choose separately how much you like doing the activity to others and how much you like having it done to you. |
 
 ### ![Security Preferences Icon](../../../Icons/Security.png) Security Preferences
 

@@ -24,6 +24,12 @@ const BookRenderer = {
         }
         return linkText;
     },
+	image(href, title, text) {
+    	if (/^\.\.?\//.test(href)) {
+    		href = `Books/Markdown/${BookCurrent.name}/${href}`;
+	    }
+    	return `<img src="${href}" title=${title} alt=${text}/>`;
+	}
 };
 
 function BookLoad() {

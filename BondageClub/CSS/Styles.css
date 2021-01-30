@@ -367,58 +367,64 @@ input[type=range][data-thumb=lightbulb]::-moz-range-thumb {
 }
 
 #BookBox {
-    box-sizing: border-box;
-    overflow: auto;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-	font-size: 1.5rem;
-    padding: 1em;
-	line-height: 1.6;
+	box-sizing  : border-box;
+	overflow    : auto;
+	border      : 1px solid rgba(0, 0, 0, 0.1);
+	font-size   : 1.2rem;
+	padding     : 1em;
+	line-height : 1.6;
 }
 
 #BookBox h1, #BookBox h2, #BookBox h3, #BookBox h4, #BookBox h5, #BookBox h6 {
-    margin: 0 0 0.5em;
+	margin : 0 0 0.5em;
 }
 
 #BookBox h1 img, #BookBox h2 img, #BookBox h3 img, #BookBox h4 img, #BookBox h5 img, #BookBox h6 img {
-	height: 1em;
-	vertical-align: middle;
+	height         : 1em;
+	vertical-align : text-top;
 }
 
 #BookBox h1 {
-    font-size: 1.8em;
+	font-size : 1.8em;
 }
 
 #BookBox h2 {
-    font-size: 1.5em;
+	font-size : 1.5em;
 }
 
 #BookBox h3 {
-    font-size: 1.2em;
+	font-size : 1.2em;
 }
 
 #BookBox h4 {
-    font-size: 1.1em;
+	font-size : 1.1em;
 }
 
 #BookBox h5 {
-    font-size: 1em;
+	font-size : 1em;
 }
 
 #BookBox h6 {
-    font-size: 0.9em;
+	font-size : 0.9em;
 }
 
 #BookBox table {
-	border-collapse: collapse;
+	border-collapse : collapse;
+	margin-bottom: 1em;
 }
 
 #BookBox table td, #BookBox table th {
-	padding: 0.5em 1em;
-	border: 1px solid rgba(0, 0, 0, 0.1);
+	padding : 0.25em 0.5em;
+	border  : 1px solid rgba(0, 0, 0, 0.1);
+	vertical-align: top;
 }
 
 #BookBox code {
-	padding: 0.1em 0.25em;
-	background-color: rgba(0,0,0,0.1);
-	border: 1px solid rgba(0,0,0,0.1);
+	padding          : 0.1em 0.25em;
+	background-color : rgba(0, 0, 0, 0.1);
+	border           : 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#BookBox img {
+	max-width : 100%;
 }
