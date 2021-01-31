@@ -859,22 +859,30 @@ function DrawCheckboxColor(Left, Top, Width, Height, Text, IsChecked, Color) {
  * @param {string} BackText - Text for the back button tooltip
  * @param {string} NextText - Text for the next button tooltip
  * @param {boolean} [Disabled] - Disables the hovering options if set to true
+ * @param {number} ArrowWidth - How much of the button the previous/next sections cover. By default, half each.
  * @returns {void} - Nothing
  */
-function DrawBackNextButton(Left, Top, Width, Height, Label, Color, Image, BackText, NextText, Disabled) {
+function DrawBackNextButton(Left, Top, Width, Height, Label, Color, Image, BackText, NextText, Disabled, ArrowWidth) {
+	// Set the widths of the previous/next sections to be colored cyan when hovering over them
+	// By default each covers half the width, together covering the whole button
+	if (ArrowWidth == null || ArrowWidth > Width / 2) ArrowWidth = Width / 2;
+	const LeftSplit = Left + ArrowWidth;
+	const RightSplit = Left + Width - ArrowWidth;
 
-	// Draw the button rectangle (makes half of the background cyan colored if the mouse is over it)
-	var Split = Left + Width / 2;
+	// Draw the button rectangle
 	MainCanvas.beginPath();
 	MainCanvas.rect(Left, Top, Width, Height);
 	MainCanvas.fillStyle = Color;
 	MainCanvas.fillRect(Left, Top, Width, Height);
 	if ((MouseX >= Left) && (MouseX <= Left + Width) && (MouseY >= Top) && (MouseY <= Top + Height) && !CommonIsMobile && !Disabled) {
 		MainCanvas.fillStyle = "Cyan";
-		if (MouseX > Split) {
-			MainCanvas.fillRect(Split, Top, Width / 2, Height);
+		if (MouseX > RightSplit) {
+			MainCanvas.fillRect(RightSplit, Top, ArrowWidth, Height);
+		}
+		else if (MouseX <= LeftSplit) {
+			MainCanvas.fillRect(Left, Top, ArrowWidth, Height);
 		} else {
-			MainCanvas.fillRect(Left, Top, Width / 2, Height);
+			MainCanvas.fillRect(Left + ArrowWidth, Top, Width - ArrowWidth * 2, Height);
 		}
 	}
 	MainCanvas.lineWidth = '2';
@@ -909,7 +917,7 @@ function DrawBackNextButton(Left, Top, Width, Height, Label, Color, Image, BackT
 	if (BackText == null) BackText = () => "MISSING VALUE FOR: BACK TEXT";
 	if (NextText == null) NextText = () => "MISSING VALUE FOR: NEXT TEXT";
 	if ((MouseX >= Left) && (MouseX <= Left + Width) && (MouseY >= Top) && (MouseY <= Top + Height) && !Disabled)
-		DrawButtonHover(Left, Top, Width, Height, (MouseX > Split) ? NextText() : BackText());
+		DrawButtonHover(Left, Top, Width, Height, MouseX < LeftSplit ? NextText() : MouseX >= RightSplit ? BackText() : "");
 
 }
 
@@ -1074,22 +1082,25 @@ function DrawProcess() {
  * Draws an asset's preview box
  * @param {number} X - Position of the preview box on the X axis
  * @param {number} Y - Position of the preview box on the Y axis
- * @param {Asset} Asset - The asset to draw the preview for
+ * @param {Asset} A - The asset to draw the preview for
  * @Param {object} [Options] - Additional optional drawing options
  * @param {Character} Options.[C] - The character using the item (used to calculate dynamic item descriptions/previews)
- * @param {string} Options.Description - The preview box description
- * @param {string} Options.[Background] - The background color to draw the preview box in - defaults to white
- * @param {string} Options.[Foreground] - The foreground (text) color to draw the description in - defaults to black
- * @param {boolean} Options.[Vibrating] - Whether or not to add vibration effects to the item - defaults to false
- * @param {boolean} Options.[Border] - Whether or not to draw a border around the preview box
+ * @param {string} [Options.Description] - The preview box description
+ * @param {string} [Options.Background] - The background color to draw the preview box in - defaults to white
+ * @param {string} [Options.Foreground] - The foreground (text) color to draw the description in - defaults to black
+ * @param {boolean} [Options.Vibrating] - Whether or not to add vibration effects to the item - defaults to false
+ * @param {boolean} [Options.Border] - Whether or not to draw a border around the preview box
+ * @param {boolean} [Options.Hover] - Whether or not the button should enable hover behaviour (background color change)
+ * @param {string} [Options.HoverBackground] - The background color that should be used on mouse hover, if any
+ * @param {boolean} [Options.Disabled] - Whether or not the element is disabled (prevents hover functionality)
  * @returns {void} - Nothing
  */
-function DrawAssetPreview(X, Y, Asset, Options) {
-	let {C, Description, Background, Foreground, Vibrating, Border} = (Options || {});
-	const DynamicPreviewIcon = C ? Asset.DynamicPreviewIcon(C) : "";
-	const Path = `Assets/${Asset.Group.Family}/${Asset.DynamicGroupName}/Preview/${Asset.Name}${DynamicPreviewIcon}.png`;
-	if (Description == null) Description = C ? Asset.DynamicDescription(C) : Asset.Description;
-	DrawPreviewBox(X, Y, Path, Description, { Background, Foreground, Vibrating, Border });
+function DrawAssetPreview(X, Y, A, Options) {
+	let {C, Description, Background, Foreground, Vibrating, Border, Hover, HoverBackground, Disabled} = (Options || {});
+	const DynamicPreviewIcon = C ? A.DynamicPreviewIcon(C) : "";
+	const Path = `${AssetGetPreviewPath(A)}/${A.Name}${DynamicPreviewIcon}.png`;
+	if (Description == null) Description = C ? A.DynamicDescription(C) : A.Description;
+	DrawPreviewBox(X, Y, Path, Description, { Background, Foreground, Vibrating, Border, Hover, HoverBackground, Disabled });
 }
 
 /**
@@ -1099,18 +1110,24 @@ function DrawAssetPreview(X, Y, Asset, Options) {
  * @param {string} Path - The path of the image to draw
  * @param {string} Description - The preview box description
  * @param {object} [Options] - Additional optional drawing options
- * @param {string} Options.[Background] - The background color to draw the preview box in - defaults to white
- * @param {string} Options.[Foreground] - The foreground (text) color to draw the description in - defaults to black
- * @param {boolean} Options.[Vibrating] - Whether or not to add vibration effects to the item - defaults to false
- * @param {boolean} Options.[Border] - Whether or not to draw a border around the preview box
+ * @param {string} [Options.Background] - The background color to draw the preview box in - defaults to white
+ * @param {string} [Options.Foreground] - The foreground (text) color to draw the description in - defaults to black
+ * @param {boolean} [Options.Vibrating] - Whether or not to add vibration effects to the item - defaults to false
+ * @param {boolean} [Options.Border] - Whether or not to draw a border around the preview box
+ * @param {boolean} [Options.Hover] - Whether or not the button should enable hover behaviour (background color change)
+ * @param {string} [Options.HoverBackground] - The background color that should be used on mouse hover, if any
+ * @param {boolean} [Options.Disabled] - Whether or not the element is disabled (prevents hover functionality)
  * @returns {void} - Nothing
  */
 function DrawPreviewBox(X, Y, Path, Description, Options) {
-	let {Background, Foreground, Vibrating, Border} = (Options || {});
+	let {Background, Foreground, Vibrating, Border, Hover, HoverBackground, Disabled} = (Options || {});
+	const Height = Description ? 275 : 225;
 	Background = Background || "#fff";
 	Foreground = Foreground || "#000";
-	const Height = Description ? 275 : 225;
+	if (Disabled === true) Background = "#888";
+	else if (Hover && MouseHovering(X, Y, 225, Height)) Background = (HoverBackground || "cyan");
 	DrawRect(X, Y, 225, Height, Background);
+	setButton(X, Y);
 	if (Border) DrawEmptyRect(X, Y, 225, Height, Foreground);
 	const ImageX = Vibrating ? X + 1 + Math.floor(Math.random() * 3) : X + 2;
 	const ImageY = Vibrating ? Y + 1 + Math.floor(Math.random() * 3) : Y + 2;
