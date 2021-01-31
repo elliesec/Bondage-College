@@ -4,7 +4,8 @@ const DynamicDrawTextRegex = /^(?:\w|[ ~!$#%*+])*$/;
 const DynamicDrawTextInputPattern = "(?:\\w|[ ~!$#%*+])*";
 
 const DynamicDrawTextDefaultOptions = {
-	font: CommonGetFont(30),
+	fontSize: 30,
+	fontFamily: CommonGetFontName(),
 	textAlign: "center",
 	textBaseline: "middle",
 	color: "#000",
@@ -27,10 +28,12 @@ const DynamicDrawTextEffects = {
 
 function DynamicDrawText(text, ctx, x, y, options) {
 	options = options || {};
-	const { font, textAlign, textBaseline, color, effect, width } = options = Object.assign({}, DynamicDrawTextDefaultOptions, options);
+	const { fontSize, fontFamily, textAlign, textBaseline, color, effect, width }
+		= options
+		= Object.assign({}, DynamicDrawTextDefaultOptions, options);
 	const effectDef = DynamicDrawTextEffects[effect] || {};
 
-	ctx.font = font;
+	ctx.font = `${fontSize}px ${fontFamily}`;
 	ctx.textAlign = textAlign;
 	ctx.textBaseline = textBaseline;
 

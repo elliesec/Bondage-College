@@ -88,7 +88,8 @@ function AssetsItemMiscWoodenSignAfterDraw({
 		const text2 = (Property && Property.Text2.match(DynamicDrawTextRegex) ? Property.Text2 : "♠");
 
 		const drawOptions = {
-			font: "30px Calligraffitti",
+			fontSize: 30,
+			fontFamily: "\"Calligraffitti\", cursive",
 			color: Color,
 			effect: DynamicDrawTextEffect.BURN,
 			width,
