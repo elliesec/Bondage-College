@@ -163,49 +163,28 @@ function InventoryItemDevicesWoodenBoxGetInputOpacity() {
 
 function AssetsItemDevicesWoodenBoxAfterDraw({ C, A, X, Y, L, Pose, Property, drawCanvas, drawCanvasBlink, AlphaMasks, Color, Opacity }) {
 	if (L === "_Text") {
-		// We set up a canvas
 		const height = 900;
 		const width = 310;
-		const TempCanvas = AnimationGenerateTempCanvas(C, A, width, height);
+		const tmpCanvas = AnimationGenerateTempCanvas(C, A, width, height);
+		const ctx = tmpCanvas.getContext("2d");
 
 		let text = Property && Property.Text || "";
 		if (!InventoryItemDevicesWoodenBoxAllowedChars.test(text)) text = "";
 		text = text.substring(0, InventoryItemDevicesWoodenBoxMaxLength);
 
-		let fontHeight = 96;
-
-		const angle = Math.atan(height / width);
-		const hypotenuse = Math.sqrt(Math.pow(height, 2) + Math.pow(width, 2));
-		const textWidth = hypotenuse - 2 * (height / width) * (fontHeight / 2);
-
-		let context = TempCanvas.getContext("2d");
-
-		context.textAlign = "center";
-		context.font = `${fontHeight}px 'Saira Stencil One', 'Arial', sans-serif`;
-		context.fillStyle = Color;
-		context.textBaseline = "middle";
-
-		// Dummy text fill to force the browser to load the font (otherwise it
-		// won't get loaded until after the first time the text has been
-		// populated, causing the first draw to fallback)
-		context.fillText("", 0, 0);
-
-		const rgb = DrawHexToRGB(Color);
-
-		context.save();
-		context.translate(width / 2, height / 2);
-		context.rotate(-angle);
-		context.translate(-width / 2, -height / 2);
-		context.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.7 * Opacity})`;
-		context.fillText(text, width / 2, height / 2, textWidth);
-		context.restore();
+		const { r, g, b } = DrawHexToRGB(Color);
+		DynamicDrawTextFromTo(text, ctx, [0, height], [width, 0], {
+			fontSize: 96,
+			fontFamily: `'Saira Stencil One', 'Arial', sans-serif`,
+			color: `rgba(${r}, ${g}, ${b}, ${0.7 * Opacity})`,
+		});
 
 		let drawY = Y + 300;
 		if (Pose === "Kneel/") drawY -= 250;
 
 		// We print the canvas on the character based on the asset position
-		drawCanvas(TempCanvas, X + 90, drawY, AlphaMasks);
-		drawCanvasBlink(TempCanvas, X + 90, drawY, AlphaMasks);
+		drawCanvas(tmpCanvas, X + 90, drawY, AlphaMasks);
+		drawCanvasBlink(tmpCanvas, X + 90, drawY, AlphaMasks);
 	}
 }
 

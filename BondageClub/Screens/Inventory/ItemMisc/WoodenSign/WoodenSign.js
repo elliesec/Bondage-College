@@ -18,8 +18,8 @@ function InventoryItemMiscWoodenSignLoad() {
 
 	const input1 = ElementCreateInput("WoodenSignText1", "text", DialogFocusItem.Property.Text, "12");
 	const input2 = ElementCreateInput("WoodenSignText2", "text", DialogFocusItem.Property.Text2, "12");
-	input1.pattern = DynamicDrawTextInputPattern;
-	input2.pattern = DynamicDrawTextInputPattern;
+	if (input1) input1.pattern = DynamicDrawTextInputPattern;
+	if (input2) input2.pattern = DynamicDrawTextInputPattern;
 }
 
 // Draw the extension screen
@@ -89,7 +89,7 @@ function AssetsItemMiscWoodenSignAfterDraw({
 
 		const drawOptions = {
 			fontSize: 30,
-			fontFamily: "\"Calligraffitti\", cursive",
+			fontFamily: "'Calligraffitti', cursive",
 			color: Color,
 			effect: DynamicDrawTextEffect.BURN,
 			width,
