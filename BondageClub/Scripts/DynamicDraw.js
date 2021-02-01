@@ -56,19 +56,25 @@ function DynamicDrawTextFromTo(text, ctx, from, to, options) {
 	const cx = x0 + 0.5 * dx;
 	const cy = y0 + 0.5 * dy;
 
+	// Calculate the angle of the text
 	let angle;
 	if (dx === 0) {
+		// If dx is 0, the text is vertical
 		angle = dy > 0 ? Math.PI / 2 : -Math.PI / 2;
 	} else {
 		angle = Math.atan(dy / dx);
 	}
+	// If dx < 0, then we need to rotate 180 degrees to respect directionality
 	if (dx < 0) angle += Math.PI;
 
+	// Save the canvas state and rotate by the calculated angle about the center point
 	ctx.save();
 	ctx.translate(cx, cy);
 	ctx.rotate(angle);
 	ctx.translate(-cx, -cy);
+	// Draw the text and any dynamic text effects
 	DynamicDrawTextAndEffects(text, ctx, cx, cy, options);
+	// Restore the canvas rotation
 	ctx.restore();
 }
 

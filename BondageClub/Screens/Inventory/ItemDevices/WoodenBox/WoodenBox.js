@@ -1,5 +1,3 @@
-const InventoryItemDevicesWoodenBoxAllowedChars = /^(?:\w|[ ~!$#%*+])*$/;
-const InventoryItemDevicesWoodenBoxInputPattern = "(?:\\w|[ ~!$#%*+])*";
 const InventoryItemDevicesWoodenBoxMaxLength = 20;
 const InventoryItemDevicesWoodenBoxTextInputId = "InventoryItemDevicesWoodenBoxText";
 const InventoryItemDevicesWoodenBoxOpacityInputId = "InventoryItemDevicesWoodenBoxOpacity";
@@ -39,7 +37,7 @@ function InventoryItemDevicesWoodenBoxLoad() {
 	const textInput = ElementCreateInput(
 		InventoryItemDevicesWoodenBoxTextInputId, "text", Property.Text, InventoryItemDevicesWoodenBoxMaxLength);
 	if (textInput) {
-		textInput.pattern = InventoryItemDevicesWoodenBoxInputPattern;
+		textInput.pattern = DynamicDrawTextInputPattern;
 		textInput.addEventListener("input", (e) => InventoryItemDevicesWoodenBoxTextChange(C, item, e.target.value));
 	}
 
@@ -87,7 +85,7 @@ function InventoryItemDevicesWoodenBoxExit() {
 
 	InventoryItemDevicesWoodenBoxSetOpacity(item.Property, InventoryItemDevicesWoodenBoxGetInputOpacity());
 	const text = InventoryItemDevicesWoodenBoxGetText();
-	if (InventoryItemDevicesWoodenBoxAllowedChars.test(text)) item.Property.Text = text;
+	if (DynamicDrawTextRegex.test(text)) item.Property.Text = text;
 
 	if (CurrentScreen === "ChatRoom" && text !== InventoryItemDevicesWoodenBoxOriginalText) {
 		const dictionary = [
@@ -143,7 +141,7 @@ const InventoryItemDevicesWoodenBoxOpacityChange = CommonDebounce((C, item, opac
  * @returns {void} - Nothing
  */
 const InventoryItemDevicesWoodenBoxTextChange = CommonDebounce((C, item, text) => {
-	if (InventoryItemDevicesWoodenBoxAllowedChars.test(text)) {
+	if (DynamicDrawTextRegex.test(text)) {
 		item.Property.Text = text.substring(0, InventoryItemDevicesWoodenBoxMaxLength);
 		CharacterRefresh(C, false);
 	}
@@ -169,7 +167,7 @@ function AssetsItemDevicesWoodenBoxAfterDraw({ C, A, X, Y, L, Pose, Property, dr
 		const ctx = tmpCanvas.getContext("2d");
 
 		let text = Property && Property.Text || "";
-		if (!InventoryItemDevicesWoodenBoxAllowedChars.test(text)) text = "";
+		if (!DynamicDrawTextRegex.test(text)) text = "";
 		text = text.substring(0, InventoryItemDevicesWoodenBoxMaxLength);
 
 		const { r, g, b } = DrawHexToRGB(Color);
