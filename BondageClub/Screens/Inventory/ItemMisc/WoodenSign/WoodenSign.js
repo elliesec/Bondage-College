@@ -1,7 +1,11 @@
 "use strict";
 
+const InventoryItemMiscWoodenSignFont = "'Calligraffitti', cursive";
+
 // Loads the item extension properties
 function InventoryItemMiscWoodenSignLoad() {
+	DynamicDrawLoadFont(InventoryItemMiscWoodenSignFont);
+
     var C = CharacterGetCurrent();
 	var MustRefresh = false;
 
@@ -89,7 +93,7 @@ function AssetsItemMiscWoodenSignAfterDraw({
 
 		const drawOptions = {
 			fontSize: 30,
-			fontFamily: "'Calligraffitti', cursive",
+			fontFamily: InventoryItemMiscWoodenSignFont,
 			color: Color,
 			effect: DynamicDrawTextEffect.BURN,
 			width,

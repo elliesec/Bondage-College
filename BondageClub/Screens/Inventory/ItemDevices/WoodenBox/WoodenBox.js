@@ -1,6 +1,7 @@
 const InventoryItemDevicesWoodenBoxMaxLength = 20;
 const InventoryItemDevicesWoodenBoxTextInputId = "InventoryItemDevicesWoodenBoxText";
 const InventoryItemDevicesWoodenBoxOpacityInputId = "InventoryItemDevicesWoodenBoxOpacity";
+const InventoryItemDevicesWoodenBoxFont = "'Saira Stencil One', 'Arial', sans-serif";
 
 let InventoryItemDevicesWoodenBoxOriginalText = null;
 
@@ -9,6 +10,8 @@ let InventoryItemDevicesWoodenBoxOriginalText = null;
  * @returns {void} - Nothing
  */
 function InventoryItemDevicesWoodenBoxLoad() {
+	DynamicDrawLoadFont(InventoryItemDevicesWoodenBoxFont);
+
 	const C = CharacterGetCurrent();
 	const item = DialogFocusItem;
 	let mustRefresh = false;
@@ -173,7 +176,7 @@ function AssetsItemDevicesWoodenBoxAfterDraw({ C, A, X, Y, L, Pose, Property, dr
 		const { r, g, b } = DrawHexToRGB(Color);
 		DynamicDrawTextFromTo(text, ctx, [0, height], [width, 0], {
 			fontSize: 96,
-			fontFamily: `'Saira Stencil One', 'Arial', sans-serif`,
+			fontFamily: InventoryItemDevicesWoodenBoxFont,
 			color: `rgba(${r}, ${g}, ${b}, ${0.7 * Opacity})`,
 		});
 

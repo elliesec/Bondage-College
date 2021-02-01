@@ -2,6 +2,9 @@
 
 const DynamicDrawTextRegex = /^(?:\w|[ ~!$#%*+])*$/;
 const DynamicDrawTextInputPattern = "(?:\\w|[ ~!$#%*+])*";
+const DynamicDrawValidTextCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_- ~!$#%*+".split("");
+const DynamicDrawTextArcPaddingRatio = 1.15;
+const DynamicDrawFontMeasurements = {};
 
 const DynamicDrawTextDefaultOptions = {
 	fontSize: 30,
@@ -12,6 +15,9 @@ const DynamicDrawTextDefaultOptions = {
 	effect: undefined,
 	width: undefined,
 	contain: true,
+	angle: 0,
+	radius: 450,
+	maxAngle: Math.PI,
 };
 
 const DynamicDrawTextEffect = {
@@ -28,6 +34,40 @@ const DynamicDrawTextEffects = {
 		},
 	},
 };
+
+function DynamicDrawLoadFont(fontFamily) {
+	// If we've already measured the font, do nothing
+	if (DynamicDrawFontMeasurements[fontFamily]) return;
+
+	const canvas = document.createElement("canvas");
+	canvas.width = 20;
+	canvas.height = 20;
+	const ctx = canvas.getContext("2d");
+
+	// Dummy text fill to force the browser to load the font (otherwise it won't get loaded until after the first time
+	// the text has been populated, causing the first draw to fallback)
+	ctx.font = `1px ${fontFamily}`;
+	ctx.fillText("", 0, 0);
+
+	// Measure each of the valid characters in the given font and record the maximum width
+	let maxWidth = 0;
+	const measurements = DynamicDrawValidTextCharacters.map(char => {
+		const width = ctx.measureText(char).width;
+		if (width > maxWidth) maxWidth = width;
+		return width;
+	});
+
+	// Capture the maximum character width for the font, and set up a relative map for character weights
+	const weightMap = DynamicDrawFontMeasurements[fontFamily] = {
+		width: maxWidth,
+		weights: {},
+	};
+
+	// Normalise the width of each character as a weight relative to the max width
+	DynamicDrawValidTextCharacters.forEach((char, i) => {
+		weightMap.weights[char] = measurements[i] / maxWidth;
+	});
+}
 
 function DynamicDrawText(text, ctx, x, y, options) {
 	options = DynamicDrawParseOptions(options);
@@ -78,6 +118,72 @@ function DynamicDrawTextFromTo(text, ctx, from, to, options) {
 	ctx.restore();
 }
 
+function DynamicDrawTextArc(text, ctx, x, y, options) {
+	let { fontFamily, angle, radius, width, maxAngle, fontSize } = options = DynamicDrawParseOptions(options);
+
+	// Load the font measurements if they haven't already been populated
+	DynamicDrawLoadFont(fontFamily);
+
+	// Calculate the circle's center based on the desired text position and the angle
+	const cx = x - radius * Math.sin(angle);
+	const cy = y - radius * Math.cos(angle);
+
+	// Retrieve the character weight map for the font
+	const weightMap = DynamicDrawFontMeasurements[fontFamily] || {
+		width: 1,
+		weights: {},
+	};
+
+	// Calculate the total weight of the desired text
+	let totalWeight = 0;
+	for (let i = 0; i < text.length; i++) {
+		totalWeight += weightMap.weights[text[i]] || 1;
+	}
+
+	if (width == null || width > 2 * radius + fontSize) {
+		width = 2 * radius + fontSize;
+	}
+	// Check whether the maximum angle should be constrained by the maximum width
+	const angleConstraint = 2 * Math.asin(width / (fontSize + 2 * radius));
+	maxAngle = Math.min(maxAngle, angleConstraint);
+
+	// Check whether the font size should be constrained by the maximum angle
+	const baseWidth = weightMap.width * totalWeight * DynamicDrawTextArcPaddingRatio;
+	const fontSizeConstraint = (2 * maxAngle * radius) / (2 * baseWidth + maxAngle);
+	options.fontSize = Math.min(fontSize, fontSizeConstraint);
+
+	// Based on the computed font size, calculate the actual angle that the text will occupy (may be less than the max
+	// angle)
+	const actualAngle = options.fontSize * baseWidth / radius;
+
+	// Apply drawing options
+	DynamicDrawApplyOptions(ctx, options);
+
+	// Prepare the canvas by translating to the intended drawing position, then translating over to the center of the
+	// circle. Then rotate the canvas around to the angle where the text should be draw, and rotate back again half the
+	// angle occupied by the text
+	ctx.save();
+	ctx.translate(x, y);
+	ctx.translate(x - cx, y - cy);
+	ctx.rotate(-angle);
+	ctx.rotate(-actualAngle / 2);
+
+	// Draw each character in turn, rotating a little before and after each character to space them out evenly
+	for (let n = 0; n < text.length; n++) {
+		const char = text[n];
+		const rotationAngle = 0.5 * actualAngle * (weightMap.weights[char] || 1) / totalWeight;
+		ctx.rotate(rotationAngle);
+		ctx.save();
+		ctx.translate(0, -radius);
+		DynamicDrawTextAndEffects(char, ctx, 0, 0, options);
+		ctx.restore();
+		ctx.rotate(rotationAngle);
+	}
+
+	// Restore the canvas back to its original position and orientation
+	ctx.restore();
+}
+
 function DynamicDrawTextAndEffects(text, ctx, x, y, options) {
 	const { effect, width } = options;
 	DynamicDrawApplyOptions(ctx, options);
@@ -98,7 +204,4 @@ function DynamicDrawApplyOptions(ctx, { fontSize, fontFamily, textAlign, textBas
 	ctx.textAlign = textAlign;
 	ctx.textBaseline = textBaseline;
 	ctx.fillStyle = color;
-	// Dummy text fill to force the browser to load the font (otherwise it won't get loaded until after the first time
-	// the text has been populated, causing the first draw to fallback)
-	ctx.fillText("", 0, 0);
 }
