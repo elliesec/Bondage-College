@@ -48,7 +48,7 @@ function DynamicDrawTextFromTo(text, ctx, from, to, options) {
 	const dy = y1 - y0;
 	// Diagonal distance
 	options.width = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-	if (contain) {
+	if (contain && dx !== 0) {
 		// If the text should be fully contained withing the [x0, y0], [x1, y1] box, subtract appropriately
 		options.width -= 2 * Math.abs(dy / dx) * (fontSize / 2);
 	}
@@ -56,7 +56,13 @@ function DynamicDrawTextFromTo(text, ctx, from, to, options) {
 	const cx = x0 + 0.5 * dx;
 	const cy = y0 + 0.5 * dy;
 
-	const angle = Math.atan(dy / dx);
+	let angle;
+	if (dx === 0) {
+		angle = dy > 0 ? Math.PI / 2 : -Math.PI / 2;
+	} else {
+		angle = Math.atan(dy / dx);
+	}
+	if (dx < 0) angle += Math.PI;
 
 	ctx.save();
 	ctx.translate(cx, cy);
