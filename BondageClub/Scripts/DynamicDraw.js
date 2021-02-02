@@ -9,9 +9,9 @@ const DynamicDrawTextDirection = {
 	CLOCKWISE: 1,
 	ANTICLOCKWISE: -1,
 };
-const DynamicDrawTextMood = {
-	HAPPY: -1,
-	SAD: 1,
+const DynamicDrawTextCurve = {
+	SMILEY: -1,
+	FROWNY: 1,
 };
 
 const DynamicDrawTextDefaultOptions = {
@@ -27,7 +27,7 @@ const DynamicDrawTextDefaultOptions = {
 	radius: 450,
 	maxAngle: Math.PI,
 	direction: DynamicDrawTextDirection.CLOCKWISE,
-	mood: DynamicDrawTextMood.SAD,
+	textCurve: DynamicDrawTextCurve.FROWNY,
 };
 
 const DynamicDrawTextEffect = {
@@ -129,7 +129,7 @@ function DynamicDrawTextFromTo(text, ctx, from, to, options) {
 }
 
 function DynamicDrawTextArc(text, ctx, x, y, options) {
-	let { fontFamily, angle, radius, width, maxAngle, fontSize, direction, mood } = options = DynamicDrawParseOptions(options);
+	let { fontFamily, angle, radius, width, maxAngle, fontSize, direction, textCurve } = options = DynamicDrawParseOptions(options);
 
 	// Load the font measurements if they haven't already been populated
 	DynamicDrawLoadFont(fontFamily);
@@ -185,7 +185,7 @@ function DynamicDrawTextArc(text, ctx, x, y, options) {
 		ctx.rotate(rotationAngle);
 		ctx.save();
 		ctx.translate(0, -radius);
-		ctx.transform(direction, 0, 0, mood, 0, 0);
+		ctx.transform(direction, 0, 0, textCurve, 0, 0);
 		DynamicDrawTextAndEffects(char, ctx, 0, 0, options);
 		ctx.restore();
 		ctx.rotate(rotationAngle);

@@ -1,4 +1,3 @@
-const InventoryItemDevicesPetBowlAllowedChars = /^(?:\w|[ ~!$#%*+-])*$/;
 const InventoryItemDevicesPetBowlMaxLength = 12;
 const InventoryItemDevicesPetBowlInputId = "InventoryItemDevicesPetBowlText";
 const InventoryItemDevicesPetBowlFont = "'Saira Stencil One', 'Arial', sans-serif";
@@ -25,7 +24,8 @@ function InventoryItemDevicesPetBowlLoad() {
 		ChatRoomCharacterItemUpdate(C, DialogFocusItem.Asset.Group.Name);
 	}
 
-	ElementCreateInput(InventoryItemDevicesPetBowlInputId, "text", Property.Text, InventoryItemDevicesPetBowlMaxLength);
+	const input = ElementCreateInput(InventoryItemDevicesPetBowlInputId, "text", Property.Text, InventoryItemDevicesPetBowlMaxLength);
+	if (input) input.pattern = DynamicDrawTextInputPattern;
 }
 
 /**
@@ -34,23 +34,9 @@ function InventoryItemDevicesPetBowlLoad() {
  */
 function InventoryItemDevicesPetBowlDraw() {
 	// Draw the header and item
-	DrawRect(1387, 125, 225, 275, "white");
-	DrawImageResize(
-		"Assets/" +
-			DialogFocusItem.Asset.Group.Family +
-			"/" +
-			DialogFocusItem.Asset.Group.Name +
-			"/Preview/" +
-			DialogFocusItem.Asset.Name +
-			".png",
-		1389,
-		127,
-		221,
-		221
-	);
-	DrawTextFit(DialogFocusItem.Asset.Description, 1500, 375, 221, "black");
+	DrawAssetPreview(1387, 125, DialogFocusItem.Asset);
 
-	const updateAllowed = InventoryItemDevicesPetBowlAllowedChars.test(InventoryItemDevicesPetBowlGetText());
+	const updateAllowed = DynamicDrawTextRegex.test(InventoryItemDevicesPetBowlGetText());
 	DrawTextFit(DialogFindPlayer("PetBowlLabel"), 1505, 620, 350, "#fff", "#000");
 	ElementPosition(InventoryItemDevicesPetBowlInputId, 1505, 680, 350);
 	DrawButton(1330, 731, 340, 64, DialogFindPlayer("SaveText"), updateAllowed ? "White" : "#888", "");
@@ -67,7 +53,7 @@ function InventoryItemDevicesPetBowlClick() {
 	}
 
 	const text = InventoryItemDevicesPetBowlGetText();
-	if (MouseIn(1330, 731, 340, 64) && InventoryItemDevicesPetBowlAllowedChars.test(text)) {
+	if (MouseIn(1330, 731, 340, 64) && DynamicDrawTextRegex.test(text)) {
 		DialogFocusItem.Property.Text = text;
 		InventoryItemDevicesPetBowlChange(text);
 	}
@@ -126,7 +112,7 @@ function AssetsItemDevicesPetBowlAfterDraw({ C, A, X, Y, L, Property, drawCanvas
 		// Fetch the text property and assert that it matches the character
 		// and length requirements
 		let text = (Property && Property.Text) || "";
-		if (!InventoryItemDevicesPetBowlAllowedChars.test(text)) text = "";
+		if (!DynamicDrawTextRegex.test(text)) text = "";
 		text = text.substring(0, InventoryItemDevicesPetBowlMaxLength);
 
 		// Prepare a temporary canvas to draw the text to
@@ -142,7 +128,7 @@ function AssetsItemDevicesPetBowlAfterDraw({ C, A, X, Y, L, Property, drawCanvas
 			color: Color,
 			angle: Math.PI,
 			direction: DynamicDrawTextDirection.ANTICLOCKWISE,
-			mood: DynamicDrawTextMood.HAPPY,
+			textCurve: DynamicDrawTextCurve.SMILEY,
 			radius: 350,
 		});
 
