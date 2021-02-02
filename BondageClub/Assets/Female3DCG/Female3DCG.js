@@ -1732,14 +1732,14 @@ var AssetFemale3DCG = [
 			{ Name: "HarnessBra1", Fetish: ["Leather"], Priority: 20, Value: 30, Difficulty: 8, Time: 15, RemoveTime: 10, HideItem: ["ItemNipplesLactationPump"], AllowLock: true, BuyGroup: "HarnessBra1", Prerequisite: "AccessTorso", Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"] },
 			{ Name: "HarnessBra2", Fetish: ["Leather"], Priority: 20, Value: 40, Difficulty: 8, Time: 15, RemoveTime: 10, HideItem: ["ItemNipplesLactationPump"], AllowLock: true, BuyGroup: "HarnessBra2", Prerequisite: "AccessTorso", Expose: ["ItemNipples", "ItemBreast", "ItemNipplesPiercings"] },
 			{ Name: "Corset2", Fetish: ["Lingerie"], Priority: 22, Value: 30, Difficulty: 8, Time: 15, RemoveTime: 10, AllowLock: true, Left: 150, BuyGroup: "Corset2", Prerequisite: "AccessTorso", Hide: ["ItemNipples", "ItemNipplesPiercings"], OverrideAllowPose: ["Hogtied"], DynamicGroupName: "Corset" },
-			{ Name: "FuturisticHarness", Fetish: ["Metal"], Category: ["SciFi"], Value: 25, BuyGroup: "FuturisticHarness", Difficulty: 15, Time: 15, RemoveTime: 10, Audio: "FuturisticApply", DefaultColor: ["#50913C", "Default", "#889FA7"], AllowLock: true, Prerequisite: "AccessTorso", HideForPose: ["Hogtied", "AllFours"],
+			{ Name: "FuturisticHarness", Fetish: ["Metal"], Category: ["SciFi"], Value: 25, BuyGroup: "FuturisticHarness", Difficulty: 15, Time: 15, RemoveTime: 10, Audio: "FuturisticApply", DefaultColor: ["#50913C", "Default", "#889FA7"], AllowLock: true, Prerequisite: "AccessTorso", HideForPose: ["Hogtied", "AllFours"], Extended: true,
 				Layer:[
 					{ Name: "Display", AllowColorize: true, ParentGroup: null,},
 					{ Name: "Band", AllowColorize: true },
 					{ Name: "Mesh", AllowColorize: true, ParentGroup: null,},
 				]
 			},
-			{ Name: "FuturisticHarness2", Fetish: ["Metal"], Category: ["SciFi"], Value: -1, BuyGroup: "FuturisticHarness", Difficulty: 20, Time: 17, RemoveTime: 12, Audio: "FuturisticApply", DefaultColor: ["#50913C", "Default", "#889FA7"], AllowLock: true, Prerequisite: "AccessTorso", HideForPose: ["AllFours"],
+			{ Name: "FuturisticHarness2", Fetish: ["Metal"], Category: ["SciFi"], Value: -1, BuyGroup: "FuturisticHarness", Difficulty: 20, Time: 17, RemoveTime: 12, Audio: "FuturisticApply", DefaultColor: ["#50913C", "Default", "#889FA7"], AllowLock: true, Prerequisite: "AccessTorso", HideForPose: ["AllFours"], Extended: true,
 				Layer:[
 					{ Name: "Display", AllowColorize: true, ParentGroup: null, Priority: 15,},
 					{ Name: "Band", AllowColorize: true, Priority: 15 },
@@ -3505,6 +3505,12 @@ var AssetFemale3DCG = [
 			{ Name: "HeavyDutyEarPlugs", Value: 30, Difficulty: 50, Time: 5, Visible: false, Effect: ["DeafHeavy"] },
 			{ Name: "HeadphoneEarPlugs", Value: 50, Difficulty: 50, Time: 5, Visible: false, Effect: [""], AllowEffect: ["DeafLight", "DeafHeavy"], AllowType: ["Off", "Light", "Heavy"], Extended: true },
 			{ Name: "BluetoothEarbuds", Value: 50, Difficulty: 50, Time: 5, Visible: false, Effect: [""], AllowEffect: ["DeafLight", "DeafHeavy"], AllowType: ["Off", "Light", "Heavy"], Extended: true, AlwaysExtend: true },
+			{ Name: "FuturisticEarphones", Priority: 54, Category: ["SciFi"], Value: 60, Difficulty: 50, Top: 20, Time: 12, DefaultColor: ["Default", "#50913C"], AllowLock: true, Random: false, Effect: [""], AllowEffect: ["DeafLight", "DeafHeavy", "DeafTotal"], AllowType: ["Off", "Light", "Heavy", "NoiseCancelling"], Extended: true, AlwaysExtend: true, HasType: false,
+				Layer: [
+					{ Name: "Band" },
+					{ Name: "Display" },
+				]
+			},
 			{ 
 				Name: "Headphones", Priority: 54, Value: 50, Time: 5, Random: false, Top: 20, Effect: [""], AllowEffect: ["DeafLight", "DeafHeavy"], AllowType: ["Off", "Light", "Heavy"], Extended: true, AlwaysExtend: true, HasType: false,
 				Layer: [

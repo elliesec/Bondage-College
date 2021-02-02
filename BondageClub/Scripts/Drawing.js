@@ -66,9 +66,6 @@ function DrawLoad() {
 	MainCanvas.textAlign = "center";
 	MainCanvas.textBaseline = "middle";
 
-	// Loads the 3D engine as well
-	Draw3DLoad();
-
 }
 
 /**
@@ -230,12 +227,6 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 			return;
 		}
 
-		// Shortcuts drawing the character to 3D if needed
-		if (Draw3DEnabled) {
-			Draw3DCharacter(C, X, Y, Zoom, IsHeightResizeAllowed);
-			return;
-		}
-
 		// Run any existing asset scripts
 		if (C.RunScripts && C.HasScriptedAssets) {
 			var DynamicAssets = C.Appearance.filter(CA => CA.Asset.DynamicScriptDraw);
@@ -260,14 +251,14 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 
 		// There's 2 different canvas, one blinking and one that doesn't
 		var seconds = new Date().getTime();
-		var Canvas = (Math.round(seconds / 400) % C.BlinkFactor == 0) ? C.CanvasBlink : C.Canvas;
+		var Canvas = (Math.round(seconds / 400) % C.BlinkFactor == 0 && !CommonPhotoMode) ? C.CanvasBlink : C.Canvas;
 
 		// If we must dark the Canvas characters
 		if ((C.ID != 0) && Player.IsBlind() && (CurrentScreen != "InformationSheet")) {
 			var CanvasH = document.createElement("canvas");
 			CanvasH.width = Canvas.width;
 			CanvasH.height = Canvas.height;
-			var DarkFactor = (Player.Effect.indexOf("BlindNormal") >= 0) ? 0.3 : 0.6;
+			var DarkFactor = Math.min(CharacterGetDarkFactor(Player) * 2, 1);
 			var ctx = CanvasH.getContext('2d');
 			ctx.drawImage(Canvas, 0, 0);
 			// Overlay black rectangle.
@@ -308,10 +299,12 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 		MainCanvas.drawImage(Canvas, 0, SourceY, Canvas.width, SourceHeight, X + XOffset * Zoom, Y + DestY * Zoom, 500 * HeightRatio * Zoom, (1000 - DestY) * Zoom);
 
 		// Draw the arousal meter & game images on certain conditions
-		DrawArousalMeter(C, X, Y, Zoom);
-		OnlineGameDrawCharacter(C, X, Y, Zoom);
-		if (C.HasHiddenItems) DrawImageZoomCanvas("Screens/Character/Player/HiddenItem.png", MainCanvas, 0, 0, 86, 86, X + 54 * Zoom, Y + 880 * Zoom, 70 * Zoom, 70 * Zoom);
-
+		if (CurrentScreen != "ChatRoom" || ChatRoomHideIconState <= 1) {
+			DrawArousalMeter(C, X, Y, Zoom);
+			OnlineGameDrawCharacter(C, X, Y, Zoom);
+			if (C.HasHiddenItems) DrawImageZoomCanvas("Screens/Character/Player/HiddenItem.png", MainCanvas, 0, 0, 86, 86, X + 54 * Zoom, Y + 880 * Zoom, 70 * Zoom, 70 * Zoom);
+		}
+		
 		// Draws the character focus zones if we need too
 		if ((C.FocusGroup != null) && (C.FocusGroup.Zone != null) && (CurrentScreen != "Preference") && (DialogColor == null)) {
 
@@ -329,10 +322,10 @@ function DrawCharacter(C, X, Y, Zoom, IsHeightResizeAllowed) {
 		}
 
 		// Draw the character name below herself
-		if ((C.Name != "") && ((CurrentModule == "Room") || (CurrentModule == "Online") || ((CurrentScreen == "Wardrobe") && (C.ID != 0))) && (CurrentScreen != "Private"))
+		if ((C.Name != "") && ((CurrentModule == "Room") || (CurrentModule == "Online" && !(CurrentScreen == "ChatRoom" && ChatRoomHideIconState >= 3)) || ((CurrentScreen == "Wardrobe") && (C.ID != 0))) && (CurrentScreen != "Private"))
 			if (!Player.IsBlind() || (Player.GameplaySettings && Player.GameplaySettings.SensDepChatLog == "SensDepLight")) {
 				MainCanvas.font = CommonGetFont(30);
-				let NameOffset = CurrentScreen == "ChatRoom" && ChatRoomCharacter.length > 5 && CurrentCharacter == null ? -4 : 0;
+				let NameOffset = CurrentScreen == "ChatRoom" && (ChatRoomCharacter.length > 5 || (ChatRoomCharacter.length == 5 && CommonPhotoMode)) && CurrentCharacter == null ? -4 : 0;
 				DrawText(C.Name, X + 255 * Zoom, Y + 980 * Zoom + NameOffset, (CommonIsColor(C.LabelColor)) ? C.LabelColor : "White", "Black");
 				MainCanvas.font = CommonGetFont(36);
 			}
@@ -874,7 +867,7 @@ function DrawBackNextButton(Left, Top, Width, Height, Label, Color, Image, BackT
 	MainCanvas.rect(Left, Top, Width, Height);
 	MainCanvas.fillStyle = Color;
 	MainCanvas.fillRect(Left, Top, Width, Height);
-	if ((MouseX >= Left) && (MouseX <= Left + Width) && (MouseY >= Top) && (MouseY <= Top + Height) && !CommonIsMobile && !Disabled) {
+	if (MouseIn(Left, Top, Width, Height) && !CommonIsMobile && !Disabled) {
 		MainCanvas.fillStyle = "Cyan";
 		if (MouseX > RightSplit) {
 			MainCanvas.fillRect(RightSplit, Top, ArrowWidth, Height);
@@ -884,6 +877,12 @@ function DrawBackNextButton(Left, Top, Width, Height, Label, Color, Image, BackT
 		} else {
 			MainCanvas.fillRect(Left + ArrowWidth, Top, Width - ArrowWidth * 2, Height);
 		}
+	}
+	else if (CommonIsMobile && ArrowWidth < Width / 2) {
+		// Fill in the arrow regions on mobile
+		MainCanvas.fillStyle = "lightgrey";
+		MainCanvas.fillRect(Left, Top, ArrowWidth, Height);
+		MainCanvas.fillRect(RightSplit, Top, ArrowWidth, Height);
 	}
 	MainCanvas.lineWidth = '2';
 	MainCanvas.strokeStyle = 'black';
@@ -1045,11 +1044,8 @@ function DrawProcess() {
 	if ((B != null) && (B != "")) {
 		var DarkFactor = 1.0;
 		if ((CurrentModule != "Character") && (B != "Sheet")) {
-			const blindLevel = Player.GetBlindLevel();
-			if (blindLevel >= 3) DarkFactor = 0.0;
-			else if (blindLevel == 2) DarkFactor = 0.15;
-			else if (blindLevel == 1) DarkFactor = 0.3;
-			else if (CurrentCharacter != null || ShopStarted) DarkFactor = 0.5;
+			DarkFactor = CharacterGetDarkFactor(Player);
+			if (DarkFactor == 1 && (CurrentCharacter != null || ShopStarted) && !CommonPhotoMode) DarkFactor = 0.5;
 		}
 		if (DarkFactor > 0.0) {
 			let Invert = Player.GraphicsSettings && Player.GraphicsSettings.InvertRoom && Player.IsInverted();
@@ -1064,9 +1060,6 @@ function DrawProcess() {
 
 	// Draws beep from online player sent by the server
 	ServerDrawBeep();
-
-	// Draws the 3D objects
-	Draw3DProcess();
 
 	// Leave dialogs AFTER drawing everything
 	// If needed
