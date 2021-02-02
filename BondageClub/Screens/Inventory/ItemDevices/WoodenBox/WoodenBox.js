@@ -5,6 +5,21 @@ const InventoryItemDevicesWoodenBoxFont = "'Saira Stencil One', 'Arial', sans-se
 
 let InventoryItemDevicesWoodenBoxOriginalText = null;
 
+let InventoryItemDevicesWoodenBoxOptions = [
+	{
+		Name: "SWNE",
+		Property: { Type: null },
+		from: [0, 1],
+		to: [1, 0],
+	},
+	{
+		Name: "NWSE",
+		Property: { Type: "NWSE" },
+		from: [0, 0],
+		to: [1, 1],
+	},
+];
+
 /**
  * Loads the wooden box's extended item properties
  * @returns {void} - Nothing
@@ -26,7 +41,10 @@ function InventoryItemDevicesWoodenBoxLoad() {
 		InventoryItemDevicesWoodenBoxSetOpacity(Property, Property.Opacity);
 		mustRefresh = true;
 	}
-
+	if (!InventoryItemDevicesWoodenBoxOptions.find(option => option.Property.Type === Property.Type)) {
+		Property.Type = InventoryItemDevicesWoodenBoxOptions[0].Property.Type;
+		mustRefresh = true;
+	}
 
 	if (mustRefresh) {
 		CharacterRefresh(C);
@@ -55,8 +73,10 @@ function InventoryItemDevicesWoodenBoxLoad() {
  * @returns {void} - Nothing
  */
 function InventoryItemDevicesWoodenBoxDraw() {
+	const asset = DialogFocusItem.Asset;
+
 	// Draw the header and item
-	DrawAssetPreview(1387, 125, DialogFocusItem.Asset);
+	DrawAssetPreview(1387, 125, asset);
 
 	MainCanvas.textAlign = "right";
 	DrawTextFit(DialogFindPlayer("WoodenBoxOpacityLabel"), 1475, 500, 400, "#fff", "#000");
@@ -65,6 +85,18 @@ function InventoryItemDevicesWoodenBoxDraw() {
 	DrawTextFit(DialogFindPlayer("WoodenBoxTextLabel"), 1475, 580, 400, "#fff", "#000");
 	ElementPosition(InventoryItemDevicesWoodenBoxTextInputId, 1725, 580, 400);
 	MainCanvas.textAlign = "center";
+
+	DrawTextFit(DialogFindPlayer("WoodenBoxTypeLabel"), 1500, 660, 800, "#fff", "#000");
+
+	InventoryItemDevicesWoodenBoxOptions.forEach((option, i) => {
+		const x = ExtendedXY[InventoryItemDevicesWoodenBoxOptions.length][i][0];
+		const isSelected = DialogFocusItem.Property.Type === option.Property.Type;
+		DrawPreviewBox(x, 700, `${AssetGetInventoryPath(asset)}/${option.Name}.png`, "", {
+			Border: true,
+			Hover: true,
+			Disabled: isSelected,
+		});
+	});
 }
 
 /**
@@ -76,6 +108,14 @@ function InventoryItemDevicesWoodenBoxClick() {
 	if (MouseIn(1885, 25, 90, 90)) {
 		return InventoryItemDevicesWoodenBoxExit();
 	}
+
+	InventoryItemDevicesWoodenBoxOptions.some((option, i) => {
+		const x = ExtendedXY[InventoryItemDevicesWoodenBoxOptions.length][i][0];
+		if (MouseIn(x, 700, 225, 275)) {
+			DialogFocusItem.Property.Type = option.Property.Type;
+			CharacterRefresh(CharacterGetCurrent(), false);
+		}
+	});
 }
 
 /**
@@ -135,6 +175,7 @@ function InventoryItemDevicesWoodenBoxSetOpacity(property, opacity) {
  * @returns {void} - Nothing
  */
 const InventoryItemDevicesWoodenBoxOpacityChange = CommonDebounce((C, item, opacity) => {
+	item = DialogFocusItem || item;
 	item.Property.Opacity = Number(opacity);
 	CharacterRefresh(C, false);
 }, 100);
@@ -144,6 +185,7 @@ const InventoryItemDevicesWoodenBoxOpacityChange = CommonDebounce((C, item, opac
  * @returns {void} - Nothing
  */
 const InventoryItemDevicesWoodenBoxTextChange = CommonDebounce((C, item, text) => {
+	item = DialogFocusItem || item;
 	if (DynamicDrawTextRegex.test(text)) {
 		item.Property.Text = text.substring(0, InventoryItemDevicesWoodenBoxMaxLength);
 		CharacterRefresh(C, false);
@@ -173,8 +215,22 @@ function AssetsItemDevicesWoodenBoxAfterDraw({ C, A, X, Y, L, Pose, Property, dr
 		if (!DynamicDrawTextRegex.test(text)) text = "";
 		text = text.substring(0, InventoryItemDevicesWoodenBoxMaxLength);
 
+		let from = [0, 1];
+		let to = [1, 0];
+
+		if (Property && Property.Type) {
+			const option = InventoryItemDevicesWoodenBoxOptions.find(o => o.Property.Type === Property.Type);
+			if (option) {
+				from = option.from;
+				to = option.to;
+			}
+		}
+
+		from = [width * from[0], height * from[1]];
+		to = [width * to[0], height * to[1]];
+
 		const { r, g, b } = DrawHexToRGB(Color);
-		DynamicDrawTextFromTo(text, ctx, [0, height], [width, 0], {
+		DynamicDrawTextFromTo(text, ctx, from, to, {
 			fontSize: 96,
 			fontFamily: InventoryItemDevicesWoodenBoxFont,
 			color: `rgba(${r}, ${g}, ${b}, ${0.7 * Opacity})`,
