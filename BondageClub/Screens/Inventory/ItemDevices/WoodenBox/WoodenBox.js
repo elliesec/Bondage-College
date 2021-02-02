@@ -193,17 +193,26 @@ const InventoryItemDevicesWoodenBoxTextChange = CommonDebounce((C, item, text) =
 }, 200);
 
 /**
- * Fetches the current input text, trimmed appropriately
- * @returns {string} - The text in the wooden box's input element
+ * Fetches the current text input value, trimmed appropriately
+ * @returns {string} - The text in the wooden box's text input element
  */
 function InventoryItemDevicesWoodenBoxGetText() {
 	return ElementValue(InventoryItemDevicesWoodenBoxTextInputId).substring(0, InventoryItemDevicesWoodenBoxMaxLength);
 }
 
+/**
+ * Fetches the current opacity input value, parsed to a number
+ * @returns {number} - The value of the wooden box's opacity input slider
+ */
 function InventoryItemDevicesWoodenBoxGetInputOpacity() {
 	return Number(ElementValue(InventoryItemDevicesWoodenBoxOpacityInputId));
 }
 
+/**
+ * Dynamic AfterDraw function. Draws text onto the box.
+ * @param {object} DrawingData - The dynamic drawing data
+ * @returns {void} - Nothing
+ */
 function AssetsItemDevicesWoodenBoxAfterDraw({ C, A, X, Y, L, Pose, Property, drawCanvas, drawCanvasBlink, AlphaMasks, Color, Opacity }) {
 	if (L === "_Text") {
 		const height = 900;
