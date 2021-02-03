@@ -124,7 +124,9 @@ const AssetType = {
 	AvailableLocations: "[String]",
 	OverrideHeight: "{ Height: Number, Priority: Number, HeightRatioProportion: Maybe Number }",
 	FreezeActivePose: "[String]",
-	Layer: "[Object]"
+	Layer: "[Object]",
+	AllowExpression: "[String]",
+	MirrorExpression: "String",
 };
 
 const AssetLayerType = {
@@ -146,7 +148,8 @@ const AssetLayerType = {
 	HasImage: "Boolean",
 	Opacity: "Number",
 	MinOpacity: "Number",
-	MaxOpacity: "Number"
+	MaxOpacity: "Number",
+	MirrorExpression: "String",
 };
 
 module.exports = { AssetGroupType, AssetType, AssetLayerType };
