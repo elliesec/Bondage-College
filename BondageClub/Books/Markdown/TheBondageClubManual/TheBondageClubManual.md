@@ -23,6 +23,8 @@ _Everything you ever needed to know about the Bondage Club_
     * [Item Visibility Preferences](#item-visibility-preferences)
     * [Immersion Preferences](#immersion-preferences)
     * [Graphics Preferences](#graphics-preferences)
+    * [Controller Preferences](#controller-preferences)
+    * [Notifications Preferences](#notifications-preferences)
 * [Clothes and Equipment](#clothes-and-equipment)
 * [Earning Money](#earning-money)
 * [Relationships](#relationships)
@@ -340,9 +342,27 @@ The page also contains several other ways to customize your sexual preferences, 
 
 [Back to the contents](#table-of-contents)
 
+The security preferences contain useful settings that allow you to keep your personal Bondage Club account secure. In your security preferences, you can register an email address with the club if you haven't already, or update your existing email address. The benefit of having an email address linked to your account is that if for any reason you lose access to your account, you will be able to reset your account password and recover your account.
+
+**Note:** You don't have to register an email address with the club. However, if you don't, and you lose access to your account, there will be no way for you to recover your account, so we encourage members to register an email address if they feel comfortable doing so.
+
 ### ![Online Preferences Icon](../../../Icons/Online.png) Online Preferences
 
 [Back to the contents](#table-of-contents)
+
+Your Online Preferences allow you to customize your interactions with other club members inside [chatrooms](#the-chatrooms).
+
+| Preference | Description |
+| --- | --- |
+| Ban blacklist when creating a room | Turning this preference on will automatically add anyone on your [blacklist](#your-blacklist) to the ban list of any room you create |
+| Ban ghostlist when creating a room | Turning this preference on will automatically add anyone on your [ghostlist](#your-ghostlist) to the ban list of any room you create |
+| Display full chatrooms | When this preference is checked, you will be able to see any public chatrooms in the room lobby, even if they are currently full (you will still not be able to enter a full room) |
+| Order rooms by number of friends | When this preference is checked, the chatroom list in the room lobby will display chatrooms that your friends are currently in first, with rooms with more friends appearing higher in the list |
+| Disable scripted assets on others | Checking this preference will cause scripted items (e.g. items with custom text or animations) from running their scripts on other players. Turning this off can help with performance on slower devices |
+| Show AFK bubble if idle for 5 minutes | Checking this preference will cause the "AFK" emote to display when you are inactive for 5 minutes or more |
+| Show Wardrobe icon to others while in the appearance menu | Checking this preference will cause the wardrobe icon to display when you are changing your appearance or outfit |
+| Allow others to alter your whole appearance | Usually, other club members (that have permission) are able to change your clothes and items, but _not_ your hair, eyes, height, etc. Checking this setting will allow them to do so. Note that even if you check this setting, other members first need to have appropriate [item permission](#item-permission) before they can change your appearance. |
+| Prevent others from changing cosplay items | You'll frequently see club members around the club wearing cosplay items such as animal ears, tails, and even wings. Some members see this as part of their identity, so checking this preference will prevent other members from being able to change these items. |
 
 ### ![Item Visibility Preferences Icon](../../../Icons/Visibility.png) Item Visibility Preferences
 
@@ -353,6 +373,14 @@ The page also contains several other ways to customize your sexual preferences, 
 [Back to the contents](#table-of-contents)
 
 ### ![Graphics Preferences Icon](../../../Icons/Graphics.png) Graphics Preferences
+
+[Back to the contents](#table-of-contents)
+
+### ![Controller Preferences Icon](../../../Icons/Controller.png) Controller Preferences
+
+[Back to the contents](#table-of-contents)
+
+### ![Notifications Preferences Icon](../../../Icons/Notifications.png) Notifications Preferences
 
 [Back to the contents](#table-of-contents)
 
