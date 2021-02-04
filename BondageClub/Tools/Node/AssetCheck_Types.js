@@ -124,9 +124,10 @@ const AssetType = {
 	AvailableLocations: "[String]",
 	OverrideHeight: "{ Height: Number, Priority: Number, HeightRatioProportion: Maybe Number }",
 	FreezeActivePose: "[String]",
-	Layer: "[Object]",
+	DrawLocks: "Boolean",
 	AllowExpression: "[String]",
 	MirrorExpression: "String",
+	Layer: "[Object]",
 };
 
 const AssetLayerType = {
@@ -149,6 +150,7 @@ const AssetLayerType = {
 	Opacity: "Number",
 	MinOpacity: "Number",
 	MaxOpacity: "Number",
+	LockLayer: "Boolean",
 	MirrorExpression: "String",
 };
 
