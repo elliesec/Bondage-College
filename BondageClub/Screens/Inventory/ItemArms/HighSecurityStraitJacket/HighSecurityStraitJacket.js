@@ -16,7 +16,7 @@
  * s3 - Three crotch straps
  */
 
-var InventoryItemArmsHighSecurityStraitJacketCrotchOptions = [
+const InventoryItemArmsHighSecurityStraitJacketCrotchOptions = [
 	{
 		Name: "c0",
 		Difficulty: 0,
@@ -30,7 +30,7 @@ var InventoryItemArmsHighSecurityStraitJacketCrotchOptions = [
 	},
 ];
 
-var InventoryItemArmsHighSecurityStraitJacketArmsOptions = [
+const InventoryItemArmsHighSecurityStraitJacketArmsOptions = [
 	{
 		Name: "a0",
 		Difficulty: 0,
@@ -47,7 +47,7 @@ var InventoryItemArmsHighSecurityStraitJacketArmsOptions = [
 	},
 ];
 
-var InventoryItemArmsHighSecurityStraitJacketStrapsOptions = [
+const InventoryItemArmsHighSecurityStraitJacketStrapsOptions = [
 	{
 		Name: "s0",
 		Difficulty: 0,
@@ -70,6 +70,24 @@ var InventoryItemArmsHighSecurityStraitJacketStrapsOptions = [
 		Block: ["ItemPelvis", "ItemVulva", "ItemVulvaPiercings", "ItemButt"],
 		Hide: ["ItemVulvaPiercings"],
 		HideItem: ["ItemButtAnalBeads2"],
+	},
+];
+
+const InventoryItemArmsHighSecurityStraitJacketModules = [
+	{
+		Name: "CrotchPanel",
+		Key: "c",
+		Options: InventoryItemArmsHighSecurityStraitJacketCrotchOptions,
+	},
+	{
+		Name: "Arms",
+		Key: "a",
+		Options: InventoryItemArmsHighSecurityStraitJacketArmsOptions,
+	},
+	{
+		Name: "Straps",
+		Key: "s",
+		Options: InventoryItemArmsHighSecurityStraitJacketStrapsOptions,
 	},
 ];
 
