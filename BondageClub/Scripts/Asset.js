@@ -188,6 +188,12 @@ function AssetAdd(NewAsset, ExtendedConfig) {
 	if (A.Extended && ExtendedConfig) AssetBuildExtended(A, ExtendedConfig);
 }
 
+/**
+ * Constructs extended item functions for an asset, if extended item configuration exists for the asset.
+ * @param {Asset} A - The asset to configure
+ * @param {ExtendedItemConfig} ExtendedConfig - The extended item configuration object for the asset's family
+ * @returns {void} - Nothing
+ */
 function AssetBuildExtended(A, ExtendedConfig) {
 	const GroupConfig = ExtendedConfig[AssetCurrentGroup.Name];
 	if (GroupConfig) {

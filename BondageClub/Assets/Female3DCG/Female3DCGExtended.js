@@ -1,7 +1,29 @@
+"use strict";
+
+/**
+ * Female3DCGExtended.js
+ * ---------------------
+ * This file contains definitions and configuration for extended items. Items which are marked as Extended in
+ * `Female3DCG.js` and which have an extended item definition here will have their load/draw/click functions
+ * _automatically_ created when assets are loaded, saving the need for an individual extended item script.
+ *
+ * Currently, only modular items are supported, but this will expand in the future.
+ */
+
+/**
+ * An enum encapsulating the available extended item archetypes
+ * MODULAR - Indicates that this item is modular, with several independently configurable modules
+ * @enum {string}
+ * @see {@link ModularItemConfig}
+ */
 const ExtendedArchetype = {
 	MODULAR: "modular",
 };
 
+/**
+ * An object containing all extended item configurations.
+ * @const {ExtendedItemConfig}
+ */
 const AssetFemale3DCGExtended = {
 	ItemArms: {
 		HighSecurityStraitJacket: {
@@ -52,3 +74,24 @@ const AssetFemale3DCGExtended = {
 		}, // HighSecurityStraitJacket
 	}, // ItemArms
 };
+
+/**
+ *
+ * An object containing the extended item definition for an asset.
+ * @typedef ExtendedItemAssetConfig
+ * @type {object}
+ * @property {ExtendedArchetype} Archetype - The extended item archetype that this asset uses.
+ * @property {ModularItemConfig} Config - The specific configuration for the item (type will vary based on the item's
+ * archetype)
+ *
+ * An object containing extended item definitions for a group. Maps asset names within the group to their extended item
+ * configuration
+ * @typedef ExtendedItemGroupConfig
+ * @type {object.<string, ExtendedItemAssetConfig>}
+ * @see {@link ExtendedItemAssetConfig}
+ *
+ * An object containing extended item configurations keyed by group name.
+ * @typedef ExtendedItemConfig
+ * @type {object.<string, ExtendedItemGroupConfig>}
+ * @see {@link ExtendedItemAssetConfig}
+ */
