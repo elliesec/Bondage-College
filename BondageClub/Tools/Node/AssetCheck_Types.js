@@ -149,6 +149,7 @@ const AssetLayerType = {
 	MinOpacity: "Number",
 	MaxOpacity: "Number",
 	LockLayer: "Boolean",
+	HideForPose: "[String]",
 };
 
 module.exports = { AssetGroupType, AssetType, AssetLayerType };
