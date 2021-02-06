@@ -228,6 +228,7 @@ function AssetMapLayer(Layer, AssetDefinition, A, I) {
 		MinOpacity: typeof Layer.MinOpacity === "number" ? AssetParseOpacity(Layer.Opacity) : A.MinOpacity,
 		MaxOpacity: typeof Layer.MaxOpacity === "number" ? AssetParseOpacity(Layer.Opacity) : A.MaxOpacity,
 		LockLayer: typeof Layer.LockLayer === "boolean" ? Layer.LockLayer : false,
+		HideForPose: Array.isArray(Layer.HideForPose) ? Layer.HideForPose : [],
 	};
 	if (L.MinOpacity > L.Opacity) L.MinOpacity = L.Opacity;
 	if (L.MaxOpacity < L.Opacity) L.MaxOpacity = L.Opacity;
