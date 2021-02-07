@@ -67,6 +67,8 @@ const ModularItemChatSetting = {
 	PER_OPTION: "perOption",
 };
 
+const ModularItemsPerPage = 8;
+
 /**
  * Registers a modular extended item. This automatically creates the item's load, draw and click functions. It will
  * also generate the asset's AllowType array, as AllowType arrays on modular items can get long due to the
@@ -149,18 +151,52 @@ function ModularItemCreateModularData(asset, { Modules, ChatSetting }) {
 		chatMessagePrefix: `${key}Set`,
 		modules: Modules,
 		currentModule: ModularItemBase,
-		pages: {
-			[ModularItemBase]: 0,
-		},
+		pages: { [ModularItemBase]: 0 },
+		drawData: { [ModularItemBase]: ModularItemCreateDrawData(Modules.length) },
 	};
 	data.drawFunctions = { [ModularItemBase]: ModularItemCreateDrawBaseFunction(data) };
 	data.clickFunctions = { [ModularItemBase]: ModularItemCreateClickBaseFunction(data) };
 	Modules.forEach(module => {
 		data.pages[module.Name] = 0;
+		data.drawData[module.Name] = ModularItemCreateDrawData(module.Options.length);
 		data.drawFunctions[module.Name] = () => ModularItemDrawModule(module, data);
 		data.clickFunctions[module.Name] = () => ModularItemClickModule(module, data);
 	});
 	return data;
+}
+
+/**
+ * Generates drawing data for a given module. This includes button positions, whether pagination is necessary, and the
+ * total page count for that module.
+ * @param {number} itemCount - The number of items in the module
+ * @returns {{pageCount: number, paginate: boolean, positions: number[][]}} - An object containing required drawing for
+ * a module with the given item count.
+ */
+function ModularItemCreateDrawData(itemCount) {
+	const positions = [];
+	const left = 1000;
+	const width = 1000;
+	const buttonWidth = 225;
+	const rows = itemCount > ModularItemsPerPage / 2 ? 2 : 1;
+	const columns = Math.min(ModularItemsPerPage / 2, Math.ceil(itemCount / rows));
+	const top = rows === 1 ? 500 : 400;
+	const xPadding = Math.floor((width - columns * buttonWidth) / (columns + 1));
+	const xSpacing = buttonWidth + xPadding;
+	const ySpacing = 300;
+
+	for (let i = 0; i < rows; i++) {
+		for (let j = 0; j < columns; j++) {
+			positions.push([
+				left + xPadding + j * xSpacing,
+				top + i * ySpacing,
+			]);
+		}
+	}
+
+	const paginate = itemCount > ModularItemsPerPage;
+	const pageCount = Math.ceil(itemCount / ModularItemsPerPage);
+
+	return { paginate, pageCount, positions };
 }
 
 /**
@@ -175,7 +211,7 @@ function ModularItemCreateDrawBaseFunction(data) {
 			`${AssetGetInventoryPath(data.asset)}/${module.Key}${currentModuleValues[i]}.png`,
 			`${data.dialogModulePrefix}${module.Name}`,
 		]));
-		return ModularItemDrawCommon(buttonDefinitions, data);
+		return ModularItemDrawCommon(ModularItemBase, buttonDefinitions, data);
 	};
 }
 
@@ -201,20 +237,30 @@ function ModularItemMapOptionToButtonDefinition(option, i, module, { asset, dial
 
 /**
  * Draws a module screen from the provided button definitions and modular item data.
+ * @param {string} moduleName - The name of the module whose page is being drawn
  * @param {ModularItemButtonDefinition[]} buttonDefinitions - A list of button definitions to draw
  * @param {ModularItemData} data - The modular item's data
  * @returns {void} - Nothing
  */
-function ModularItemDrawCommon(buttonDefinitions, { asset }) {
+function ModularItemDrawCommon(moduleName, buttonDefinitions, { asset, pages, drawData }) {
 	DrawAssetPreview(1387, 55, asset);
 	DrawText(DialogExtendedMessage, 1500, 375, "#fff", "808080");
 
-	buttonDefinitions.forEach((buttonDefinition, i) => {
-		var x = 1200 + (i % 2 * 387);
-		var y = 450 + (Math.floor(i / 2) * 300);
-		DrawPreviewBox(x, y, buttonDefinition[0], "", { Background: buttonDefinition[2], Hover: true });
-		DrawText(DialogFindPlayer(buttonDefinition[1]), x + 113, y - 20, "#fff", "#808080");
+	const { paginate, pageCount, positions } = drawData[moduleName];
+	const pageNumber = Math.min(pageCount - 1, pages[moduleName] || 0);
+	const pageStart = pageNumber * ModularItemsPerPage;
+	const page = buttonDefinitions.slice(pageStart, pageStart + 8);
+
+	page.forEach((buttonDefinition, i) => {
+		const x = positions[i][0];
+		const y = positions[i][1];
+		DrawPreviewBox(x, y, buttonDefinition[0], DialogFindPlayer(buttonDefinition[1]), { Background: buttonDefinition[2], Hover: true });
 	});
+
+	if (paginate) {
+		DrawButton(1665, 240, 90, 90, "", "White", "Icons/Prev.png");
+		DrawButton(1775, 240, 90, 90, "", "White", "Icons/Next.png");
+	}
 }
 
 /**
@@ -225,7 +271,7 @@ function ModularItemDrawCommon(buttonDefinitions, { asset }) {
  */
 function ModularItemDrawModule(module, data) {
 	const buttonDefinitions = module.Options.map((option, i) => ModularItemMapOptionToButtonDefinition(option, i, module, data));
-	ModularItemDrawCommon(buttonDefinitions, data);
+	ModularItemDrawCommon(module.Name, buttonDefinitions, data);
 }
 
 /**
@@ -234,13 +280,19 @@ function ModularItemDrawModule(module, data) {
  * @returns {function(): void} - A click handler for the modular item's module selection screen
  */
 function ModularItemCreateClickBaseFunction(data) {
+	const { paginate, pageCount, positions } = data.drawData[ModularItemBase];
 	return () => {
 		ModularItemClickCommon(
+			{ paginate, positions },
 			() => DialogFocusItem = null,
 			i => {
-				const module = data.modules[i];
+				const pageNumber = Math.min(pageCount - 1, data.pages[ModularItemBase] || 0);
+				const pageStart = pageNumber * ModularItemsPerPage;
+				const page = data.modules.slice(pageStart, pageStart + ModularItemsPerPage);
+				const module = page[i];
 				if (module) ModularItemModuleTransition(module.Name, data);
 			},
+			(delta) => ModularItemChangePage(ModularItemBase, delta, data),
 		);
 	};
 }
@@ -252,35 +304,59 @@ function ModularItemCreateClickBaseFunction(data) {
  * @returns {void} - Nothing
  */
 function ModularItemClickModule(module, data) {
+	const { paginate, pageCount, positions } = data.drawData[module.Name];
 	ModularItemClickCommon(
+		{ paginate, positions },
 		() => ModularItemModuleTransition(ModularItemBase, data),
 		i => {
-			const selected = module.Options[i];
+			const pageNumber = Math.min(pageCount - 1, data.pages[module.Name] || 0);
+			const pageStart = pageNumber * ModularItemsPerPage;
+			const page = module.Options.slice(pageStart, pageStart + ModularItemsPerPage);
+			const selected = page[i];
 			if (selected) ModularItemSetType(module, i, data);
 		},
+		(delta) => ModularItemChangePage(module.Name, delta, data),
 	);
 }
 
 /**
  * A common click handler for modular item screens. Note that pagination is not currently handled, but will be added
  * in the future.
+ * @param {boolean} paginate - Whether or not the current screen needs pagination handling
+ * @param {number[][]} positions - The button positions to handle clicks for
  * @param {function(): void} exitCallback - A callback to be called when the exit button has been clicked
- * @param {function(): void} itemCallback - A callback to be called when an item has been clicked
+ * @param {function(number): void} itemCallback - A callback to be called when an item has been clicked
+ * @param {function(number): void} paginateCallback - A callback to be called when a pagination button has been clicked
  * @returns {void} - Nothing
  */
-function ModularItemClickCommon(exitCallback, itemCallback) {
+function ModularItemClickCommon({ paginate, positions }, exitCallback, itemCallback, paginateCallback) {
 	// Exit button
 	if (MouseIn(1885, 25, 90, 90)) {
 		return exitCallback();
+	} else if (paginate) {
+		if (MouseIn(1665, 240, 90, 90)) return paginateCallback(-1);
+		else if (MouseIn(1775, 240, 90, 90)) return paginateCallback(1);
 	}
 
-	for (let i = 0; i < 4; i++) {
-		var x = 1200 + (i % 2 * 387);
-		var y = 450 + (Math.floor(i / 2) * 300);
-		if (MouseIn(x, y, 225, 225)) {
-			return itemCallback(i);
+	positions.some((p, i) => {
+		if (MouseIn(p[0], p[1], 225, 275)) {
+			itemCallback(i);
+			return true;
 		}
-	}
+	});
+}
+
+/**
+ * Handles page changing for modules
+ * @param {string} moduleName - The name of the module whose page should be modified
+ * @param {number} delta - The page delta to apply to the module's current page
+ * @param {ModularItemData} data - The modular item's data
+ * @returns {void} - Nothing
+ */
+function ModularItemChangePage(moduleName, delta, data) {
+	const { pageCount } = data.drawData[moduleName];
+	const currentPage = data.pages[moduleName];
+	data.pages[moduleName] = (currentPage + pageCount + delta) % pageCount;
 }
 
 /**
