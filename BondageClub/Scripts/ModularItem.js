@@ -89,7 +89,6 @@ function ModularItemRegister(asset, config) {
 			layer.AllowTypes = ModularItemGenerateAllowType(data, (type) => {
 				return layer.AllowModuleTypes.some((moduleType) => type.includes(moduleType));
 			});
-			console.log(JSON.stringify(layer.AllowTypes));
 		}
 	});
 }
