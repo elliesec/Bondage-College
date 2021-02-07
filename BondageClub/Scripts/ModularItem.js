@@ -72,7 +72,8 @@ const ModularItemsPerPage = 8;
 /**
  * Registers a modular extended item. This automatically creates the item's load, draw and click functions. It will
  * also generate the asset's AllowType array, as AllowType arrays on modular items can get long due to the
- * multiplicative nature of the item's types.
+ * multiplicative nature of the item's types, and also converts the AllowModuleTypes property on any asset layers into
+ * an AllowTypes property, if present.
  * @param {Asset} asset - The asset being registered
  * @param {ModularItemConfig} config - The item's modular item configuration
  * @returns {void} - Nothing
@@ -82,7 +83,15 @@ function ModularItemRegister(asset, config) {
 	ModularItemCreateLoadFunction(data);
 	ModularItemCreateDrawFunction(data);
 	ModularItemCreateClickFunction(data);
-	ModularItemGenerateAllowType(asset, data);
+	asset.AllowType = ModularItemGenerateAllowType(data);
+	asset.Layer.forEach((layer) => {
+		if (Array.isArray(layer.AllowModuleTypes)) {
+			layer.AllowTypes = ModularItemGenerateAllowType(data, (type) => {
+				return layer.AllowModuleTypes.some((moduleType) => type.includes(moduleType));
+			});
+			console.log(JSON.stringify(layer.AllowTypes));
+		}
+	});
 }
 
 /**
@@ -510,11 +519,11 @@ function ModularItemAddToArray(dest, src) {
 
 /**
  * Generates and sets the AllowType property on an asset based on its modular item data.
- * @param {Asset} asset - The asset to modify
- * @param {ModularItemData} - The modular item's data
+ * @param {ModularItemData} data - The modular item's data
+ * @param {function(string): boolean} [predicate] - An optional predicate for filtering the resulting types
  * @returns {void} - Nothing
  */
-function ModularItemGenerateAllowType(asset, { modules }) {
+function ModularItemGenerateAllowType({ modules }, predicate) {
 	let allowType = [""];
 	modules.forEach((module) => {
 		let newAllowType = [];
@@ -524,7 +533,8 @@ function ModularItemGenerateAllowType(asset, { modules }) {
 		});
 		allowType = newAllowType;
 	});
-	asset.AllowType = allowType;
+	if (predicate) return allowType.filter(predicate);
+	else return allowType;
 }
 
 /**
