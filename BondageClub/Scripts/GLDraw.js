@@ -183,7 +183,6 @@ var GLDrawFragmentShaderSourceHalfAlpha = `
     float t = (texColor.x + texColor.y + texColor.z) / 383.0;
     if (t < ` + GLDrawHalfAlphaLow + ` || t > ` + GLDrawHalfAlphaHigh + `) {
       gl_FragColor = texColor;
-      gl_FragColor.a *= u_color.a;
     } else {
       gl_FragColor = u_color * vec4(t, t, t, texColor.w);
     }
