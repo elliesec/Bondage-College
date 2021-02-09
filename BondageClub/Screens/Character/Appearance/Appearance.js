@@ -363,6 +363,8 @@ function CharacterAppearanceVisible(C, AssetName, GroupName, Recursive = true) {
 		return false;
 	}
 
+
+
 	for (let A = 0; A < C.Appearance.length; A++) {
 		if (CharacterAppearanceItemIsHidden(C.Appearance[A].Asset.Name, C.Appearance[A].Asset.Group.Name)) continue;
 		let HidingItem = false;

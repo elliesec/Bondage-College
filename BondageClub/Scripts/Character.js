@@ -697,7 +697,7 @@ function CharacterRefresh(C, Push) {
 	C.HasScriptedAssets = !!C.Appearance.find(CA => CA.Asset.DynamicScriptDraw);
 	
 	if ((C.ID == 0) && (C.OnlineID != null) && ((Push == null) || (Push == true))) {
-		ChatRoomRefreshChatSettings(C);
+		ChatRoomRefreshChatSettings();
 		ServerPlayerAppearanceSync();
 	}
 	// Also refresh the current dialog menu if the refreshed character is the current character.
@@ -1066,7 +1066,7 @@ function CharacterCompressWardrobe(Wardrobe) {
 			var Arr = [];
 			if (Wardrobe[W] != null)
 				for (let A = 0; A < Wardrobe[W].length; A++)
-					Arr.push([Wardrobe[W][A].Name, Wardrobe[W][A].Group, Wardrobe[W][A].Color]);
+					Arr.push([Wardrobe[W][A].Name, Wardrobe[W][A].Group, Wardrobe[W][A].Color, Wardrobe[W][A].Property]);
 			CompressedWardrobe.push(Arr);
 		}
 		return LZString.compressToUTF16(JSON.stringify(CompressedWardrobe));
@@ -1087,7 +1087,7 @@ function CharacterDecompressWardrobe(Wardrobe) {
 			for (let W = 0; W < CompressedWardrobe.length; W++) {
 				var Arr = [];
 				for (let A = 0; A < CompressedWardrobe[W].length; A++)
-					Arr.push({ Name: CompressedWardrobe[W][A][0], Group: CompressedWardrobe[W][A][1], Color: CompressedWardrobe[W][A][2] });
+					Arr.push({ Name: CompressedWardrobe[W][A][0], Group: CompressedWardrobe[W][A][1], Color: CompressedWardrobe[W][A][2], Property: CompressedWardrobe[W][A][3]});
 				DecompressedWardrobe.push(Arr);
 			}
 		}
@@ -1190,4 +1190,13 @@ function CharacterCanKneel(C) {
 	if (C.Pose == null) return true;
 	if (C.Pose.includes("Suspension") || C.Pose.includes("Hogtied")) return false;
 	return C.CanChangeToPose("Kneel");
+}
+
+function CharacterGetDarkFactor(C) {
+	let DarkFactor = 1.0;
+	if (C.GetBlindLevel() >= 3) DarkFactor = 0.0;
+	else if (CommonPhotoMode) DarkFactor = 1.0;
+	else if (C.GetBlindLevel() == 2) DarkFactor = 0.15;
+	else if (C.GetBlindLevel() == 1) DarkFactor = 0.3;
+	return DarkFactor;
 }

@@ -755,10 +755,6 @@ function InventoryLock(C, Item, Lock, MemberNumber) {
 				if (Item.Property == null) Item.Property = {};
 				if (Item.Property.Effect == null) Item.Property.Effect = [];
 				if (Item.Property.Effect.indexOf("Lock") < 0) Item.Property.Effect.push("Lock");
-				if (Item.Property.Effect.indexOf("MemberNumberList") < 0) {
-					if (!Item.Property) Item.Property = {}
-					if (!Item.Property.MemberNumberList) Item.Property.MemberNumberList = "" + MemberNumber
-				}
 				
 				if (!Item.Property.MemberNumberListKeys && Lock.Asset.Name == "HighSecurityPadlock") Item.Property.MemberNumberListKeys = "" + MemberNumber
 				Item.Property.LockedBy = Lock.Asset.Name;
@@ -916,7 +912,7 @@ function InventoryIsPermissionLimited(C, AssetName, AssetGroup, AssetType) {
  * @returns {Boolean} - TRUE if item is allowed
  */
 function InventoryCheckLimitedPermission(C, Item, ItemType) {
-	if (!InventoryIsPermissionLimited(C, Item.Asset.Name, Item.Asset.Group.Name, ItemType)) return true;
+	if (!InventoryIsPermissionLimited(C, Item.Asset.DynamicName(Player), Item.Asset.DynamicGroupName, ItemType)) return true;
 	if ((C.ID == 0) || C.IsLoverOfPlayer() || C.IsOwnedByPlayer()) return true;
 	if ((C.ItemPermission < 3) && !(C.WhiteList.indexOf(Player.MemberNumber) < 0)) return true;
 	return false;
