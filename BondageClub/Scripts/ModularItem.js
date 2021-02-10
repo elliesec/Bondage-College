@@ -220,16 +220,17 @@ function ModularItemCreateDrawBaseFunction(data) {
 /**
  * Maps a modular item option to a button definition for rendering the option's button.
  * @param {ModularItemOption} option - The option to draw a button for
- * @param {number} i - The option's index within its parent module
+ * @param {number} optionIndex - The option's index within its parent module
  * @param {ModularItemModule} module - A reference to the option's parent module
  * @param {ModularItemData} data - The modular item's data
+ * @param {number} currentOptionIndex - The currently selected option index for the module
  * @returns {ModularItemButtonDefinition} - A button definition array representing the provided option
  */
-function ModularItemMapOptionToButtonDefinition(option, i, module, { asset, dialogOptionPrefix }) {
+function ModularItemMapOptionToButtonDefinition(option, optionIndex, module, { asset, dialogOptionPrefix }, currentOptionIndex) {
 	const C = CharacterGetCurrent();
-	const optionName = `${module.Key}${i}`;
+	const optionName = `${module.Key}${optionIndex}`;
 	let color = "#fff";
-	if (DialogFocusItem.Property.Type && DialogFocusItem.Property.Type.includes(optionName)) color = "#888";
+	if (currentOptionIndex === optionIndex) color = "#888";
 	else if (DialogFocusItem.Property.LockedBy && !DialogCanUnlock(C, DialogFocusItem)) color = "pink";
 	else if (ExtendedItemRequirementCheckMessageMemo(option, C.ID === 0)) color = "pink";
 	return [
@@ -274,7 +275,10 @@ function ModularItemDrawCommon(moduleName, buttonDefinitions, { asset, pages, dr
  * @returns {void} - Nothing
  */
 function ModularItemDrawModule(module, data) {
-	const buttonDefinitions = module.Options.map((option, i) => ModularItemMapOptionToButtonDefinition(option, i, module, data));
+	const moduleIndex = data.modules.indexOf(module);
+	const currentValues = ModularItemParseCurrent(data);
+	const buttonDefinitions = module.Options.map(
+		(option, i) => ModularItemMapOptionToButtonDefinition(option, i, module, data, currentValues[moduleIndex]));
 	ModularItemDrawCommon(module.Name, buttonDefinitions, data);
 }
 
@@ -320,7 +324,7 @@ function ModularItemClickModule(module, data) {
 			const pageStart = pageNumber * ModularItemsPerPage;
 			const page = module.Options.slice(pageStart, pageStart + ModularItemsPerPage);
 			const selected = page[i];
-			if (selected) ModularItemSetType(module, i, data);
+			if (selected) ModularItemSetType(module, pageStart + i, data);
 		},
 		(delta) => ModularItemChangePage(module.Name, delta, data),
 	);
