@@ -368,9 +368,46 @@ Your Online Preferences allow you to customize your interactions with other club
 
 [Back to the contents](#table-of-contents)
 
+If there are items in the club that aren't for you, there are two options available to you:
+* You can block an item via [item permissions](#item-permissions) - this will prevent club members from using the item on you, but you will still see the item
+* You can hide the item completely - this will prevent you from seeing the item at all, even on another club member
+
+From the item visibility preferences screen, you can manage both item blocking and item hiding. Use the "Group" and "Asset" buttons to cycle through the available items in the club (you can view both clothes and bondage gear here), and check the hide or block checkboxes as appropriate.
+
 ### ![Immersion Preferences Icon](../../../Icons/Immersion.png) Immersion Preferences
 
 [Back to the contents](#table-of-contents)
+
+The immersion preferences screen contains a variety of preferences to help make your club experience more immersive.
+
+| Preference | Description |
+| --- | --- |
+| Sensory deprivation setting | Your sensory deprivation setting modifies your chatroom experience when in sensory deprivation (blind & deaf). See [Sensory Deprivation Settings](#sensory-deprivation-settings) for more details. | 
+| Hide others' messages | This preference will prevent you from seeing other members' chatroom messages whilst in sensory deprivation unless they explicitly mention you. Which messages are shown/hidden are dependent on your [sensory deprivation settings](#sensory-deprivation-settings). |
+| Disable examining when blind | Checking this preference will prevent you from being able to view other players in a chatroom whilst blind. | 
+| Keep all restraints when relogging | When this preference is selected, your restraints will not be removed upon leaving the club. The next time you visit, you will still be bound as you were when you left. |
+| Prevent OOC & whispers while gagged | Checking this preference will prevent you from using OOC chat or whispers (see [chat basics](#chat-basics)) when gagged |
+| Players can drag you to rooms when leashed | When this preference is selected, other members will be able to drag you between chatrooms when you're wearing a leash or other item that renders you transportable |
+| Return to chatrooms on relog | When this preference is selected, the club will remember your current chatroom. If you leave the club without leaving the chatroom first (i.e. disconnect), you will be returned to that chatroom the next time you enter, if the room still exists |
+| Auto-remake rooms | This preference is an extension to the "Return to chatrooms on relog" preference above. If your last chatroom doesn't exist when you re-enter the club, it will be recreated. As a safety measure, if your last chatroom was private, you will be given admin rights to the recreated chatroom. |
+| Events while plugged or vibed | Checking this preference will cause arousal-based events to occasionally happen while using plugs or vibrating toys |
+| Lock this menu while bound | Checking this preference will prevent you from further modifying your immersion preferences if you are currently restrained |
+
+#### Sensory Deprivation Settings
+
+We know that sensory deprivation isn't for everyone, so when it comes to sensory deprivation in the club, members can choose from several different levels of severity to suit their tastes. Below, we'll describe the various different levels of sensory deprivation, and how they'll affect your Bondage Club experience.
+
+##### Light
+
+##### Normal
+
+##### Hide names
+
+##### Total
+
+##### Total (no whispers)
+
+#### Leashing
 
 ### ![Graphics Preferences Icon](../../../Icons/Graphics.png) Graphics Preferences
 
@@ -451,7 +488,7 @@ Your Online Preferences allow you to customize your interactions with other club
 * Chat room commands
 * Friend/White/Black/Ghost lists
 * Private chatrooms
-* Beeping & leashing
+* Beeping
 
 [Back to the contents](#table-of-contents)
 
