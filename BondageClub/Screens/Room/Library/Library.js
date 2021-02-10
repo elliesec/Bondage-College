@@ -2,28 +2,36 @@
 
 var LibraryBackground = "Library";
 
+const LibraryPortraits = ["ellie-1"];
+
 let LibraryCharacter = null;
 let LibraryLibrarian = null;
+let LibraryPortrait = null;
 
 function LibraryLoad() {
-    const roll = Math.random();
-    if (roll < 0.1) {
-        LibraryCharacter = LibraryLoadNPCLibrarian();
-    } else {
-        LibraryCharacter = null;
-    }
+	if (!LibraryPortrait) {
+		LibraryPortrait = CommonRandomItemFromList(null, LibraryPortraits);
+	}
+	const roll = Math.random();
+	if (roll < 0.1) {
+		LibraryCharacter = LibraryLoadNPCLibrarian();
+	} else {
+		LibraryCharacter = null;
+	}
 }
 
 function LibraryRun() {
-    DrawCharacter(Player, 0, 0, 1);
+	DrawImageResize(`Screens/Room/Library/Portraits/${LibraryPortrait}.png`, 1166, 229, 160, 175);
 
-    if (LibraryCharacter) {
-        DrawCharacter(LibraryCharacter, 500, 0, 1);
-    }
+	DrawCharacter(Player, 0, 0, 1);
 
-    DrawButton(1885, 25, 90, 90, "", "#fff", "Icons/Exit.png", TextGet("Exit"));
-    DrawButton(1885, 145, 90, 90, "", "#fff", "Icons/Character.png", TextGet("Profile"));
-    DrawButton(1885, 265, 90, 90, "", "#fff", "Icons/Book.png", TextGet("Read"));
+	if (LibraryCharacter) {
+		DrawCharacter(LibraryCharacter, 500, 0, 1);
+	}
+
+	DrawButton(1885, 25, 90, 90, "", "#fff", "Icons/Exit.png", TextGet("Exit"));
+	DrawButton(1885, 145, 90, 90, "", "#fff", "Icons/Character.png", TextGet("Profile"));
+	DrawButton(1885, 265, 90, 90, "", "#fff", "Icons/Book.png", TextGet("Read"));
 }
 
 function LibraryClick() {
