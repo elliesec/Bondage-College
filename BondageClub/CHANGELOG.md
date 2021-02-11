@@ -13,7 +13,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 Changelog last updated: 2021-02-11
 
-Last recorded PR: [#2072](https://github.com/Ben987/Bondage-College/pull/2072)
+Last recorded PR: [#2076](https://github.com/Ben987/Bondage-College/pull/2076)
 
 ## [R65]
 
@@ -135,7 +135,7 @@ Last recorded PR: [#2072](https://github.com/Ben987/Bondage-College/pull/2072)
 
 * Jomshir - [Server #66](https://github.com/Ben987/Bondage-Club-Server/pull/66)
 * Nina - [#2063](https://github.com/Ben987/Bondage-College/pull/2063), [#2064](https://github.com/Ben987/Bondage-College/pull/2064), [#2067](https://github.com/Ben987/Bondage-College/pull/2067), [#2069](https://github.com/Ben987/Bondage-College/pull/2069), [#2071](https://github.com/Ben987/Bondage-College/pull/2071)
-* Ellie - [#2065](https://github.com/Ben987/Bondage-College/pull/2065), [#2066](https://github.com/Ben987/Bondage-College/pull/2066), [#2073](https://github.com/Ben987/Bondage-College/pull/2073), [#2074](https://github.com/Ben987/Bondage-College/pull/2074)
+* Ellie - [#2065](https://github.com/Ben987/Bondage-College/pull/2065), [#2066](https://github.com/Ben987/Bondage-College/pull/2066), [#2073](https://github.com/Ben987/Bondage-College/pull/2073), [#2074](https://github.com/Ben987/Bondage-College/pull/2074), [#2076](https://github.com/Ben987/Bondage-College/pull/2076)
 * Sekkmer - [#2068](https://github.com/Ben987/Bondage-College/pull/2068)
 * Ada - [#2070](https://github.com/Ben987/Bondage-College/pull/2070), [#2072](https://github.com/Ben987/Bondage-College/pull/2072)
 
