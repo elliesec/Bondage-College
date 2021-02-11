@@ -11,7 +11,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-02-09
+Changelog last updated: 2021-02-10
 
 Last recorded PR: [#2046](https://github.com/Ben987/Bondage-College/pull/2046)
 
@@ -133,7 +133,7 @@ Last recorded PR: [#2046](https://github.com/Ben987/Bondage-College/pull/2046)
 
 [Beta Fixes]
 
-* None... yet
+* Jomshir - [Server #66](https://github.com/Ben987/Bondage-Club-Server/pull/66)
 
 ###
 
