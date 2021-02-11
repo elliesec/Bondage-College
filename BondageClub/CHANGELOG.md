@@ -131,7 +131,7 @@ Last recorded PR: [#2046](https://github.com/Ben987/Bondage-College/pull/2046)
   * Sekkmer - [#2034](https://github.com/Ben987/Bondage-College/pull/2034)
   * Ada - [#2055](https://github.com/Ben987/Bondage-College/pull/2055)
 
-[Beta Fixes]
+### [Beta Fixes]
 
 * Jomshir - [Server #66](https://github.com/Ben987/Bondage-Club-Server/pull/66)
 
