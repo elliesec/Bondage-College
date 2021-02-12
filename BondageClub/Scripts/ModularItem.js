@@ -246,8 +246,8 @@ function ModularItemMapOptionToButtonDefinition(option, i, module, { asset, dial
 	const optionName = `${module.Key}${i}`;
 	let color = "#fff";
 	if (DialogFocusItem.Property.Type && DialogFocusItem.Property.Type.includes(optionName)) color = "#888";
-	else if (DialogFocusItem.Property.LockedBy && !DialogCanUnlock(C, DialogFocusItem)) color = "pink";
-	else if (ModularItemRequirementCheckMessageMemo(C, option)) color = "pink";
+	// else if (DialogFocusItem.Property.LockedBy && !DialogCanUnlock(C, DialogFocusItem)) color = "pink";
+	else if (ModularItemRequirementCheckMessageMemo(option)) color = "pink";
 	return [
 		`${AssetGetInventoryPath(asset)}/${optionName}.png`,
 		`${dialogOptionPrefix}${optionName}`,
@@ -460,7 +460,7 @@ function ModularItemSetType(module, index, data) {
 	const C = CharacterGetCurrent();
 	DialogFocusItem = InventoryGet(C, C.FocusGroup.Name);
 	const option = module.Options[index];
-	const requirementMessage = ModularItemRequirementMessageCheck(C, option);
+	const requirementMessage = ModularItemRequirementMessageCheck(option);
 	if (requirementMessage) {
 		DialogExtendedMessage = requirementMessage;
 		return;
@@ -548,12 +548,12 @@ function ModularItemGenerateAllowType({ modules }, predicate) {
 
 /**
  * Checks whether the given option can be selected on the currently selected modular item
- * @param {Character} C - The character on whom the item is equipped
  * @param {ExtendedItemOption} option - The selected option
  * @returns {string|null} - Returns a string user message if the option's requirements have not been met, otherwise
  * returns nothing
  */
-function ModularItemRequirementMessageCheck(C, option) {
+function ModularItemRequirementMessageCheck(option) {
+	const C = CharacterGetCurrent();
 	// Lock check - cannot change type if you can't unlock the item
 	if (DialogFocusItem.Property && DialogFocusItem.Property.LockedBy && !DialogCanUnlock(C, DialogFocusItem)) {
 		return DialogFindPlayer("CantChangeWhileLocked");
