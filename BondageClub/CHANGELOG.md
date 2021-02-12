@@ -11,9 +11,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-02-11
+Changelog last updated: 2021-02-12
 
-Last recorded PR: [#2076](https://github.com/Ben987/Bondage-College/pull/2076)
+Last recorded PR: [#2083](https://github.com/Ben987/Bondage-College/pull/2083)
 
 ## [R65]
 
@@ -133,11 +133,12 @@ Last recorded PR: [#2076](https://github.com/Ben987/Bondage-College/pull/2076)
 
 ### [Beta Fixes]
 
-* Jomshir - [Server #66](https://github.com/Ben987/Bondage-Club-Server/pull/66)
+* Jomshir - [Server #66](https://github.com/Ben987/Bondage-Club-Server/pull/66), [#2081](https://github.com/Ben987/Bondage-College/pull/2081), [#2083](https://github.com/Ben987/Bondage-College/pull/2083)
 * Nina - [#2063](https://github.com/Ben987/Bondage-College/pull/2063), [#2064](https://github.com/Ben987/Bondage-College/pull/2064), [#2067](https://github.com/Ben987/Bondage-College/pull/2067), [#2069](https://github.com/Ben987/Bondage-College/pull/2069), [#2071](https://github.com/Ben987/Bondage-College/pull/2071)
-* Ellie - [#2065](https://github.com/Ben987/Bondage-College/pull/2065), [#2066](https://github.com/Ben987/Bondage-College/pull/2066), [#2073](https://github.com/Ben987/Bondage-College/pull/2073), [#2074](https://github.com/Ben987/Bondage-College/pull/2074), [#2076](https://github.com/Ben987/Bondage-College/pull/2076)
+* Ellie - [#2065](https://github.com/Ben987/Bondage-College/pull/2065), [#2066](https://github.com/Ben987/Bondage-College/pull/2066), [#2073](https://github.com/Ben987/Bondage-College/pull/2073), [#2074](https://github.com/Ben987/Bondage-College/pull/2074), [#2076](https://github.com/Ben987/Bondage-College/pull/2076), [#2082](https://github.com/Ben987/Bondage-College/pull/2082)
 * Sekkmer - [#2068](https://github.com/Ben987/Bondage-College/pull/2068)
-* Ada - [#2070](https://github.com/Ben987/Bondage-College/pull/2070), [#2072](https://github.com/Ben987/Bondage-College/pull/2072)
+* Ada - [#2070](https://github.com/Ben987/Bondage-College/pull/2070), [#2072](https://github.com/Ben987/Bondage-College/pull/2072), [#2077](https://github.com/Ben987/Bondage-College/pull/2077), [#2078](https://github.com/Ben987/Bondage-College/pull/2078), [#2080](https://github.com/Ben987/Bondage-College/pull/2080)
+* ZFreak - [#2079](https://github.com/Ben987/Bondage-College/pull/2079)
 
 ###
 
