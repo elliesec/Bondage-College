@@ -525,7 +525,7 @@ function ServerAppearanceLoadFromBundle(C, AssetFamily, Bundle, SourceMemberNumb
 
 					// If a non-owner/lover has added an owner/lover-only lock, remove it
 					const Lock = InventoryGetLock(NA);
-					if (C.ID === 0 && !FromOwner && Lock && Lock.Asset.OwnerOnly) ServerDeleteLock(NA.Property) && (deleted = true);
+					if (C.ID === 0 && !FromOwner && Lock && Lock.Asset.OwnerOnly) ServerDeleteLock(NA.Property);
 					if (C.ID === 0 && !FromLoversOrOwner && Lock && Lock.Asset.LoverOnly) ServerDeleteLock(NA.Property);
 
 					ServerValidateProperties(C, NA, { SourceMemberNumber: SourceMemberNumber, FromOwner: FromOwner, FromLoversOrOwner: FromLoversOrOwner });
