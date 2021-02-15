@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html style="width:100%; height:100%; padding:0px; margin:0px;">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
@@ -411,29 +411,26 @@ function Click(event) {
 }
 
 // When the user touches the screen (mobile only), we fire the click event for other screens
-function TouchStart(event) {
-	if (CommonIsMobile) {
-		var rect = document.getElementById("MainCanvas").getBoundingClientRect();
-		if (document.body.clientWidth <= document.body.clientHeight * 2) {
-			MouseX = Math.round((event.touches[0].clientX - rect.left) * 2000 / document.body.clientWidth);
-			MouseY = Math.round((event.touches[0].clientY - rect.top) * 2000 / document.body.clientWidth);
-		} else {
-			MouseX = Math.round((event.touches[0].clientX - rect.left) * 1000 / document.body.clientHeight);
-			MouseY = Math.round((event.touches[0].clientY - rect.top) * 1000 / document.body.clientHeight);
-		}
+function TouchStart(/** @type {TouchEvent} */ event) {
+	if (CommonIsMobile && MainCanvas) {
+		TouchMove(event.touches[0]);
 		CommonClick();
 	}
 }
 
+// When touch moves, we keep it's position for other scripts
+function TouchMove(/** @type {Touch} */ touch) {
+	if (MainCanvas) {
+		MouseX = Math.round((touch.pageX - MainCanvas.canvas.offsetLeft) * 2000 / MainCanvas.canvas.clientWidth);
+		MouseY = Math.round((touch.pageY - MainCanvas.canvas.offsetTop) * 1000 / MainCanvas.canvas.clientHeight);
+	}
+}
+
 // When mouse move, we keep the mouse position for other scripts
-function MouseMove(event) {
-	var rect = document.getElementById("MainCanvas").getBoundingClientRect();
-	if (document.body.clientWidth <= document.body.clientHeight * 2) {
-		MouseX = Math.round((event.clientX - rect.left) * 2000 / document.body.clientWidth);
-		MouseY = Math.round((event.clientY - rect.top) * 2000 / document.body.clientWidth);
-	} else {
-		MouseX = Math.round((event.clientX - rect.left) * 1000 / document.body.clientHeight);
-		MouseY = Math.round((event.clientY - rect.top) * 1000 / document.body.clientHeight);
+function MouseMove(/** @type {MouseEvent} */ event) {
+	if (MainCanvas) {
+		MouseX = Math.round(event.offsetX * 2000 / MainCanvas.canvas.clientWidth);
+		MouseY = Math.round(event.offsetY * 1000 / MainCanvas.canvas.clientHeight);
 	}
 }
 
