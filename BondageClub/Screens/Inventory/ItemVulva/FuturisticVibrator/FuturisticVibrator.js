@@ -15,11 +15,10 @@ function InventoryItemVulvaFuturisticVibratorLoad() {
 		ItemVulvaFuturisticVibratorTriggerValues = DialogFocusItem.Property.TriggerValues.split(',')
 
 		// Only create the inputs if the zone isn't blocked
-		if (!InventoryGroupIsBlocked(C, C.FocusGroup.Name)) {
-			for (let I = 0; I < ItemVulvaFuturisticVibratorTriggers.length; I++) {
-				ElementCreateInput("FuturisticVibe" + ItemVulvaFuturisticVibratorTriggers[I], "text", "", "12"); document.getElementById("FuturisticVibe" + ItemVulvaFuturisticVibratorTriggers[I]).placeholder = ItemVulvaFuturisticVibratorTriggerValues[I];
-			}
-		}
+		ItemVulvaFuturisticVibratorTriggers.forEach((trigger, i) => {
+			const input = ElementCreateInput("FuturisticVibe" + trigger, "text", "", "12");
+			if (input) input.placeholder = ItemVulvaFuturisticVibratorTriggerValues[i];
+		});
 	}
 }
 
@@ -32,20 +31,15 @@ function InventoryItemVulvaFuturisticVibratorDraw() {
 		DrawAssetPreview(1387, 50, DialogFocusItem.Asset);
 		const mode = DialogFindPlayer(DialogFocusItem.Property.Mode || "Off");
 		DrawText(DialogFindPlayer("CurrentMode") + mode, 1500, 375, "white", "gray");
-
-		if (InventoryGroupIsBlocked(C, C.FocusGroup.Name)) {
-			// If the group is blocked don't draw the controls
-			DrawText(DialogFindPlayer("ZoneBlocked"), 1500, 500, "white", "gray");
-		} else {
-			// Otherwise draw each of the triggers and position their inputs, then draw the save button
-			ItemVulvaFuturisticVibratorTriggers.forEach((trigger, i) => {
-				MainCanvas.textAlign = "right";
-				DrawText(DialogFindPlayer("FuturisticVibrator" + trigger), 1400, 450 + 60 * i, "white", "gray");
-				MainCanvas.textAlign = "center";
-				ElementPosition("FuturisticVibe" + trigger, 1650, 450 + 60 * i, 400);
-			});
-			DrawButton(1325, 450 + 60 * ItemVulvaFuturisticVibratorTriggers.length, 350, 64, DialogFindPlayer("FuturisticVibratorSaveVoiceCommands"), "White", "");
-		}
+		// Draw each of the triggers and position their inputs
+		ItemVulvaFuturisticVibratorTriggers.forEach((trigger, i) => {
+			MainCanvas.textAlign = "right";
+			DrawText(DialogFindPlayer("FuturisticVibrator" + trigger), 1400, 450 + 60 * i, "white", "gray");
+			MainCanvas.textAlign = "center";
+			ElementPosition("FuturisticVibe" + trigger, 1650, 450 + 60 * i, 400);
+		});
+		// Draw the save button
+		DrawButton(1325, 450 + 60 * ItemVulvaFuturisticVibratorTriggers.length, 350, 64, DialogFindPlayer("FuturisticVibratorSaveVoiceCommands"), "White", "");
 	}
 }
 
@@ -53,9 +47,7 @@ function InventoryItemVulvaFuturisticVibratorClick() {
 	var C = CharacterGetCurrent();
 	if (InventoryItemMouthFuturisticPanelGagValidate(C) !== "") InventoryItemMouthFuturisticPanelGagClickAccessDenied()
 	else if (MouseIn(1885, 25, 90, 90)) InventoryItemVulvaFuturisticVibratorExit();
-	else if (!InventoryGroupIsBlocked(C, C.FocusGroup.Name)) {
-		if (MouseIn(1325, 450 + 60 * ItemVulvaFuturisticVibratorTriggers.length, 350, 64)) InventoryItemVulvaFuturisticVibratorClickSet();
-	}
+	else if (MouseIn(1325, 450 + 60 * ItemVulvaFuturisticVibratorTriggers.length, 350, 64)) InventoryItemVulvaFuturisticVibratorClickSet();
 }
 
 
