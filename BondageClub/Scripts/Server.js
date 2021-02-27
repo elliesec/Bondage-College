@@ -9,8 +9,10 @@
  */
 
 /**
- * An appearance bundle is an array of object defining each appearance item of a character. It's a minified version of the normal appearance array
- * @typedef {Array.<{Group: string, Name: string, Difficulty: number | undefined, Color: string | undefined, Property: object | undefined}>} AppearanceBundle
+ * An appearance bundle is an array of object defining each appearance item of a character. It's a minified version of
+ * the normal appearance array
+ * @typedef {Array.<{Group: string, Name: string, Difficulty: number | undefined, Color: string | undefined, Property:
+ *     object | undefined}>} AppearanceBundle
  */
 
 "use strict";
@@ -20,6 +22,21 @@ var ServerBeep = {};
 var ServerBeepAudio = new Audio();
 var ServerIsConnected = false;
 var ServerReconnectCount = 0;
+
+// Regexes for lock combination numbers and passwords
+const ServerCombinationNumberRegex = /^\d{4}$/;
+const ServerPasswordRegex = /^[A-Z]{1,8}$/;
+const ServerDefaultCombinationNumber = "0000";
+const ServerDefaultPassword = "UNLOCK";
+const ServerRemoveTimerToleranceMs = 5000;
+const ServerLockProperties = [
+	"LockedBy", "LockMemberNumber", "CombinationNumber", "RemoveItem", "ShowTimer",
+	"MemberNumberListKeys", "Password", "Hint", "LockSet", "LockPickSeed",
+];
+const ServerTimerLockProperties = ["MemberNumberList", "RemoveTimer"];
+const ServerAllLockProperties = ServerLockProperties
+	.concat(["EnableRandomInput"])
+	.concat(ServerTimerLockProperties);
 
 /** Loads the server by attaching the socket events and their respective callbacks */
 function ServerInit() {
@@ -72,7 +89,8 @@ function ServerSetConnected(connected, errorMessage) {
 }
 
 /**
- * Callback when receiving a "connect" event on the socket - this will be called on initial connection and on successful reconnects.
+ * Callback when receiving a "connect" event on the socket - this will be called on initial connection and on
+ * successful reconnects.
  */
 function ServerConnect() {
 	console.info("Server connection established");
@@ -80,7 +98,8 @@ function ServerConnect() {
 }
 
 /**
- * Callback when receiving a "reconnecting" event on the socket - this is called when socket.io initiates a retry after a failed connection attempt.
+ * Callback when receiving a "reconnecting" event on the socket - this is called when socket.io initiates a retry after
+ * a failed connection attempt.
  */
 function ServerReconnecting() {
 	ServerReconnectCount++;
@@ -99,7 +118,8 @@ function ServerInfo(data) {
 }
 
 /**
- * Callback used when we are disconnected from the server, try to enter the reconnection mode (relog screen) if the user was logged in
+ * Callback used when we are disconnected from the server, try to enter the reconnection mode (relog screen) if the
+ * user was logged in
  * @param {*} data - Error to log
  * @param {boolean} [close=false] - close the transport
  * @returns {void} - Nothing
@@ -238,8 +258,9 @@ function ServerPlayerRelationsSync() {
 	ServerSend("AccountUpdate", D);
 }
 
-/** 
- * Prepares an appearance bundle so we can push it to the server. It minimizes it by keeping only the necessary information. (Asset name, group name, color, properties and difficulty)
+/**
+ * Prepares an appearance bundle so we can push it to the server. It minimizes it by keeping only the necessary
+ * information. (Asset name, group name, color, properties and difficulty)
  * @param {AppearanceArray} Appearance - The appearance array to bundle
  * @returns {AppearanceBundle} - The appearance bundle created from the given appearance array
  */
@@ -258,175 +279,13 @@ function ServerAppearanceBundle(Appearance) {
 }
 
 /**
- * Validates the properties for a given item to prevent griefing in multiplayer
- * @param {Character} C - The character the item will be applied to
- * @param {Item} Item - The item for which to validate the properties
- * @param {Object} [Validation=null] - Validates the LockMemberNumber against the source
- * @param {number} Validation.SourceMemberNumber - Source character MemberNumber
- * @param {number} Validation.FromOwner - Indicates the source is an owner or herself
- * @param {number} Validation.FromLoversOrOwner - Indicates the source is an lover or owner or herself
- * @returns {void} - Nothing
- */
-function ServerValidateProperties(C, Item, Validation) {
-	// No validations for NPCs
-	if ((C.AccountName.substring(0, 4) == "NPC_") || (C.AccountName.substring(0, 4) == "NPC-")) return;
-
-	// Remove LockMemberNumber if the source is incorrect prior to all checks
-	if ((Item.Property != null) && (C.ID == 0) && (Validation != null) && (Validation.SourceMemberNumber != null)) {
-		const Lock = InventoryGetLock(Item);
-		if ((Lock != null) && (Lock.Property != null)) {
-			if (!Validation.FromOwner && Lock.Asset.OwnerOnly) delete Item.Property.LockMemberNumber;
-			else if (!Validation.FromLoversOrOwner && Lock.Asset.LoverOnly) delete Item.Property.LockMemberNumber;
-		}
-	}
-
-	// For each effect on the item
-	if ((Item.Property != null) && (Item.Property.Effect != null)) {
-		for (let E = Item.Property.Effect.length - 1; E >= 0; E--) {
-
-			// Make sure the item or its subtype can be locked, remove any lock that's invalid
-			var Effect = Item.Property.Effect[E];
-			if ((Effect == "Lock") &&
-			    (
-			        !Item.Asset.AllowLock ||
-				    (InventoryGetLock(Item) == null) ||
-				    (InventoryIsPermissionBlocked(C, Item.Property.LockedBy, "ItemMisc")) ||
-				    (Item.Property && Item.Property.AllowLock === false) ||
-				    // Check if a lock on the items sub type is allowed
-				    (Item.Property && Item.Asset.AllowLockType && !Item.Asset.AllowLockType.includes(Item.Property.Type))
-			    )) {
-				ServerDeleteLock(Item.Property);
-			}
-
-			// If the item is locked by a lock
-			if ((Effect == "Lock") && (InventoryGetLock(Item) != null)) {
-
-				// Make sure the combination number on the lock is valid, 4 digits only
-				const Lock = InventoryGetLock(Item);
-				if ((Item.Property.CombinationNumber != null) && (typeof Item.Property.CombinationNumber == "string")) {
-					const Regex = /^[0-9]+$/;
-					if (!Item.Property.CombinationNumber.match(Regex) || (Item.Property.CombinationNumber.length != 4)) {
-						Item.Property.CombinationNumber = "0000";
-					}
-				} else delete Item.Property.CombinationNumber;
-				
-				
-				// Make sure the seed on the lock is valid
-				if ((Item.Property.LockPickSeed != null) && (typeof Item.Property.LockPickSeed == "string")) {
-					var conv = CommonConvertStringToArray(Item.Property.LockPickSeed)
-					for (let PP = 0; PP < conv.length; PP++) {
-						if (typeof conv[PP] != "number") {
-							delete Item.Property.LockPickSeed;
-							break;
-						}
-					}
-				} else delete Item.Property.LockPickSeed;
-
-				// Make sure the password on the lock is valid, 6 letters only
-				if ((Item.Property.Password != null) && (typeof Item.Property.Password == "string")) {
-					const Regex = /^[A-Z]+$/;
-					if (!Item.Property.Password.toUpperCase().match(Regex) || (Item.Property.Password.length > 8)) {
-						Item.Property.Password = "UNLOCK";
-					}
-				} else delete Item.Property.Password;
-
-				// Make sure the remove timer on the lock is valid
-				if ((Lock.Asset.RemoveTimer != null) && (Lock.Asset.RemoveTimer != 0)) {
-					var CurrentTimeDelay = 5000;
-					// As CurrentTime can be slightly different, we accept a small delay in ms
-					if ((typeof Item.Property.RemoveTimer !== "number") || (Item.Property.RemoveTimer - CurrentTimeDelay > CurrentTime + Lock.Asset.MaxTimer * 1000)) {
-						Item.Property.RemoveTimer = Math.round(CurrentTime + Lock.Asset.RemoveTimer * 1000);
-					}
-				} else delete Item.Property.RemoveTimer;
-
-				var LockNumber = Item.Property.LockMemberNumber;
-				var OwnerNumber = C.Ownership && C.Ownership.MemberNumber;
-
-				// Make sure the owner lock is valid
-				if (Lock.Asset.OwnerOnly && ((LockNumber == null) || ((LockNumber != C.MemberNumber) && (LockNumber != OwnerNumber)))) {
-					ServerDeleteLock(Item.Property);
-				}
-
-				if (Lock.Asset.LoverOnly && ((LockNumber == null) || (C.GetLoversNumbers().length == 0) || ((LockNumber != C.MemberNumber) && !C.GetLoversNumbers().includes(LockNumber) && !((LockNumber == OwnerNumber) && ((C.ID != 0) || !LogQuery(C, "BlockLoverLockOwner", "LoverRule")))))) {
-					ServerDeleteLock(Item.Property);
-				}
-
-			}
-
-			// Other effects can be removed
-			if (Effect != "Lock") {
-
-				// Check if the effect is allowed for the item
-				var MustRemove = true;
-				if (Item.Asset.AllowEffect != null)
-					for (let A = 0; A < Item.Asset.AllowEffect.length; A++)
-						if (Item.Asset.AllowEffect[A] == Effect)
-							MustRemove = false;
-
-				// Remove the effect if it's not allowed
-				if (MustRemove) {
-					Item.Property.Effect.splice(E, 1);
-				}
-
-			}
-		}
-	}
-
-	// For each block on the item
-	if ((Item.Property != null) && (Item.Property.Block != null)) {
-		for (let B = Item.Property.Block.length - 1; B >= 0; B--) {
-
-			// Check if the effect is allowed for the item
-			var MustRemove = true;
-			if (Item.Asset.AllowBlock != null)
-				for (let A = 0; A < Item.Asset.AllowBlock.length; A++)
-					if (Item.Asset.AllowBlock[A] == Item.Property.Block[B])
-						MustRemove = false;
-
-			// Remove the effect if it's not allowed
-			if (MustRemove) {
-				Item.Property.Block.splice(B, 1);
-			}
-		}
-	}
-
-	// Removes any type that's not allowed on the item
-	if ((Item.Property != null) && (Item.Property.Type != null))
-		if ((Item.Asset.AllowType == null) || (Item.Asset.AllowType.indexOf(Item.Property.Type) < 0))
-			delete Item.Property.Type;
-
-	// Remove impossible combinations
-	if ((Item.Property != null) && (Item.Property.Type == null) && (Item.Property.Restrain == null))
-		["SetPose", "Difficulty", "SelfUnlock", "Hide"].forEach(P => delete Item.Property[P]);
-
-	// Keeps item opacity within the allowed range
-	if (Item.Property && typeof Item.Property.Opacity === "number") {
-		if (Item.Property.Opacity > Item.Asset.MaxOpacity) Item.Property.Opacity = Item.Asset.MaxOpacity;
-		if (Item.Property.Opacity < Item.Asset.MinOpacity) Item.Property.Opacity = Item.Asset.MinOpacity;
-	}
-}
-
-/**
  * Completely removes a lock from an item
  * @param {object} Property - The item to remove the lock from
  * @returns {void} - Nothing
  */
 function ServerDeleteLock(Property) {
 	if (Property) {
-		delete Property.LockedBy;
-		delete Property.LockMemberNumber;
-		delete Property.CombinationNumber;
-		delete Property.Password;
-		delete Property.Hint;
-		delete Property.LockSet;
-		delete Property.RemoveTimer;
-		delete Property.MaxTimer;
-		delete Property.RemoveItem;
-		delete Property.ShowTimer;
-		delete Property.EnableRandomInput;
-		delete Property.MemberNumberList;
-		delete Property.MemberNumberListKeys;
-		delete Property.LockPickSeed;
+		ServerAllLockProperties.forEach(key => delete Property[key]);
 		if (Array.isArray(Property.Effect)) {
 			Property.Effect = Property.Effect.filter(E => E !== "Lock");
 		}
@@ -434,7 +293,8 @@ function ServerDeleteLock(Property) {
 }
 
 /**
- * Loads the appearance assets from a server bundle that only contains the main info (no asset) and validates their properties to prevent griefing and respecting permissions in multiplayer
+ * Loads the appearance assets from a server bundle that only contains the main info (no asset) and validates their
+ * properties to prevent griefing and respecting permissions in multiplayer
  * @param {Character} C - Character for which to load the appearance
  * @param {string} AssetFamily - Family of assets used for the appearance array
  * @param {AppearanceBundle} Bundle - Bundled appearance
@@ -442,183 +302,444 @@ function ServerDeleteLock(Property) {
  * @returns {void} - Nothing
  */
 function ServerAppearanceLoadFromBundle(C, AssetFamily, Bundle, SourceMemberNumber) {
+	const appearanceDiffs = ServerBuildAppearanceDiff(AssetFamily, C.Appearance, Bundle);
+	ServerAddRequiredAppearance(AssetFamily, appearanceDiffs);
 
-	// Removes any invalid data from the appearance bundle
-	for (let B = 0; B < Bundle.length; B++)
-		if ((Bundle[B] == null) || (typeof Bundle[B] !== "object") || (Bundle[B].Name == null) || (typeof Bundle[B].Name != "string") || (Bundle[B].Name == null) || (typeof Bundle[B].Name != "string")) {
-			Bundle.splice(B, 1);
-			B--;
-		}
-
-	// We do not check if the load is from the Player
-	const FromSelf = SourceMemberNumber == null || SourceMemberNumber === C.MemberNumber;
+	if (SourceMemberNumber == null) SourceMemberNumber = C.MemberNumber;
+	const FromSelf = SourceMemberNumber === C.MemberNumber;
 	const FromOwner = C.Ownership != null && (SourceMemberNumber === C.Ownership.MemberNumber || FromSelf);
 	const LoverNumbers = CharacterGetLoversNumbers(C);
-	const FromLoversOrOwner = LoverNumbers.length > 0 && (LoverNumbers.includes(SourceMemberNumber) || FromOwner || FromSelf);
+	const FromLoversOrOwner = LoverNumbers.includes(SourceMemberNumber) || FromOwner || FromSelf;
+	const updateParams = { C, FromSelf, FromOwner, FromLoversOrOwner, SourceMemberNumber };
 
-	// Clears the appearance to begin
-	var Appearance = [];
-
-	// Reapply any item that was equipped and isn't enable, same for owner locked items if the source member isn't the owner
-	if ((SourceMemberNumber != null) && (C.ID == 0))
-		for (let A = 0; A < C.Appearance.length; A++) {
-			if (!C.Appearance[A].Asset.Enable && !C.Appearance[A].Asset.OwnerOnly && !C.Appearance[A].Asset.LoverOnly) {
-				Appearance.push(C.Appearance[A]);
-			} else {
-				if ((!FromOwner && InventoryOwnerOnlyItem(C.Appearance[A])) || (!FromLoversOrOwner && InventoryLoverOnlyItem(C.Appearance[A]))) {
-					// If the owner-locked item is sent back from a non-owner, we allow to change some properties and lock it back with the owner lock
-					if (!C.Appearance[A].Asset.OwnerOnly && !C.Appearance[A].Asset.LoverOnly)  {
-						for (let B = 0; B < Bundle.length; B++)
-							if ((C.Appearance[A].Asset.Name == Bundle[B].Name) && (C.Appearance[A].Asset.Group.Name == Bundle[B].Group) && (C.Appearance[A].Asset.Group.Family == AssetFamily)) {
-								ServerItemCopyProperty(C, C.Appearance[A], Bundle[B].Property);
-								break;
-							}
-					}
-					Appearance.push(C.Appearance[A]);
-				}
-			}
-		}
-
-	// For each appearance item to load
-	for (let A = 0; A < Bundle.length; A++) {
-
-		// Skip blocked items
-		const Type = typeof Bundle[A].Property === "object" ? Bundle[A].Property.Type : null;
-		const Limited = C.ID == 0 && InventoryIsPermissionLimited(C, Bundle[A].Name, Bundle[A].Group, Type) && (SourceMemberNumber != null) && SourceMemberNumber !== Player.MemberNumber && ((C.Ownership == null) || (C.Ownership.MemberNumber == null) || ((C.Ownership.MemberNumber != SourceMemberNumber))) && ((C.GetLoversNumbers().indexOf(SourceMemberNumber) < 0)) && ((C.ItemPermission > 3) || C.WhiteList.indexOf(SourceMemberNumber) < 0);
-		if ((InventoryIsPermissionBlocked(C, Bundle[A].Name, Bundle[A].Group, Type)  || Limited) && OnlineGameAllowBlockItems()) continue;
-
-		// Skip items if there's already an item in that slot
-		if (Appearance.find(item => item.Asset.Group.Family === AssetFamily && item.Asset.Group.Name === Bundle[A].Group)) continue;
-
-		// Cycles in all assets to find the correct item to add (do not add )
-		for (let I = 0; I < Asset.length; I++)
-			if ((Asset[I].Name == Bundle[A].Name) && (Asset[I].Group.Name == Bundle[A].Group) && (Asset[I].Group.Family == AssetFamily)) {
-
-				// OwnerOnly items can only get update if it comes from owner
-				if (SourceMemberNumber != null && Asset[I].OwnerOnly && (C.ID == 0) && !FromOwner) break;
-
-				// LoverOnly items can only get update if it comes from lover
-				if (SourceMemberNumber != null && Asset[I].LoverOnly && (C.ID == 0) && !FromLoversOrOwner) break;
-
-				// Make sure we don't push an item that's disabled, coming from another player
-				if (!Asset[I].Enable && !Asset[I].OwnerOnly && !Asset[I].LoverOnly && (SourceMemberNumber != null) && (C.ID == 0)) break;
-
-				var ColorSchema = Asset[I].Group.ColorSchema;
-				var Color = Bundle[A].Color;
-				if (Array.isArray(Color)) {
-					if (Color.length > Asset[I].ColorableLayerCount) Color = Color.slice(0, Asset[I].ColorableLayerCount);
-					Color = Color.map(Col => ServerValidateColorAgainstSchema(Col, ColorSchema));
-				} else {
-					Color = ServerValidateColorAgainstSchema(Color, ColorSchema);
-				}
-
-				// Creates the item and colorize it
-				var NA = {
-					Asset: Asset[I],
-					Difficulty: parseInt((Bundle[A].Difficulty == null) ? 0 : Bundle[A].Difficulty),
-					Color,
-				};
-
-				// Sets the item properties and make sure a non-owner cannot add an owner lock
-				if (Bundle[A].Property != null) {
-					NA.Property = Bundle[A].Property;
-
-					// If a non-owner/lover has added an owner/lover-only lock, remove it
-					const Lock = InventoryGetLock(NA);
-					if (C.ID === 0 && !FromOwner && Lock && Lock.Asset.OwnerOnly) ServerDeleteLock(NA.Property);
-					if (C.ID === 0 && !FromLoversOrOwner && Lock && Lock.Asset.LoverOnly) ServerDeleteLock(NA.Property);
-
-					ServerValidateProperties(C, NA, { SourceMemberNumber: SourceMemberNumber, FromOwner: FromOwner, FromLoversOrOwner: FromLoversOrOwner });
-				}
-
-				Appearance.push(NA);
-
-				break;
-
-			}
-
-	}
-
-	// Adds any critical appearance asset that could be missing, adds the default one
-	for (let G = 0; G < AssetGroup.length; G++)
-		if ((AssetGroup[G].Category == "Appearance") && !AssetGroup[G].AllowNone) {
-
-			// Check if we already have the item
-			var Found = false;
-			for (let A = 0; A < Appearance.length; A++)
-				if (Appearance[A].Asset.Group.Name == AssetGroup[G].Name)
-					Found = true;
-
-			// Adds the missing appearance part, we copy the mirrored group if it is not found and it exists
-			if (!Found) {
-				if (AssetGroup[G].MirrorGroup) {
-					var MirroredAsset = null;
-					for (let A = 0; A < Appearance.length; A++)
-						if (Appearance[A].Asset.Group.Name == AssetGroup[G].MirrorGroup) {
-							for (let I = 0; I < Asset.length; I++)
-								if (Asset[I].Group.Name == AssetGroup[G].Name && Asset[I].Name == Appearance[A].Asset.Name) {
-									MirroredAsset = { Asset: Asset[I], Color: Appearance[A].Color };
-									break;
-								}
-							break;
-						}
-					if (MirroredAsset == null)
-						for (let I = 0; I < Asset.length; I++)
-							if (Asset[I].Group.Name == AssetGroup[G].Name) {
-								MirroredAsset = { Asset: Asset[I], Color: Asset[I].Group.ColorSchema[0] };
-								break;
-							}
-					Appearance.push(MirroredAsset);
-				} else
-					for (let I = 0; I < Asset.length; I++)
-						if (Asset[I].Group.Name == AssetGroup[G].Name) {
-							Appearance.push({ Asset: Asset[I], Color: Asset[I].Group.ColorSchema[0] });
-							break;
-						}
-			}
-
-		}
-	return Appearance;
-
+	return Object.keys(appearanceDiffs)
+		.map(key => ServerResolveAppearanceDiff(appearanceDiffs[key][0], appearanceDiffs[key][1], updateParams))
+		.filter(Boolean);
 }
 
-/**
- * Validates a new item properties to the item the character has
- * @param {Character} C - Character for which to apply the update
- * @param {Item} Item - The item the character has
- * @param {Property} NewProperty - The new Property we want to set on the item
- * @returns {void} - Nothing
- */
-function ServerItemCopyProperty(C, Item, NewProperty) {
-	if (Item.Property == null) return;
-	if (Item.Property.LockedBy != null) NewProperty.LockedBy = Item.Property.LockedBy;
-	if (Item.Property.LockMemberNumber != null) NewProperty.LockMemberNumber = Item.Property.LockMemberNumber; else delete NewProperty.LockMemberNumber;
-	if (Item.Property.CombinationNumber != null) NewProperty.CombinationNumber = Item.Property.CombinationNumber; else delete NewProperty.CombinationNumber;
-	if (Item.Property.RemoveItem != null) NewProperty.RemoveItem = Item.Property.RemoveItem; else delete NewProperty.RemoveItem;
-	if (Item.Property.ShowTimer != null) NewProperty.ShowTimer = Item.Property.ShowTimer; else delete NewProperty.ShowTimer;
-	if (Item.Property.EnableRandomInput != null) NewProperty.EnableRandomInput = Item.Property.EnableRandomInput; else delete NewProperty.EnableRandomInput;
-	if (!NewProperty.EnableRandomInput || !["LoversTimerPadlock", "OwnerTimerPadlock"].includes(NewProperty.LockedBy)) {
-		if (Item.Property.MemberNumberList != null) NewProperty.MemberNumberList = Item.Property.MemberNumberList; else delete NewProperty.MemberNumberList;
-		if (Item.Property.RemoveTimer != null) NewProperty.RemoveTimer = Math.round(Item.Property.RemoveTimer); else delete NewProperty.RemoveTimer;
+// TODO: JSDoc for all this stuff
+function ServerBuildAppearanceDiff(assetFamily, appearance, bundle) {
+	const diffMap = {};
+	appearance.forEach((item) => {
+		diffMap[item.Asset.Group.Name] = [item, null];
+	});
+	bundle.forEach((item) => {
+		const appearanceItem = ServerBundledItemToAppearanceItem(assetFamily, item);
+		if (appearanceItem) {
+			const diff = diffMap[item.Group] = (diffMap[item.Group] || [null, null]);
+			diff[1] = appearanceItem;
+		}
+	});
+	return diffMap;
+}
+
+function ServerBundledItemToAppearanceItem(assetFamily, item) {
+	if (!item || typeof item !== "object" || typeof item.Name !== "string" || typeof item.Group !==
+	    "string") return null;
+
+	const asset = AssetGet(assetFamily, item.Group, item.Name);
+	if (!asset) return null;
+
+	return {
+		Asset: asset,
+		Difficulty: parseInt(item.Difficulty == null ? 0 : item.Difficulty),
+		Color: ServerParseColor(asset, item.Color, asset.Group.ColorSchema),
+		Property: item.Property,
+	};
+}
+
+function ServerParseColor(asset, color, schema) {
+	if (Array.isArray(color)) {
+		if (color.length > asset.ColorableLayerCount) color = color.slice(0, asset.ColorableLayerCount);
+		return color.map(c => ServerValidateColorAgainstSchema(c, schema));
+	} else {
+		return ServerValidateColorAgainstSchema(color, schema);
 	}
-	if (Item.Property.MemberNumberListKeys != null) NewProperty.MemberNumberListKeys = Item.Property.MemberNumberListKeys; else delete NewProperty.MemberNumberListKeys;
-	if (Item.Property.Password != null) NewProperty.Password = Item.Property.Password; else delete NewProperty.Password;
-	if (Item.Property.Hint != null) NewProperty.Hint = Item.Property.Hint; else delete NewProperty.Hint;
-	if (Item.Property.LockSet != null) NewProperty.LockSet = Item.Property.LockSet; else delete NewProperty.LockSet;
-	
-	if (Item.Property.LockPickSeed != null) NewProperty.LockPickSeed = Item.Property.LockPickSeed; else delete NewProperty.LockPickSeed;
-	Item.Property = NewProperty;
-	ServerValidateProperties(C, Item);
-	if (Item.Property.LockedBy == "OwnerPadlock") InventoryLock(C, Item, { Asset: AssetGet(C.AssetFamily, "ItemMisc", "OwnerPadlock") }, NewProperty.LockMemberNumber);
-	else if (Item.Property.LockedBy == "LoversPadlock") InventoryLock(C, Item, { Asset: AssetGet(C.AssetFamily, "ItemMisc", "LoversPadlock") }, NewProperty.LockMemberNumber);
+}
+
+function ServerAddRequiredAppearance(assetFamily, diffMap) {
+	AssetGroup.forEach(group => {
+		// If it's not in the appearance category or is allowed to empty, return
+		if (group.Category !== "Appearance" || group.AllowNone) return;
+		// If the current source already has an item in the group, return
+		if (diffMap[group.Name] && diffMap[group.Name][0]) return;
+
+		const diff = diffMap[group.Name] = diffMap[group.Name] || [null, null];
+
+		if (group.MirrorGroup) {
+			// If we need to mirror an item, see if it exists
+			const itemToMirror = diffMap[group.MirrorGroup] && diffMap[group.MirrorGroup][0];
+			if (itemToMirror) {
+				const mirroredAsset = AssetGet(assetFamily, group.Name, itemToMirror.Asset.Name);
+				// If there is an item to mirror, copy it and its color
+				if (mirroredAsset) diff[0] = { Asset: mirroredAsset, Color: itemToMirror.Color };
+			}
+		}
+
+		// If the item still hasn't been filled, use the first item from the group's asset list
+		if (!diff[0]) {
+			const asset = Asset.find(a => a.Group.Name === group.Name);
+			diff[0] = { Asset: asset, Color: group.ColorSchema[0] };
+		}
+	});
+}
+
+function ServerResolveAppearanceDiff(previousItem, newItem, params) {
+	let resolvedItem;
+	if (!previousItem) {
+		resolvedItem = ServerResolveAddDiff(newItem, params);
+	} else if (!newItem) {
+		resolvedItem = ServerResolveRemoveDiff(previousItem, params);
+	} else if (previousItem.Asset === newItem.Asset) {
+		resolvedItem = ServerResolveModifyDiff(previousItem, newItem, params);
+	} else {
+		resolvedItem = ServerResolveSwapDiff(previousItem, newItem, params);
+	}
+	// If the diff has resolved to an item, sanitize its properties
+	if (resolvedItem) ServerSanitizeProperties(params.C, resolvedItem);
+	return resolvedItem;
+}
+
+function ServerResolveAddDiff(newItem, params) {
+	if (ServerCanAdd(newItem, params)) {
+		const itemWithoutProperties = {
+			Asset: newItem.Asset,
+			Difficulty: newItem.Difficulty,
+			Color: newItem.Color,
+		};
+		return ServerResolveModifyDiff(itemWithoutProperties, newItem, params);
+	} else {
+		return null;
+	}
+}
+
+function ServerResolveRemoveDiff(previousItem, params) {
+	const canRemove = ServerCanRemove(previousItem, params);
+	return canRemove ? null : previousItem;
+}
+
+function ServerResolveSwapDiff(previousItem, newItem, params) {
+	// First, attempt to remove the previous item
+	const removalResult = ServerResolveRemoveDiff(previousItem, params);
+	// If the result is not null, the removal was unsuccessful - return the previous item
+	if (removalResult) return previousItem;
+	// Next, attempt to add the new item
+	const addResult = ServerResolveAddDiff(newItem, params);
+	// If the result is null, the add was unsuccessful - return the previous item. Otherwise, return the added item
+	return addResult || previousItem;
+}
+
+function ServerResolveModifyDiff(previousItem, newItem, params) {
+	const { C, SourceMemberNumber } = params;
+	const previousLock = InventoryGetLock(previousItem);
+	const newLock = InventoryGetLock(newItem);
+	const previousProperty = previousItem.Property || {};
+	const newProperty = newItem.Property = newItem.Property || {};
+
+	const lockSwapped = !!newLock && !!previousLock && newLock.Asset !== previousLock.Asset;
+	const lockModified = !!newLock && !!previousLock && !lockSwapped;
+	const lockRemoved = lockSwapped || (!newLock && !!previousLock);
+	const lockAdded = lockSwapped || (!!newLock && !previousLock);
+
+	const lockChangeInvalid = (lockRemoved && !ServerIsLockChangePermitted(previousLock, params)) ||
+	                          (lockAdded && !ServerIsLockChangePermitted(newLock, params));
+
+	if (lockChangeInvalid) {
+		// If there was a lock previously, reapply the old lock
+		if (previousLock) {
+			console.warn(
+				`Invalid removal of ${previousLock.Asset.Name} on member number ${C.MemberNumber} by member number ${SourceMemberNumber} blocked`);
+			InventoryLock(C, newItem, previousLock, previousProperty.LockMemberNumber, false);
+			ServerCopyLockProperties(previousProperty, newProperty, true);
+		} else {
+			// Otherwise, delete any lock
+			console.warn(
+				`Invalid addition of ${newLock.Asset.Name} to member number ${C.MemberNumber} by member number ${SourceMemberNumber} blocked`);
+			ServerDeleteLock(newItem.Property);
+		}
+	} else if (lockModified) {
+		// If the lock has been modified, then ensure lock properties don't change (except where they should be able to)
+		const hasLockPermissions = ServerIsLockChangePermitted(previousLock, params);
+		ServerCopyLockProperties(previousProperty, newProperty, hasLockPermissions);
+	}
+
+	if (!Object.keys(newProperty).length) delete newItem.Property;
+
+	return newItem;
+}
+
+function ServerIsLockChangePermitted(lock, { FromOwner, FromLoversOrOwner }) {
+	if (!lock) return true;
+	return !(
+		(lock.Asset.LoverOnly && !FromLoversOrOwner) ||
+		(lock.Asset.OwnerOnly && !FromOwner)
+	);
+}
+
+function ServerCopyLockProperties(sourceProperty, targetProperty, hasLockPermissions) {
+	ServerLockProperties.forEach((key) => ServerCopyLockProperty(sourceProperty, targetProperty, key));
+	if (!hasLockPermissions) {
+		ServerCopyLockProperty(sourceProperty, targetProperty, "EnableRandomInput");
+		if (!targetProperty.EnableRandomInput) {
+			ServerTimerLockProperties.forEach(
+				(key) => ServerCopyLockProperty(sourceProperty, targetProperty, key),
+			);
+		}
+	}
+}
+
+function ServerCopyLockProperty(sourceProperty, targetProperty, key) {
+	if (sourceProperty[key] != null) targetProperty[key] = sourceProperty[key];
+	else delete targetProperty[key];
+}
+
+function ServerCanAdd(newItem, { C, FromSelf, FromOwner, FromLoversOrOwner, SourceMemberNumber }) {
+	// If the update is coming from ourself, it's always permitted
+	if (FromSelf) return true;
+
+	const asset = newItem.Asset;
+
+	// If changing cosplay items is blocked and we're adding a cosplay item, block it
+	const blockBodyCosplay = C.OnlineSharedSettings && C.OnlineSharedSettings.BlockBodyCosplay;
+	if (blockBodyCosplay && asset.Group.BodyCosplay) return false;
+
+	// If the item is blocked/limited and the source doesn't have the correct permission, prevent it from being added
+	const type = (newItem.Property && newItem.Property.Type) || null;
+	const blockedOrLimited = ServerIsItemBlockedOrLimited(C, SourceMemberNumber, asset.Group.Name, asset.Name, type);
+	if (blockedOrLimited && OnlineGameAllowBlockItems()) return false;
+
+	// If the item is owner only or locked by an owner only lock, only the owner can add it
+	if (InventoryOwnerOnlyItem(newItem)) return FromOwner;
+
+	// If the item is lover only or locked by a lover only lock, only a lover/owner can add it
+	if (InventoryLoverOnlyItem(newItem)) return FromLoversOrOwner;
+
+	// Otherwise, the item can be added
+	return true;
+}
+
+function ServerIsItemBlockedOrLimited(C, sourceMemberNumber, groupName, assetName, type) {
+	if (C.MemberNumber === sourceMemberNumber) return false;
+	if (InventoryIsPermissionBlocked(C, assetName, groupName, type)) return true;
+	if (!InventoryIsPermissionLimited(C, assetName, groupName, type)) return false;
+	if (C.IsLoverOfMemberNumber(sourceMemberNumber) || C.IsOwnedByMemberNumber(sourceMemberNumber)) return false;
+	// If item permission is "Owner, Lover, whitelist & Dominants" or below, the source must be on their whitelist
+	if (C.ItemPermission < 3 && C.WhiteList.includes(sourceMemberNumber)) return false;
+	// Otherwise, the item is limited, and the source doesn't have permission
+	return true;
+}
+
+function ServerCanRemove(previousItem, { C, FromSelf, FromOwner, FromLoversOrOwner }) {
+	// If the update is coming from ourself, it's always permitted
+	if (FromSelf) return true;
+
+	const asset = previousItem.Asset;
+
+	// If changing cosplay items is blocked and we're removing a cosplay item, block it
+	const blockBodyCosplay = C.OnlineSharedSettings && C.OnlineSharedSettings.BlockBodyCosplay;
+	if (blockBodyCosplay && asset.Group.BodyCosplay) return false;
+
+	// If the item is owner only or locked by an owner only lock, only the owner can remove it
+	if (InventoryOwnerOnlyItem(previousItem)) return FromOwner;
+
+	// If the item is lover only or locked by a lover only lock, only a lover/owner can remove it
+	if (InventoryLoverOnlyItem(previousItem)) return FromLoversOrOwner;
+
+	// If the asset does not have the Enable flag, it can't be removed
+	if (!asset.Enable) return false;
+
+	// Otherwise, the item can be removed
+	return true;
+}
+
+function ServerSanitizeProperties(C, item) {
+	// If the character is an NPC, no validation is needed
+	if (C.IsNpc()) return;
+
+	const property = item.Property;
+
+	// If the item doesn't have a property, no validation is needed
+	if (property == null) return;
+
+	// If the property is not an object, remove it and return
+	if (typeof property !== "object") {
+		console.warn("Removing invalid property:", property);
+		delete item.Property;
+		return;
+	}
+
+	// Sanitize various properties
+	ServerSanitizeEffects(C, item);
+	ServerSanitizeBlocks(C, item);
+	ServerSanitizeStringArray(property, "Hide");
+
+	const asset = item.Asset;
+
+	// If the property has a type, it needs to be in the asset's AllowType array
+	const allowType = asset.AllowType || [];
+	if (property.Type != null && !allowType.includes(property.Type)) {
+		console.warn("Removing invalid type:", property.Type);
+		delete property.Type;
+	}
+
+	// Clamp item opacity within the allowed range
+	if (property && typeof property.Opacity === "number") {
+		if (property.Opacity > asset.MaxOpacity) property.Opacity = asset.MaxOpacity;
+		if (property.Opacity < asset.MinOpacity) property.Opacity = asset.MinOpacity;
+	}
+
+	// Remove impossible combinations
+	if (property.Type == null && property.Restrain == null) {
+		["SetPose", "Difficulty", "SelfUnlock", "Hide"].forEach(P => delete property[P]);
+	}
+}
+
+function ServerSanitizeEffects(C, item) {
+	const property = item.Property;
+	ServerSanitizeStringArray(property, "Effect");
+	ServerSanitizeLock(C, item);
+
+	// If there is no Effect array, no further sanitization is needed
+	if (!Array.isArray(property.Effect)) return;
+
+	const allowEffect = item.Asset.AllowEffect || [];
+	property.Effect = property.Effect.filter((effect) => {
+		// The Lock effect is handled by ServerSanitizeLock
+		if (effect === "Lock") return true;
+		// All other effects must be included in the AllowEffect array to be permitted
+		else return allowEffect.includes(effect);
+	});
+}
+
+function ServerSanitizeLock(C, item) {
+	const asset = item.Asset;
+	const property = item.Property;
+	// If there is no lock effect present, strip out any lock-related properties
+	if (!Array.isArray(property.Effect) || !property.Effect.includes("Lock")) return ServerDeleteLock(property);
+
+	const lock = InventoryGetLock(item);
+
+	// If there is no lock, or the asset does not permit locks, or
+	if (
+		!asset.AllowLock ||
+		!lock ||
+		property.AllowLock === false ||
+		(asset.AllowLockType && !asset.AllowLockType.includes(property.Type))
+	) {
+		return ServerDeleteLock(property);
+	}
+
+	// Remove any invalid lock member number
+	const lockNumber = property.LockMemberNumber;
+	if (lockNumber != null && typeof lockNumber !== "number") {
+		console.warn("Removing invalid lock member number:", lockNumber);
+		delete property.LockMemberNumber;
+	}
+
+	// The character's member number is always valid on a lock
+	if (lockNumber !== C.MemberNumber) {
+		const ownerNumber = C.Ownership && C.Ownership.MemberNumber;
+		const hasOwner = typeof ownerNumber === "number";
+		const lockedByOwner = hasOwner && lockNumber === ownerNumber;
+
+		// Ensure the lock member number is valid on owner-only locks
+		if (lock.Asset.OwnerOnly && !lockedByOwner) {
+			console.warn(`Removing invalid owner-only lock with member number: ${lockNumber}`);
+			return ServerDeleteLock(property);
+		}
+
+		const lockedByLover = C.GetLoversNumbers().includes(lockNumber);
+		// Ensure the lock member number is valid on lover-only locks
+		if (lock.Asset.LoverOnly && !lockedByOwner && !lockedByLover) {
+			console.warn(`Removing invalid lover-only lock with member number: ${lockNumber}`);
+			return ServerDeleteLock(property);
+		}
+	}
+
+	// Sanitize combination lock number
+	if (typeof property.CombinationNumber === "string") {
+		if (!ServerCombinationNumberRegex.test(property.CombinationNumber)) {
+			// If the combination is invalid, reset to 0000
+			console.warn(
+				`Invalid combination number: ${property.CombinationNumber}. Combination will be reset to ${ServerDefaultCombinationNumber}`,
+			);
+			property.CombinationNumber = ServerDefaultCombinationNumber;
+		}
+	} else delete property.CombinationNumber;
+
+	// Sanitize lockpicking seed
+	if (typeof property.LockPickSeed === "string") {
+		const seed = CommonConvertStringToArray(Item.Property.LockPickSeed);
+		if (!seed.length) {
+			console.warn("Deleting invalid lockpicking seed: ", property.LockPickSeed);
+			delete property.LockPickSeed;
+		} else {
+			// Check that every number from 0 up to the seed length is included in the seed
+			for (let i = 0; i < seed.length; i++) {
+				if (!seed.includes(i)) {
+					console.warn("Deleting invalid lockpicking seed: ", property.LockPickSeed);
+					delete property.LockPickSeed;
+					break;
+				}
+			}
+		}
+	} else delete property.LockPickSeed;
+
+	// Sanitize lock password
+	if (typeof property.Password === "string") {
+		if (!ServerPasswordRegex.test(property.Password)) {
+			// If the password is invalid, reset to "UNLOCK"
+			console.warn(
+				`Invalid password: ${property.Password}. Combination will be reset to ${ServerDefaultPassword}`,
+			);
+			property.Password = ServerDefaultPassword;
+		}
+	} else delete property.Password;
+
+	// Sanitize timer lock remove timers
+	if (asset.RemoveTimer > 0 && typeof property.RemoveTimer === "number") {
+		// Ensure the lock's remove timer doesn't exceed the maximum for that lock type
+		if (property.RemoveTimer - ServerRemoveTimerToleranceMs > CurrentTime + lock.Asset.MaxTimer * 1000) {
+			property.RemoveTimer = Math.round(CurrentTime + lock.Asset.RemoveTimer * 1000);
+		}
+	} else delete property.RemoveTimer;
+}
+
+function ServerSanitizeBlocks(C, item) {
+	const property = item.Property;
+	ServerSanitizeStringArray(property, "Block");
+
+	// If there is no Block array, no further sanitization is needed
+	if (!Array.isArray(property.Block)) return;
+
+	const allowBlock = item.Asset.AllowBlock || [];
+	// Any Block entry must be included in the AllowBlock list to be permitted
+	property.Block = property.Block.filter((block) => allowBlock.includes(block));
+}
+
+function ServerSanitizeStringArray(property, key) {
+	const value = property[key];
+	if (Array.isArray(value)) {
+		return value.filter(str => {
+			if (typeof str !== "string") {
+				console.warn(`Filtering out invalid ${key}:`, value);
+				return false;
+			} else {
+				return true;
+			}
+		});
+	} else if (value != null) {
+		console.warn(`Removing invalid ${key} array:`, value);
+		delete property[key];
+	}
 }
 
 /**
  * Validates and returns a color against a color schema
  * @param {string} Color - The color to validate
  * @param {string[]} Schema - The color schema to validate against (a list of accepted Color values)
- * @returns {string} - The color if it is a valid hex color string or part of the color schema, or the default color from the color schema
- * otherwise
+ * @returns {string} - The color if it is a valid hex color string or part of the color schema, or the default color
+ *     from the color schema otherwise
  */
 function ServerValidateColorAgainstSchema(Color, Schema) {
 	var HexCodeRegex = /^#(?:[0-9a-f]{3}){1,2}$/i;
@@ -672,7 +793,8 @@ function ServerPrivateCharacterSync() {
 };
 
 /**
- * Callback used to parse received information related to a query made by the player such as viewing their online friends or current email status
+ * Callback used to parse received information related to a query made by the player such as viewing their online
+ * friends or current email status
  * @param {object} data - Data object containing the query data
  * @returns {void} - Nothing
  */
@@ -689,7 +811,8 @@ function ServerAccountQueryResult(data) {
 
 /**
  * Callback used to parse received information related to ta beep from another account
- * @param {object} data - Data object containing the beep object which contain at the very least a name and a member number
+ * @param {object} data - Data object containing the beep object which contain at the very least a name and a member
+ *     number
  * @returns {void} - Nothing
  */
 function ServerAccountBeep(data) {

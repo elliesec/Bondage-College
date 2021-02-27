@@ -1726,6 +1726,9 @@ function ChatRoomSync(data) {
 			} else return;
 		}
 
+		// Treat chatroom updates from ourselves as if the updated characters had sent them
+		const trustedUpdate = data.SourceMemberNumber === Player.MemberNumber;
+
 		// If someone enters or leaves the chat room only that character must be updated
 		if (!Joining && ChatRoomCharacter && ChatRoomData && (ChatRoomData.Name == data.Name)) {
 			if (ChatRoomCharacter.length == data.Character.length + 1) {
@@ -1735,7 +1738,9 @@ function ChatRoomSync(data) {
 				return;
 			}
 			else if (ChatRoomCharacter.length == data.Character.length - 1) {
-				let C = CharacterLoadOnline(data.Character[data.Character.length - 1], data.SourceMemberNumber);
+				const characterToUpdate = data.Character[data.Character.length - 1];
+				const sourceMemberNumber = trustedUpdate ? characterToUpdate.MemberNumber : data.SourceMemberNumber;
+				let C = CharacterLoadOnline(characterToUpdate, sourceMemberNumber);
 				ChatRoomCharacter.push(C);
 				ChatRoomData = data;
 				NotificationsChatRoomJoin(C);
@@ -1751,8 +1756,10 @@ function ChatRoomSync(data) {
 
 		// Load the characters
 		ChatRoomCharacter = [];
-		for (let C = 0; C < data.Character.length; C++)
-			ChatRoomCharacter.push(CharacterLoadOnline(data.Character[C], data.SourceMemberNumber));
+		for (let C = 0; C < data.Character.length; C++) {
+			const sourceMemberNumber = trustedUpdate ? data.Character[C].MemberNumber : data.SourceMemberNumber;
+			ChatRoomCharacter.push(CharacterLoadOnline(data.Character[C], sourceMemberNumber));
+		}
 
 		// Keeps a copy of the previous version
 		ChatRoomData = data;
@@ -1869,24 +1876,6 @@ function ChatRoomSyncArousal(data) {
 		}
 }
 
-/**
- * Determines whether or not an owner/lover exclusive item can be modified by a non-owner/lover
- * @param {object} Data - The item data received from the server which defines the modification being made to the item
- * @param {Asset} Item - The currently equipped item
- * @return {boolean} - Returns true if the defined modification is permitted, false otherwise.
- */
-function ChatRoomAllowChangeLockedItem(Data, Item) {
-	// Slave collars cannot be modified
-	if (Item.Asset.Name == "SlaveCollar") return false;
-	// Items with AllowRemoveExclusive can always be removed
-	if (Data.Item.Name == null && Item.Asset.AllowRemoveExclusive) return true;
-	// Otherwise non-owners/lovers cannot remove/change the item
-	if ((Data.Item.Name == null) || (Data.Item.Name == "") || (Data.Item.Name != Item.Asset.Name)) return false;
-	// Lock member numbers cannot be modified
-	if ((Data.Item.Property == null) || (Data.Item.Property.LockedBy == null) || (Data.Item.Property.LockedBy != Item.Property.LockedBy) || (Data.Item.Property.LockMemberNumber == null) || (Data.Item.Property.LockMemberNumber != Item.Property.LockMemberNumber)) return false;
-	return true;
-}
-
 
 /**
  * Updates a single item on a specific character in the chatroom.
@@ -1901,55 +1890,27 @@ function ChatRoomSyncItem(data) {
 			var FromSelf = data.Source === data.Item.Target;
 			var FromOwner = (ChatRoomCharacter[C].Ownership != null) && ((data.Source === ChatRoomCharacter[C].Ownership.MemberNumber) || FromSelf);
 			var LoverNumbers = ChatRoomCharacter[C].GetLoversNumbers();
-			var FromLoversOrOwner = (LoverNumbers.length !== 0) && (LoverNumbers.includes(data.Source) || FromOwner || FromSelf);
+			var FromLoversOrOwner = LoverNumbers.includes(data.Source) || FromOwner || FromSelf;
 
-			// From another user, we prevent changing the item if the current item is locked by owner/lover locks
-			if (!FromOwner) {
-				const Item = InventoryGet(ChatRoomCharacter[C], data.Item.Group);
-				if ((Item != null) && (InventoryOwnerOnlyItem(Item) || (!FromLoversOrOwner && InventoryLoverOnlyItem(Item)))) {
-					if (!ChatRoomAllowChangeLockedItem(data, Item)) return;
-					else if (Item.Asset.Name === data.Item.Name && data.Item.Property != null) {
-						ServerItemCopyProperty(ChatRoomCharacter[C], Item, data.Item.Property);
-					}
-				}
-			}
-
-			// If there's no name in the item packet, we remove the item instead of wearing it
+			const previousItem = InventoryGet(ChatRoomCharacter[C], data.Item.Group);
+			const newItem = ServerBundledItemToAppearanceItem(ChatRoomCharacter[C].AssetFamily, data.Item);
+			const resolvedItem = ServerResolveAppearanceDiff(previousItem, newItem, {C: ChatRoomCharacter[C], FromSelf, FromOwner, FromLoversOrOwner, SourceMemberNumber: data.Source});
+			console.log(previousItem, newItem, resolvedItem);
 			ChatRoomAllowCharacterUpdate = false;
-			if ((data.Item.Name == null) || (data.Item.Name == "")) {
-				InventoryRemove(ChatRoomCharacter[C], data.Item.Group);
+			if (resolvedItem) {
+				CharacterAppearanceSetItem(ChatRoomCharacter[C], data.Item.Group, resolvedItem.Asset, resolvedItem.Color, resolvedItem.Difficulty);
+				InventoryGet(ChatRoomCharacter[C], data.Item.Group).Property = resolvedItem.Property;
 			} else {
-				var Color = data.Item.Color;
-				if (!CommonColorIsValid(Color)) Color = "Default";
-
-				if (!FromOwner) {
-					var Item = { Asset: AssetGet(ChatRoomCharacter[C].AssetFamily, data.Item.Group, data.Item.Name), Property: data.Item.Property };
-					if (data.Item.Property != null)	ServerValidateProperties(ChatRoomCharacter[C], Item, { SourceMemberNumber: data.Source, FromOwner: FromOwner, FromLoversOrOwner: FromLoversOrOwner })
-					if (InventoryOwnerOnlyItem(Item) || (!FromLoversOrOwner && InventoryLoverOnlyItem(Item))) {
-						ChatRoomAllowCharacterUpdate = true;
-						return;
-					}
-				}
-
-				// Wear the item and applies locks and properties if we need to
-				InventoryWear(ChatRoomCharacter[C], data.Item.Name, data.Item.Group, Color, data.Item.Difficulty);
-				if (data.Item.Property != null) {
-					var Item = InventoryGet(ChatRoomCharacter[C], data.Item.Group);
-					if (Item != null) {
-						Item.Property = data.Item.Property;
-						ServerValidateProperties(ChatRoomCharacter[C], Item, { SourceMemberNumber: data.Source, FromOwner: FromOwner, FromLoversOrOwner: FromLoversOrOwner });
-						CharacterRefresh(ChatRoomCharacter[C]);
-					}
-				}
-
+				InventoryRemove(ChatRoomCharacter[C], data.Item.Group);
 			}
+			CharacterRefresh(ChatRoomCharacter[C]);
 
 			// Keeps the change in the chat room data and allows the character to be updated again
 			for (let R = 0; R < ChatRoomData.Character.length; R++)
 				if (ChatRoomData.Character[R].MemberNumber == data.Item.Target)
 					ChatRoomData.Character[R].Appearance = ChatRoomCharacter[C].Appearance;
 			ChatRoomAllowCharacterUpdate = true;
-
+			return;
 		}
 }
 
