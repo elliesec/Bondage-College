@@ -740,7 +740,7 @@ function ServerSanitizeStringArray(property, key) {
 	if (Array.isArray(value)) {
 		return value.filter(str => {
 			if (typeof str !== "string") {
-				console.warn(`Filtering out invalid ${key}:`, value);
+				console.warn(`Filtering out invalid ${key}:`, str);
 				return false;
 			} else {
 				return true;
