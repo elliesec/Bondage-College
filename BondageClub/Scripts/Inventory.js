@@ -121,9 +121,16 @@ function InventoryLoad(C, Inventory) {
 			console.log("Error while loading compressed inventory, no inventory loaded.");
 		}
 	}
-	if (typeof Inventory === "object")
+	if (Array.isArray(Inventory)) {
 		for (let I = 0; I < Inventory.length; I++)
 			InventoryAdd(C, Inventory[I].Name, Inventory[I].Group, false);
+	} else if (typeof Inventory === "object") {
+		for (const G of Object.keys(Inventory)) {
+			for (const A of Inventory[G]) {
+				InventoryAdd(C, A, G, false);
+			}
+		}
+	}
 }
 
 /**
@@ -163,7 +170,7 @@ function InventoryPrerequisiteMessage(C, Prerequisite) {
 		case "NotKneelingSpread": return C.Pose.includes("KneelingSpread") ? "MustStandUpFirst" : "";
 		case "NotChaste": return C.Effect.includes("Chaste") ? "RemoveChastityFirst" : "";
 		case "NotChained": return C.Effect.includes("IsChained") ? "RemoveChainForItem" : "";
-		case "NoFeetSpreader": return InventoryIsItemInList(C, "ItemFeet", ["SpreaderMetal", "SpreaderVibratingDildoBar", "SpreaderDildoBar"]) ? "CannotBeUsedWithFeetSpreader" : "";
+		case "NoFeetSpreader": return InventoryIsItemInList(C, "ItemFeet", ["SpreaderMetal", "SpreaderVibratingDildoBar", "SpreaderDildoBar", "FloorShackles"]) ? "CannotBeUsedWithFeetSpreader" : "";
 		case "NotShackled": return C.Effect.includes("Shackled") ? "RemoveShacklesFirst" : "";
 		case "Collared": return (InventoryGet(C, "ItemNeck") == null) ? "MustCollaredFirst" : "";
 		case "CannotHaveWand": return InventoryIsItemInList(C, "ItemArms", ["FullLatexSuit"]) ? "CannotHaveWand" : "";
@@ -197,7 +204,7 @@ function InventoryPrerequisiteMessage(C, Prerequisite) {
 		case "NakedHands": return InventoryHasItemInAnyGroup(C, ["ItemHands", "Gloves"]) ? "RemoveClothesForItem" : "";
 
 		// Toe Tied
-		case "ToeTied": return InventoryIsItemInList(C, "ItemFeet", ["SpreaderMetal", "SpreaderVibratingDildoBar", "SpreaderDildoBar"])
+		case "ToeTied": return InventoryIsItemInList(C, "ItemFeet", ["SpreaderMetal", "SpreaderVibratingDildoBar", "SpreaderDildoBar", "FloorShackles"])
 			|| InventoryIsItemInList(C, "ItemLegs", ["WoodenHorse"])
 			|| InventoryIsItemInList(C, "ItemDevices", ["OneBarPrison", "SaddleStand"])
 			? "LegsCannotClose" : "";
@@ -850,6 +857,7 @@ function InventoryConfiscateRemote() {
 	InventoryDelete(Player, "VibratorRemote", "ItemVulva");
 	InventoryDelete(Player, "VibratorRemote", "ItemNipples");
 	InventoryDelete(Player, "LoversVibratorRemote", "ItemVulva");
+	InventoryDelete(Player, "SpankingToysVibeRemote", "ItemHands");
 }
 
 /**
@@ -871,9 +879,9 @@ function InventoryIsWorn(C, AssetName, AssetGroup) {
  * Toggles an item's permission for the player
  * @param {object} Item - Appearance item to toggle
  * @param {object} Type - Type of the item to toggle
- * @returns {void} - Nothing 
+ * @returns {void} - Nothing
  */
-function InventoryTogglePermission(Item, Type) { 
+function InventoryTogglePermission(Item, Type) {
 	if (InventoryIsPermissionBlocked(Player, Item.Asset.Name, Item.Asset.Group.Name, Type)) {
 		Player.BlockItems = Player.BlockItems.filter(B => B.Name != Item.Asset.Name || B.Group != Item.Asset.Group.Name || B.Type != Type);
 		Player.LimitedItems.push({ Name: Item.Asset.Name, Group: Item.Asset.Group.Name, Type: Type });
@@ -882,7 +890,7 @@ function InventoryTogglePermission(Item, Type) {
 		Player.LimitedItems = Player.LimitedItems.filter(B => B.Name != Item.Asset.Name || B.Group != Item.Asset.Group.Name || B.Type != Type);
 	else
 		Player.BlockItems.push({ Name: Item.Asset.Name, Group: Item.Asset.Group.Name, Type: Type });
-	ServerSend("AccountUpdate", { BlockItems: Player.BlockItems, LimitedItems: Player.LimitedItems });
+	ServerPlayerBlockItemsSync();
 }
 
 /**

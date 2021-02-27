@@ -11,6 +11,9 @@ var CommonCSVCache = {};
 var CutsceneStage = 0;
 
 var CommonPhotoMode = false;
+var GameVersion = "R0";
+const GameVersionFormat = /^R([0-9]+)(?:Beta([0-9]+))?$/;
+var CommonVersionUpdated = false;
 
 /**
  * A map of keys to common font stack definitions. Each stack definition is a	
@@ -110,6 +113,8 @@ function CommonParseCSV(str) {
 	var quote = false;  // true means we're inside a quoted field
 	var c;
 	var col;
+	// We remove whitespace on start and end
+	str = str.trim();
 
 	// iterate over each character, keep track of current row and column (of the returned array)
 	for (let row = col = c = 0; c < str.length; c++) {
@@ -236,7 +241,7 @@ function CommonKeyDown() {
 		}
 	}
 	else {
-		DialogKeyDown();
+		StruggleKeyDown();
 		if (ControllerActive == true) {
 			ControllerSupportKeyDown();
 		}
@@ -569,22 +574,74 @@ function CommonTakePhoto(Left, Top, Width, Height) {
 	DrawProcess();
 
 	// Capture screen as image URL
-	let ImgData = document.getElementById("MainCanvas").getContext('2d').getImageData(Left, Top, Width, Height);
+	const ImgData = document.getElementById("MainCanvas").getContext('2d').getImageData(Left, Top, Width, Height);
 	let PhotoCanvas = document.createElement('canvas');
 	PhotoCanvas.width = Width;
 	PhotoCanvas.height = Height;
 	PhotoCanvas.getContext('2d').putImageData(ImgData, 0, 0);
-	let PhotoImg = PhotoCanvas.toDataURL("image/png");
+	const PhotoImg = PhotoCanvas.toDataURL("image/png");
 
 	// Open the image in a new window
-	if (CommonGetBrowser().Name === "Chrome") {
-		// Chrome does not allow loading data URLs in the top frame
-		let newWindow = window.open('about:blank', '_blank');
-		newWindow.document.write("<img src='" + PhotoImg + "' alt='from canvas'/>");
-	}
-	else {
-		window.open(PhotoImg);
-	}
-	
+	let newWindow = window.open('about:blank', '_blank');
+	newWindow.document.write("<img src='" + PhotoImg + "' alt='from canvas'/>");
+
 	CommonPhotoMode = false;
+}
+
+/**
+ * Takes an array of items and converts it to record format
+ * @param { { Group: string; Name: string; Type?: string|null }[] } arr The array of items
+ * @returns { { [group: string]: { [name: string]: string[] } } } Output in object foramat
+ */
+function CommonPackItemArray(arr) {
+	const res = {};
+	for (const I of arr) {
+		let G = res[I.Group];
+		if (G === undefined) {
+			G = res[I.Group] = {};
+		}
+		let A = G[I.Name];
+		if (A === undefined) {
+			A = G[I.Name] = [];
+		}
+		const T = I.Type || "";
+		if (!A.includes(T)) {
+			A.push(T);
+		}
+	}
+	return res;
+}
+
+/**
+ * Takes an record format of items and converts it to array
+ * @param { { [group: string]: { [name: string]: string[] } } } arr Object defining items
+ * @return { { Group: string; Name: string; Type?: string }[] } The array of items
+ */
+function CommonUnpackItemArray(arr) {
+	const res = [];
+	for (const G of Object.keys(arr)) {
+		for (const A of Object.keys(arr[G])) {
+			for (const T of arr[G][A]) {
+				res.push({ Group: G, Name: A, Type: T ? T : undefined });
+			}
+		}
+	}
+	return res;
+}
+
+/**
+ * Compares two version numbers and returns -1/0/1 if Other number is smaller/same/larger than Current one
+ * @param {string} Current Current version number
+ * @param {string} Other Other version number
+ * @returns {-1|0|1} Comparsion result
+ */
+function CommonCompareVersion(Current, Other) {
+	const CurrentMatch = GameVersionFormat.exec(Current);
+	const OtherMatch = GameVersionFormat.exec(Other);
+	if (CurrentMatch == null || OtherMatch == null || isNaN(CurrentMatch[1]) || isNaN(OtherMatch[1])) return -1;
+	if (CurrentMatch[1] !== OtherMatch[1]) return Math.sign(Number.parseInt(OtherMatch[1]) - Number.parseInt(CurrentMatch[1]));
+	const CurrentSubversion = Number.parseInt(CurrentMatch[2]) || Infinity;
+	const OtherSubversion = Number.parseInt(OtherMatch[2]) || Infinity;
+	if (CurrentSubversion == OtherSubversion) return 0;
+	return Math.sign(OtherSubversion - CurrentSubversion);
 }
