@@ -187,7 +187,8 @@ function ChatRoomCanGiveHighSecurityKeys() {
 }
 
 /**
- * Checks if the player can give the target character her high security keys, while also removing the ones from her possession
+ * Checks if the player can give the target character her high security keys, while also removing the ones from her
+ * possession
  * @returns {boolean} - TRUE if the player can interact and is allowed to interact with the current character.
  */
 function ChatRoomCanGiveHighSecurityKeysAll() {
@@ -269,14 +270,18 @@ function ChatRoomCanPerformCharacterAction() { return ChatRoomCanAssistStand() |
  */
 function ChatRoomCanPerformSecurityAction() { return ChatRoomCanGiveLockpicks() || ChatRoomCanGiveHighSecurityKeys() || ChatRoomCanGiveHighSecurityKeysAll()}
 /**
- * Checks if the target character can be helped back on her feet. This is different than CurrentCharacter.CanKneel() because it listens for the current active pose and removes certain checks that are not required for someone else to help a person kneel down.
+ * Checks if the target character can be helped back on her feet. This is different than CurrentCharacter.CanKneel()
+ * because it listens for the current active pose and removes certain checks that are not required for someone else to
+ * help a person kneel down.
  * @returns {boolean} - Whether or not the target character can stand
  */
 function ChatRoomCanAssistStand() {
 	return Player.CanInteract() && CurrentCharacter.AllowItem && CharacterItemsHavePoseAvailable(CurrentCharacter, "BodyLower", "Kneel") && !CharacterDoItemsSetPose(CurrentCharacter, "Kneel") && CurrentCharacter.IsKneeling()
 }
 /**
- * Checks if the target character can be helped down on her knees. This is different than CurrentCharacter.CanKneel() because it listens for the current active pose and removes certain checks that are not required for someone else to help a person kneel down.
+ * Checks if the target character can be helped down on her knees. This is different than CurrentCharacter.CanKneel()
+ * because it listens for the current active pose and removes certain checks that are not required for someone else to
+ * help a person kneel down.
  * @returns {boolean} - Whether or not the target character can stand
  */
 function ChatRoomCanAssistKneel() {
@@ -1496,7 +1501,8 @@ function ChatRoomCharacterItemUpdate(C, Group) {
  * Publishes a custom action to the chat
  * @param {string} msg - Tag of the action to send
  * @param {boolean} LeaveDialog - Whether or not the dialog should be left.
- * @param {Array.<{Tag: string, Text: string, MemberNumber: number}>} Dictionary - Dictionary of tags and data to send to the room.
+ * @param {Array.<{Tag: string, Text: string, MemberNumber: number}>} Dictionary - Dictionary of tags and data to send
+ *     to the room.
  * @returns {void} - Nothing.
  */
 function ChatRoomPublishCustomAction(msg, LeaveDialog, Dictionary) {
@@ -1864,15 +1870,14 @@ function ChatRoomSync(data) {
 		const OldChatRoomCharacter = ChatRoomCharacter || [];
 		ChatRoomCharacter = [];
 		for (let C = 0; C < data.Character.length; C++) {
-			const Char = CharacterLoadOnline(data.Character[C], data.SourceMemberNumber);
+			const sourceMemberNumber = trustedUpdate ? data.Character[C].MemberNumber : data.SourceMemberNumber;
+			const Char = CharacterLoadOnline(data.Character[C], sourceMemberNumber);
 			ChatRoomCharacter.push(Char);
 			// Special cases when someone joins the room
 			if (!Joining && !OldChatRoomCharacter.includes(Char)) {
 				NotificationsChatRoomJoin(Char);
 				if (ChatRoomLeashList.includes(Char.MemberNumber)) {
-				const characterToUpdate = data.Character[data.Character.length - 1];
-				const sourceMemberNumber = trustedUpdate ? characterToUpdate.MemberNumber : data.SourceMemberNumber;
-				let C = CharacterLoadOnline(characterToUpdate, sourceMemberNumber);
+					const characterToUpdate = data.Character[data.Character.length - 1];
 					// Ping to make sure they are still leashed
 					ServerSend("ChatRoomChat", { Content: "PingHoldLeash", Type: "Hidden", Target: Char.MemberNumber });
 				}
@@ -1880,8 +1885,6 @@ function ChatRoomSync(data) {
 		}
 
 		for (let C = 0; C < data.Character.length; C++) {
-			const sourceMemberNumber = trustedUpdate ? data.Character[C].MemberNumber : data.SourceMemberNumber;
-			ChatRoomCharacter.push(CharacterLoadOnline(data.Character[C], sourceMemberNumber));
 		}
 		// Keeps a copy of the previous version
 		ChatRoomData = data;
@@ -2091,7 +2094,8 @@ function DialogCallMaids() {
 
 
 /**
- * Triggered when the player assists another player to struggle out, the bonus is evasion / 2 + 1, with penalties if the player is restrained.
+ * Triggered when the player assists another player to struggle out, the bonus is evasion / 2 + 1, with penalties if
+ * the player is restrained.
  * @returns {void} - Nothing.
  */
 function ChatRoomStruggleAssist() {
@@ -2349,7 +2353,8 @@ function ChatRoomDrinkPick(DrinkType, Money) {
 function ChatRoomSendLoverRule(RuleType, Option) { ChatRoomSendRule(RuleType, Option, "Lover"); }
 function ChatRoomSendOwnerRule(RuleType, Option) { ChatRoomSendRule(RuleType, Option, "Owner"); }
 /**
- * Sends a rule / restriction / punishment to the player's slave/lover client, it will be handled on the slave/lover's side when received.
+ * Sends a rule / restriction / punishment to the player's slave/lover client, it will be handled on the slave/lover's
+ * side when received.
  * @param {string} RuleType - The rule selected.
  * @param {"Quest" | "Leave"} Option - If the rule is a quest or we should just leave the dialog.
  * @param {"Owner" | "Lover"} Sender - Type of the sender
@@ -2524,7 +2529,8 @@ function ChatRoomGameResponse(data) {
 }
 
 /**
- * Triggered when the player uses the /safeword command, we revert the character if safewords are enabled, and display a warning in chat if not.
+ * Triggered when the player uses the /safeword command, we revert the character if safewords are enabled, and display
+ * a warning in chat if not.
  * @returns {void} - Nothing
  */
 function ChatRoomSafewordChatCommand() {
@@ -2537,7 +2543,8 @@ function ChatRoomSafewordChatCommand() {
 }
 
 /**
- * Triggered when the player activates her safeword to revert, we swap her appearance to the state when she entered the chat room lobby, minimum permission becomes whitelist and up.
+ * Triggered when the player activates her safeword to revert, we swap her appearance to the state when she entered the
+ * chat room lobby, minimum permission becomes whitelist and up.
  * @returns {void} - Nothing
  */
 function ChatRoomSafewordRevert() {
@@ -2556,7 +2563,8 @@ function ChatRoomSafewordRevert() {
 }
 
 /**
- * Triggered when the player activates her safeword and wants to be released, we remove all bondage from her and return her to the chat search screen.
+ * Triggered when the player activates her safeword and wants to be released, we remove all bondage from her and return
+ * her to the chat search screen.
  * @returns {void} - Nothing
  */
 function ChatRoomSafewordRelease() {
