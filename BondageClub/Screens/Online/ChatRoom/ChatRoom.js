@@ -1938,15 +1938,12 @@ function ChatRoomSync(data) {
 			if (!Joining && !OldChatRoomCharacter.includes(Char)) {
 				NotificationsChatRoomJoin(Char);
 				if (ChatRoomLeashList.includes(Char.MemberNumber)) {
-					const characterToUpdate = data.Character[data.Character.length - 1];
 					// Ping to make sure they are still leashed
 					ServerSend("ChatRoomChat", { Content: "PingHoldLeash", Type: "Hidden", Target: Char.MemberNumber });
 				}
 			}
 		}
 
-		for (let C = 0; C < data.Character.length; C++) {
-		}
 		// Keeps a copy of the previous version
 		ChatRoomData = data;
 		if (ChatRoomData.Game != null) ChatRoomGame = ChatRoomData.Game;
