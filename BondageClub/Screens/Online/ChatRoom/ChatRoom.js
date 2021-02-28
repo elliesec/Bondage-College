@@ -2076,16 +2076,24 @@ function ChatRoomSyncItem(data) {
 		if (ChatRoomCharacter[C].MemberNumber === data.Item.Target) {
 
 			var FromSelf = data.Source === data.Item.Target;
-			var FromOwner = (ChatRoomCharacter[C].Ownership != null) && ((data.Source === ChatRoomCharacter[C].Ownership.MemberNumber) || FromSelf);
+			var FromOwner = (ChatRoomCharacter[C].Ownership != null) &&
+			                ((data.Source === ChatRoomCharacter[C].Ownership.MemberNumber) || FromSelf);
 			var LoverNumbers = ChatRoomCharacter[C].GetLoversNumbers();
 			var FromLoversOrOwner = LoverNumbers.includes(data.Source) || FromOwner || FromSelf;
 
 			const previousItem = InventoryGet(ChatRoomCharacter[C], data.Item.Group);
 			const newItem = ServerBundledItemToAppearanceItem(ChatRoomCharacter[C].AssetFamily, data.Item);
-			const { item, valid } = ServerResolveAppearanceDiff(previousItem, newItem, {C: ChatRoomCharacter[C], FromSelf, FromOwner, FromLoversOrOwner, SourceMemberNumber: data.Source});
+			const { item, valid } = ValidationResolveAppearanceDiff(previousItem, newItem, {
+				C: ChatRoomCharacter[C],
+				FromSelf,
+				FromOwner,
+				FromLoversOrOwner,
+				SourceMemberNumber: data.Source,
+			});
 			ChatRoomAllowCharacterUpdate = false;
 			if (item) {
-				CharacterAppearanceSetItem(ChatRoomCharacter[C], data.Item.Group, item.Asset, item.Color, item.Difficulty);
+				CharacterAppearanceSetItem(
+					ChatRoomCharacter[C], data.Item.Group, item.Asset, item.Color, item.Difficulty);
 				InventoryGet(ChatRoomCharacter[C], data.Item.Group).Property = item.Property;
 			} else {
 				InventoryRemove(ChatRoomCharacter[C], data.Item.Group);

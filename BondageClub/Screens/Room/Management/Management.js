@@ -528,7 +528,7 @@ function ManagementBreakTrialOnline() {
 		ServerSend("AccountOwnership", { MemberNumber: Player.Ownership.MemberNumber, Action: "Break" });
 		Player.Ownership = null;
 		for (let A = 0; A < Player.Appearance.length; A++)
-			ServerSanitizeProperties(Player, Player.Appearance[A]);
+			ValidationSanitizeProperties(Player, Player.Appearance[A]);
 	}
 }
 
