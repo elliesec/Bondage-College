@@ -302,12 +302,24 @@ function ServerAppearanceBundle(Appearance) {
  * @returns {void} - Nothing
  */
 function ServerDeleteLock(Property) {
+	let changed = false;
 	if (Property) {
-		ServerAllLockProperties.forEach(key => delete Property[key]);
+		ServerAllLockProperties.forEach(key => {
+			if (Property[key] != null) {
+				delete Property[key];
+				changed = true;
+			}
+		});
 		if (Array.isArray(Property.Effect)) {
-			Property.Effect = Property.Effect.filter(E => E !== "Lock");
+			Property.Effect = Property.Effect.filter(E => {
+				if (E === "Lock") {
+					changed = true;
+					return false;
+				} else return true;
+			});
 		}
 	}
+	return changed;
 }
 
 /**
@@ -572,24 +584,24 @@ function ServerCanRemove(previousItem, { C, FromSelf, FromOwner, FromLoversOrOwn
 
 function ServerSanitizeProperties(C, item) {
 	// If the character is an NPC, no validation is needed
-	if (C.IsNpc()) return;
+	if (C.IsNpc()) return false;
 
 	const property = item.Property;
 
 	// If the item doesn't have a property, no validation is needed
-	if (property == null) return;
+	if (property == null) return false;
 
 	// If the property is not an object, remove it and return
 	if (typeof property !== "object") {
 		console.warn("Removing invalid property:", property);
 		delete item.Property;
-		return;
+		return true;
 	}
 
 	// Sanitize various properties
-	ServerSanitizeEffects(C, item);
-	ServerSanitizeBlocks(C, item);
-	ServerSanitizeStringArray(property, "Hide");
+	let changed = ServerSanitizeEffects(C, item);
+	changed = changed || ServerSanitizeBlocks(C, item);
+	changed = changed || ServerSanitizeStringArray(property, "Hide");
 
 	const asset = item.Asset;
 
@@ -598,35 +610,54 @@ function ServerSanitizeProperties(C, item) {
 	if (property.Type != null && !allowType.includes(property.Type)) {
 		console.warn("Removing invalid type:", property.Type);
 		delete property.Type;
+		changed = true;
 	}
 
 	// Clamp item opacity within the allowed range
 	if (property && typeof property.Opacity === "number") {
-		if (property.Opacity > asset.MaxOpacity) property.Opacity = asset.MaxOpacity;
-		if (property.Opacity < asset.MinOpacity) property.Opacity = asset.MinOpacity;
+		if (property.Opacity > asset.MaxOpacity) {
+			property.Opacity = asset.MaxOpacity;
+			changed = true;
+		}
+		if (property.Opacity < asset.MinOpacity) {
+			property.Opacity = asset.MinOpacity;
+			changed = true;
+		}
 	}
 
 	// Remove impossible combinations
 	if (property.Type == null && property.Restrain == null) {
-		["SetPose", "Difficulty", "SelfUnlock", "Hide"].forEach(P => delete property[P]);
+		["SetPose", "Difficulty", "SelfUnlock", "Hide"].forEach(P => {
+			if (property[P] != null) {
+				delete property[P];
+				changed = true;
+			}
+		});
 	}
+
+	return changed;
 }
 
 function ServerSanitizeEffects(C, item) {
 	const property = item.Property;
-	ServerSanitizeStringArray(property, "Effect");
-	ServerSanitizeLock(C, item);
+	let changed = ServerSanitizeStringArray(property, "Effect");
+	changed = changed || ServerSanitizeLock(C, item);
 
 	// If there is no Effect array, no further sanitization is needed
-	if (!Array.isArray(property.Effect)) return;
+	if (!Array.isArray(property.Effect)) return changed;
 
 	const allowEffect = item.Asset.AllowEffect || [];
 	property.Effect = property.Effect.filter((effect) => {
 		// The Lock effect is handled by ServerSanitizeLock
 		if (effect === "Lock") return true;
 		// All other effects must be included in the AllowEffect array to be permitted
-		else return allowEffect.includes(effect);
+		else if (!allowEffect.includes(effect)) {
+			changed = true;
+			return false;
+		} else return true;
 	});
+
+	return changed;
 }
 
 function ServerSanitizeLock(C, item) {
@@ -647,11 +678,14 @@ function ServerSanitizeLock(C, item) {
 		return ServerDeleteLock(property);
 	}
 
+	let changed = false;
+
 	// Remove any invalid lock member number
 	const lockNumber = property.LockMemberNumber;
 	if (lockNumber != null && typeof lockNumber !== "number") {
 		console.warn("Removing invalid lock member number:", lockNumber);
 		delete property.LockMemberNumber;
+		changed = true;
 	}
 
 	// The character's member number is always valid on a lock
@@ -682,8 +716,12 @@ function ServerSanitizeLock(C, item) {
 				`Invalid combination number: ${property.CombinationNumber}. Combination will be reset to ${ServerDefaultCombinationNumber}`,
 			);
 			property.CombinationNumber = ServerDefaultCombinationNumber;
+			changed = true;
 		}
-	} else delete property.CombinationNumber;
+	} else if (property.CombinationNumber != null) {
+		delete property.CombinationNumber;
+		changed = true;
+	}
 
 	// Sanitize lockpicking seed
 	if (typeof property.LockPickSeed === "string") {
@@ -691,17 +729,22 @@ function ServerSanitizeLock(C, item) {
 		if (!seed.length) {
 			console.warn("Deleting invalid lockpicking seed: ", property.LockPickSeed);
 			delete property.LockPickSeed;
+			changed = true;
 		} else {
 			// Check that every number from 0 up to the seed length is included in the seed
 			for (let i = 0; i < seed.length; i++) {
 				if (!seed.includes(i)) {
 					console.warn("Deleting invalid lockpicking seed: ", property.LockPickSeed);
 					delete property.LockPickSeed;
+					changed = true;
 					break;
 				}
 			}
 		}
-	} else delete property.LockPickSeed;
+	} else if (property.LockPickSeed != null) {
+		delete property.LockPickSeed;
+		changed = true;
+	}
 
 	// Sanitize lock password
 	if (typeof property.Password === "string") {
@@ -711,36 +754,54 @@ function ServerSanitizeLock(C, item) {
 				`Invalid password: ${property.Password}. Combination will be reset to ${ServerDefaultPassword}`,
 			);
 			property.Password = ServerDefaultPassword;
+			changed = true;
 		}
-	} else delete property.Password;
+	} else if (property.Password != null) {
+		delete property.Password;
+		changed = true;
+	}
 
 	// Sanitize timer lock remove timers
 	if (asset.RemoveTimer > 0 && typeof property.RemoveTimer === "number") {
 		// Ensure the lock's remove timer doesn't exceed the maximum for that lock type
 		if (property.RemoveTimer - ServerRemoveTimerToleranceMs > CurrentTime + lock.Asset.MaxTimer * 1000) {
 			property.RemoveTimer = Math.round(CurrentTime + lock.Asset.RemoveTimer * 1000);
+			changed = true;
 		}
-	} else delete property.RemoveTimer;
+	} else if (property.RemoveTimer != null) {
+		delete property.RemoveTimer;
+		changed = true;
+	}
+
+	return changed;
 }
 
 function ServerSanitizeBlocks(C, item) {
 	const property = item.Property;
-	ServerSanitizeStringArray(property, "Block");
+	let changed = ServerSanitizeStringArray(property, "Block");
 
 	// If there is no Block array, no further sanitization is needed
-	if (!Array.isArray(property.Block)) return;
+	if (!Array.isArray(property.Block)) return changed;
 
 	const allowBlock = item.Asset.AllowBlock || [];
 	// Any Block entry must be included in the AllowBlock list to be permitted
-	property.Block = property.Block.filter((block) => allowBlock.includes(block));
+	property.Block = property.Block.filter((block) => {
+		if (!allowBlock.includes(block)) {
+			changed = true;
+			return false;
+		} else return true;
+	});
+	return changed;
 }
 
 function ServerSanitizeStringArray(property, key) {
 	const value = property[key];
+	let changed = false;
 	if (Array.isArray(value)) {
-		return value.filter(str => {
+		value.filter(str => {
 			if (typeof str !== "string") {
 				console.warn(`Filtering out invalid ${key}:`, str);
+				changed = true;
 				return false;
 			} else {
 				return true;
@@ -749,7 +810,9 @@ function ServerSanitizeStringArray(property, key) {
 	} else if (value != null) {
 		console.warn(`Removing invalid ${key} array:`, value);
 		delete property[key];
+		changed = true;
 	}
+	return changed;
 }
 
 /**
@@ -808,7 +871,7 @@ function ServerPrivateCharacterSync() {
 		}
 		ServerSend("AccountUpdate", D);
 	}
-};
+}
 
 /**
  * Callback used to parse received information related to a query made by the player such as viewing their online
