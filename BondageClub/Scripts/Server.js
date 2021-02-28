@@ -443,14 +443,14 @@ function ServerResolveAddDiff(newItem, params) {
 	}
 }
 
-function ServerResolveRemoveDiff(previousItem, params) {
-	const canRemove = ServerCanRemove(previousItem, params);
+function ServerResolveRemoveDiff(previousItem, params, isSwap) {
+	const canRemove = ServerCanRemove(previousItem, params, isSwap);
 	return canRemove ? null : previousItem;
 }
 
 function ServerResolveSwapDiff(previousItem, newItem, params) {
 	// First, attempt to remove the previous item
-	const removalResult = ServerResolveRemoveDiff(previousItem, params);
+	const removalResult = ServerResolveRemoveDiff(previousItem, params, true);
 	// If the result is not null, the removal was unsuccessful - return the previous item
 	if (removalResult) return previousItem;
 	// Next, attempt to add the new item
@@ -570,11 +570,14 @@ function ServerIsItemBlockedOrLimited(C, sourceMemberNumber, groupName, assetNam
 	return true;
 }
 
-function ServerCanRemove(previousItem, { C, FromSelf, FromOwner, FromLoversOrOwner }) {
+function ServerCanRemove(previousItem, { C, FromSelf, FromOwner, FromLoversOrOwner }, isSwap) {
+	const asset = previousItem.Asset;
+
+	// If we're not swapping, and the asset group can't be empty, always block removal
+	if (!asset.Group.AllowNone && !isSwap) return false;
+
 	// If the update is coming from ourself, it's always permitted
 	if (FromSelf) return true;
-
-	const asset = previousItem.Asset;
 
 	// If changing cosplay items is blocked and we're removing a cosplay item, block it
 	const blockBodyCosplay = C.OnlineSharedSettings && C.OnlineSharedSettings.BlockBodyCosplay;
