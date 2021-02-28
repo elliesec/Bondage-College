@@ -342,9 +342,21 @@ function ServerAppearanceLoadFromBundle(C, AssetFamily, Bundle, SourceMemberNumb
 	const FromLoversOrOwner = LoverNumbers.includes(SourceMemberNumber) || FromOwner || FromSelf;
 	const updateParams = { C, FromSelf, FromOwner, FromLoversOrOwner, SourceMemberNumber };
 
-	return Object.keys(appearanceDiffs)
-		.map(key => ServerResolveAppearanceDiff(appearanceDiffs[key][0], appearanceDiffs[key][1], updateParams))
-		.filter(Boolean);
+	const { appearance, updateValid } = Object.keys(appearanceDiffs)
+		.reduce(({ appearance, updateValid }, key) => {
+			const diff = appearanceDiffs[key];
+			const { item, valid } = ServerResolveAppearanceDiff(diff[0], diff[1], updateParams);
+			if (item) appearance.push(item);
+			updateValid = updateValid && valid;
+			return { appearance, updateValid };
+		}, { appearance: [], updateValid: true });
+
+	// If the appearance update was invalid, send another update to correct any issues
+	if (!updateValid && C.ID === 0) {
+		console.warn("Invalid appearance update bundle received. Updating with sanitized appearance.");
+		ChatRoomCharacterUpdate(C);
+	}
+	return appearance;
 }
 
 // TODO: JSDoc for all this stuff
@@ -415,48 +427,60 @@ function ServerAddRequiredAppearance(assetFamily, diffMap) {
 }
 
 function ServerResolveAppearanceDiff(previousItem, newItem, params) {
-	let item;
+	let result;
 	if (!previousItem) {
-		item = ServerResolveAddDiff(newItem, params);
+		result = ServerResolveAddDiff(newItem, params);
 	} else if (!newItem) {
-		item = ServerResolveRemoveDiff(previousItem, params);
+		result = ServerResolveRemoveDiff(previousItem, params);
 	} else if (previousItem.Asset === newItem.Asset) {
-		item = ServerResolveModifyDiff(previousItem, newItem, params);
+		result = ServerResolveModifyDiff(previousItem, newItem, params);
 	} else {
-		item = ServerResolveSwapDiff(previousItem, newItem, params);
+		result = ServerResolveSwapDiff(previousItem, newItem, params);
 	}
+	let { item, valid } = result;
 	// If the diff has resolved to an item, sanitize its properties
-	if (item) ServerSanitizeProperties(params.C, item);
-	return item;
+	if (item) valid = valid && !ServerSanitizeProperties(params.C, result);
+	return { item, valid };
 }
 
 function ServerResolveAddDiff(newItem, params) {
-	if (ServerCanAdd(newItem, params)) {
-		const itemWithoutProperties = {
-			Asset: newItem.Asset,
-			Difficulty: newItem.Difficulty,
-			Color: newItem.Color,
-		};
-		return ServerResolveModifyDiff(itemWithoutProperties, newItem, params);
-	} else {
-		return null;
+	const canAdd = ServerCanAdd(newItem, params);
+	if (!canAdd) {
+		const { C, SourceMemberNumber } = params;
+		console.warn(
+			`Invalid addition of ${previousItem.Asset.Name} to member number ${C.MemberNumber} by ${SourceMemberNumber} blocked`);
+		return { item: null, valid: false };
 	}
+	const itemWithoutProperties = {
+		Asset: newItem.Asset,
+		Difficulty: newItem.Difficulty,
+		Color: newItem.Color,
+	};
+	return ServerResolveModifyDiff(itemWithoutProperties, newItem, params);
 }
 
 function ServerResolveRemoveDiff(previousItem, params, isSwap) {
 	const canRemove = ServerCanRemove(previousItem, params, isSwap);
-	return canRemove ? null : previousItem;
+	if (!canRemove) {
+		const { C, SourceMemberNumber } = params;
+		console.warn(
+			`Invalid removal of ${previousItem.Asset.Name} from member number ${C.MemberNumber} by ${SourceMemberNumber} blocked`);
+	}
+	return {
+		item: canRemove ? null : previousItem,
+		valid: canRemove,
+	};
 }
 
 function ServerResolveSwapDiff(previousItem, newItem, params) {
 	// First, attempt to remove the previous item
-	const removalResult = ServerResolveRemoveDiff(previousItem, params, true);
-	// If the result is not null, the removal was unsuccessful - return the previous item
-	if (removalResult) return previousItem;
-	// Next, attempt to add the new item
-	const addResult = ServerResolveAddDiff(newItem, params);
-	// If the result is null, the add was unsuccessful - return the previous item. Otherwise, return the added item
-	return addResult || previousItem;
+	let result = ServerResolveRemoveDiff(previousItem, params, true);
+	// If the removal result was valid, attempt to add the new item
+	if (result.valid) result = ServerResolveAddDiff(newItem, params);
+	// If the result is valid, return it
+	if (result.valid) return result;
+	// Otherwise, return the previous item and an invalid status
+	else return { item: previousItem, valid: false };
 }
 
 function ServerResolveModifyDiff(previousItem, newItem, params) {
@@ -466,14 +490,14 @@ function ServerResolveModifyDiff(previousItem, newItem, params) {
 	const previousProperty = previousItem.Property || {};
 	const newProperty = newItem.Property = newItem.Property || {};
 
-	const lockSwapped = !!newLock && !!previousLock && newLock.Asset !== previousLock.Asset;
+	const lockSwapped = !!newLock && !!previousLock && newLock.Asset.Name !== previousLock.Asset.Name;
 	const lockModified = !!newLock && !!previousLock && !lockSwapped;
 	const lockRemoved = lockSwapped || (!newLock && !!previousLock);
 	const lockAdded = lockSwapped || (!!newLock && !previousLock);
 
 	const lockChangeInvalid = (lockRemoved && !ServerIsLockChangePermitted(previousLock, params)) ||
 	                          (lockAdded && !ServerIsLockChangePermitted(newLock, params));
-	let changeInvalid = false;
+	let valid = true;
 
 	if (lockChangeInvalid) {
 		// If there was a lock previously, reapply the old lock
@@ -482,21 +506,22 @@ function ServerResolveModifyDiff(previousItem, newItem, params) {
 				`Invalid removal of ${previousLock.Asset.Name} on member number ${C.MemberNumber} by member number ${SourceMemberNumber} blocked`);
 			InventoryLock(C, newItem, previousLock, previousProperty.LockMemberNumber, false);
 			ServerCopyLockProperties(previousProperty, newProperty, true);
+			valid = false;
 		} else {
 			// Otherwise, delete any lock
 			console.warn(
 				`Invalid addition of ${newLock.Asset.Name} to member number ${C.MemberNumber} by member number ${SourceMemberNumber} blocked`);
-			ServerDeleteLock(newItem.Property);
+			valid = valid && !ServerDeleteLock(newItem.Property);
 		}
 	} else if (lockModified) {
 		// If the lock has been modified, then ensure lock properties don't change (except where they should be able to)
 		const hasLockPermissions = ServerIsLockChangePermitted(previousLock, params);
-		ServerCopyLockProperties(previousProperty, newProperty, hasLockPermissions);
+		valid = valid && !ServerCopyLockProperties(previousProperty, newProperty, hasLockPermissions);
 	}
 
 	if (!Object.keys(newProperty).length) delete newItem.Property;
 
-	return newItem;
+	return { item: newItem, valid };
 }
 
 function ServerIsLockChangePermitted(lock, { FromOwner, FromLoversOrOwner }) {
@@ -526,9 +551,6 @@ function ServerCopyLockProperties(sourceProperty, targetProperty, hasLockPermiss
 function ServerCopyLockProperty(sourceProperty, targetProperty, key) {
 	if (sourceProperty[key] != null && !CommonDeepEqual(targetProperty[key], sourceProperty[key])) {
 		targetProperty[key] = sourceProperty[key];
-		return true;
-	} else if (targetProperty[key] != null) {
-		delete targetProperty[key];
 		return true;
 	}
 	return false;

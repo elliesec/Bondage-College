@@ -292,12 +292,15 @@ function ChatRoomCanAssistKneel() {
 }
 
 /**
-* Checks if the player character can attempt to stand up. This is different than CurrentCharacter.CanKneel() because it listens for the current active pose, but it forces the player to do a minigame.
+* Checks if the player character can attempt to stand up. This is different than CurrentCharacter.CanKneel() because it
+* listens for the current active pose, but it forces the player to do a minigame.
  * @returns {boolean} - Whether or not the player character can stand
  */
 function ChatRoomCanAttemptStand() { return CharacterItemsHavePoseAvailable(Player, "BodyLower", "Kneel") && !CharacterDoItemsSetPose(Player, "Kneel") && Player.IsKneeling()}
 /**
- * Checks if the player character can attempt to get down on her knees. This is different than CurrentCharacter.CanKneel() because it listens for the current active pose, but it forces the player to do a minigame.
+ * Checks if the player character can attempt to get down on her knees. This is different than
+ * CurrentCharacter.CanKneel() because it listens for the current active pose, but it forces the player to do a
+ * minigame.
  * @returns {boolean} - Whether or not the player character can stand
  */
 function ChatRoomCanAttemptKneel() { return CharacterItemsHavePoseAvailable(Player, "BodyLower", "Kneel") && !CharacterDoItemsSetPose(Player, "Kneel") && !Player.IsKneeling() }
@@ -2079,22 +2082,29 @@ function ChatRoomSyncItem(data) {
 
 			const previousItem = InventoryGet(ChatRoomCharacter[C], data.Item.Group);
 			const newItem = ServerBundledItemToAppearanceItem(ChatRoomCharacter[C].AssetFamily, data.Item);
-			const resolvedItem = ServerResolveAppearanceDiff(previousItem, newItem, {C: ChatRoomCharacter[C], FromSelf, FromOwner, FromLoversOrOwner, SourceMemberNumber: data.Source});
-			console.log(previousItem, newItem, resolvedItem);
+			const { item, valid } = ServerResolveAppearanceDiff(previousItem, newItem, {C: ChatRoomCharacter[C], FromSelf, FromOwner, FromLoversOrOwner, SourceMemberNumber: data.Source});
 			ChatRoomAllowCharacterUpdate = false;
-			if (resolvedItem) {
-				CharacterAppearanceSetItem(ChatRoomCharacter[C], data.Item.Group, resolvedItem.Asset, resolvedItem.Color, resolvedItem.Difficulty);
-				InventoryGet(ChatRoomCharacter[C], data.Item.Group).Property = resolvedItem.Property;
+			if (item) {
+				CharacterAppearanceSetItem(ChatRoomCharacter[C], data.Item.Group, item.Asset, item.Color, item.Difficulty);
+				InventoryGet(ChatRoomCharacter[C], data.Item.Group).Property = item.Property;
 			} else {
 				InventoryRemove(ChatRoomCharacter[C], data.Item.Group);
 			}
-			CharacterRefresh(ChatRoomCharacter[C]);
+			CharacterRefresh(ChatRoomCharacter[C], false);
+
 
 			// Keeps the change in the chat room data and allows the character to be updated again
 			for (let R = 0; R < ChatRoomData.Character.length; R++)
 				if (ChatRoomData.Character[R].MemberNumber == data.Item.Target)
 					ChatRoomData.Character[R].Appearance = ChatRoomCharacter[C].Appearance;
 			ChatRoomAllowCharacterUpdate = true;
+
+			// If the update was invalid, send a correction update
+			if (ChatRoomCharacter[C].ID === 0 && !valid) {
+				console.warn(`Invalid appearance update to group ${data.Item.Group}. Updating with sanitized appearance.`);
+				ChatRoomCharacterItemUpdate(ChatRoomCharacter[C], data.Item.Group);
+			}
+
 			return;
 		}
 }
