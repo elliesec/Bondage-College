@@ -645,3 +645,24 @@ function CommonCompareVersion(Current, Other) {
 	if (CurrentSubversion == OtherSubversion) return 0;
 	return Math.sign(OtherSubversion - CurrentSubversion);
 }
+
+function CommonDeepEqual(obj1, obj2) {
+	if (obj1 === obj2) {
+		return true;
+	}
+
+	if (obj1 && obj2 && typeof obj1 === "object" && typeof obj2 === "object") {
+		if (Object.keys(obj1).length !== Object.keys(obj2).length) {
+			return false;
+		} else {
+			for (let key in obj1) {
+				if (!CommonDeepEqual(obj1[key], obj2[key])) {
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+
+	return false;
+}

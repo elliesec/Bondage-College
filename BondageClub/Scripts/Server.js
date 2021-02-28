@@ -415,19 +415,19 @@ function ServerAddRequiredAppearance(assetFamily, diffMap) {
 }
 
 function ServerResolveAppearanceDiff(previousItem, newItem, params) {
-	let resolvedItem;
+	let item;
 	if (!previousItem) {
-		resolvedItem = ServerResolveAddDiff(newItem, params);
+		item = ServerResolveAddDiff(newItem, params);
 	} else if (!newItem) {
-		resolvedItem = ServerResolveRemoveDiff(previousItem, params);
+		item = ServerResolveRemoveDiff(previousItem, params);
 	} else if (previousItem.Asset === newItem.Asset) {
-		resolvedItem = ServerResolveModifyDiff(previousItem, newItem, params);
+		item = ServerResolveModifyDiff(previousItem, newItem, params);
 	} else {
-		resolvedItem = ServerResolveSwapDiff(previousItem, newItem, params);
+		item = ServerResolveSwapDiff(previousItem, newItem, params);
 	}
 	// If the diff has resolved to an item, sanitize its properties
-	if (resolvedItem) ServerSanitizeProperties(params.C, resolvedItem);
-	return resolvedItem;
+	if (item) ServerSanitizeProperties(params.C, item);
+	return item;
 }
 
 function ServerResolveAddDiff(newItem, params) {
@@ -473,6 +473,7 @@ function ServerResolveModifyDiff(previousItem, newItem, params) {
 
 	const lockChangeInvalid = (lockRemoved && !ServerIsLockChangePermitted(previousLock, params)) ||
 	                          (lockAdded && !ServerIsLockChangePermitted(newLock, params));
+	let changeInvalid = false;
 
 	if (lockChangeInvalid) {
 		// If there was a lock previously, reapply the old lock
@@ -507,20 +508,30 @@ function ServerIsLockChangePermitted(lock, { FromOwner, FromLoversOrOwner }) {
 }
 
 function ServerCopyLockProperties(sourceProperty, targetProperty, hasLockPermissions) {
-	ServerLockProperties.forEach((key) => ServerCopyLockProperty(sourceProperty, targetProperty, key));
+	let changed = false;
+	ServerLockProperties.forEach((key) => {
+		changed = changed || ServerCopyLockProperty(sourceProperty, targetProperty, key);
+	});
 	if (!hasLockPermissions) {
-		ServerCopyLockProperty(sourceProperty, targetProperty, "EnableRandomInput");
+		changed = changed || ServerCopyLockProperty(sourceProperty, targetProperty, "EnableRandomInput");
 		if (!targetProperty.EnableRandomInput) {
-			ServerTimerLockProperties.forEach(
-				(key) => ServerCopyLockProperty(sourceProperty, targetProperty, key),
-			);
+			ServerTimerLockProperties.forEach((key) => {
+				changed = changed || ServerCopyLockProperty(sourceProperty, targetProperty, key);
+			});
 		}
 	}
+	return changed;
 }
 
 function ServerCopyLockProperty(sourceProperty, targetProperty, key) {
-	if (sourceProperty[key] != null) targetProperty[key] = sourceProperty[key];
-	else delete targetProperty[key];
+	if (sourceProperty[key] != null && !CommonDeepEqual(targetProperty[key], sourceProperty[key])) {
+		targetProperty[key] = sourceProperty[key];
+		return true;
+	} else if (targetProperty[key] != null) {
+		delete targetProperty[key];
+		return true;
+	}
+	return false;
 }
 
 function ServerCanAdd(newItem, { C, FromSelf, FromOwner, FromLoversOrOwner, SourceMemberNumber }) {
