@@ -2075,21 +2075,12 @@ function ChatRoomSyncItem(data) {
 	for (let C = 0; C < ChatRoomCharacter.length; C++)
 		if (ChatRoomCharacter[C].MemberNumber === data.Item.Target) {
 
-			var FromSelf = data.Source === data.Item.Target;
-			var FromOwner = (ChatRoomCharacter[C].Ownership != null) &&
-			                ((data.Source === ChatRoomCharacter[C].Ownership.MemberNumber) || FromSelf);
-			var LoverNumbers = ChatRoomCharacter[C].GetLoversNumbers();
-			var FromLoversOrOwner = LoverNumbers.includes(data.Source) || FromOwner || FromSelf;
-
+			const updateParams = ValidationCreateDiffParams(ChatRoomCharacter[C], data.Source);
 			const previousItem = InventoryGet(ChatRoomCharacter[C], data.Item.Group);
 			const newItem = ServerBundledItemToAppearanceItem(ChatRoomCharacter[C].AssetFamily, data.Item);
-			const { item, valid } = ValidationResolveAppearanceDiff(previousItem, newItem, {
-				C: ChatRoomCharacter[C],
-				FromSelf,
-				FromOwner,
-				FromLoversOrOwner,
-				SourceMemberNumber: data.Source,
-			});
+
+			const { item, valid } = ValidationResolveAppearanceDiff(previousItem, newItem, updateParams);
+
 			ChatRoomAllowCharacterUpdate = false;
 			if (item) {
 				CharacterAppearanceSetItem(

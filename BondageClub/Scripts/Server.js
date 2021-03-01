@@ -295,11 +295,7 @@ function ServerAppearanceLoadFromBundle(C, AssetFamily, Bundle, SourceMemberNumb
 	ServerAddRequiredAppearance(AssetFamily, appearanceDiffs);
 
 	if (SourceMemberNumber == null) SourceMemberNumber = C.MemberNumber;
-	const FromSelf = SourceMemberNumber === C.MemberNumber;
-	const FromOwner = C.Ownership != null && (SourceMemberNumber === C.Ownership.MemberNumber || FromSelf);
-	const LoverNumbers = CharacterGetLoversNumbers(C);
-	const FromLoversOrOwner = LoverNumbers.includes(SourceMemberNumber) || FromOwner || FromSelf;
-	const updateParams = { C, FromSelf, FromOwner, FromLoversOrOwner, SourceMemberNumber };
+	const updateParams = ValidationCreateDiffParams(C, SourceMemberNumber);
 
 	const { appearance, updateValid } = Object.keys(appearanceDiffs)
 		.reduce(({ appearance, updateValid }, key) => {
