@@ -15,6 +15,14 @@ const ValidationAllLockProperties = ValidationLockProperties
 	.concat(["EnableRandomInput"])
 	.concat(ValidationTimerLockProperties);
 
+/**
+ * Creates the appearance update parameters used to validate an appearance diff, based on the provided target character
+ * and the source character's member number.
+ * @param {Character} C - The target character (to whom the appearance update is being applied)
+ * @param {number} sourceMemberNumber - The member number of the source player (the person that sent the update)
+ * @returns {AppearanceUpdateParameters} - Appearance update parameters used based on the relationship between the
+ * target and source characters
+ */
 function ValidationCreateDiffParams(C, sourceMemberNumber) {
 	const fromSelf = sourceMemberNumber === C.MemberNumber;
 	const fromOwner = C.Ownership != null && (sourceMemberNumber === C.Ownership.MemberNumber || fromSelf);
@@ -31,6 +39,16 @@ function ValidationCreateDiffParams(C, sourceMemberNumber) {
 	return { C, fromSelf, fromOwner, fromLover, sourceMemberNumber };
 }
 
+/**
+ * Resolves an appearance diff based on the previous item, new item, and the appearance update parameters provided.
+ * Returns an {@link AppearanceDiffResolution} object containing the final appearance item and a valid flag indicating
+ * whether or not the new item had to be modified/rolled back.
+ * @param {Item|null} previousItem - The previous item that the target character had equipped (or null if none)
+ * @param {Item|null} newItem - The new item to equip (may be identical to the previous item, or null if removing)
+ * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
+ * @returns {AppearanceDiffResolution} - The diff resolution - a wrapper object containing the final item and a flag
+ * indicating whether or not the change was valid.
+ */
 function ValidationResolveAppearanceDiff(previousItem, newItem, params) {
 	let result;
 	if (!previousItem) {
@@ -48,6 +66,15 @@ function ValidationResolveAppearanceDiff(previousItem, newItem, params) {
 	return { item, valid };
 }
 
+/**
+ * Resolves an appearance diff where an item is being added (i.e. there was no previous item in the asset group). Add
+ * diffs are handled as the composite of two operations: item addition, followed by property modification. First we
+ * check whether the base item can be added, and then we check that any added properties are permitted.
+ * @param {Item} newItem - The new item to equip
+ * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
+ * @returns {AppearanceDiffResolution} - The diff resolution - a wrapper object containing the final item and a flag
+ * indicating whether or not the change was valid.
+ */
 function ValidationResolveAddDiff(newItem, params) {
 	const canAdd = ValidationCanAddItem(newItem, params);
 	if (!canAdd) {
@@ -64,6 +91,16 @@ function ValidationResolveAddDiff(newItem, params) {
 	return ValidationResolveModifyDiff(itemWithoutProperties, newItem, params);
 }
 
+/**
+ * Resolves an appearance diff where an item is being removed (i.e. there was previously an item in the asset group, but
+ * it is being removed)
+ * @param {Item} previousItem - The previous item to remove
+ * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
+ * @param {boolean} [isSwap] - Whether or not the removal is part of an item swap operation. This will allow certain
+ * items which cannot normally be removed (e.g. items with `AllowNone: false`) to be removed
+ * @returns {AppearanceDiffResolution} - The diff resolution - a wrapper object containing the final item and a flag
+ * indicating whether or not the change was valid.
+ */
 function ValidationResolveRemoveDiff(previousItem, params, isSwap) {
 	const canRemove = ValidationCanRemoveItem(previousItem, params, isSwap);
 	if (!canRemove) {
@@ -77,6 +114,17 @@ function ValidationResolveRemoveDiff(previousItem, params, isSwap) {
 	};
 }
 
+/**
+ * Resolves an appearance diff where an item is being swapped (i.e. there was an item previously in the asset group, but
+ * the new item uses a different asset to the previous item). Swap diffs are handled as the composite of three
+ * operations: item removal, item addition, and then property modification. First we check whether the previous item
+ * can be removed, then whether the new item can be added, and finally we check that any added properties are permitted.
+ * @param {Item} previousItem - The previous item to remove
+ * @param {Item} newItem - The new item to add
+ * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
+ * @returns {AppearanceDiffResolution} - The diff resolution - a wrapper object containing the final item and a flag
+ * indicating whether or not the change was valid.
+ */
 function ValidationResolveSwapDiff(previousItem, newItem, params) {
 	// First, attempt to remove the previous item
 	let result = ValidationResolveRemoveDiff(previousItem, params, true);
@@ -88,6 +136,16 @@ function ValidationResolveSwapDiff(previousItem, newItem, params) {
 	else return { item: previousItem, valid: false };
 }
 
+/**
+ * Resolves an appearance diff where an item is being modified (i.e. there was an item previously in the asset group,
+ * and the new item uses the same asset as the previous item). The function primarily validates modifications to locked
+ * items
+ * @param {Item} previousItem - The previous item to remove
+ * @param {Item} newItem - The new item to add
+ * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
+ * @returns {AppearanceDiffResolution} - The diff resolution - a wrapper object containing the final item and a flag
+ * indicating whether or not the change was valid.
+ */
 function ValidationResolveModifyDiff(previousItem, newItem, params) {
 	const { C, sourceMemberNumber } = params;
 	const previousLock = InventoryGetLock(previousItem);
@@ -129,14 +187,28 @@ function ValidationResolveModifyDiff(previousItem, newItem, params) {
 	return { item: newItem, valid };
 }
 
+/**
+ * Determines whether or not a lock can be modified based on the lock object and the provided appearance update
+ * parameters.
+ * @param {Item} lock - The lock object that is being checked, as returned by {@link InventoryGetLock}
+ * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
+ * @returns {boolean} - TRUE if the lock can be modified, FALSE otherwise
+ */
 function ValidationIsLockChangePermitted(lock, { fromOwner, fromLover }) {
 	if (!lock) return true;
-	return !(
-		(lock.Asset.LoverOnly && !fromLover) ||
-		(lock.Asset.OwnerOnly && !fromOwner)
-	);
+	return !((lock.Asset.LoverOnly && !fromLover) || (lock.Asset.OwnerOnly && !fromOwner));
 }
 
+/**
+ * Copies an item's lock-related properties from one Property object to another based on whether or not the source
+ * character has permissions to modify the lock.
+ * @param {object} sourceProperty - The original Property object on the item
+ * @param {object} targetProperty - The Property object on the modified item
+ * @param {boolean} hasLockPermissions - Whether or not the source character of the appearance change has permission to
+ * modify the lock (as determined by {@link ValidationIsLockChangePermitted})
+ * @returns {boolean} - TRUE if the target Property object was modified as a result of copying (indicating that there
+ * were invalid changes to the lock), FALSE otherwise
+ */
 function ValidationCopyLockProperties(sourceProperty, targetProperty, hasLockPermissions) {
 	let changed = false;
 	ValidationLockProperties.forEach((key) => {
@@ -153,6 +225,14 @@ function ValidationCopyLockProperties(sourceProperty, targetProperty, hasLockPer
 	return changed;
 }
 
+/**
+ * Copies the value of a single property key from a source Property object to a target Property object.
+ * @param {object} sourceProperty - The original Property object on the item
+ * @param {object} targetProperty - The Property object on the modified item
+ * @param {string} key - The property key whose value to copy
+ * @returns {boolean} - TRUE if the target Property object was modified as a result of copying (indicating that there
+ * were invalid changes to the lock), FALSE otherwise
+ */
 function ValidationCopyLockProperty(sourceProperty, targetProperty, key) {
 	if (sourceProperty[key] != null && !CommonDeepEqual(targetProperty[key], sourceProperty[key])) {
 		targetProperty[key] = sourceProperty[key];
@@ -161,6 +241,14 @@ function ValidationCopyLockProperty(sourceProperty, targetProperty, key) {
 	return false;
 }
 
+/**
+ * Determines whether an item can be added to the target character, based on the provided appearance update parameters.
+ * Note that the item's properties are not taken into account at this stage - this merely checks whether the basic item
+ * can be added.
+ * @param {Item} newItem - The new item to add
+ * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
+ * @returns {boolean} - TRUE if the new item can be equipped based on the appearance update parameters, FALSE otherwise
+ */
 function ValidationCanAddItem(newItem, { C, fromSelf, fromOwner, fromLover, sourceMemberNumber }) {
 	// If the update is coming from ourself, it's always permitted
 	if (fromSelf) return true;
@@ -187,6 +275,18 @@ function ValidationCanAddItem(newItem, { C, fromSelf, fromOwner, fromLover, sour
 	return true;
 }
 
+/**
+ * Determines whether the character described by the `sourceMemberNumber` parameter is permitted to add a given asset to
+ * the target character `C`, based on the asset's group name, asset name and type (if applicable). This only checks
+ * against the target character's limited and blocked item lists, not their global item permissions.
+ * @param {Character} C - The target character
+ * @param sourceMemberNumber - The member number of the source character
+ * @param {string} groupName - The name of the asset group for the intended item
+ * @param {string} assetName - The asset name of the intended item
+ * @param {string|null} type - The type of the intended item
+ * @returns {boolean} - TRUE if the character with the provided source member number is _not_ allowed to equip the
+ * described asset on the target character, FALSE otherwise.
+ */
 function ValidationIsItemBlockedOrLimited(C, sourceMemberNumber, groupName, assetName, type) {
 	if (C.MemberNumber === sourceMemberNumber) return false;
 	if (InventoryIsPermissionBlocked(C, assetName, groupName, type)) return true;
@@ -198,6 +298,15 @@ function ValidationIsItemBlockedOrLimited(C, sourceMemberNumber, groupName, asse
 	return true;
 }
 
+/**
+ * Determines whether an item can be removed from the target character, based on the provided appearance update
+ * parameters.
+ * @param {Item} previousItem - The item to remove
+ * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
+ * @param {boolean} isSwap - Whether or not the removal is part of a swap, which allows temporary removal of items with
+ * `AllowNone: false`.
+ * @returns {boolean} - TRUE if the item can be removed based on the appearance update parameters, FALSE otherwise
+ */
 function ValidationCanRemoveItem(previousItem, { C, fromSelf, fromOwner, fromLover }, isSwap) {
 	const asset = previousItem.Asset;
 
@@ -224,6 +333,14 @@ function ValidationCanRemoveItem(previousItem, { C, fromSelf, fromOwner, fromLov
 	return true;
 }
 
+/**
+ * Sanitizes the properties on an appearance item to ensure that no invalid properties are present. This removes invalid
+ * locks, strips invalid values, and ensures property values are within the constraints defined by an item.
+ * @param {Character} C - The character on whom the item is equipped
+ * @param {Item} item - The appearance item to sanitize
+ * @returns {boolean} - TRUE if the item was modified as part of the sanitization process (indicating that invalid
+ * properties were present), FALSE otherwise
+ */
 function ValidationSanitizeProperties(C, item) {
 	// If the character is an NPC, no validation is needed
 	if (C.IsNpc()) return false;
@@ -280,6 +397,14 @@ function ValidationSanitizeProperties(C, item) {
 	return changed;
 }
 
+/**
+ * Sanitizes the `Effect` array on an item's Property object, if present. This ensures that it is a valid array of
+ * strings, and that each item in the array is present in the asset's `AllowEffect` array.
+ * @param {Character} C - The character on whom the item is equipped
+ * @param {Item} item - The item whose `Effect` property should be sanitized
+ * @returns {boolean} - TRUE if the item's `Effect` property was modified as part of the sanitization process
+ * (indicating it was not a valid string array, or that invalid effects were present), FALSE otherwise
+ */
 function ValidationSanitizeEffects(C, item) {
 	const property = item.Property;
 	let changed = ValidationSanitizeStringArray(property, "Effect");
@@ -302,6 +427,14 @@ function ValidationSanitizeEffects(C, item) {
 	return changed;
 }
 
+/**
+ * Sanitizes an item's lock properties, if present. This ensures that any lock on the item is valid, and removes or
+ * corrects invalid properties.
+ * @param {Character} C - The character on whom the item is equipped
+ * @param {Item} item - The item whose lock properties should be sanitized
+ * @returns {boolean} - TRUE if the item's properties were modified as part of the sanitization process (indicating the
+ * lock was not valid), FALSE otherwise
+ */
 function ValidationSanitizeLock(C, item) {
 	const asset = item.Asset;
 	const property = item.Property;
@@ -418,6 +551,14 @@ function ValidationSanitizeLock(C, item) {
 	return changed;
 }
 
+/**
+ * Sanitizes the `Block` array on an item's Property object, if present. This ensures that it is a valid array of
+ * strings, and that each item in the array is present in the asset's `AllowBlock` array.
+ * @param {Character} C - The character on whom the item is equipped
+ * @param {Item} item - The item whose `Block` property should be sanitized
+ * @returns {boolean} - TRUE if the item's `Block` property was modified as part of the sanitization process
+ * (indicating it was not a valid string array, or that invalid entries were present), FALSE otherwise
+ */
 function ValidationSanitizeBlocks(C, item) {
 	const property = item.Property;
 	let changed = ValidationSanitizeStringArray(property, "Block");
@@ -436,6 +577,15 @@ function ValidationSanitizeBlocks(C, item) {
 	return changed;
 }
 
+/**
+ * Sanitizes a property on an object to ensure that it is a valid string array or null/undefined. If the property is not
+ * a valid array and is not null, it will be deleted from the object. If it is a valid array, any non-string entries
+ * will be removed.
+ * @param {object} property - The object whose property should be sanitized
+ * @param {string} key - The key indicating which property on the object should be sanitized
+ * @returns {boolean} - TRUE if the object's property was modified as part of the sanitization process (indicating  that
+ * the property was not a valid array, or that it contained a non-string entry), FALSE otherwise
+ */
 function ValidationSanitizeStringArray(property, key) {
 	const value = property[key];
 	let changed = false;
@@ -458,9 +608,11 @@ function ValidationSanitizeStringArray(property, key) {
 }
 
 /**
- * Completely removes a lock from an item
- * @param {object} Property - The item to remove the lock from
- * @returns {void} - Nothing
+ * Completely removes a lock from an item's Property object. This removes all lock-related properties, and the "Lock"
+ * effect from the property object.
+ * @param {object} Property - The Property object to remove the lock from
+ * @returns {boolean} - TRUE if the Property object was modified as a result of the lock deletion (indicating that at
+ * least one lock-related property was present), FALSE otherwise
  */
 function ValidationDeleteLock(Property) {
 	let changed = false;
@@ -482,3 +634,35 @@ function ValidationDeleteLock(Property) {
 	}
 	return changed;
 }
+
+/**
+ * A parameter object containing information used to validate and sanitize character appearance update diffs. An
+ * appearance update has a source character (the player that sent the update) and a target character (the character
+ * being updated). What is allowed in an update varies depending on the status of the target character in relation to
+ * the source character (i.e. whether they are the target's lover/owner, or the target themselves, and also whether or
+ * not they have been whitelisted by the target).
+ * @typedef AppearanceUpdateParameters
+ * @type {object}
+ * @property {Character} C - The character whose appearance is being updated
+ * @property {boolean} fromSelf - Whether or not the source player is the same as the target player
+ * @property {boolean} fromOwner - Whether or not the source player has permissions to use owner-only items (i.e. they
+ * are either the target themselves, or the target's owner)
+ * @property {boolean} fromLover - Whether or not the source player has permissions to use lover-only items (i.e. they
+ * are the target themselves, one of the target's lovers, or the target's owner, provided the target's lover rules
+ * permit their owner using lover-only items)
+ * @property {number} sourceMemberNumber - The member number of the source player
+ */
+
+/**
+ * A wrapper object containing the results of a diff resolution. This includes the final item that the diff resolved to
+ * (or null if the diff resulted in no item, for example in the case of item removal), along with a valid flag which
+ * indicates whether or not the diff was fully valid or not.
+ * @typedef AppearanceDiffResolution
+ * @type {object}
+ * @property {Item|null} item - The resulting item after resolution of the item diff, or null if the diff resulted in
+ * no item being equipped in the given group
+ * @property {boolean} valid - Whether or not the diff was fully valid. In most cases, an invalid diff will result in
+ * the whole appearance update being rolled back, but in some cases the change will be accepted, but some properties may
+ * be modified to keep the resulting item valid - in both situations, the valid flag will be returned as false,
+ * indicating that a remedial appearance update should be made by the target player.
+ */
