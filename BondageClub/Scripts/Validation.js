@@ -51,7 +51,9 @@ function ValidationCreateDiffParams(C, sourceMemberNumber) {
  */
 function ValidationResolveAppearanceDiff(previousItem, newItem, params) {
 	let result;
-	if (!previousItem) {
+	if (!previousItem && !newItem) {
+		result = { item: previousItem, valid: true };
+	} else if (!previousItem) {
 		result = ValidationResolveAddDiff(newItem, params);
 	} else if (!newItem) {
 		result = ValidationResolveRemoveDiff(previousItem, params);
