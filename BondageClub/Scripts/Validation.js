@@ -249,15 +249,13 @@ function ValidationCopyLockProperty(sourceProperty, targetProperty, key) {
  * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
  * @returns {boolean} - TRUE if the new item can be equipped based on the appearance update parameters, FALSE otherwise
  */
-function ValidationCanAddItem(newItem, { C, fromSelf, fromOwner, fromLover, sourceMemberNumber }) {
+function ValidationCanAddItem(newItem, params) {
+	const {C, fromSelf, sourceMemberNumber} = params;
+
 	// If the update is coming from ourself, it's always permitted
 	if (fromSelf) return true;
 
 	const asset = newItem.Asset;
-
-	// If changing cosplay items is blocked and we're adding a cosplay item, block it
-	const blockBodyCosplay = C.OnlineSharedSettings && C.OnlineSharedSettings.BlockBodyCosplay;
-	if (blockBodyCosplay && asset.Group.BodyCosplay) return false;
 
 	// If the item is blocked/limited and the source doesn't have the correct permission, prevent it from being added
 	const type = (newItem.Property && newItem.Property.Type) || null;
@@ -265,14 +263,8 @@ function ValidationCanAddItem(newItem, { C, fromSelf, fromOwner, fromLover, sour
 		C, sourceMemberNumber, asset.Group.Name, asset.Name, type);
 	if (blockedOrLimited && OnlineGameAllowBlockItems()) return false;
 
-	// If the item is owner only or locked by an owner only lock, only the owner can add it
-	if (InventoryOwnerOnlyItem(newItem)) return fromOwner;
-
-	// If the item is lover only or locked by a lover only lock, only a lover/owner can add it
-	if (InventoryLoverOnlyItem(newItem)) return fromLover;
-
-	// Otherwise, the item can be added
-	return true;
+	// Fall back to common item add/remove validation
+	return ValidationCanAddOrRemoveItem(newItem, params);
 }
 
 /**
@@ -307,29 +299,46 @@ function ValidationIsItemBlockedOrLimited(C, sourceMemberNumber, groupName, asse
  * `AllowNone: false`.
  * @returns {boolean} - TRUE if the item can be removed based on the appearance update parameters, FALSE otherwise
  */
-function ValidationCanRemoveItem(previousItem, { C, fromSelf, fromOwner, fromLover }, isSwap) {
-	const asset = previousItem.Asset;
-
+function ValidationCanRemoveItem(previousItem, params, isSwap) {
 	// If we're not swapping, and the asset group can't be empty, always block removal
-	if (!asset.Group.AllowNone && !isSwap) return false;
+	if (!previousItem.Asset.Group.AllowNone && !isSwap) return false;
 
 	// If the update is coming from ourself, it's always permitted
-	if (fromSelf) return true;
+	if (params.fromSelf) return true;
 
-	// If changing cosplay items is blocked and we're removing a cosplay item, block it
+	// Fall back to common item add/remove validation
+	return ValidationCanAddOrRemoveItem(previousItem, params);
+}
+
+/**
+ * Determines whether an item can be added or removed from the target character, based on the provided appearance update
+ * parameters.
+ * @param {Item} item - The item to add or remove
+ * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
+ * @return {boolean} - TRUE if the item can be added or removed based on the appearance update parameters, FALSE
+ * otherwise
+ */
+function ValidationCanAddOrRemoveItem(item, { C, fromOwner, fromLover }) {
+	const asset = item.Asset;
+
+	// If the target does not permit full appearance modification, block changing non-clothing appearance items
+	const blockFullWardrobeAccess = !(C.OnlineSharedSettings && C.OnlineSharedSettings.AllowFullWardrobeAccess);
+	if (blockFullWardrobeAccess && asset.Group.Category === "Appearance" && !asset.Group.Clothing) return false;
+
+	// If changing cosplay items is blocked and we're adding/removing a cosplay item, block it
 	const blockBodyCosplay = C.OnlineSharedSettings && C.OnlineSharedSettings.BlockBodyCosplay;
 	if (blockBodyCosplay && asset.Group.BodyCosplay) return false;
 
-	// If the item is owner only or locked by an owner only lock, only the owner can remove it
-	if (InventoryOwnerOnlyItem(previousItem)) return fromOwner;
+	// If the item is owner only or locked by an owner only lock, only the owner can add/remove it
+	if (InventoryOwnerOnlyItem(item)) return fromOwner;
 
-	// If the item is lover only or locked by a lover only lock, only a lover/owner can remove it
-	if (InventoryLoverOnlyItem(previousItem)) return fromLover;
+	// If the item is lover only or locked by a lover only lock, only a lover/owner can add/remove it
+	if (InventoryLoverOnlyItem(item)) return fromLover;
 
-	// If the asset does not have the Enable flag, it can't be removed
+	// If the asset does not have the Enable flag, it can't be added/removed
 	if (!asset.Enable) return false;
 
-	// Otherwise, the item can be removed
+	// Otherwise, the item can be added/removed
 	return true;
 }
 
