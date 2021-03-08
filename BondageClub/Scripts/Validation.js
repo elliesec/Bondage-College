@@ -80,9 +80,7 @@ function ValidationResolveAppearanceDiff(previousItem, newItem, params) {
 function ValidationResolveAddDiff(newItem, params) {
 	const canAdd = ValidationCanAddItem(newItem, params);
 	if (!canAdd) {
-		const { C, sourceMemberNumber } = params;
-		console.warn(
-			`Invalid addition of ${newItem.Asset.Name} to member number ${C.MemberNumber} by member number ${sourceMemberNumber} blocked`);
+		console.warn(`Invalid addition of ${ValidationItemWarningMessage(newItem, params)}`);
 		return { item: null, valid: false };
 	}
 	const itemWithoutProperties = {
@@ -106,9 +104,7 @@ function ValidationResolveAddDiff(newItem, params) {
 function ValidationResolveRemoveDiff(previousItem, params, isSwap) {
 	const canRemove = ValidationCanRemoveItem(previousItem, params, isSwap);
 	if (!canRemove) {
-		const { C, sourceMemberNumber } = params;
-		console.warn(
-			`Invalid removal of ${previousItem.Asset.Name} from member number ${C.MemberNumber} by member number ${sourceMemberNumber} blocked`);
+		console.warn(`Invalid removal of ${ValidationItemWarningMessage(previousItem, params)}`);
 	}
 	return {
 		item: canRemove ? null : previousItem,
@@ -149,39 +145,94 @@ function ValidationResolveSwapDiff(previousItem, newItem, params) {
  * indicating whether or not the change was valid.
  */
 function ValidationResolveModifyDiff(previousItem, newItem, params) {
-	const { C, sourceMemberNumber } = params;
-	const previousLock = InventoryGetLock(previousItem);
-	const newLock = InventoryGetLock(newItem);
+	const { C, fromSelf, sourceMemberNumber } = params;
+
+	// If the update is coming from ourself, it's always permitted
+	if (fromSelf) return { item: newItem, valid: true };
+
+	const asset = previousItem.Asset;
+	const group = asset.Group;
 	const previousProperty = previousItem.Property || {};
 	const newProperty = newItem.Property = newItem.Property || {};
+	const itemBlocked = ValidationIsItemBlockedOrLimited(C, sourceMemberNumber, group.Name, asset.Name) ||
+	                    ValidationIsItemBlockedOrLimited(
+		                    C, sourceMemberNumber, group.Name, asset.Name, newProperty.Type);
+
+	// If the type has changed and the new type is blocked/limited for the source character, prevent modifications
+	if (newProperty.Type !== previousProperty.Type && itemBlocked) {
+		return { item: previousItem, valid: false };
+	}
+
+	let valid = true;
+
+	const previousLock = InventoryGetLock(previousItem);
+	const newLock = InventoryGetLock(newItem);
 
 	const lockSwapped = !!newLock && !!previousLock && newLock.Asset.Name !== previousLock.Asset.Name;
 	const lockModified = !!newLock && !!previousLock && !lockSwapped;
 	const lockRemoved = lockSwapped || (!newLock && !!previousLock);
 	const lockAdded = lockSwapped || (!!newLock && !previousLock);
+	const newLockBlocked = lockAdded && ValidationIsItemBlockedOrLimited(
+		C, sourceMemberNumber, newLock.Asset.Group.Name, newLock.Asset.Name,
+	);
 
 	const lockChangeInvalid = (lockRemoved && !ValidationIsLockChangePermitted(previousLock, params)) ||
-	                          (lockAdded && !ValidationIsLockChangePermitted(newLock, params));
-	let valid = true;
+	                          (lockAdded && !ValidationIsLockChangePermitted(newLock, params)) ||
+	                          (newLockBlocked);
 
 	if (lockChangeInvalid) {
 		// If there was a lock previously, reapply the old lock
 		if (previousLock) {
-			console.warn(
-				`Invalid removal of ${previousLock.Asset.Name} on member number ${C.MemberNumber} by member number ${sourceMemberNumber} blocked`);
+			if (newLockBlocked) {
+				console.warn(`Invalid addition of lock ${ValidationItemWarningMessage(newLock, params)}`);
+			} else {
+				console.warn(`Invalid removal of lock ${ValidationItemWarningMessage(previousLock, params)}`);
+			}
 			InventoryLock(C, newItem, previousLock, previousProperty.LockMemberNumber, false);
 			ValidationCopyLockProperties(previousProperty, newProperty, true);
 			valid = false;
 		} else {
 			// Otherwise, delete any lock
-			console.warn(
-				`Invalid addition of ${newLock.Asset.Name} to member number ${C.MemberNumber} by member number ${sourceMemberNumber} blocked`);
+			console.warn(`Invalid addition of lock ${ValidationItemWarningMessage(newLock, params)}`);
 			valid = valid && !ValidationDeleteLock(newItem.Property);
 		}
 	} else if (lockModified) {
 		// If the lock has been modified, then ensure lock properties don't change (except where they should be able to)
-		const hasLockPermissions = ValidationIsLockChangePermitted(previousLock, params);
+		const hasLockPermissions = ValidationIsLockChangePermitted(previousLock, params) && !newLockBlocked;
 		valid = valid && !ValidationCopyLockProperties(previousProperty, newProperty, hasLockPermissions);
+	}
+
+	// If the source wouldn't usually be able to add the item, ensure that some properties are not modified
+	if (!ValidationCanAddItem(newItem, params)) {
+		const warningSuffix = ValidationItemWarningMessage(previousItem, params);
+		// Block changing the color of non-clothing appearance items/cosplay items if the target does not permit that
+		if (newItem.Color !== previousItem.Color) {
+			console.warn(`Invalid modification of color for item ${warningSuffix}`);
+			newItem.Color = previousItem.Color;
+			valid = false;
+		}
+
+		// Block changing the base difficulty of non-clothing appearance items/cosplay items
+		if (newItem.Difficulty !== previousItem.Difficulty) {
+			console.warn(`Invalid modification of difficulty for item ${warningSuffix}`);
+			newItem.Difficulty = previousItem.Difficulty;
+			valid = false;
+		}
+
+		// Block changing properties, but exclude lock-related properties, as they get handled separately
+		const previousKeys = Object.keys(previousProperty)
+			.filter(key => !ValidationAllLockProperties.includes(key));
+		const newKeys = Object.keys(newProperty).filter(key => !ValidationAllLockProperties.includes(key));
+
+		previousKeys.forEach(key => {
+			valid = valid && !ValidationCopyProperty(previousProperty, newProperty, key);
+		});
+		newKeys.forEach((key) => {
+			if (!previousKeys.includes(key)) {
+				valid = false;
+				delete newProperty[key];
+			}
+		});
 	}
 
 	if (!Object.keys(newProperty).length) delete newItem.Property;
@@ -190,15 +241,33 @@ function ValidationResolveModifyDiff(previousItem, newItem, params) {
 }
 
 /**
+ * Returns a commonly used warning message indicating that an invalid change to an item was made, along with the target
+ * and source characters' member numbers.
+ * @param {Item} item - The item being modified
+ * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
+ * @returns {string} - The warning message
+ */
+function ValidationItemWarningMessage(item, { C, sourceMemberNumber }) {
+	return `${item.Asset.Name} on member number ${C.MemberNumber} by member number ${sourceMemberNumber} blocked`;
+}
+
+/**
  * Determines whether or not a lock can be modified based on the lock object and the provided appearance update
  * parameters.
  * @param {Item} lock - The lock object that is being checked, as returned by {@link InventoryGetLock}
  * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
+ * @param {boolean} remove - Whether the lock change is a removal
  * @returns {boolean} - TRUE if the lock can be modified, FALSE otherwise
  */
-function ValidationIsLockChangePermitted(lock, { fromOwner, fromLover }) {
+function ValidationIsLockChangePermitted(lock, { fromOwner, fromLover }, remove) {
 	if (!lock) return true;
-	return !((lock.Asset.LoverOnly && !fromLover) || (lock.Asset.OwnerOnly && !fromOwner));
+	if (lock.Asset.OwnerOnly && !fromOwner) return false;
+	if (lock.Asset.LoverOnly) {
+		// Owners can always remove lover locks, regardless of lover rules
+		if (remove && fromOwner) return true;
+		else return fromLover;
+	}
+	return true;
 }
 
 /**
@@ -214,13 +283,13 @@ function ValidationIsLockChangePermitted(lock, { fromOwner, fromLover }) {
 function ValidationCopyLockProperties(sourceProperty, targetProperty, hasLockPermissions) {
 	let changed = false;
 	ValidationLockProperties.forEach((key) => {
-		changed = changed || ValidationCopyLockProperty(sourceProperty, targetProperty, key);
+		changed = changed || ValidationCopyProperty(sourceProperty, targetProperty, key);
 	});
 	if (!hasLockPermissions) {
-		changed = changed || ValidationCopyLockProperty(sourceProperty, targetProperty, "EnableRandomInput");
+		changed = changed || ValidationCopyProperty(sourceProperty, targetProperty, "EnableRandomInput");
 		if (!targetProperty.EnableRandomInput) {
 			ValidationTimerLockProperties.forEach((key) => {
-				changed = changed || ValidationCopyLockProperty(sourceProperty, targetProperty, key);
+				changed = changed || ValidationCopyProperty(sourceProperty, targetProperty, key);
 			});
 		}
 	}
@@ -233,9 +302,9 @@ function ValidationCopyLockProperties(sourceProperty, targetProperty, hasLockPer
  * @param {object} targetProperty - The Property object on the modified item
  * @param {string} key - The property key whose value to copy
  * @returns {boolean} - TRUE if the target Property object was modified as a result of copying (indicating that there
- * were invalid changes to the lock), FALSE otherwise
+ * were invalid changes to the property), FALSE otherwise
  */
-function ValidationCopyLockProperty(sourceProperty, targetProperty, key) {
+function ValidationCopyProperty(sourceProperty, targetProperty, key) {
 	if (sourceProperty[key] != null && !CommonDeepEqual(targetProperty[key], sourceProperty[key])) {
 		targetProperty[key] = sourceProperty[key];
 		return true;
@@ -308,6 +377,17 @@ function ValidationCanRemoveItem(previousItem, params, isSwap) {
 	// If the update is coming from ourself, it's always permitted
 	if (params.fromSelf) return true;
 
+	const lock = InventoryGetLock(previousItem);
+
+	// If the previous item has AllowRemoveExclusive, allow owner/lover-only items to be removed if they're not locked
+	if (previousItem.Asset.AllowRemoveExclusive) {
+		if (InventoryOwnerOnlyItem(previousItem) && (!lock || !lock.Asset.OwnerOnly)) return true;
+		else if (InventoryLoverOnlyItem(previousItem) && (!lock || !lock.Asset.LoverOnly)) return true;
+	}
+
+	// Owners can always remove lover locks, regardless of lover rules
+	if (lock && lock.Asset.LoverOnly && params.fromOwner) return true;
+
 	// Fall back to common item add/remove validation
 	return ValidationCanAddOrRemoveItem(previousItem, params);
 }
@@ -329,13 +409,13 @@ function ValidationCanAddOrRemoveItem(item, { C, fromOwner, fromLover }) {
 
 	// If changing cosplay items is blocked and we're adding/removing a cosplay item, block it
 	const blockBodyCosplay = C.OnlineSharedSettings && C.OnlineSharedSettings.BlockBodyCosplay;
-	if (blockBodyCosplay && asset.Group.BodyCosplay) return false;
+	if (blockBodyCosplay && InventoryGetItemProperty(item, "BodyCosplay", true)) return false;
 
-	// If the item is owner only or locked by an owner only lock, only the owner can add/remove it
-	if (InventoryOwnerOnlyItem(item)) return fromOwner;
+	// If the item is owner only, only the owner can add/remove it
+	if (asset.OwnerOnly) return fromOwner;
 
-	// If the item is lover only or locked by a lover only lock, only a lover/owner can add/remove it
-	if (InventoryLoverOnlyItem(item)) return fromLover;
+	// If the item is lover only, only a lover/owner can add/remove it
+	if (asset.LoverOnly) return fromLover;
 
 	// If the asset does not have the Enable flag, it can't be added/removed
 	if (!asset.Enable) return false;

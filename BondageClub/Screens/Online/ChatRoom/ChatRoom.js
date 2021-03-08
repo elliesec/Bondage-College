@@ -2110,7 +2110,7 @@ function ChatRoomSyncItem(data) {
 			// If the update was invalid, send a correction update
 			if (ChatRoomCharacter[C].ID === 0 && !valid) {
 				console.warn(`Invalid appearance update to group ${data.Item.Group}. Updating with sanitized appearance.`);
-				ChatRoomCharacterItemUpdate(ChatRoomCharacter[C], data.Item.Group);
+				ChatRoomCharacterUpdate(ChatRoomCharacter[C]);
 			}
 
 			return;
