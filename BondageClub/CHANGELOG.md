@@ -11,9 +11,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-02-17
+Changelog last updated: 2021-03-09
 
-Last recorded PR: [#2187](https://github.com/Ben987/Bondage-College/pull/2187)
+Last recorded PR: [#2194](https://github.com/Ben987/Bondage-College/pull/2194)
 
 ## [R66]
 
@@ -45,6 +45,7 @@ Last recorded PR: [#2187](https://github.com/Ben987/Bondage-College/pull/2187)
 * Ada - Added a restriction preference to bypass some NPC punishments ([#2175](https://github.com/Ben987/Bondage-College/pull/2175))
 * Nina - Added several enhancements to the notification system, including optional desktop popups ([#2182](https://github.com/Ben987/Bondage-College/pull/2182))
 * Nina - Added an improved view for player hair selection to allow the player to preview hairstyles ([#2185](https://github.com/Ben987/Bondage-College/pull/2185), [#2187](https://github.com/Ben987/Bondage-College/pull/2187))
+* TessaTech - Added an "In front of body" variation of the metal cuffs ([#2194](https://github.com/Ben987/Bondage-College/pull/2194))
 
 ### [Removed]
 
@@ -61,6 +62,7 @@ Last recorded PR: [#2187](https://github.com/Ben987/Bondage-College/pull/2187)
 * Jomshir - Improvements to the chatroom player move interface ([#2047](https://github.com/Ben987/Bondage-College/pull/2047))
 * ZFreak - Changed the neck rope to look slightly looser ([#2155](https://github.com/Ben987/Bondage-College/pull/2155))
 * Ada - Modified the slowdown logic so that the Pencil Skirt no longer slows players down ([#2172](https://github.com/Ben987/Bondage-College/pull/2172))
+* Nina - Changed the wardrobe to remember outfit names when modifying outfits ([#2191](https://github.com/Ben987/Bondage-College/pull/2191))
 
 ### [Fixed]
 
@@ -71,6 +73,9 @@ Last recorded PR: [#2187](https://github.com/Ben987/Bondage-College/pull/2187)
 * Ada - Fixed the input tab order in the password padlock ([#2176](https://github.com/Ben987/Bondage-College/pull/2176))
 * Ada - Fixed some issues with arousal effects whilst in the lockpicking screen ([#2178](https://github.com/Ben987/Bondage-College/pull/2178))
 * Ellie - Fixed an issue with leather armbinder locks appearing in the wrong place under certain circumstances ([#2179](https://github.com/Ben987/Bondage-College/pull/2179))
+* Sekkmer - Fixed an issue with text overlap ([78bc29](https://github.com/Ben987/Bondage-College/commit/78bc293148e33f45f753f9ae647e7c51355b1f23))
+* 4i0 - Fixed a typo in LARP ([#2188](https://github.com/Ben987/Bondage-College/pull/2188))
+* Nina - Fixed an issue where player interaction options in chatrooms would overflow the height of the screen ([#2190](https://github.com/Ben987/Bondage-College/pull/2190))
 
 ### [Technical]
 
