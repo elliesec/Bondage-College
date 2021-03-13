@@ -1002,51 +1002,6 @@ function ChatRoomStimulationMessage(Context) {
  * @returns {void} - Nothing.
  */
 function ChatRoomRun() {
-	
-	// Set the admins of the new room
-	if (Player.ImmersionSettings && ChatRoomData && Player.ImmersionSettings.ReturnToChatRoomAdmin && Player.ImmersionSettings.ReturnToChatRoom && Player.LastChatRoomAdmin && ChatRoomNewRoomToUpdate) {
-		if (Player.LastChatRoomAdmin.indexOf(Player.MemberNumber) < 0 && Player.LastChatRoomPrivate) { // Add the player if they are not an admin
-			Player.LastChatRoomAdmin.push(Player.MemberNumber)
-		}
-		var UpdatedRoom = {
-			Name: Player.LastChatRoom,
-			Description: Player.LastChatRoomDesc,
-			Background: Player.LastChatRoomBG,
-			Limit: "" + Player.LastChatRoomSize,
-			Admin: Player.LastChatRoomAdmin,
-			Ban: ChatRoomData.Ban,
-			BlockCategory: ChatRoomData.BlockCategory,
-			Game: ChatRoomData.Game,
-			Private: Player.LastChatRoomPrivate,
-			Locked: ChatRoomData.Locked
-		};
-		ServerSend("ChatRoomAdmin", { MemberNumber: Player.ID, Room: UpdatedRoom, Action: "Update" });
-		ChatRoomNewRoomToUpdate = null
-	}
-	 
-	var OnlyPersonBlacklisted = ChatRoomCharacter.length > 1;
-	
-	for (let I = 0; I < ChatRoomCharacter.length; I++) {
-		if (ChatRoomCharacter[I].ID != 0 && (Player.BlackList.indexOf(ChatRoomCharacter[I].MemberNumber) < 0 || Player.FriendList.indexOf(ChatRoomCharacter[I].MemberNumber) >= 0 || Player.IsOwnedByMemberNumber(ChatRoomCharacter[I].MemberNumber))) {
-			OnlyPersonBlacklisted = false
-		}
-	}
-	if (!(ChatRoomData && (!Player.BlackList || !OnlyPersonBlacklisted))) {
-		ChatRoomSetLastChatRoom("")
-	}
-	else if (Player.ImmersionSettings 
-		&& (ChatRoomLastName != ChatRoomData.Name || ChatRoomLastBG != ChatRoomData.Background || ChatRoomLastSize != ChatRoomData.Limit || ChatRoomLastPrivate != ChatRoomData.Private || ChatRoomLastDesc != ChatRoomData.Description || ChatRoomLastAdmin != ChatRoomData.Admin)) {
-		ChatRoomLastName = ChatRoomData.Name
-		ChatRoomLastBG = ChatRoomData.Background
-		ChatRoomLastSize = ChatRoomData.Limit
-		ChatRoomLastPrivate = ChatRoomData.Private
-		ChatRoomLastDesc = ChatRoomData.Description
-		ChatRoomLastAdmin = ChatRoomData.Admin
-		
-		ChatRoomSetLastChatRoom(ChatRoomData.Name)
-	}
-	
-
 	// Draws the chat room controls
 	ChatRoomCreateElement();
 	ChatRoomFirstTimeHelp();
@@ -1967,6 +1922,12 @@ function ChatRoomSync(data) {
 		ChatRoomData = data;
 		if (ChatRoomData.Game != null) ChatRoomGame = ChatRoomData.Game;
 
+		// Recreates the chatroom with the stored chatroom data if necessary
+		ChatRoomRecreate();
+
+		// Check whether the player's last chatroom data needs updating
+		ChatRoomCheckForLastChatRoomUpdates();
+
 		// Reloads the online game statuses if needed
 		OnlineGameLoadStatus();
 
@@ -2868,4 +2829,77 @@ function ChatRoomNotificationRaiseChatJoin(C) {
 		else if (settings.Subs && C.IsOwnedByPlayer()) raise = true;
 	}
 	return raise;
+}
+
+/**
+ * Updates the chatroom with the player's stored chatroom data if needed (happens when entering a recreated chatroom for
+ * the first time)
+ * @returns {void} - Nothing
+ */
+function ChatRoomRecreate() {
+	if (Player.ImmersionSettings && Player.ImmersionSettings.ReturnToChatRoomAdmin &&
+	    Player.ImmersionSettings.ReturnToChatRoom && Player.LastChatRoomAdmin && ChatRoomNewRoomToUpdate) {
+		// Add the player if they are not an admin
+		if (!Player.LastChatRoomAdmin.includes(Player.MemberNumber) && Player.LastChatRoomPrivate) {
+			Player.LastChatRoomAdmin.push(Player.MemberNumber);
+		}
+		var UpdatedRoom = {
+			Name: Player.LastChatRoom,
+			Description: Player.LastChatRoomDesc,
+			Background: Player.LastChatRoomBG,
+			Limit: "" + Player.LastChatRoomSize,
+			Admin: Player.LastChatRoomAdmin,
+			Ban: ChatRoomData.Ban,
+			BlockCategory: ChatRoomData.BlockCategory,
+			Game: ChatRoomData.Game,
+			Private: Player.LastChatRoomPrivate,
+			Locked: ChatRoomData.Locked,
+		};
+		ServerSend("ChatRoomAdmin", { MemberNumber: Player.ID, Room: UpdatedRoom, Action: "Update" });
+		ChatRoomNewRoomToUpdate = null;
+	}
+}
+
+/**
+ * Checks whether or not the player's last chatroom data needs updating
+ * @returns {void} - Nothing
+ */
+function ChatRoomCheckForLastChatRoomUpdates() {
+	const Blacklist = Player.Blacklist || [];
+	// Check whether the chatroom contains at least one "safe" character (a friend, owner, or non-blacklisted player)
+	const ContainsSafeCharacters = ChaChatRoomCharacter.some((Char) => {
+		return Char.ID !== 0 && (
+			Player.FriendList.includes(Char.MemberNumber) ||
+			Player.IsOwnedByMemberNumber(Char.MemberNumber) ||
+			!Blacklist.includes(Char.MemberNumber)
+		);
+	});
+
+	if (!ChatRoomData || !ContainsSafeCharacters) {
+		// If the room only contains blacklisted characters, do not save the room data
+		ChatRoomSetLastChatRoom("");
+	} else if (Player.ImmersionSettings && ChatRoomDataChanged()) {
+		// Otherwise save the chatroom data if it has changed
+		ChatRoomLastName = ChatRoomData.Name;
+		ChatRoomLastBG = ChatRoomData.Background;
+		ChatRoomLastSize = ChatRoomData.Limit;
+		ChatRoomLastPrivate = ChatRoomData.Private;
+		ChatRoomLastDesc = ChatRoomData.Description;
+		ChatRoomLastAdmin = ChatRoomData.Admin;
+
+		ChatRoomSetLastChatRoom(ChatRoomData.Name);
+	}
+}
+
+/**
+ * Determines whether or not the current chatroom data differs from the locally stroed chatroom data
+ * @returns {boolean} - TRUE if the stored chatroom data is different from the current chatroom data, FALSE otherwise
+ */
+function ChatRoomDataChanged() {
+	return ChatRoomLastName != ChatRoomData.Name ||
+	       ChatRoomLastBG != ChatRoomData.Background ||
+	       ChatRoomLastSize != ChatRoomData.Limit ||
+	       ChatRoomLastPrivate != ChatRoomData.Private ||
+	       ChatRoomLastDesc != ChatRoomData.Description ||
+	       ChatRoomLastAdmin != ChatRoomData.Admin;
 }
