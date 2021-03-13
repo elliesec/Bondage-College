@@ -82,7 +82,7 @@ Last recorded PR: [#2210](https://github.com/Ben987/Bondage-College/pull/2210)
 * Jomshir - Created a new item saving format to reduce server message sizes ([#2137](https://github.com/Ben987/Bondage-College/pull/2137), [Server #68](https://github.com/Ben987/Bondage-Club-Server/pull/68) [#2138](https://github.com/Ben987/Bondage-College/pull/2138))
 * Technical changes, fixes and improvements:
     * Ellie - [#2119](https://github.com/Ben987/Bondage-College/pull/2119), [#2062](https://github.com/Ben987/Bondage-College/pull/2062)
-    * Nina - [#2061](https://github.com/Ben987/Bondage-College/pull/2137), [#2161](https://github.com/Ben987/Bondage-College/pull/2161), [#2181](https://github.com/Ben987/Bondage-College/pull/2181)
+    * Nina - [#2061](https://github.com/Ben987/Bondage-College/pull/2061), [#2161](https://github.com/Ben987/Bondage-College/pull/2161), [#2181](https://github.com/Ben987/Bondage-College/pull/2181)
     * Jomshir - [#2153](https://github.com/Ben987/Bondage-College/pull/2153), [#2129](https://github.com/Ben987/Bondage-College/pull/2129), [#2162](https://github.com/Ben987/Bondage-College/pull/2162), [Server 70](https://github.com/Ben987/Bondage-Club-Server/pull/70), [Server 71](https://github.com/Ben987/Bondage-Club-Server/pull/71), [#2171](https://github.com/Ben987/Bondage-College/pull/2171), [#2173](https://github.com/Ben987/Bondage-College/pull/2173), [#2180](https://github.com/Ben987/Bondage-College/pull/2180)
 
 ### [Beta Fixes]
