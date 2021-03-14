@@ -2867,7 +2867,7 @@ function ChatRoomRecreate() {
 function ChatRoomCheckForLastChatRoomUpdates() {
 	const Blacklist = Player.Blacklist || [];
 	// Check whether the chatroom contains at least one "safe" character (a friend, owner, or non-blacklisted player)
-	const ContainsSafeCharacters = ChaChatRoomCharacter.some((Char) => {
+	const ContainsSafeCharacters = ChatRoomCharacter.length === 1 || ChatRoomCharacter.some((Char) => {
 		return Char.ID !== 0 && (
 			Player.FriendList.includes(Char.MemberNumber) ||
 			Player.IsOwnedByMemberNumber(Char.MemberNumber) ||
@@ -2901,5 +2901,5 @@ function ChatRoomDataChanged() {
 	       ChatRoomLastSize != ChatRoomData.Limit ||
 	       ChatRoomLastPrivate != ChatRoomData.Private ||
 	       ChatRoomLastDesc != ChatRoomData.Description ||
-	       ChatRoomLastAdmin != ChatRoomData.Admin;
+	       !CommonDeepEqual(ChatRoomLastAdmin, ChatRoomData.Admin);
 }

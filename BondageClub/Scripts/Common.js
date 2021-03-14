@@ -656,3 +656,32 @@ function CommonCompareVersion(Current, Other) {
 	}
 	return 0;
 }
+
+/**
+ * A simple deep equality check function which checks whether two objects are equal. The function traverses recursively
+ * into objects and arrays to check for equality. Primitives and simple types are considered equal as defined by `===`.
+ * @param {*} obj1 - The first object to compare
+ * @param {*} obj2 - The second object to compare
+ * @returns {boolean} - TRUE if both objects are equal, up to arbitrarily deeply nested property values, FALSE
+ * otherwise.
+ */
+function CommonDeepEqual(obj1, obj2) {
+	if (obj1 === obj2) {
+		return true;
+	}
+
+	if (obj1 && obj2 && typeof obj1 === "object" && typeof obj2 === "object") {
+		if (Object.keys(obj1).length !== Object.keys(obj2).length) {
+			return false;
+		} else {
+			for (let key in obj1) {
+				if (!CommonDeepEqual(obj1[key], obj2[key])) {
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+
+	return false;
+}
