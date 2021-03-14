@@ -671,15 +671,12 @@ function CommonDeepEqual(obj1, obj2) {
 	}
 
 	if (obj1 && obj2 && typeof obj1 === "object" && typeof obj2 === "object") {
-		if (Object.keys(obj1).length !== Object.keys(obj2).length) {
+		const keys1 = Object.keys(obj1);
+		const keys2 = Object.keys(obj2);
+		if (keys1.length !== keys2.length) {
 			return false;
 		} else {
-			for (let key in obj1) {
-				if (!CommonDeepEqual(obj1[key], obj2[key])) {
-					return false;
-				}
-			}
-			return true;
+			return keys1.every((key) => CommonDeepEqual(obj1[key], obj2[key]));
 		}
 	}
 

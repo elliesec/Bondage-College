@@ -851,9 +851,21 @@ function ChatRoomSetLastChatRoom(room) {
 		if (ChatRoomData && ChatRoomData.Admin)
 			Player.LastChatRoomAdmin = ChatRoomData.Admin
 
+		ChatRoomLastName = ChatRoomData.Name;
+		ChatRoomLastBG = ChatRoomData.Background;
+		ChatRoomLastSize = ChatRoomData.Limit;
+		ChatRoomLastPrivate = ChatRoomData.Private;
+		ChatRoomLastDesc = ChatRoomData.Description;
+		ChatRoomLastAdmin = ChatRoomData.Admin;
 	} else {
 		Player.LastChatRoomBG = ""
 		Player.LastChatRoomPrivate = false
+		ChatRoomLastName = "";
+		ChatRoomLastBG = "";
+		ChatRoomLastSize = 0;
+		ChatRoomLastPrivate = false;
+		ChatRoomLastDesc = "";
+		ChatRoomLastAdmin = [];
 	}
 	Player.LastChatRoom = room
 	var P = {
@@ -2865,7 +2877,7 @@ function ChatRoomRecreate() {
  * @returns {void} - Nothing
  */
 function ChatRoomCheckForLastChatRoomUpdates() {
-	const Blacklist = Player.Blacklist || [];
+	const Blacklist = Player.BlackList || [];
 	// Check whether the chatroom contains at least one "safe" character (a friend, owner, or non-blacklisted player)
 	const ContainsSafeCharacters = ChatRoomCharacter.length === 1 || ChatRoomCharacter.some((Char) => {
 		return Char.ID !== 0 && (
@@ -2880,13 +2892,6 @@ function ChatRoomCheckForLastChatRoomUpdates() {
 		ChatRoomSetLastChatRoom("");
 	} else if (Player.ImmersionSettings && ChatRoomDataChanged()) {
 		// Otherwise save the chatroom data if it has changed
-		ChatRoomLastName = ChatRoomData.Name;
-		ChatRoomLastBG = ChatRoomData.Background;
-		ChatRoomLastSize = ChatRoomData.Limit;
-		ChatRoomLastPrivate = ChatRoomData.Private;
-		ChatRoomLastDesc = ChatRoomData.Description;
-		ChatRoomLastAdmin = ChatRoomData.Admin;
-
 		ChatRoomSetLastChatRoom(ChatRoomData.Name);
 	}
 }
