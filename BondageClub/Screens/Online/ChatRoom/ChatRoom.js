@@ -2906,5 +2906,5 @@ function ChatRoomDataChanged() {
 	       ChatRoomLastSize != ChatRoomData.Limit ||
 	       ChatRoomLastPrivate != ChatRoomData.Private ||
 	       ChatRoomLastDesc != ChatRoomData.Description ||
-	       !CommonDeepEqual(ChatRoomLastAdmin, ChatRoomData.Admin);
+	       !CommonArraysEqual(ChatRoomLastAdmin, ChatRoomData.Admin);
 }
