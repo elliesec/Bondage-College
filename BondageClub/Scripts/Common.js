@@ -671,16 +671,31 @@ function CommonDeepEqual(obj1, obj2) {
 	}
 
 	if (obj1 && obj2 && typeof obj1 === "object" && typeof obj2 === "object") {
-		if (Object.keys(obj1).length !== Object.keys(obj2).length) {
+		// If the objects do not share a prototype, they are not equal
+		if (Object.getPrototypeOf(obj1) !== Object.getPrototypeOf(obj2)) {
 			return false;
-		} else {
-			for (let key in obj1) {
-				if (!CommonDeepEqual(obj1[key], obj2[key])) {
-					return false;
-				}
-			}
-			return true;
 		}
+
+		// Get the keys for the objects
+		const keys1 = Object.keys(obj1);
+		const keys2 = Object.keys(obj2);
+
+		// If the objects have different numbers of keys, they are not equal
+		if (keys1.length !== keys2.length) {
+			return false;
+		}
+
+		// Sort the keys
+		keys1.sort();
+		keys2.sort();
+		return keys1.every((key, i) => {
+			// If the keys are different, the objects are not equal
+			if (key !== keys2[i]) {
+				return false;
+			}
+			// Otherwise, compare the values
+			return CommonDeepEqual(obj1[key], obj2[key]);
+		});
 	}
 
 	return false;
