@@ -10,7 +10,7 @@ const InventoryItemLegsFuturisticLegCuffsOptions = [
 		Property: {
 			Type: "Closed",
 			SetPose: ["LegsClosed"],
-			Effect: ["Prone", "KneelFreeze"],
+			Effect: ["Prone", "KneelFreeze", "Slow"],
 			FreezeActivePose: ["BodyLower"],
 			Difficulty: 6,
 		},
