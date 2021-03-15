@@ -112,6 +112,7 @@ Last recorded PR: [#2228](https://github.com/Ben987/Bondage-College/pull/2228)
 * Nina - Fixed an issue where the VR Headset's custom backgrounds would not be dimmed when the player's eyes were close ([#2224](https://github.com/Ben987/Bondage-College/pull/2224))
 * Nina - Fixed an issue where suspension items would allow the player to kneel ([#2225](https://github.com/Ben987/Bondage-College/pull/2225))
 * Nina - Fixed an issue with the bondage chess minigame where the player's clothes were being removed and items were being added when they shouldn't ([#2226](https://github.com/Ben987/Bondage-College/pull/2226))
+* Nina - Fixed an issue with the chess minigame where players could move a piece during their opponent's turn, causing the game to crash ([#2230](https://github.com/Ben987/Bondage-College/pull/2230))
 
 ## [R65]
 
