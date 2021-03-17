@@ -989,6 +989,7 @@ ItemMouth,RegressedMilk,Nursery Milk
 ItemMouth,PrisonLockdownGag,Prison Lockdown Gag
 ItemMouth,ShoeGag,Shoe Gag
 ItemMouth,FunnelGag,Funnel Gag
+ItemMouth,VetWrap,Vet Wrap
 ItemMouth2,,Mouth
 ItemMouth2,ClothGag,Cloth Gag
 ItemMouth2,WiffleGag,Wiffle Ball Gag
@@ -1030,6 +1031,7 @@ ItemMouth2,MedicalMask,Medical Mask
 ItemMouth2,RegressedMilk,Nursery Milk
 ItemMouth2,PrisonLockdownGag,Prison Lockdown Gag
 ItemMouth2,ShoeGag,Shoe Gag
+ItemMouth2,VetWrap,Vet Wrap
 ItemMouth3,,Mouth
 ItemMouth3,ClothGag,Cloth Gag
 ItemMouth3,WiffleGag,Wiffle Ball Gag
@@ -1073,6 +1075,7 @@ ItemMouth3,RegressedMilk,Nursery Milk
 ItemMouth3,PrisonLockdownGag,Prison Lockdown Gag
 ItemMouth3,ShoeGag,Shoe Gag
 ItemMouth3,CageMuzzle,Iron Cage Muzzle
+ItemMouth3,VetWrap,Vet Wrap
 ItemHead,,Eyes
 ItemHead,ClothBlindfold,Cloth Blindfold
 ItemHead,LeatherBlindfold,Leather Blindfold
@@ -1096,6 +1099,7 @@ ItemHead,SleepMask,Smooth Sleep Mask
 ItemHead,PrisonLockdownBlindfold,Prison Lockdown Blindfold
 ItemHead,Pantyhose,Pantyhose
 ItemHead,Snorkel,Snorkel
+ItemHead,VetWrap,Vet Wrap
 ItemNose,,Nose
 ItemNose,NoseHook,Nose Hook
 ItemNose,NoseRing,Nose Ring

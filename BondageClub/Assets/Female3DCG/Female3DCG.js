@@ -2359,6 +2359,9 @@ var AssetFemale3DCG = [
 					{ Name: "StrapsLegs", CopyLayerColor: "Straps", ParentGroup: "BodyLower", AllowTypes: ["ShortsAndStraps"], HasType: false, HideForPose: ["Horse", "KneelingSpread", "Spread"] },
 				],
 			},
+			{
+				Name: "VetWrap", Value: 80, BuyGroup: "VetWrap",
+			},
 			AssetSpankingToys
 		],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"],
@@ -3032,6 +3035,7 @@ var AssetFemale3DCG = [
 					{ Name: "Funnel", Priority: 55, AllowColorize: false, AllowTypes: ["Funnel"] }
 				]
 			},
+			{ Name: "VetWrap", Value: 80, Difficulty: 5, Top: 180, Time: 5, RemoveTime: 10, DefaultColor: "#202f4f", BuyGroup: "VetWrap", Prerequisite: "GagFlat", Effect: ["BlockMouth", "GagEasy"] },
 			AssetSpankingToys
 		],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"]
@@ -3249,6 +3253,7 @@ var AssetFemale3DCG = [
 					{ Name: "Strap" },
 				]
 			},
+			{ Name: "VetWrap", Value: -1, Difficulty: 5, Top: 180, Time: 5, RemoveTime: 10, DefaultColor: "#202f4f", BuyGroup: "VetWrap", Prerequisite: "GagFlat", Effect: ["BlockMouth", "GagEasy"], Block: ["ItemMouth"], DynamicGroupName: "ItemMouth" },
 	],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"]
 	},
@@ -3471,6 +3476,7 @@ var AssetFemale3DCG = [
 					{ Name: "Muzzle" },
 				]
 			},
+			{ Name: "VetWrap", Value: -1, Difficulty: 5, Top: 180, Time: 5, RemoveTime: 10, DefaultColor: "#202f4f", BuyGroup: "VetWrap", Prerequisite: "GagFlat", Effect: ["BlockMouth", "GagEasy"], Block: ["ItemMouth", "ItemMouth2"], DynamicGroupName: "ItemMouth" },
 		],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"]
 	},
@@ -3525,6 +3531,7 @@ var AssetFemale3DCG = [
 					{ Name: "Tube", Priority: 56, AllowColorize: true },
 				]
 			},
+			{ Name: "VetWrap", Value: 80, Difficulty: 6, Time: 5, RemoveTime: 10, DefaultColor: ["#202f4f"], BuyGroup: "VetWrap", Hide: ["Glasses"], Effect: ["BlindNormal", "Prone"] },
 			AssetSpankingToys
 		],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"]
@@ -3652,7 +3659,7 @@ var AssetFemale3DCG = [
 			{ Name: "OpenFaceHood", Fetish: ["Latex"], Value: 35, Priority: 40, Difficulty: 5, Time: 15, AllowLock: false, DefaultColor: "#404040", BuyGroup: "OpenFace", Block: ["ItemEars"], Hide: ["HairFront", "HairBack", "Ears"] },
 			{ Name: "GwenHood", Fetish: ["Leather"], Value: 35, Difficulty: 5, Time: 15, AllowLock: true, DefaultColor: "#404040", Hide: ["HairFront", "Ears",], Block: ["ItemMouth", "ItemMouth2", "ItemMouth3", "ItemEars"], Extended: true, AllowType: ["HairOutAccIn", "HairInAccIn", "HairInAccOut"], Alpha: [{ Group: ["ItemMouth", "ItemMouth2", "ItemMouth3"], Masks: [[0, 185, 400, 400]] }], HasType: false },
 			{
-				Name: "VetWrap", Fetish: ["Tape"], Value: 0, Difficulty: 25, Time: 15, RemoveTime: 30, DefaultColor: ["#202f4f"], BuyGroup: "VetWrap",
+				Name: "VetWrap", Fetish: ["Tape"], Value: 80, Difficulty: 25, Time: 15, RemoveTime: 30, DefaultColor: ["#202f4f"], BuyGroup: "VetWrap",
 				Hide: ["ItemMouth", "ItemMouth2", "ItemMouth3", "HairFront", "HairBack", "Glasses", "Mask", "ItemEars"],
 				Block: ["ItemMouth", "ItemMouth2", "ItemMouth3", "ItemEars", "ItemNose", "ItemHead"],
 				Effect: ["Prone", "BlindHeavy", "GagNormal", "BlockMouth"],
