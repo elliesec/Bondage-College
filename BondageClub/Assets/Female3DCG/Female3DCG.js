@@ -2360,7 +2360,7 @@ var AssetFemale3DCG = [
 				],
 			},
 			{
-				Top: 0, Left: 0, Name: "VetWrap", Fetish: ["Tape"], Value: 80, SelfBondage: 5, Time: 15, RemoveTime: 20, BuyGroup: "VetWrap", DefaultColor: ["#202f4f"], SetPose: ["BackElbowTouch"], Extended: true,
+				Name: "VetWrap", Fetish: ["Tape"], Value: 80, SelfBondage: 5, Time: 15, RemoveTime: 20, Top: 150, Left: 50, BuyGroup: "VetWrap", DefaultColor: ["#202f4f"], SetPose: ["BackElbowTouch"], Extended: true,
 				Effect: ["Block", "Prone"],
 				Block: ["ItemHands"],
 				AllowType: ["Armbinder", "Pet", "Strait", "Crawler"],
