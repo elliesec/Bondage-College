@@ -28,8 +28,19 @@ const InventoryItemArmsVetWrapOptions = [
 		Property: {
 			Type: "Strait",
 			Difficulty: 2,
-		}
-	}
+		},
+	},
+	{
+		Name: "Crawler",
+		SelfBondageLevel: 7,
+		Property: {
+			Type: "Crawler",
+			Difficulty: 3,
+			SetPose: ["AllFours"],
+			Block: ["ItemLegs", "ItemFeets", "ItemBoots", "ItemDevices"],
+			Effect: ["Block", "Prone", "ForceKneel"],
+		},
+	},
 ];
 
 function InventoryItemArmsVetWrapLoad() {

@@ -2362,7 +2362,9 @@ var AssetFemale3DCG = [
 			{
 				Name: "VetWrap", Fetish: ["Tape"], Value: 80, SelfBondage: 5, Time: 15, RemoveTime: 20, Top: 150, Left: 50, BuyGroup: "VetWrap", DefaultColor: ["#202f4f"], SetPose: ["BackElbowTouch"], Extended: true,
 				Effect: ["Block", "Prone"],
+				AllowEffect: ["Block", "Prone", "ForceKneel"],
 				Block: ["ItemHands"],
+				AllowBlock: ["ItemLegs", "ItemFeets", "ItemBoots", "ItemDevices"],
 				AllowType: ["Armbinder", "Pet", "Strait", "Crawler"],
 			},
 			AssetSpankingToys
