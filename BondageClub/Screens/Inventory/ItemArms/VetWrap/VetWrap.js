@@ -48,7 +48,7 @@ function InventoryItemArmsVetWrapLoad() {
 }
 
 function InventoryItemArmsVetWrapDraw() {
-	ExtendedItemDraw(InventoryItemArmsVetWrapOptions, "VetWrapType");
+	ExtendedItemDraw(InventoryItemArmsVetWrapOptions, "ItemArmsVetWrapType");
 }
 
 function InventoryItemArmsVetWrapClick() {
@@ -56,7 +56,7 @@ function InventoryItemArmsVetWrapClick() {
 }
 
 function InventoryItemArmsVetWrapPublishAction(C, Option) {
-	const msg = "VetWrapSet" + Option.Name;
+	const msg = "ItemArmsVetWrapSet" + Option.Name;
 	const dictionary = [
 		{ Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber },
 		{ Tag: "TargetCharacter", Text: C.Name, MemberNumber: C.MemberNumber },

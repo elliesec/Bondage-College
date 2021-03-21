@@ -1431,6 +1431,17 @@ var AssetFemale3DCG = [
 					{ Name: "Straps", Priority: 26 },
 				],
 			},
+			{
+				Name: "VetWrap", Fetish: ["Tape"], Value: 80, Time: 10, RemoveTime: 15, BuyGroup: "VetWrap", DefaultColor: ["#202f4f"], SetPose: ["LegsClosed"], Extended: true,
+				Effect: ["Prone", "Freeze"],
+				Block: ["ItemFeet", "ItemBoots"],
+				AllowBlock: ["ItemFeet", "ItemBoots", "ItemVulva", "ItemButt", "ItemVulvaPiercings", "ItemPelvis"],
+				Hide: ["ClothLower", "Socks", "Shoes", "SuitLower", "RightAnklet", "LeftAnklet"],
+				HideItemExclude: ["ClothLowerAdmiralSkirt", "ClothLowerWaspie1", "ClothLowerChineseSkirt1", "ClothLowerGown2Skirt", "ClothLowerJeanSkirt", "ClothLowerLatexSkirt1", "ClothLowerLatexSkirt2", "ClothLowerLongSkirt1", "ClothLowerClothSkirt1", "ClothLowerPleatedSkirt", "ClothLowerPencilSkirt", "ClothLowerWaspie2", "ClothLowerWaspie3", "ClothLowerSkirt1", "ClothLowerSkirt2", "ClothLowerSkirt3", "ClothLowerTennisSkirt1", "SocksPantyhose1", "SocksPantyhose2", "SuitLowerPantyhose1", "SuitLowerPantyhose2"],
+				AllowType: ["Cover"],
+				AllowActivePose: ["Kneel"],
+				AllowActivityOn: ["ItemPelvis", "ItemFeet", "ItemBoots"],
+			},
 			AssetSpankingToys
 		],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"]
@@ -2366,6 +2377,7 @@ var AssetFemale3DCG = [
 				Block: ["ItemHands"],
 				AllowBlock: ["ItemLegs", "ItemFeets", "ItemBoots", "ItemDevices"],
 				AllowType: ["Armbinder", "Pet", "Strait", "Crawler"],
+				Hide: ["Cloth"],
 			},
 			AssetSpankingToys
 		],
