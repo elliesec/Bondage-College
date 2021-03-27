@@ -314,10 +314,9 @@ function ServerAppearanceLoadFromBundle(C, AssetFamily, Bundle, SourceMemberNumb
 		console.warn("Invalid appearance update bundle received. Updating with sanitized appearance.");
 		ChatRoomCharacterUpdate(C);
 	}
-	return appearance;
+	return { appearance, updateValid };
 }
 
-// TODO: JSDoc for all this stuff
 function ServerBuildAppearanceDiff(assetFamily, appearance, bundle) {
 	const diffMap = {};
 	appearance.forEach((item) => {
