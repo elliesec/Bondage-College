@@ -26,7 +26,7 @@ const ExtendedArchetype = {
  * An object containing all extended item configurations.
  * @const {ExtendedItemConfig}
  */
-const AssetFemale3DCGExtended = {
+var AssetFemale3DCGExtended = {
 	ItemArms: {
 		HighSecurityStraitJacket: {
 			Archetype: ExtendedArchetype.MODULAR,
