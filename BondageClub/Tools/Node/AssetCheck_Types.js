@@ -169,6 +169,7 @@ const AssetExtendedConfigType = {
 	Options: "Maybe [{Name: String, Property: Object}]", // Typed items
 	ChatSetting: "Maybe String",
 	Dialog: "Maybe Object",
+	ChatTags: "Maybe [String]",
 };
 
 module.exports = { AssetGroupType, AssetType, AssetLayerType, AssetExtendedArchetypeType, AssetExtendedConfigType };
