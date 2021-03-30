@@ -55,6 +55,7 @@ function TypedItemRegister(asset, config) {
 	TypedItemCreateClickFunction(data);
 	TypedItemCreatePublishFunction(data);
 	TypedItemCreateNpcDialogFunction(data);
+	TypedItemGenerateAllowType(data);
 }
 
 /**
@@ -148,6 +149,17 @@ function TypedItemCreateNpcDialogFunction({ asset, functionPrefix, dialog }) {
 	window[npcDialogFunctionName] = function (C, option) {
 		C.CurrentDialog = DialogFind(C, `${dialog.npcPrefix}${option.Name}`, asset.Group.Name);
 	};
+}
+
+/**
+ * Generates an asset's AllowType property based on its typed item data.
+ * @param {TypedItemData} data - The typed item's data
+ * @returns {void} - Nothing
+ */
+function TypedItemGenerateAllowType({ asset, options }) {
+	asset.AllowType = options
+		.map((option) => option.Property.Type)
+		.filter(Boolean);
 }
 
 /**

@@ -7,7 +7,7 @@
  * `Female3DCG.js` and which have an extended item definition here will have their load/draw/click functions
  * _automatically_ created when assets are loaded, saving the need for an individual extended item script.
  *
- * Currently, only modular items are supported, but this will expand in the future.
+ * Currently, modular and typed items are supported, and this is likely to expand in the future.
  */
 
 /**
