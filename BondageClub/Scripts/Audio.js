@@ -92,11 +92,11 @@ var AudioActions = [
 		Sound: "Shocks"
 	},
 	{
-		IsAction: (data) => ["FuturisticChastityBeltSetClosedBack", "FuturisticChastityBeltSetOpenBack", "InventoryItemBreastFuturisticBraSet", "FuturisticHeelsSet", "FuturisticArmbinderSet", "FuturisticCuffsRestrain", "FuturisticLegCuffsRestrain", "FuturisticAnkleCuffsRestrain"].find(A => data.Content.includes(A)),
+		IsAction: (data) => ["FuturisticChastityBeltSetClosedBack", "FuturisticChastityBeltSetOpenBack", "InventoryItemBreastFuturisticBraSet", "FuturisticHeelsSet", "FuturisticArmbinderSet", "FuturisticCuffsRestrain", "FuturisticLegCuffsRestrain", "FuturisticAnkleCuffsRestrain", "SciFiPleasurePantiesAction"].find(A => data.Content.includes(A)),
 		Sound: "SciFiConfigure"
 	},
 	{
-		IsAction: (data) => ["FuturisticChastityBeltSetPunish", "FuturisticPanelGagMouthSetAutoPunish", ].find(A => data.Content.includes(A)),
+		IsAction: (data) => ["FuturisticChastityBeltSetPunish", "FuturisticPanelGagMouthSetAutoPunish", "SciFiPleasurePantiesBeep"].find(A => data.Content.includes(A)),
 		GetAudioInfo: AudioSciFiBeepSounds
 	},	
 	{
@@ -108,7 +108,7 @@ var AudioActions = [
 		Sound: "Deflation"
 	},
 	{
-		IsAction: (data) => ["CollarShockUnitTrigger", "ShockCollarTrigger", "LoveChastityBeltShockTrigger", "TriggerShock"].find(A => data.Content.includes(A)),
+		IsAction: (data) => ["CollarShockUnitTrigger", "ShockCollarTrigger", "LoveChastityBeltShockTrigger", "SciFiPleasurePantiesShockTrigger", "TriggerShock", "CollarAutoShockUnitTrigger"].find(A => data.Content.includes(A)),
 		GetAudioInfo: (data) => InventoryItemNeckAccessoriesCollarShockUnitDynamicAudio(data)
 	},
 	{
@@ -124,10 +124,13 @@ var AudioActions = [
  * @returns {void} - Nothing
  */
 function AudioPlayInstantSound(src, volume) {
-	var audio = new Audio();
-	audio.src = src;
-	audio.volume = Math.max(0, Math.min(volume, 1));
-	audio.play();
+	const vol = volume != null ? volume : Player.AudioSettings.Volume;
+	if (vol > 0) {
+		var audio = new Audio();
+		audio.src = src;
+		audio.volume = Math.min(vol, 1);
+		audio.play();
+	}
 }
 
 /**
@@ -246,6 +249,7 @@ function AudioVibratorSounds(data) {
 		case "ClitStimulator":
 		case "Egg": Sound = "VibrationShort"; break;
 		case "LoveChastityBeltVibe":
+		case "SciFiPleasurePantiesVibe":
 		case "Belt":
 		case "Panties": Sound = "VibrationLong1"; break;
 		case "Buttplug":

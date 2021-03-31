@@ -222,6 +222,49 @@ function PreferenceInit(C) {
 	if (!Array.isArray(C.ArousalSettings.Activity)) C.ArousalSettings.Activity = [];
 	if (!Array.isArray(C.ArousalSettings.Zone)) C.ArousalSettings.Zone = [];
 	if (!Array.isArray(C.ArousalSettings.Fetish)) C.ArousalSettings.Fetish = [];
+
+	// Validates the player preference, they must match with the assets activities & zones, default factor is 2 (normal love)
+	if (Player.AssetFamily == "Female3DCG") {
+
+		// Validates the activities
+		for (let A = 0; A < ActivityFemale3DCG.length; A++) {
+			let Found = false;
+			for (let P = 0; P < C.ArousalSettings.Activity.length; P++)
+				if ((C.ArousalSettings.Activity[P] != null) && (C.ArousalSettings.Activity[P].Name != null) && (ActivityFemale3DCG[A].Name == C.ArousalSettings.Activity[P].Name)) {
+					Found = true;
+					if ((C.ArousalSettings.Activity[P].Self == null) || (typeof C.ArousalSettings.Activity[P].Self !== "number") || (C.ArousalSettings.Activity[P].Self < 0) || (C.ArousalSettings.Activity[P].Self > 4)) C.ArousalSettings.Activity[P].Self = 2;
+					if ((C.ArousalSettings.Activity[P].Other == null) || (typeof C.ArousalSettings.Activity[P].Other !== "number") || (C.ArousalSettings.Activity[P].Other < 0) || (C.ArousalSettings.Activity[P].Other > 4)) C.ArousalSettings.Activity[P].Other = 2;
+				}
+			if (!Found) C.ArousalSettings.Activity.push({ Name: ActivityFemale3DCG[A].Name, Self: 2, Other: 2 });
+		}
+
+		// Validates the fetishes
+		for (let A = 0; A < FetishFemale3DCG.length; A++) {
+			let Found = false;
+			for (let F = 0; F < C.ArousalSettings.Fetish.length; F++)
+				if ((C.ArousalSettings.Fetish[F] != null) && (C.ArousalSettings.Fetish[F].Name != null) && (FetishFemale3DCG[A].Name == C.ArousalSettings.Fetish[F].Name)) {
+					Found = true;
+					if ((C.ArousalSettings.Fetish[F].Factor == null) || (typeof C.ArousalSettings.Fetish[F].Factor !== "number") || (C.ArousalSettings.Fetish[F].Factor < 0) || (C.ArousalSettings.Fetish[F].Factor > 4)) C.ArousalSettings.Fetish[F].Factor = 2;
+				}
+			if (!Found) C.ArousalSettings.Fetish.push({ Name: FetishFemale3DCG[A].Name, Factor: 2 });
+		}
+
+		// Validates the zones
+		for (let A = 0; A < AssetGroup.length; A++)
+			if ((AssetGroup[A].Zone != null) && (AssetGroup[A].Activity != null)) {
+				let Found = false;
+				for (let Z = 0; Z < C.ArousalSettings.Zone.length; Z++)
+					if ((C.ArousalSettings.Zone[Z] != null) && (C.ArousalSettings.Zone[Z].Name != null) && (AssetGroup[A].Name == C.ArousalSettings.Zone[Z].Name)) {
+						Found = true;
+						if ((C.ArousalSettings.Zone[Z].Factor == null) || (typeof C.ArousalSettings.Zone[Z].Factor !== "number") || (C.ArousalSettings.Zone[Z].Factor < 0) || (C.ArousalSettings.Zone[Z].Factor > 4)) C.ArousalSettings.Zone[Z].Factor = 2;
+					}
+				if (!Found) {
+					C.ArousalSettings.Zone.push({ Name: AssetGroup[A].Name, Factor: 2 });
+					if (AssetGroup[A].Name == "ItemVulva") PreferenceSetZoneOrgasm(C, "ItemVulva", true);
+				}
+			}
+
+	}
 }
 
 /**
@@ -273,6 +316,7 @@ function PreferenceInitPlayer() {
 	if (typeof C.AudioSettings.PlayBeeps !== "boolean") C.AudioSettings.PlayBeeps = false;
 	if (typeof C.AudioSettings.PlayItem !== "boolean") C.AudioSettings.PlayItem = false;
 	if (typeof C.AudioSettings.PlayItemPlayerOnly !== "boolean") C.AudioSettings.PlayItemPlayerOnly = false;
+	if (typeof C.AudioSettings.Notifications !== "boolean") C.AudioSettings.Notifications = false;
 
 	// Controller settings
 	if (!C.ControllerSettings) C.ControllerSettings = {};
@@ -340,6 +384,7 @@ function PreferenceInitPlayer() {
 	if (!C.RestrictionSettings) C.RestrictionSettings = {};
 	if (typeof C.RestrictionSettings.BypassStruggle !== "boolean") C.RestrictionSettings.BypassStruggle = false;
 	if (typeof C.RestrictionSettings.SlowImmunity !== "boolean") C.RestrictionSettings.SlowImmunity = false;
+	if (typeof C.RestrictionSettings.BypassNPCPunishments !== "boolean") C.RestrictionSettings.BypassNPCPunishments = false;
 
 	// Online settings
 	if (!C.OnlineSettings) C.OnlineSettings = {};
@@ -357,6 +402,12 @@ function PreferenceInitPlayer() {
 	if (typeof C.OnlineSharedSettings.BlockBodyCosplay !== "boolean") C.OnlineSharedSettings.BlockBodyCosplay = false;
 	if (typeof C.OnlineSharedSettings.AllowPlayerLeashing !== "boolean") C.OnlineSharedSettings.AllowPlayerLeashing = true;
 	if (typeof C.OnlineSharedSettings.DisablePickingLocksOnSelf !== "boolean") C.OnlineSharedSettings.DisablePickingLocksOnSelf = false;
+	if (C.OnlineSharedSettings.GameVersion !== GameVersion) {
+		if (CommonCompareVersion(GameVersion, C.OnlineSharedSettings.GameVersion) < 0) {
+			CommonVersionUpdated = true;
+		}
+		C.OnlineSharedSettings.GameVersion = GameVersion;
+	}
 
 	// Graphical settings
 	if (!C.GraphicsSettings) C.GraphicsSettings = {}
@@ -365,23 +416,37 @@ function PreferenceInitPlayer() {
 	if (typeof C.GraphicsSettings.StimulationFlashes !== "boolean") C.GraphicsSettings.StimulationFlashes = true;
 
 	// Notification settings
-	if (!C.NotificationSettings) C.NotificationSettings = {};
-	if (typeof C.NotificationSettings.Audio !== "boolean") C.NotificationSettings.Audio = false;
-	if (typeof C.NotificationSettings.Beeps !== "boolean") C.NotificationSettings.Beeps = true;
-	if (typeof C.NotificationSettings.Chat !== "boolean") C.NotificationSettings.Chat = true;
-	if (typeof C.NotificationSettings.ChatActions !== "boolean") C.NotificationSettings.ChatActions = false;
-	if (C.NotificationSettings.ChatJoin == undefined) C.NotificationSettings.ChatJoin = {};
-	if (typeof C.NotificationSettings.ChatJoin.Enabled !== "boolean") C.NotificationSettings.ChatJoin.Enabled = false;
-	if (typeof C.NotificationSettings.ChatJoin.Owner !== "boolean") C.NotificationSettings.ChatJoin.Owner = false;
-	if (typeof C.NotificationSettings.ChatJoin.Lovers !== "boolean") C.NotificationSettings.ChatJoin.Lovers = false;
-	if (typeof C.NotificationSettings.ChatJoin.Friendlist !== "boolean") C.NotificationSettings.ChatJoin.Friendlist = false;
-	
+	let NS = C.NotificationSettings;
+	if (!NS) NS = {};
+	const defaultAudio = typeof NS.Audio === "boolean" && NS.Audio ? NotificationAudioType.FIRST : NotificationAudioType.NONE;
+	if (typeof NS.Beeps !== "object") NS.Beeps = PreferenceInitNotificationSetting(NS.Beeps, defaultAudio, NotificationAlertType.POPUP);
+	if (typeof NS.Chat !== "undefined") { NS.ChatMessage = NS.Chat; delete NS.Chat; }
+	if (typeof NS.ChatMessage !== "object") NS.ChatMessage = PreferenceInitNotificationSetting(NS.ChatMessage, defaultAudio);
+	if (typeof NS.ChatMessage.IncludeActions !== "boolean") NS.ChatMessage.IncludeActions = false;
+	if (typeof NS.ChatActions !== undefined) delete NS.ChatActions;
+	if (typeof NS.ChatJoin !== "object") NS.ChatJoin = PreferenceInitNotificationSetting(NS.ChatJoin, defaultAudio);
+	if (NS.ChatJoin.Enabled !== undefined) {
+		NS.ChatJoin.AlertType = NS.ChatJoin.Enabled ? NotificationAlertType.TITLEPREFIX : NotificationAlertType.NONE;
+		NS.ChatJoin.Audio = NotificationAudioType.NONE;
+		delete NS.ChatJoin.Enabled;
+	}
+	if (typeof NS.ChatJoin.Owner !== "boolean") NS.ChatJoin.Owner = false;
+	if (typeof NS.ChatJoin.Lovers !== "boolean") NS.ChatJoin.Lovers = false;
+	if (typeof NS.ChatJoin.Friendlist !== "boolean") NS.ChatJoin.Friendlist = false;
+	if (typeof NS.ChatJoin.Subs !== "boolean") NS.ChatJoin.Subs = false;
+	if (typeof NS.Audio !== undefined) delete NS.Audio;
+	if (typeof NS.Disconnect !== "object") NS.Disconnect = PreferenceInitNotificationSetting(NS.Disconnect, defaultAudio);
+	if (typeof NS.Larp !== "object") NS.Larp = PreferenceInitNotificationSetting(NS.Larp, defaultAudio, NotificationEventType.NONE);
+	if (typeof NS.Test !== "object") NS.Test = PreferenceInitNotificationSetting(NS.Test, defaultAudio, NotificationAlertType.TITLEPREFIX);
+	C.NotificationSettings = NS;
+
 	// Forces some preferences depending on difficulty
 
 	// Difficulty: non-Roleplay settings
 	if (C.GetDifficulty() >= 1) {
 		C.RestrictionSettings.BypassStruggle = false;
 		C.RestrictionSettings.SlowImmunity = false;
+		C.RestrictionSettings.BypassNPCPunishments = false;
 	}
 
 	// Difficulty: Hardcore settings
@@ -389,7 +454,6 @@ function PreferenceInitPlayer() {
 		C.GameplaySettings.EnableSafeword = false;
 		C.GameplaySettings.DisableAutoMaid = true;
 		C.GameplaySettings.OfflineLockedRestrained = true;
-		C.OnlineSharedSettings.DisablePickingLocksOnSelf = true;
 	}
 
 	// Difficulty: Extreme settings
@@ -406,50 +470,7 @@ function PreferenceInitPlayer() {
 		C.ImmersionSettings.SenseDepMessages = true;
 		C.OnlineSharedSettings.AllowPlayerLeashing = true;
 	}
-
-	// Validates the player preference, they must match with the assets activities & zones, default factor is 2 (normal love)
-	if (Player.AssetFamily == "Female3DCG") {
-
-		// Validates the activities
-		for (let A = 0; A < ActivityFemale3DCG.length; A++) {
-			let Found = false;
-			for (let P = 0; P < C.ArousalSettings.Activity.length; P++)
-				if ((C.ArousalSettings.Activity[P] != null) && (C.ArousalSettings.Activity[P].Name != null) && (ActivityFemale3DCG[A].Name == C.ArousalSettings.Activity[P].Name)) {
-					Found = true;
-					if ((C.ArousalSettings.Activity[P].Self == null) || (typeof C.ArousalSettings.Activity[P].Self !== "number") || (C.ArousalSettings.Activity[P].Self < 0) || (C.ArousalSettings.Activity[P].Self > 4)) C.ArousalSettings.Activity[P].Self = 2;
-					if ((C.ArousalSettings.Activity[P].Other == null) || (typeof C.ArousalSettings.Activity[P].Other !== "number") || (C.ArousalSettings.Activity[P].Other < 0) || (C.ArousalSettings.Activity[P].Other > 4)) C.ArousalSettings.Activity[P].Other = 2;
-				}
-			if (!Found) C.ArousalSettings.Activity.push({ Name: ActivityFemale3DCG[A].Name, Self: 2, Other: 2 });
-		}
-
-		// Validates the fetishes
-		for (let A = 0; A < FetishFemale3DCG.length; A++) {
-			let Found = false;
-			for (let F = 0; F < C.ArousalSettings.Fetish.length; F++)
-				if ((C.ArousalSettings.Fetish[F] != null) && (C.ArousalSettings.Fetish[F].Name != null) && (FetishFemale3DCG[A].Name == C.ArousalSettings.Fetish[F].Name)) {
-					Found = true;
-					if ((C.ArousalSettings.Fetish[F].Factor == null) || (typeof C.ArousalSettings.Fetish[F].Factor !== "number") || (C.ArousalSettings.Fetish[F].Factor < 0) || (C.ArousalSettings.Fetish[F].Factor > 4)) C.ArousalSettings.Fetish[F].Factor = 2;
-				}
-			if (!Found) C.ArousalSettings.Fetish.push({ Name: FetishFemale3DCG[A].Name, Factor: 2 });
-		}
-
-		// Validates the zones
-		for (let A = 0; A < AssetGroup.length; A++)
-			if ((AssetGroup[A].Zone != null) && (AssetGroup[A].Activity != null)) {
-				let Found = false;
-				for (let Z = 0; Z < C.ArousalSettings.Zone.length; Z++)
-					if ((C.ArousalSettings.Zone[Z] != null) && (C.ArousalSettings.Zone[Z].Name != null) && (AssetGroup[A].Name == C.ArousalSettings.Zone[Z].Name)) {
-						Found = true;
-						if ((C.ArousalSettings.Zone[Z].Factor == null) || (typeof C.ArousalSettings.Zone[Z].Factor !== "number") || (C.ArousalSettings.Zone[Z].Factor < 0) || (C.ArousalSettings.Zone[Z].Factor > 4)) C.ArousalSettings.Zone[Z].Factor = 2;
-					}
-				if (!Found) {
-					C.ArousalSettings.Zone.push({ Name: AssetGroup[A].Name, Factor: 2 });
-					if (AssetGroup[A].Name == "ItemVulva") PreferenceSetZoneOrgasm(C, "ItemVulva", true);
-				}
-			}
-
-	}
-
+	
 	// Enables the AFK timer for the current player only
 	AfkTimerSetEnabled(C.OnlineSettings.EnableAfkTimer);
 
@@ -463,6 +484,21 @@ function PreferenceInitPlayer() {
 	if (Object.keys(toUpdate).length > 0) {
 		ServerSend("AccountUpdate", toUpdate);
 	}
+}
+
+/**
+ * Initialise the Notifications settings, converting the old boolean types to objects
+ * @param {NotificationSetting} setting - The individual setting
+ * @param {NotificationAudioType} audio - The audio setting
+ * @param {NotificationAlertType} defaultAlertType - The default AlertType to use
+ * @returns {void} - Nothing
+ */
+function PreferenceInitNotificationSetting(setting, audio, defaultAlertType) {
+	const alertType = typeof setting === "boolean" && setting === true ? NotificationAlertType.TITLEPREFIX : defaultAlertType || NotificationAlertType.NONE;
+	setting = {};
+	setting.AlertType = alertType;
+	setting.Audio = audio;
+	return setting;
 }
 
 /**
@@ -578,12 +614,12 @@ function PreferenceSubscreenGeneralRun() {
 
 	// Checkboxes (Some are not available when playing on Hardcore or Extreme)
 	DrawCheckbox(500, 402, 64, 64, TextGet("ForceFullHeight"), Player.VisualSettings.ForceFullHeight);
+	DrawCheckbox(500, 482, 64, 64, TextGet("DisablePickingLocksOnSelf"), Player.OnlineSharedSettings.DisablePickingLocksOnSelf);
 	if (Player.GetDifficulty() < 2) {
-		DrawCheckbox(500, 482, 64, 64, TextGet(PreferenceSafewordConfirm ? "ConfirmSafeword" : "EnableSafeword"), Player.GameplaySettings.EnableSafeword);
+		DrawCheckbox(500, 722, 64, 64, TextGet(PreferenceSafewordConfirm ? "ConfirmSafeword" : "EnableSafeword"), Player.GameplaySettings.EnableSafeword);
 		DrawCheckbox(500, 562, 64, 64, TextGet("DisableAutoMaid"), !Player.GameplaySettings.DisableAutoMaid);
 		DrawCheckbox(500, 642, 64, 64, TextGet("OfflineLockedRestrained"), Player.GameplaySettings.OfflineLockedRestrained);
-		DrawCheckbox(500, 722, 64, 64, TextGet("DisablePickingLocksOnSelf"), Player.OnlineSharedSettings.DisablePickingLocksOnSelf);
-	} else DrawText(TextGet("GeneralHardcoreWarning"), 500, 562, "Red", "Gray");
+	} else DrawText(TextGet("GeneralHardcoreWarning"), 500, 622, "Red", "Gray");
 
 	// Draw the player & controls
 	DrawCharacter(Player, 50, 50, 0.9);
@@ -593,6 +629,7 @@ function PreferenceSubscreenGeneralRun() {
 	else
 		ColorPickerHide();
 
+	MainCanvas.textAlign = "center";
 }
 
 /**
@@ -658,12 +695,13 @@ function PreferenceSubscreenRestrictionRun() {
 		DrawText(TextGet("RestrictionAccess"), 500, 225, "Black", "Gray");
 		DrawCheckbox(500, 325, 64, 64, TextGet("RestrictionBypassStruggle"), Player.RestrictionSettings.BypassStruggle);
 		DrawCheckbox(500, 425, 64, 64, TextGet("RestrictionSlowImmunity"), Player.RestrictionSettings.SlowImmunity);
+		DrawCheckbox(500, 525, 64, 64, TextGet("RestrictionBypassNPCPunishments"), Player.RestrictionSettings.BypassNPCPunishments);
 	} else {
 		DrawText(TextGet("RestrictionNoAccess"), 500, 225, "Black", "Gray");
 		DrawCheckboxDisabled(500, 325, 64, 64, TextGet("RestrictionBypassStruggle"));
 		DrawCheckboxDisabled(500, 425, 64, 64, TextGet("RestrictionSlowImmunity"));
 	}
-
+	MainCanvas.textAlign = "center";
 }
 
 /**
@@ -713,7 +751,8 @@ function PreferenceSubscreenGeneralClick() {
 
 	// Preference check boxes
 	if (MouseIn(500, 402, 64, 64)) Player.VisualSettings.ForceFullHeight = !Player.VisualSettings.ForceFullHeight;
-	if (MouseIn(500, 482, 64, 64) && (Player.GetDifficulty() < 2)) {
+	if (MouseIn(500, 482, 64, 64) ) Player.OnlineSharedSettings.DisablePickingLocksOnSelf = !Player.OnlineSharedSettings.DisablePickingLocksOnSelf;
+	if (MouseIn(500, 722, 64, 64) && (Player.GetDifficulty() < 2)) {
 		if (!Player.GameplaySettings.EnableSafeword && !Player.IsRestrained() && !Player.IsChaste()) {
 			if (PreferenceSafewordConfirm) {
 				Player.GameplaySettings.EnableSafeword = true;
@@ -728,7 +767,6 @@ function PreferenceSubscreenGeneralClick() {
 	} else PreferenceSafewordConfirm = false;
 	if (MouseIn(500, 562, 64, 64) && (Player.GetDifficulty() < 2)) Player.GameplaySettings.DisableAutoMaid = !Player.GameplaySettings.DisableAutoMaid;
 	if (MouseIn(500, 642, 64, 64) && (Player.GetDifficulty() < 2)) Player.GameplaySettings.OfflineLockedRestrained = !Player.GameplaySettings.OfflineLockedRestrained;
-	if (MouseIn(500, 722, 64, 64) && (Player.GetDifficulty() < 2)) Player.OnlineSharedSettings.DisablePickingLocksOnSelf = !Player.OnlineSharedSettings.DisablePickingLocksOnSelf;
 }
 
 /**
@@ -775,6 +813,8 @@ function PreferenceSubscreenRestrictionClick() {
 	if (MouseIn(1815, 75, 90, 90)) PreferenceSubscreenDifficultyExit();
 	if (MouseIn(500, 325, 64, 64) && (Player.GetDifficulty() == 0)) Player.RestrictionSettings.BypassStruggle = !Player.RestrictionSettings.BypassStruggle;
 	if (MouseIn(500, 425, 64, 64) && (Player.GetDifficulty() == 0)) Player.RestrictionSettings.SlowImmunity = !Player.RestrictionSettings.SlowImmunity;
+	if (MouseIn(500, 525, 64, 64) && (Player.GetDifficulty() == 0)) Player.RestrictionSettings.BypassNPCPunishments = !Player.RestrictionSettings.BypassNPCPunishments;
+	
 }
 
 /**
@@ -885,7 +925,7 @@ function PreferenceExit() {
 		NotificationSettings: Player.NotificationSettings,
 		ItemPermission: Player.ItemPermission,
 		LabelColor: Player.LabelColor,
-		LimitedItems: Player.LimitedItems,
+		LimitedItems: CommonPackItemArray(Player.LimitedItems),
 	};
 	ServerSend("AccountUpdate", P);
 	PreferenceMessage = "";
@@ -904,7 +944,7 @@ function PreferenceSubscreenAudioRun() {
 	DrawCheckbox(500, 272, 64, 64, TextGet("AudioPlayBeeps"), Player.AudioSettings.PlayBeeps);
 	DrawCheckbox(500, 352, 64, 64, TextGet("AudioPlayItem"), Player.AudioSettings.PlayItem);
 	DrawCheckbox(500, 432, 64, 64, TextGet("AudioPlayItemPlayerOnly"), Player.AudioSettings.PlayItemPlayerOnly);
-	DrawCheckbox(500, 512, 64, 64, TextGet("NotificationsAudio"), Player.NotificationSettings.Audio);
+	DrawCheckbox(500, 512, 64, 64, TextGet("AudioNotifications"), Player.AudioSettings.Notifications);
 	MainCanvas.textAlign = "center";
 	DrawBackNextButton(500, 193, 250, 64, Player.AudioSettings.Volume * 100 + "%", "White", "",
 		() => PreferenceSettingsVolumeList[(PreferenceSettingsVolumeIndex + PreferenceSettingsVolumeList.length - 1) % PreferenceSettingsVolumeList.length] * 100 + "%",
@@ -917,70 +957,71 @@ function PreferenceSubscreenAudioRun() {
  * @returns {void} - Nothing
  */
 function PreferenceSubscreenControllerRun() {
-    if (PreferenceCalibrationStage == 0) {
-        DrawCharacter(Player, 50, 50, 0.9);
-        MainCanvas.textAlign = "left";
-        DrawText(TextGet("ControllerPreferences"), 500, 125, "Black", "Gray");
-        DrawText(TextGet("Sensitivity"), 800, 225, "Black", "Gray");
-        DrawText(TextGet("DeadZone"), 800, 625, "Black", "Gray");
-        DrawCheckbox(500, 272, 64, 64, TextGet("ControllerActive"), ControllerActive);
+	if (PreferenceCalibrationStage == 0) {
+		DrawCharacter(Player, 50, 50, 0.9);
+		MainCanvas.textAlign = "left";
+		DrawText(TextGet("ControllerPreferences"), 500, 125, "Black", "Gray");
+		DrawText(TextGet("Sensitivity"), 800, 225, "Black", "Gray");
+		DrawText(TextGet("DeadZone"), 800, 625, "Black", "Gray");
+		DrawCheckbox(500, 272, 64, 64, TextGet("ControllerActive"), ControllerActive);
 
-        DrawButton(500, 380, 400, 90, "", "White");
-        DrawTextFit(TextGet("MapButtons"), 590, 425, 310, "Black");
+		DrawButton(500, 380, 400, 90, "", "White");
+		DrawTextFit(TextGet("MapButtons"), 590, 425, 310, "Black");
 
-        DrawButton(500, 480, 400, 90, "", "White");
-        DrawTextFit(TextGet("MapSticks"), 590, 525, 310, "Black");
+		DrawButton(500, 480, 400, 90, "", "White");
+		DrawTextFit(TextGet("MapSticks"), 590, 525, 310, "Black");
 
-        MainCanvas.textAlign = "center";
-        DrawBackNextButton(500, 193, 250, 64, Player.ControllerSettings.ControllerSensitivity, "White", "",
-            () => PreferenceSettingsSensitivityList[(PreferenceSettingsSensitivityIndex + PreferenceSettingsSensitivityList.length - 1) % PreferenceSettingsSensitivityList.length],
-            () => PreferenceSettingsSensitivityList[(PreferenceSettingsSensitivityIndex + 1) % PreferenceSettingsSensitivityList.length]);
-        MainCanvas.textAlign = "center";
-        DrawBackNextButton(500, 593, 250, 64, Player.ControllerSettings.ControllerDeadZone, "White", "",
-            () => PreferenceSettingsDeadZoneList[(PreferenceSettingsDeadZoneIndex + PreferenceSettingsDeadZoneList.length - 1) % PreferenceSettingsDeadZoneList.length],
-            () => PreferenceSettingsDeadZoneList[(PreferenceSettingsDeadZoneIndex + 1) % PreferenceSettingsDeadZoneList.length] );
-    }
-    if (PreferenceCalibrationStage == 101) {
-        MainCanvas.textAlign = "left";
-        DrawTextFit(TextGet("MoveLeftStickUp"), 590, 425, 310, "Black");
-    }
-    if (PreferenceCalibrationStage == 102) {
-        MainCanvas.textAlign = "left";
-        DrawTextFit(TextGet("MoveLeftStickRight"), 590, 425, 310, "Black");
-    }
-    DrawButton(1815, 75, 90, 90, "", "White", "Icons/Exit.png");
-    if (PreferenceCalibrationStage == 1) {
-        MainCanvas.textAlign = "left";
-        DrawTextFit(TextGet("PressA"), 590, 425, 310, "Black");
-    }
-    if (PreferenceCalibrationStage == 2) {
-        MainCanvas.textAlign = "left";
-        DrawTextFit(TextGet("PressB"), 590, 425, 310, "Black");
-    }
-    if (PreferenceCalibrationStage == 3) {
-        MainCanvas.textAlign = "left";
-        DrawTextFit(TextGet("PressX"), 590, 425, 310, "Black");
-    }
-    if (PreferenceCalibrationStage == 4) {
-        MainCanvas.textAlign = "left";
-        DrawTextFit(TextGet("PressY"), 590, 425, 310, "Black");
-    }
-    if (PreferenceCalibrationStage == 5) {
-        MainCanvas.textAlign = "left";
-        DrawTextFit(TextGet("PressUpOnDpad"), 590, 425, 310, "Black");
-    }
-    if (PreferenceCalibrationStage == 6) {
-        MainCanvas.textAlign = "left";
-        DrawTextFit(TextGet("PressDownOnDpad"), 590, 425, 310, "Black");
-    }
-    if (PreferenceCalibrationStage == 7) {
-        MainCanvas.textAlign = "left";
-        DrawTextFit(TextGet("PressLeftOnDpad"), 590, 425, 310, "Black");
-    }
-    if (PreferenceCalibrationStage == 8) {
-        MainCanvas.textAlign = "left";
-        DrawTextFit(TextGet("PressRightOnDpad"), 590, 425, 310, "Black");
-    }
+		MainCanvas.textAlign = "center";
+		DrawBackNextButton(500, 193, 250, 64, Player.ControllerSettings.ControllerSensitivity, "White", "",
+			() => PreferenceSettingsSensitivityList[(PreferenceSettingsSensitivityIndex + PreferenceSettingsSensitivityList.length - 1) % PreferenceSettingsSensitivityList.length],
+			() => PreferenceSettingsSensitivityList[(PreferenceSettingsSensitivityIndex + 1) % PreferenceSettingsSensitivityList.length]);
+		MainCanvas.textAlign = "center";
+		DrawBackNextButton(500, 593, 250, 64, Player.ControllerSettings.ControllerDeadZone, "White", "",
+			() => PreferenceSettingsDeadZoneList[(PreferenceSettingsDeadZoneIndex + PreferenceSettingsDeadZoneList.length - 1) % PreferenceSettingsDeadZoneList.length],
+			() => PreferenceSettingsDeadZoneList[(PreferenceSettingsDeadZoneIndex + 1) % PreferenceSettingsDeadZoneList.length] );
+	}
+	if (PreferenceCalibrationStage == 101) {
+		MainCanvas.textAlign = "left";
+		DrawTextFit(TextGet("MoveLeftStickUp"), 590, 425, 310, "Black");
+	}
+	if (PreferenceCalibrationStage == 102) {
+		MainCanvas.textAlign = "left";
+		DrawTextFit(TextGet("MoveLeftStickRight"), 590, 425, 310, "Black");
+	}
+	DrawButton(1815, 75, 90, 90, "", "White", "Icons/Exit.png");
+	if (PreferenceCalibrationStage == 1) {
+		MainCanvas.textAlign = "left";
+		DrawTextFit(TextGet("PressA"), 590, 425, 310, "Black");
+	}
+	if (PreferenceCalibrationStage == 2) {
+		MainCanvas.textAlign = "left";
+		DrawTextFit(TextGet("PressB"), 590, 425, 310, "Black");
+	}
+	if (PreferenceCalibrationStage == 3) {
+		MainCanvas.textAlign = "left";
+		DrawTextFit(TextGet("PressX"), 590, 425, 310, "Black");
+	}
+	if (PreferenceCalibrationStage == 4) {
+		MainCanvas.textAlign = "left";
+		DrawTextFit(TextGet("PressY"), 590, 425, 310, "Black");
+	}
+	if (PreferenceCalibrationStage == 5) {
+		MainCanvas.textAlign = "left";
+		DrawTextFit(TextGet("PressUpOnDpad"), 590, 425, 310, "Black");
+	}
+	if (PreferenceCalibrationStage == 6) {
+		MainCanvas.textAlign = "left";
+		DrawTextFit(TextGet("PressDownOnDpad"), 590, 425, 310, "Black");
+	}
+	if (PreferenceCalibrationStage == 7) {
+		MainCanvas.textAlign = "left";
+		DrawTextFit(TextGet("PressLeftOnDpad"), 590, 425, 310, "Black");
+	}
+	if (PreferenceCalibrationStage == 8) {
+		MainCanvas.textAlign = "left";
+		DrawTextFit(TextGet("PressRightOnDpad"), 590, 425, 310, "Black");
+	}
+	MainCanvas.textAlign = "center";
 }
 
 /**
@@ -1217,7 +1258,7 @@ function PreferenceSubscreenGraphicsClick() {
 function PreferenceSubscreenAudioClick() {
 
 	// If the user clicked the exit icon to return to the main screen
-	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) PreferenceSubscreen = "";
+	if ((MouseX >= 1815) && (MouseX < 1905) && (MouseY >= 75) && (MouseY < 165)) PreferenceSubscreenAudioExit();
 
 	// Volume increase/decrease control
 	if ((MouseX >= 500) && (MouseX < 750) && (MouseY >= 193) && (MouseY < 257)) {
@@ -1231,10 +1272,26 @@ function PreferenceSubscreenAudioClick() {
 		if ((MouseY >= 272) && (MouseY < 336)) Player.AudioSettings.PlayBeeps = !Player.AudioSettings.PlayBeeps;
 		if ((MouseY >= 352) && (MouseY < 416)) Player.AudioSettings.PlayItem = !Player.AudioSettings.PlayItem;
 		if ((MouseY >= 432) && (MouseY < 496)) Player.AudioSettings.PlayItemPlayerOnly = !Player.AudioSettings.PlayItemPlayerOnly;
-		if ((MouseY >= 512) && (MouseY < 576)) Player.NotificationSettings.Audio = !Player.NotificationSettings.Audio;
+		if ((MouseY >= 512) && (MouseY < 576)) Player.AudioSettings.Notifications = !Player.AudioSettings.Notifications;
+	}
+}
+
+/**
+ * Exists the preference screen.
+ * @returns {void} - Nothing
+ */
+function PreferenceSubscreenAudioExit() {
+	// If audio has been disabled for notifications, disable each individual notification audio setting
+	if (!Player.AudioSettings.Notifications) {
+		for (const setting in Player.NotificationSettings) {
+			let audio = Player.NotificationSettings[setting].Audio;
+			if (typeof audio === 'number' && audio > 0) Player.NotificationSettings[setting].Audio = NotificationAudioType.NONE;
+		}
 	}
 
+	PreferenceSubscreen = "";
 }
+
 /**
  * Handles click events for the audio preference settings.  Redirected from the main Click function.
  * @returns {void} - Nothing
@@ -1645,7 +1702,7 @@ function PreferenceVisibilityCheckboxChanged(List, CheckSetting) {
  * @returns {void} - Nothing
  */
 function PreferenceVisibilityExit(SaveChanges) {
-	if (SaveChanges) ServerSend("AccountUpdate", { HiddenItems: Player.HiddenItems, BlockItems: Player.BlockItems });
+	if (SaveChanges) ServerPlayerBlockItemsSync();
 
 	PreferenceVisibilityGroupList = [];
 	PreferenceVisibilityHiddenList = [];
@@ -1702,6 +1759,29 @@ function PreferenceIsPlayerInSensDep() {
 }
 
 /**
+ * Loads the preference screen. This function is called dynamically, when the character enters the preference screen for the first time
+ * @returns {void} - Nothing
+ */
+function PreferenceSubscreenNotificationsLoad() {
+	const NS = Player.NotificationSettings;
+	PreferenceNotificationsCheckSetting(NS.Beeps);
+	PreferenceNotificationsCheckSetting(NS.ChatMessage);
+	PreferenceNotificationsCheckSetting(NS.ChatJoin);
+	PreferenceNotificationsCheckSetting(NS.Disconnect);
+	PreferenceNotificationsCheckSetting(NS.Test);
+}
+
+/**
+ * If the setting's alert type is not allowed for this session, e.g. from using a new device/browser, reset it to 'None'
+ * @param {NotificationSetting} setting - The notifications setting to check
+ * @returns {void} - Nothing
+ */
+function PreferenceNotificationsCheckSetting(setting) {
+	const type = NotificationAlertTypeList.find(N => N === setting.AlertType);
+	if (type == null) setting.AlertType = NotificationAlertTypeList[0];
+}
+
+/**
  * Sets the notifications preferences for a player. Redirected to from the main Run function if the player is in the notifications settings subscreen
  * @returns {void} - Nothing
  */
@@ -1713,31 +1793,63 @@ function PreferenceSubscreenNotificationsRun() {
 
 	// Left-aligned text controls
 	MainCanvas.textAlign = "left";
+	const NS = Player.NotificationSettings;
 	DrawText(TextGet("NotificationsPreferences"), 500, 125, "Black", "Gray");
-	DrawCheckbox(500, 190, 64, 64, TextGet("NotificationsAudio"), Player.NotificationSettings.Audio);
-	DrawText(TextGet("NotificationsChatRooms"), 500, 305, "Black", "Gray");
-	DrawCheckbox(500, 350, 64, 64, TextGet("NotificationsBeeps"), Player.NotificationSettings.Beeps);
-	DrawCheckbox(500, 430, 64, 64, TextGet("NotificationsChat"), Player.NotificationSettings.Chat);
-	if (Player.NotificationSettings.Chat) {
-		DrawCheckbox(600, 510, 64, 64, TextGet("NotificationsChatActions"), Player.NotificationSettings.ChatActions);
+	DrawText(TextGet("NotificationsExplanation"), 500, 190, "Black", "Gray");
+	DrawEmptyRect(1190, 92, 510, 125, "Black", 2);
+	DrawImage("Icons/Audio1.png", 1202, 97);
+	DrawText(TextGet("NotificationsAudioExplanation1"), 1275, 125, "Black", "Gray");
+	DrawText(TextGet("NotificationsAudioExplanation2"), 1200, 190, "Black", "Gray");
+	PreferenceNotificationsDrawSetting(500, 235, TextGet("NotificationsBeeps"), NS.Beeps);
+	PreferenceNotificationsDrawSetting(500, 315, TextGet("NotificationsChatMessage"), NS.ChatMessage);
+	if (NS.ChatMessage.AlertType > 0) {
+		DrawCheckbox(1260, 315, 64, 64, TextGet("NotificationsChatActions"), NS.ChatMessage.IncludeActions);
 	} else {
-		DrawCheckboxDisabled(600, 510, 64, 64, TextGet("NotificationsChatActions"));
+		DrawCheckboxDisabled(1250, 315, 64, 64, TextGet("NotificationsChatActions"));
 	}
-	DrawCheckbox(500, 590, 64, 64, TextGet("NotificationsChatJoin"), Player.NotificationSettings.ChatJoin.Enabled);
-	DrawText("Only:", 600, 702, "Black", "Gray");
-	if (Player.NotificationSettings.ChatJoin.Enabled) {
-		DrawCheckbox(775, 670, 64, 64, TextGet("NotificationsChatJoinOwner"), Player.NotificationSettings.ChatJoin.Owner);
-		DrawCheckbox(1075, 670, 64, 64, TextGet("NotificationsChatJoinLovers"), Player.NotificationSettings.ChatJoin.Lovers);
-		DrawCheckbox(1375, 670, 64, 64, TextGet("NotificationsChatJoinFriendlist"), Player.NotificationSettings.ChatJoin.Friendlist);
+	PreferenceNotificationsDrawSetting(500, 395, TextGet("NotificationsChatJoin"), NS.ChatJoin);
+	DrawText(TextGet("NotificationsChatJoinOnly"), 550, 507, "Black", "Gray");
+	if (NS.ChatJoin.AlertType > 0) {
+		DrawCheckbox(700, 475, 64, 64, TextGet("NotificationsChatJoinOwner"), NS.ChatJoin.Owner);
+		DrawCheckbox(980, 475, 64, 64, TextGet("NotificationsChatJoinLovers"), NS.ChatJoin.Lovers);
+		DrawCheckbox(1260, 475, 64, 64, TextGet("NotificationsChatJoinFriendlist"), NS.ChatJoin.Friendlist);
+		DrawCheckbox(1540, 475, 64, 64, TextGet("NotificationsChatJoinSubs"), NS.ChatJoin.Subs);
 	} else {
-		DrawCheckboxDisabled(775, 670, 64, 64, TextGet("NotificationsChatJoinOwner"));
-		DrawCheckboxDisabled(1075, 670, 64, 64, TextGet("NotificationsChatJoinLovers"));
-		DrawCheckboxDisabled(1375, 670, 64, 64, TextGet("NotificationsChatJoinFriendlist"));
+		DrawCheckboxDisabled(700, 475, 64, 64, TextGet("NotificationsChatJoinOwner"));
+		DrawCheckboxDisabled(980, 475, 64, 64, TextGet("NotificationsChatJoinLovers"));
+		DrawCheckboxDisabled(1260, 475, 64, 64, TextGet("NotificationsChatJoinFriendlist"));
+		DrawCheckboxDisabled(1540, 475, 64, 64, TextGet("NotificationsChatJoinSubs"));
 	}
+	PreferenceNotificationsDrawSetting(500, 555, TextGet("NotificationsDisconnect"), NS.Disconnect);
+	PreferenceNotificationsDrawSetting(500, 635, TextGet("NotificationsLarp"), NS.Larp);
+	PreferenceNotificationsDrawSetting(500, 820, "", NS.Test);
 	MainCanvas.textAlign = "center";
 
-	// Reset button
-	DrawButton(500, 800, 380, 64, TextGet("NotificationsReset"), "White");
+	// Test buttons
+	DrawEmptyRect(500, 795, 1400, 0, "Black", 1);
+	DrawButton(800, 820, 450, 64, TextGet("NotificationsTestRaise"), "White");
+	DrawButton(1286, 820, 450, 64, TextGet("NotificationsTestReset"), "White");
+}
+
+/**
+ * Draws the two checkbox row for a notifications setting
+ * @param {number} Left - The X co-ordinate the row starts on
+ * @param {number} Top - The Y co-ordinate the row starts on
+ * @param {string} Text - The text for the setting's description
+ * @param {NotificationSetting} Setting - The player setting the row corresponds to
+ * @returns {void} - Nothing
+ */
+function PreferenceNotificationsDrawSetting(Left, Top, Text, Setting) {
+	MainCanvas.textAlign = "center";
+	DrawBackNextButton(Left, Top, 164, 64, TextGet("NotificationsAlertType" + Setting.AlertType.toString()), "White", null, () => "", () => "");
+	MainCanvas.textAlign = "left";
+	const Enabled = Setting.AlertType > 0;
+	if (Enabled) {
+		DrawButton(Left + 200, Top, 64, 64, "", "White", "Icons/Audio" + Setting.Audio.toString() + ".png");
+	} else {
+		DrawCheckboxDisabled(Left + 200, Top, 64, 64, "");
+	}
+	DrawText(Text, Left + 300, Top + 33, "Black", "Gray");
 }
 
 /**
@@ -1747,26 +1859,79 @@ function PreferenceSubscreenNotificationsRun() {
 function PreferenceSubscreenNotificationsClick() {
 
 	// If the user clicked the exit icon to return to the main screen
-	if (MouseIn(1815, 75, 90, 90)) PreferenceSubscreen = "";
+	if (MouseIn(1815, 75, 90, 90)) PreferenceNotificationsExit();
 
 	// Checkboxes
-	const settings = Player.NotificationSettings;
-	if (MouseIn(500, 190, 64, 64)) settings.Audio = !settings.Audio;
-	if (MouseIn(500, 350, 64, 64)) settings.Beeps = !settings.Beeps;
-	if (MouseIn(500, 430, 64, 64)) settings.Chat = !settings.Chat;
-	if (MouseIn(600, 510, 64, 64)) settings.ChatActions = !settings.ChatActions && settings.Chat;
-	if (MouseIn(500, 590, 64, 64)) {
-		settings.ChatJoin.Enabled = !settings.ChatJoin.Enabled;
-		if (!settings.ChatJoin.Enabled) {
-			settings.ChatJoin.Owner = false;
-			settings.ChatJoin.Lovers = false;
-			settings.ChatJoin.Friendlist = false;
-		}
+	const NS = Player.NotificationSettings;
+	PreferenceNotificationsClickSetting(500, 235, NS.Beeps, NotificationEventType.BEEP);
+	PreferenceNotificationsClickSetting(500, 315, NS.ChatMessage, NotificationEventType.CHATMESSAGE);
+	if (MouseIn(1260, 315, 64, 64) && NS.ChatMessage.AlertType > 0) {
+		NS.ChatMessage.IncludeActions = !NS.ChatMessage.IncludeActions;
 	}
-	if (MouseIn(775, 670, 64, 64) && settings.ChatJoin.Enabled) settings.ChatJoin.Owner = !settings.ChatJoin.Owner;
-	if (MouseIn(1075, 670, 64, 64) && settings.ChatJoin.Enabled) settings.ChatJoin.Lovers = !settings.ChatJoin.Lovers;
-	if (MouseIn(1375, 670, 64, 64) && settings.ChatJoin.Enabled) settings.ChatJoin.Friendlist = !settings.ChatJoin.Friendlist;
-	
-	// Reset button
-	if (MouseIn(500, 800, 380, 64)) NotificationsResetAll();
+	PreferenceNotificationsClickSetting(500, 395, NS.ChatJoin, NotificationEventType.CHATJOIN);
+	if (NS.ChatJoin.AlertType > 0) {
+		if (MouseIn(700, 475, 64, 64)) NS.ChatJoin.Owner = !NS.ChatJoin.Owner;
+		if (MouseIn(980, 475, 64, 64)) NS.ChatJoin.Lovers = !NS.ChatJoin.Lovers;
+		if (MouseIn(1260, 475, 64, 64)) NS.ChatJoin.Friendlist = !NS.ChatJoin.Friendlist;
+		if (MouseIn(1540, 475, 64, 64)) NS.ChatJoin.Subs = !NS.ChatJoin.Subs;
+	}
+	PreferenceNotificationsClickSetting(500, 555, NS.Disconnect, NotificationEventType.DISCONNECT);
+	PreferenceNotificationsClickSetting(500, 635, NS.Larp, NotificationEventType.LARP);
+	PreferenceNotificationsClickSetting(500, 820, NS.Test);
+
+	// Test buttons
+	if (MouseIn(800, 820, 450, 64)) {
+		NotificationRaise(NotificationEventType.TEST, { body: TextGet("NotificationsTestMessage"), character: Player, useCharAsIcon: true });
+	}
+	if (MouseIn(1286, 820, 450, 64)) NotificationResetAll();
+}
+
+/** Handles the click events within a multi-checkbox settings row.
+ * @param {number} Left - The X co-ordinate the row starts on
+ * @param {number} Top - The Y co-ordinate the row starts on
+ * @param {NotificationSetting} Setting - The player setting the row corresponds to
+ * @param {NotificationEventType} EventType - The event type the setting corresponds to
+ * @returns {void} - Nothing
+ */
+function PreferenceNotificationsClickSetting(Left, Top, Setting, EventType) {
+
+	// Toggle the alert type
+	if (MouseIn(Left, Top, 164, 64)) {
+		if (MouseXIn(Left, 83)) {
+			let prevType = NotificationAlertTypeList.findIndex(N => N === Setting.AlertType) - 1;
+			if (prevType < 0) prevType = NotificationAlertTypeList.length - 1;
+			Setting.AlertType = NotificationAlertTypeList[prevType];
+		}
+		else if (MouseXIn(Left + 83, 83)) {
+			let nextType = NotificationAlertTypeList.findIndex(N => N === Setting.AlertType) + 1;
+			if (nextType > NotificationAlertTypeList.length - 1) nextType = 0;
+			Setting.AlertType = NotificationAlertTypeList[nextType];
+		}
+		if (EventType) NotificationReset(EventType);
+	}
+
+	// Toggle the audio type
+	if (MouseIn(Left + 200, Top, 64, 64) && Setting.AlertType > 0) {
+		let nextType = NotificationAudioTypeList.findIndex(N => N === Setting.Audio) + 1;
+		if (nextType > NotificationAudioTypeList.length - 1) nextType = 0;
+		Setting.Audio = NotificationAudioTypeList[nextType];
+	}
+}
+
+/**
+ * Exits the preference screen. Resets the test notifications.
+ * @returns {void} - Nothing
+ */
+function PreferenceNotificationsExit() {
+
+	//If any of the settings now have audio enabled, enable the AudioSettings setting as well
+	let enableAudio = false;
+	for (const setting in Player.NotificationSettings) {
+		let audio = Player.NotificationSettings[setting].Audio;
+		if (typeof audio === 'number' && audio > 0) enableAudio = true;
+	}
+	if (enableAudio) Player.AudioSettings.Notifications = true;
+
+	NotificationReset(NotificationEventType.TEST);
+	PreferenceSubscreen = "";
 }

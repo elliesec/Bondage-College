@@ -5,10 +5,10 @@ var LoginCredits = null;
 var LoginCreditsPosition = 0;
 var LoginThankYou = "";
 var LoginThankYouList = ["Abby", "Anna", "Aylea", "BlueEyedCat", "BlueWinter", "Brian", "Bryce", "Christian", "Dini", "EliseBlackthorn",
-						 "Epona", "Escurse", "FanRunner", "Fluffythewhat", "Greendragon", "Jin", "KamiKaze", "KBgamer", "Kimuriel", "Longwave",
-						 "Michal", "Michel", "Mike", "Mindtie", "Misa", "Mzklopyu", "Nick", "Nightcore", "Overlord", "Ramtam",
-						 "Rashiash", "Ray", "Rika", "Rutherford", "Ryner", "Samuel", "Sayari", "SeraDenoir", "Shadow", "Somononon", 
-						 "Stephanie", "Tam", "Trent", "Troubadix", "William", "Xepherio", "Yurei"];
+						 "Epona", "Escurse", "FanRunner", "Fotari", "Greendragon", "KamiKaze", "KBgamer", "Kimuriel", "Longwave", "Michal", 
+						 "Michel", "Mike", "Mindtie", "Misa", "Mzklopyu", "Nick", "Nightcore", "Overlord", "Rashiash", "Ray", 
+						 "Rika", "Robin", "Rutherford", "Ryner", "Samuel", "SeraDenoir", "Shadow", "Somononon", "Stephanie", "Tam", 
+						 "TopHat", "Trent", "Troubadix", "William", "Xepherio", "Yurei", "Znarf"];
 var LoginThankYouNext = 0;
 var LoginSubmitted = false;
 var LoginIsRelog = false;
@@ -166,6 +166,8 @@ function LoginValidCollar() {
 			if (CurrentScreen == "ChatRoom") ChatRoomCharacterItemUpdate(Player, "ItemNeck");
 		}
 	}
+	if (LogQuery("ClubSlave", "Management") && !InventoryIsWorn(Player, "ItemNeck", "ClubSlaveCollar"))
+		InventoryWear(Player, "ClubSlaveCollar", "ItemNeck");
 }
 
 /**
@@ -182,6 +184,7 @@ function LoginMistressItems() {
 		InventoryAdd(Player, "MistressPadlock", "ItemMisc", false);
 		InventoryAdd(Player, "MistressPadlockKey", "ItemMisc", false);
 		InventoryAdd(Player, "MistressTimerPadlock", "ItemMisc", false);
+		InventoryAdd(Player, "DeluxeBoots", "Shoes", false);
 	} else {
 		InventoryDelete(Player, "MistressPadlock", "ItemMisc", false);
 		InventoryDelete(Player, "MistressPadlockKey", "ItemMisc", false);
@@ -190,6 +193,7 @@ function LoginMistressItems() {
 		InventoryDelete(Player, "MistressBoots", "Shoes", false);
 		InventoryDelete(Player, "MistressTop", "Cloth", false);
 		InventoryDelete(Player, "MistressBottom", "ClothLower", false);
+		InventoryDelete(Player, "DeluxeBoots", "Shoes", false);
 	}
 }
 
@@ -289,23 +293,26 @@ function LoginValideBuyGroups() {
  * @returns {void} Nothing
  */
 function LoginValidateArrays() {
+	let update = false;
 	var CleanBlockItems = AssetCleanArray(Player.BlockItems);
 	if (CleanBlockItems.length != Player.BlockItems.length) {
 		Player.BlockItems = CleanBlockItems;
-		ServerSend("AccountUpdate", { BlockItems: Player.BlockItems });
+		update = true;
 	}
 
 	var CleanLimitedItems = AssetCleanArray(Player.LimitedItems);
 	if (CleanLimitedItems.length != Player.LimitedItems.length) {
 		Player.LimitedItems = CleanLimitedItems;
-		ServerSend("AccountUpdate", { LimitedItems: Player.LimitedItems });
+		update = true;
 	}
 
 	var CleanHiddenItems = AssetCleanArray(Player.HiddenItems);
 	if (CleanHiddenItems.length != Player.HiddenItems.length) {
 		Player.HiddenItems = CleanHiddenItems;
-		ServerSend("AccountUpdate", { HiddenItems: Player.HiddenItems });
+		update = true;
 	}
+	if (update)
+		ServerPlayerBlockItemsSync();
 }
 
 /**
@@ -317,7 +324,7 @@ function LoginDifficulty() {
 	// If Extreme mode, the player cannot control her blocked items
 	if (Player.GetDifficulty() >= 3) {
 		LoginExtremeItemSettings();
-		ServerSend("AccountUpdate", { BlockItems: Player.BlockItems, LimitedItems: Player.LimitedItems, HiddenItems: Player.HiddenItems });
+		ServerPlayerBlockItemsSync();
 	}
 }
 
@@ -388,13 +395,20 @@ function LoginResponse(C) {
 			WardrobeFixLength();
 			Player.OnlineID = C.ID.toString();
 			Player.MemberNumber = C.MemberNumber;
-			Player.BlockItems = ((C.BlockItems == null) || !Array.isArray(C.BlockItems)) ? [] : C.BlockItems;
-			Player.LimitedItems = ((C.LimitedItems == null) || !Array.isArray(C.LimitedItems)) ? [] : C.LimitedItems;
+			Player.BlockItems = Array.isArray(C.BlockItems) ? C.BlockItems :
+				typeof C.BlockItems === "object" && C.BlockItems ? CommonUnpackItemArray(C.BlockItems) : [];
+			Player.LimitedItems = Array.isArray(C.LimitedItems) ? C.LimitedItems :
+				typeof C.LimitedItems === "object" && C.LimitedItems ? CommonUnpackItemArray(C.LimitedItems) : [];
 			Player.HiddenItems = ((C.HiddenItems == null) || !Array.isArray(C.HiddenItems)) ? [] : C.HiddenItems;
+			// TODO: Migration code; remove after few versions (added R66)
+			if (Array.isArray(C.BlockItems) || Array.isArray(C.LimitedItems)) {
+				ServerPlayerBlockItemsSync();
+			}
+
 			Player.Difficulty = C.Difficulty;
 			Player.WardrobeCharacterNames = C.WardrobeCharacterNames;
 			WardrobeCharacter = [];
-			
+
 			// Load the last chat room
 			Player.LastChatRoom = C.LastChatRoom;
 			Player.LastChatRoomBG = C.LastChatRoomBG;
@@ -420,6 +434,7 @@ function LoginResponse(C) {
 			// Gets the online preferences
 			Player.LabelColor = C.LabelColor;
 			Player.ItemPermission = C.ItemPermission;
+			Player.KinkyDungeonKeybindings = C.KinkyDungeonKeybindings;
 			Player.ArousalSettings = C.ArousalSettings;
 			Player.ChatSettings = C.ChatSettings;
 			Player.VisualSettings = C.VisualSettings;
@@ -448,10 +463,11 @@ function LoginResponse(C) {
 			}
 			Player.SubmissivesList = typeof C.SubmissivesList === "string" ? new Set(JSON.parse(LZString.decompressFromUTF16(C.SubmissivesList))) : new Set();
 			Player.GhostList = ((C.GhostList == null) || !Array.isArray(C.GhostList)) ? [] : C.GhostList;
+			Player.Infiltration = C.Infiltration;
 			LoginDifficulty();
 
 			// Loads the player character model and data
-			Player.Appearance = ServerAppearanceLoadFromBundle(Player, C.AssetFamily, C.Appearance);
+			Player.Appearance = ServerAppearanceLoadFromBundle(Player, C.AssetFamily, C.Appearance, C.MemberNumber).appearance;
 			InventoryLoad(Player, C.Inventory);
 			LogLoad(C.Log);
 			ReputationLoad(C.Reputation);
@@ -465,6 +481,7 @@ function LoginResponse(C) {
 			}
 			ActivitySetArousal(Player, 0);
 			ActivityTimerProgress(Player, 0);
+			NotificationLoad();
 
 			// Loads the dialog and removes the login controls
 			CharacterLoadCSVDialog(Player);

@@ -1,3 +1,4 @@
+"use strict";
 const InventoryItemDevicesWoodenBoxMaxLength = 20;
 const InventoryItemDevicesWoodenBoxTextInputId = "InventoryItemDevicesWoodenBoxText";
 const InventoryItemDevicesWoodenBoxOpacityInputId = "InventoryItemDevicesWoodenBoxOpacity";
@@ -214,15 +215,14 @@ function InventoryItemDevicesWoodenBoxGetInputOpacity() {
  * @param {object} DrawingData - The dynamic drawing data
  * @returns {void} - Nothing
  */
-function AssetsItemDevicesWoodenBoxAfterDraw({ C, A, X, Y, L, Pose, Property, drawCanvas, drawCanvasBlink, AlphaMasks, Color, Opacity }) {
+function AssetsItemDevicesWoodenBoxAfterDraw({ C, A, X, Y, L, Property, drawCanvas, drawCanvasBlink, AlphaMasks, Color, Opacity }) {
 	if (L === "_Text") {
 		const height = 900;
 		const width = 310;
 		const tmpCanvas = AnimationGenerateTempCanvas(C, A, width, height);
 		const ctx = tmpCanvas.getContext("2d");
 
-		let text = Property && Property.Text || "";
-		if (!DynamicDrawTextRegex.test(text)) text = "";
+		let text = Property && typeof Property.Text === "string" && DynamicDrawTextRegex.test(Property.Text) ? Property.Text : "";
 		text = text.substring(0, InventoryItemDevicesWoodenBoxMaxLength);
 
 		let from = [0, 1];
@@ -246,12 +246,9 @@ function AssetsItemDevicesWoodenBoxAfterDraw({ C, A, X, Y, L, Pose, Property, dr
 			color: `rgba(${r}, ${g}, ${b}, ${0.7 * Opacity})`,
 		});
 
-		let drawY = Y + 300;
-		if (Pose === "Kneel/") drawY -= 250;
-
 		// We print the canvas on the character based on the asset position
-		drawCanvas(tmpCanvas, X + 90, drawY, AlphaMasks);
-		drawCanvasBlink(tmpCanvas, X + 90, drawY, AlphaMasks);
+		drawCanvas(tmpCanvas, X + 90, Y + 300, AlphaMasks);
+		drawCanvasBlink(tmpCanvas, X + 90, Y + 300, AlphaMasks);
 	}
 }
 

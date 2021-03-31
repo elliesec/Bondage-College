@@ -32,7 +32,7 @@ const AssetGroupType = {
 	Blink: "Maybe Boolean",
 	InheritColor: "Maybe String",
 	FreezeActivePose: "Maybe [String]",
-
+	PreviewZone: "Maybe (Number, Number, Number, Number)",
 };
 
 const AssetType = {
@@ -127,7 +127,9 @@ const AssetType = {
 	DrawLocks: "Boolean",
 	AllowExpression: "[String]",
 	MirrorExpression: "String",
+	FixedPosition: "Boolean",
 	Layer: "[Object]",
+	CustomBlindBackground: "Object",
 };
 
 const AssetLayerType = {
