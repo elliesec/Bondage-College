@@ -404,7 +404,7 @@ function MainHallClick() {
 		// Cafe, Arcade
 		if ((MouseX >=   25) && (MouseX <  115) && (MouseY >= 265) && (MouseY < 355)) MainHallWalk("Cafe");
 		if ((MouseX >=   145) && (MouseX <  235) && (MouseY >= 265) && (MouseY < 355)) MainHallWalk("Arcade");
-		if ((MouseX >=   265) && (MouseX <  235) && (MouseY >= 265) && (MouseY < 355)) MainHallWalk("Library");
+		if ((MouseX >=   265) && (MouseX <  355) && (MouseY >= 265) && (MouseY < 355)) MainHallWalk("Library");
 
 	} else {
 
