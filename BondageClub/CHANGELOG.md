@@ -11,9 +11,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-04-13
+Changelog last updated: 2021-04-14
 
-Last recorded PR: [#2303](https://github.com/Ben987/Bondage-College/pull/2303)
+Last recorded PR: [#2318](https://github.com/Ben987/Bondage-College/pull/2318)
 
 ## [R67]
 
@@ -90,6 +90,10 @@ Last recorded PR: [#2303](https://github.com/Ben987/Bondage-College/pull/2303)
 * Nina - Fixed an issue with the ordering of multi-colorable item layers in the color picker ([#2309](https://github.com/Ben987/Bondage-College/pull/2309))
 * Nina - Fixed a bug where "Dress Back Up" option was not working in kidnap battles ([#2310](https://github.com/Ben987/Bondage-College/pull/2310))
 * Jomshir - Fixed an issue with whitelists that could result in player appearance desynchronization for limited items ([#2303](https://github.com/Ben987/Bondage-College/pull/2303))
+* Nina - Fixed an issue where getting kicked from a chatroom whilst playing the Kinky Dungeon minigame would cause chatrooms to stop working ([#2315](https://github.com/Ben987/Bondage-College/pull/2315))
+* Aeren - Fixed an issue with a duplicated click handler for the Pleasure Panties extended menu ([#2316](https://github.com/Ben987/Bondage-College/pull/2316))
+* Ellie - Fixed an issue with appearance validation rollback ([#2317](https://github.com/Ben987/Bondage-College/pull/2317))
+* Ellie - Fixed a bug where interacting with combination padlocks while wearing Futuristic Mittens in glove mode would prevent players from being able to manipulate the lock properly ([#2318](https://github.com/Ben987/Bondage-College/pull/2318))
 
 ## [R66]
 
