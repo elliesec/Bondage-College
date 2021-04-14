@@ -13,7 +13,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 Changelog last updated: 2021-04-14
 
-Last recorded PR: [#2320](https://github.com/Ben987/Bondage-College/pull/2320)
+Last recorded PR: [#2322](https://github.com/Ben987/Bondage-College/pull/2322)
 
 ## [R67]
 
@@ -66,6 +66,7 @@ Last recorded PR: [#2320](https://github.com/Ben987/Bondage-College/pull/2320)
 * Ellie - Fixed a 404 error when wearing a locked Full Bondage Harness pelvis item ([#2288](https://github.com/Ben987/Bondage-College/pull/2288))
 * Ada - Fixed an issue where a missing text message is displayed after the stand up/kneel minigame ([#2291](https://github.com/Ben987/Bondage-College/pull/2291))
 * Ada - Fixed an issue with the VR Headset for players on light sensory deprivation settings ([#2290](https://github.com/Ben987/Bondage-College/pull/2290), [#2293](https://github.com/Ben987/Bondage-College/pull/2293))
+* Ellie - Fixed a longstanding issue where the player's expression wouldn't get reset to default after expression changes triggered by items ([#2322](https://github.com/Ben987/Bondage-College/pull/2322))
 
 ### [Technical]
 
@@ -83,7 +84,7 @@ Last recorded PR: [#2320](https://github.com/Ben987/Bondage-College/pull/2320)
 
 * Ellie - Fixed some issues with the behavior of the extended item menu for the Bunny Girl Accessories item ([#2301](https://github.com/Ben987/Bondage-College/pull/2301))
 * Ellie - Fixed issues with missing assets in the Kinky Dungeon minigame ([#2302](https://github.com/Ben987/Bondage-College/pull/2302))
-* Ellie - Fixed a bug where appearance changes (in extended items or via the wardrobe) incorrectly get reverted in some cases ([#2304](https://github.com/Ben987/Bondage-College/pull/2304))
+* Ellie - Fixed a bug where appearance changes (in extended items or via the wardrobe) incorrectly get reverted in some cases ([#2304](https://github.com/Ben987/Bondage-College/pull/2304), [#2322](https://github.com/Ben987/Bondage-College/pull/2322))
 * Nina - Fixed an issue where the text on the custom and electronic collar tags would occasionally revert to "Tag" ([#2305](https://github.com/Ben987/Bondage-College/pull/2305))
 * Nina - Fixed several issues with the Sci-Fi Pleasure Panties ([#2306](https://github.com/Ben987/Bondage-College/pull/2306))
 * Nina - Fixed an issue where timer locks would display NaN time remaining ([#2307](https://github.com/Ben987/Bondage-College/pull/2307))
