@@ -93,8 +93,7 @@ function ModularItemRegister(asset, config) {
 	ModularItemCreateLoadFunction(data);
 	ModularItemCreateDrawFunction(data);
 	ModularItemCreateClickFunction(data);
-	asset.AllowType = ModularItemGenerateAllowType(data);
-	asset.Layer.forEach((layer) => ModularItemGenerateLayerAllowTypes(layer, data));
+	ModularItemGenerateValidationProperties(data);
 }
 
 /**
@@ -518,6 +517,12 @@ function ModularItemChatRoomMessage(module, index, { chatSetting, chatMessagePre
 	ChatRoomPublishCustomAction(msg, false, dictionary);
 }
 
+/**
+ * Adds all items from the source array to the destination array if they aren't already included
+ * @param {string[]} dest - The destination array
+ * @param {string[]} src - The source array
+ * @returns {void} - Nothing
+ */
 function ModularItemAddToArray(dest, src) {
 	src.forEach(item => {
 		if (!dest.includes(item)) dest.push(item);
@@ -585,6 +590,26 @@ function ModularItemRequirementMessageCheck(option) {
 	} else {
 		return ExtendedItemRequirementCheckMessage(option, C.ID === 0);
 	}
+}
+
+/**
+ * Generates and assigns a modular asset's AllowType, AllowEffect and AllowBlock properties, along with the AllowTypes
+ * properties on the asset layers based on the values set in its module definitions.
+ * @param {ModularItemData} data - The modular item's data
+ * @returns {void} - Nothing
+ */
+function ModularItemGenerateValidationProperties(data) {
+	const {asset, modules} = data;
+	asset.AllowType = ModularItemGenerateAllowType(data);
+	asset.AllowEffect = asset.Effect || [];
+	asset.AllowBlock = asset.Block || [];
+	modules.forEach((module) => {
+		module.Options.forEach(({Property}) => {
+			if (Property && Property.Effect) ModularItemAddToArray(asset.AllowEffect, Property.Effect);
+			if (Property && Property.Block) ModularItemAddToArray(asset.AllowBlock, Property.Block);
+		});
+	});
+	asset.Layer.forEach((layer) => ModularItemGenerateLayerAllowTypes(layer, data));
 }
 
 /**
