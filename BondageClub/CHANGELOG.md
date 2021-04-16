@@ -13,7 +13,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 Changelog last updated: 2021-04-16
 
-Last recorded PR: [#2332](https://github.com/Ben987/Bondage-College/pull/2332)
+Last recorded PR: [#2335](https://github.com/Ben987/Bondage-College/pull/2335)
 
 ## [R67]
 
@@ -101,6 +101,7 @@ Last recorded PR: [#2332](https://github.com/Ben987/Bondage-College/pull/2332)
 * Ellie - Fixed an issue with appearance validation rollback ([#2317](https://github.com/Ben987/Bondage-College/pull/2317))
 * Ellie - Fixed a bug where interacting with combination padlocks while wearing Futuristic Mittens in glove mode would prevent players from being able to manipulate the lock properly ([#2318](https://github.com/Ben987/Bondage-College/pull/2318))
 * Ellie - Fixed an issue where the pet bed was not displaying chat messages when switching between blanket/no blanket ([#2320](https://github.com/Ben987/Bondage-College/pull/2320))
+* Jomshir - Reverted a change to the friend list that sorted friends in alphabetical order ([#2335](https://github.com/Ben987/Bondage-College/pull/2335))
 
 ## [R66]
 
