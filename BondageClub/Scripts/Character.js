@@ -1073,6 +1073,7 @@ function CharacterSetFacialExpression(C, AssetGroup, Expression, Timer, Color) {
 				if (C.Appearance[A].Property.Expression != Expression) {
 					C.Appearance[A].Property.Expression = Expression;
 					if (Color && CommonColorIsValid(Color)) C.Appearance[A].Color = Color;
+					if (Expression == null && Timer == null) delete C.Appearance[A].Property.RemoveTimer;
 					CharacterRefresh(C);
 					if (CurrentScreen == "ChatRoom") {
 						if (C.ID == 0) ChatRoomCharacterItemUpdate(C, AssetGroup);
