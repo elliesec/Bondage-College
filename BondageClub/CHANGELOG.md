@@ -55,6 +55,9 @@ Last recorded PR: [#2332](https://github.com/Ben987/Bondage-College/pull/2332)
 * Ada - Modified the VR Headset item to allow players to play the new Kinky Dungeon minigame when wearing one ([#2271](https://github.com/Ben987/Bondage-College/pull/2271))
 * Ada - Changed the VR Headset's "Virtual World" option to allow players to see and whisper to other players that are also in the Virtual World ([#2283](https://github.com/Ben987/Bondage-College/pull/2283))
 * fleisch11 - Modified NPCs so that they react to being put in chastity belts other than the metal one ([#2296](https://github.com/Ben987/Bondage-College/pull/2296))
+* Ada - Renamed some sensory deprivation settings ([#2321](https://github.com/Ben987/Bondage-College/pull/2321))
+    * "Total" is now "Heavy"
+    * "Total (no whispers)" is now "Total"
 
 ### [Fixed]
 
