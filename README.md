@@ -1,6 +1,6 @@
 # Bondage College
 
-[![Asset Check](https://github.com/Ben987/Bondage-College/actions/workflows/assetCheck.yml/badge.svg)](https://github.com/Ben987/Bondage-College/actions)
+[![Asset Check](https://github.com/Ben987/Bondage-College/actions/workflows/assetCheck.yml/badge.svg)](https://github.com/Ben987/Bondage-College/actions/workflows/assetCheck.yml)
 
 Welcome to the Bondage College! 
 
