@@ -4,11 +4,12 @@ var LoginMessage = "";
 var LoginCredits = null;
 var LoginCreditsPosition = 0;
 var LoginThankYou = "";
-var LoginThankYouList = ["Abby", "Anna", "Aylea", "BlueEyedCat", "BlueWinter", "Brian", "Bryce", "Christian", "Dini", "EliseBlackthorn",
-						 "Epona", "Escurse", "FanRunner", "Greendragon", "KamiKaze", "KBgamer", "Kimuriel", "Longwave", "Michal", "Michel", 
-						 "Mike", "Mindtie", "Misa", "Mzklopyu", "Nick", "Nightcore", "Overlord", "Ramtam", "Rashiash", "Ray", 
-						 "Rika", "Rutherford", "Ryner", "Samuel", "SeraDenoir", "Shadow", "Somononon", "Stephanie", "Tam", "Trent", 
-						 "Troubadix", "William", "Xepherio", "Yurei", "Znarf"];
+var LoginThankYouList = [
+	"Anna", "Aylea", "BlueEyedCat", "BlueWinter", "Brian", "Bryce", "Christian", "Dini", "Elise", "Epona",
+	"Escurse", "FanRunner", "Flux", "Greendragon", "KamiKaze", "KBgamer", "Kimuriel", "Longwave", "Michal", "Michel",
+	"Mike", "Mindtie", "Misa", "MrUniver", "Mzklopyu", "Nick", "Nightcore", "Overlord", "Rashiash", "Ray",
+	"Rika", "Robin", "Rutherford", "Ryner", "Samuel", "SeraDenoir", "Shadow", "Somononon", "Stephanie", "Tam",
+	"TopHat", "Trent", "Troubadix", "William", "Xepherio", "Yurei", "Znarf"];
 var LoginThankYouNext = 0;
 var LoginSubmitted = false;
 var LoginIsRelog = false;
@@ -339,6 +340,15 @@ function LoginExtremeItemSettings() {
 	Player.HiddenItems = [];
 }
 
+/**
+ * Handles server response, when login has been queued
+ * @param {number} Pos The position in queue
+ */
+function LoginQueue(Pos) {
+	if (typeof Pos !== "number") return;
+
+	LoginMessage = TextGet("LoginQueueWait").replace("QUEUE_POS", Pos);
+}
 
 /**
  * Handles player login response data
@@ -434,6 +444,7 @@ function LoginResponse(C) {
 			// Gets the online preferences
 			Player.LabelColor = C.LabelColor;
 			Player.ItemPermission = C.ItemPermission;
+			Player.KinkyDungeonKeybindings = C.KinkyDungeonKeybindings;
 			Player.ArousalSettings = C.ArousalSettings;
 			Player.ChatSettings = C.ChatSettings;
 			Player.VisualSettings = C.VisualSettings;
@@ -446,6 +457,15 @@ function LoginResponse(C) {
 			Player.OnlineSharedSettings = C.OnlineSharedSettings;
 			Player.GraphicsSettings = C.GraphicsSettings;
 			Player.NotificationSettings = C.NotificationSettings;
+			Player.SavedExpressions = C.SavedExpressions;
+			if (!Array.isArray(Player.SavedExpressions)) {
+				Player.SavedExpressions = [];
+			}
+			if (Player.SavedExpressions.length < 5) {
+				for (let x = Player.SavedExpressions.length; x < 5; x++) {
+					Player.SavedExpressions.push(null);
+				}
+			}
 			Player.WhiteList = ((C.WhiteList == null) || !Array.isArray(C.WhiteList)) ? [] : C.WhiteList;
 			Player.BlackList = ((C.BlackList == null) || !Array.isArray(C.BlackList)) ? [] : C.BlackList;
 			Player.FriendList = ((C.FriendList == null) || !Array.isArray(C.FriendList)) ? [] : C.FriendList;
@@ -462,10 +482,11 @@ function LoginResponse(C) {
 			}
 			Player.SubmissivesList = typeof C.SubmissivesList === "string" ? new Set(JSON.parse(LZString.decompressFromUTF16(C.SubmissivesList))) : new Set();
 			Player.GhostList = ((C.GhostList == null) || !Array.isArray(C.GhostList)) ? [] : C.GhostList;
+			Player.Infiltration = C.Infiltration;
 			LoginDifficulty();
 
 			// Loads the player character model and data
-			Player.Appearance = ServerAppearanceLoadFromBundle(Player, C.AssetFamily, C.Appearance, C.MemberNumber);
+			ServerAppearanceLoadFromBundle(Player, C.AssetFamily, C.Appearance, C.MemberNumber)
 			InventoryLoad(Player, C.Inventory);
 			LogLoad(C.Log);
 			ReputationLoad(C.Reputation);
