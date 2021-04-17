@@ -1489,7 +1489,6 @@ var AssetFemale3DCG = [
 				AllowBlock: ["ItemFeet", "ItemBoots", "ItemVulva", "ItemButt", "ItemVulvaPiercings", "ItemPelvis"],
 				Hide: ["ClothLower", "Socks", "Shoes", "SuitLower", "RightAnklet", "LeftAnklet"],
 				HideItemExclude: ["ClothLowerAdmiralSkirt", "ClothLowerWaspie1", "ClothLowerChineseSkirt1", "ClothLowerGown2Skirt", "ClothLowerJeanSkirt", "ClothLowerLatexSkirt1", "ClothLowerLatexSkirt2", "ClothLowerLongSkirt1", "ClothLowerClothSkirt1", "ClothLowerPleatedSkirt", "ClothLowerPencilSkirt", "ClothLowerWaspie2", "ClothLowerWaspie3", "ClothLowerSkirt1", "ClothLowerSkirt2", "ClothLowerSkirt3", "ClothLowerTennisSkirt1", "SocksPantyhose1", "SocksPantyhose2", "SuitLowerPantyhose1", "SuitLowerPantyhose2"],
-				AllowType: ["Cover"],
 				AllowActivePose: ["Kneel"],
 				AllowActivityOn: ["ItemPelvis", "ItemFeet", "ItemBoots"],
 			},
@@ -2443,7 +2442,6 @@ var AssetFemale3DCG = [
 				AllowEffect: ["Block", "Prone", "ForceKneel"],
 				Block: ["ItemHands"],
 				AllowBlock: ["ItemLegs", "ItemFeets", "ItemBoots", "ItemDevices"],
-				AllowType: ["Armbinder", "Pet", "Strait", "Crawler"],
 				Hide: ["Cloth"],
 			},
 			AssetSpankingToys

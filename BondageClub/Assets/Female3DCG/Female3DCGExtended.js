@@ -107,7 +107,58 @@ var AssetFemale3DCGExtended = {
 		LatexSleevelessLeotard: {
 			Archetype: ExtendedArchetype.TYPED,
 			CopyConfig: { AssetName: "LatexButterflyLeotard" },
-		}
+		},
+		VetWrap: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Boxtie",
+						SelfBondageLevel: 5,
+						Property: { Type: null },
+					},
+					{
+						Name: "Armbinder",
+						SelfBondageLevel: 7,
+						Property: {
+							Type: "Armbinder",
+							Difficulty: 3,
+						},
+					},
+					{
+						Name: "Pet",
+						SelfBondageLevel: 5,
+						Property: {
+							Type: "Pet",
+							Difficulty: 1,
+						},
+					},
+					{
+						Name: "Strait",
+						SelfBondageLevel: 6,
+						Property: {
+							Type: "Strait",
+							Difficulty: 2,
+						},
+					},
+					{
+						Name: "Crawler",
+						SelfBondageLevel: 7,
+						Property: {
+							Type: "Crawler",
+							Difficulty: 3,
+							SetPose: ["AllFours"],
+							Block: ["ItemLegs", "ItemFeets", "ItemBoots", "ItemDevices"],
+							Effect: ["Block", "Prone", "ForceKneel"],
+						},
+					},
+				],
+				Dialog: {
+					Load: "VetWrapSelect",
+				},
+				ChatTags: [CommonChatTags.SOURCE_CHAR, CommonChatTags.TARGET_CHAR, CommonChatTags.DEST_CHAR],
+			},
+		}, // VetWrap
 	}, // ItemArms
 	ItemHood: {
 		KirugumiMask: {
@@ -158,6 +209,29 @@ var AssetFemale3DCGExtended = {
 			},
 		}, // Crib
 	}, // ItemDevices
+	ItemLegs: {
+		VetWrap: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Open",
+						Property: { Type: null },
+					},
+					{
+						Name: "Cover",
+						Property: {
+							Type: "Cover",
+							Block: ["ItemFeet", "ItemBoots", "ItemVulva", "ItemButt", "ItemVulvaPiercings", "ItemPelvis"],
+						},
+					},
+				],
+				Dialog: {
+					Load: "VetWrapSelect",
+				},
+			},
+		}, // VetWrap
+	}, // ItemLegs
 };
 
 /**

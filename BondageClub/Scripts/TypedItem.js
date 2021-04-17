@@ -10,7 +10,7 @@
  * All dialogue for typed items should be added to `Dialog_Player.csv`. To implement a typed item, you need the
  * following dialogue entries (these dialogue keys can also be configured through the item's configuration if custom
  * dialogue keys are needed):
- *  * "<GroupName><AssetName>Select" - This is the text that will be displayed at the top of the extended itme screen
+ *  * "<GroupName><AssetName>Select" - This is the text that will be displayed at the top of the extended item screen
  *    (usually a prompt for the player to select a type)
  *  * For each type:
  *    * "<GroupName><AssetName><TypeName>" - This is the display name for the given type
@@ -202,6 +202,32 @@ function TypedItemMapChatTagToDictionaryEntry(C, asset, tag) {
  * @typedef TypedItemConfig
  * @type {object}
  * @property {ExtendedItemOption[]} Options - The list of extended item options available for the item
+ * @property {TypedItemDialogConfig} [Dialog] - The optional text configuration for the item. Custom text keys can be
+ * configured within this object
+ * @property {CommonChatTags} [ChatTags] - An optional array of chat tags that should be included in the dictionary of
+ * the chatroom message when the item's type is changed. Defaults to {@link CommonChatTags.SOURCE_CHAR} and
+ * {@link CommonChatTags.DEST_CHAR}
+ * @property {TypedItemChatSetting} [ChatSetting] - The chat message setting for the item. This can be provided to allow
+ * finer-grained chatroom message keys for the item. Defaults to {@link TypedItemChatSetting.TO_ONLY}
+ */
+
+/**
+ * @typedef TypedItemDialogConfig
+ * @type {object}
+ * @property {string} [Load] - The key for the text that will be displayed at the top of the extended item screen
+ * (usually a prompt for the player to select a type). Defaults to "<groupName><assetName>Select"
+ * @property {string} [TypePrefix] - A prefix for text keys for the display names of the item's individual types. This
+ * will be suffixed with the option name to get the final key (i.e. "<typePrefix><optionName>"). Defaults to
+ * "<groupName><assetName>"
+ * @property {string} [ChatPrefix] - A prefix for text keys for chat messages triggered by the item. Chat message keys
+ * will include the name of the new option, and depending on the chat setting, the name of the previous option:
+ * - For chat setting FROM_TO: <chatPrefix><oldOptionName>To<newOptionName>
+ * - For chat setting TO_ONLY: <chatPrefix><newOptionName>
+ * @property {string} [NpcPrefix] - A prefix for text keys for NPC dialog. This will be suffixed with the option name
+ * to get the final NPC dialogue key (i.e. "<npcPrefix><optionName>". Defaults to "<groupName><assetName>"
+ */
+
+/**
  *
  * An object containing typed item configuration for an asset. Contains all of the necessary information for the item's
  * load, draw & click handlers.
