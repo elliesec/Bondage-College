@@ -170,7 +170,6 @@ const AssetExtendedConfigType = {
 	ChatSetting: "Maybe String",
 	Dialog: "Maybe Object",
 	ChatTags: "Maybe [String]",
-	Cloth: "Maybe Boolean",
 	DrawImages: "Maybe Boolean",
 };
 

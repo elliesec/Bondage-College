@@ -172,7 +172,6 @@ var AssetFemale3DCGExtended = {
 						Property: { Type: "Garterless" },
 					},
 				],
-				Cloth: true,
 				Dialog: {
 					Load: "LatexCorset1Select",
 					TypePrefix: "LatexCorset1",
@@ -185,9 +184,6 @@ var AssetFemale3DCGExtended = {
 		LatexCorset1: {
 			Archetype: ExtendedArchetype.TYPED,
 			CopyConfig: { GroupName: "Corset", AssetName: "LatexCorset1" },
-			Config: {
-				Cloth: false,
-			},
 		},
 	}, // ItemTorso
 };

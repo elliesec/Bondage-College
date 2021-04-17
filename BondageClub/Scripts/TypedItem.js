@@ -64,7 +64,7 @@ function TypedItemRegister(asset, config) {
  * @param {TypedItemConfig} config - The item's extended item configuration
  * @returns {TypedItemData} - The generated typed item data for the asset
  */
-function TypedItemCreateTypedItemData(asset, { Options, Dialog, ChatTags, ChatSetting, Cloth, DrawImages }) {
+function TypedItemCreateTypedItemData(asset, { Options, Dialog, ChatTags, ChatSetting, DrawImages }) {
 	Dialog = Dialog || {};
 	const key = `${asset.Group.Name}${asset.Name}`;
 	return TypedItemDataLookup[key] = {
@@ -83,7 +83,6 @@ function TypedItemCreateTypedItemData(asset, { Options, Dialog, ChatTags, ChatSe
 			CommonChatTags.DEST_CHAR,
 		],
 		chatSetting: ChatSetting || TypedItemChatSetting.TO_ONLY,
-		cloth: typeof Cloth === "boolean" ? Cloth : false,
 		drawImages: typeof DrawImages === "boolean" ? DrawImages : true,
 	};
 }
@@ -105,10 +104,10 @@ function TypedItemCreateLoadFunction({ options, functionPrefix, dialog }) {
  * @param {TypedItemData} data - The typed item data for the asset
  * @returns {void} - Nothing
  */
-function TypedItemCreateDrawFunction({ options, functionPrefix, dialog, drawImages, cloth }) {
+function TypedItemCreateDrawFunction({ options, functionPrefix, dialog, drawImages }) {
 	const drawFunctionName = `${functionPrefix}Draw`;
 	window[drawFunctionName] = function () {
-		ExtendedItemDraw(options, dialog.typePrefix, null, drawImages, cloth);
+		ExtendedItemDraw(options, dialog.typePrefix, null, drawImages);
 	};
 }
 
@@ -117,10 +116,10 @@ function TypedItemCreateDrawFunction({ options, functionPrefix, dialog, drawImag
  * @param {TypedItemData} data - The typed item data for the asset
  * @returns {void} - Nothing
  */
-function TypedItemCreateClickFunction({ options, functionPrefix, cloth, drawImages }) {
+function TypedItemCreateClickFunction({ options, functionPrefix, drawImages }) {
 	const clickFunctionName = `${functionPrefix}Click`;
 	window[clickFunctionName] = function () {
-		ExtendedItemClick(options, cloth, null, drawImages);
+		ExtendedItemClick(options, null, drawImages);
 	};
 }
 
@@ -211,7 +210,6 @@ function TypedItemMapChatTagToDictionaryEntry(C, asset, tag) {
  * {@link CommonChatTags.DEST_CHAR}
  * @property {TypedItemChatSetting} [ChatSetting] - The chat message setting for the item. This can be provided to allow
  * finer-grained chatroom message keys for the item. Defaults to {@link TypedItemChatSetting.TO_ONLY}
- * @property {boolean} [Cloth] - A boolean indicating whether this item is a clothing item or not. Defaults to false
  * @property {boolean} [DrawImages] - A boolean indicating whether or not images should be drawn in this item's extended
  * item menu. Defaults to true
  */
@@ -252,7 +250,6 @@ function TypedItemMapChatTagToDictionaryEntry(C, asset, tag) {
  * changes
  * @property {CommonChatTags[]} chatTags - An array of the chat message tags that should be included in the item's
  * chatroom messages. Defaults to [{@link CommonChatTags.SOURCE_CHAR}, {@link CommonChatTags.DEST_CHAR}]
- * @property {boolean} [cloth] - A boolean indicating whether this item is a clothing item or not. Defaults to false
  * @property {boolean} [drawImages] - A boolean indicating whether or not images should be drawn in this item's extended
  * item menu. Defaults to true
  */
