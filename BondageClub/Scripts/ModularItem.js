@@ -601,8 +601,8 @@ function ModularItemRequirementMessageCheck(option) {
 function ModularItemGenerateValidationProperties(data) {
 	const {asset, modules} = data;
 	asset.AllowType = ModularItemGenerateAllowType(data);
-	asset.AllowEffect = asset.Effect || [];
-	asset.AllowBlock = asset.Block || [];
+	asset.AllowEffect = Array.isArray(asset.Effect) ? asset.Effect.slice() : [];
+	asset.AllowBlock = Array.isArray(asset.Block) ? asset.Block.slice() : [];
 	modules.forEach((module) => {
 		module.Options.forEach(({Property}) => {
 			if (Property && Property.Effect) ModularItemAddToArray(asset.AllowEffect, Property.Effect);
