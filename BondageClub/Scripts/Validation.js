@@ -158,8 +158,7 @@ function ValidationResolveModifyDiff(previousItem, newItem, params) {
 	const previousProperty = previousItem.Property || {};
 	const newProperty = newItem.Property = newItem.Property || {};
 	const itemBlocked = ValidationIsItemBlockedOrLimited(C, sourceMemberNumber, group.Name, asset.Name) ||
-	                    ValidationIsItemBlockedOrLimited(
-		                    C, sourceMemberNumber, group.Name, asset.Name, newProperty.Type);
+						ValidationIsItemBlockedOrLimited(C, sourceMemberNumber, group.Name, asset.Name, newProperty.Type);
 
 	// If the type has changed and the new type is blocked/limited for the target character, prevent modifications
 	if (newProperty.Type !== previousProperty.Type && itemBlocked) {
@@ -176,12 +175,12 @@ function ValidationResolveModifyDiff(previousItem, newItem, params) {
 	const lockRemoved = lockSwapped || (!newLock && !!previousLock);
 	const lockAdded = lockSwapped || (!!newLock && !previousLock);
 	const newLockBlocked = lockAdded && ValidationIsItemBlockedOrLimited(
-		C, sourceMemberNumber, newLock.Asset.Group.Name, newLock.Asset.Name,
+		C, sourceMemberNumber, newLock.Asset.Group.Name, newLock.Asset.Name
 	);
 
 	const lockChangeInvalid = (lockRemoved && !ValidationIsLockChangePermitted(previousLock, params)) ||
-	                          (lockAdded && !ValidationIsLockChangePermitted(newLock, params)) ||
-	                          (newLockBlocked);
+		(lockAdded && !ValidationIsLockChangePermitted(newLock, params)) ||
+		(newLockBlocked);
 
 	if (lockChangeInvalid) {
 		// If there was a lock previously, reapply the old lock
@@ -380,8 +379,10 @@ function ValidationCanRemoveItem(previousItem, params, isSwap) {
 	// If we're not swapping, and the asset group can't be empty, always block removal
 	if (!previousItem.Asset.Group.AllowNone && !isSwap) return false;
 
+	const {fromSelf, fromOwner, fromLover} = params;
+
 	// If the update is coming from ourself, it's always permitted
-	if (params.fromSelf) return true;
+	if (fromSelf) return true;
 
 	const lock = InventoryGetLock(previousItem);
 
@@ -392,7 +393,13 @@ function ValidationCanRemoveItem(previousItem, params, isSwap) {
 	}
 
 	// Owners can always remove lover locks, regardless of lover rules
-	if (lock && lock.Asset.LoverOnly && params.fromOwner) return true;
+	if (lock && lock.Asset.LoverOnly && fromOwner) return true;
+
+	// Only owners/lovers can remove lover locks
+	if (lock && lock.Asset.LoverOnly && !fromLover && !fromOwner) return false;
+
+	// Only owners can remove owner locks
+	if (lock && lock.Asset.OwnerOnly && !fromOwner) return false;
 
 	// Fall back to common item add/remove validation
 	return ValidationCanAddOrRemoveItem(previousItem, params);
@@ -596,7 +603,7 @@ function ValidationSanitizeLock(C, item) {
 		if (!ValidationCombinationNumberRegex.test(property.CombinationNumber)) {
 			// If the combination is invalid, reset to 0000
 			console.warn(
-				`Invalid combination number: ${property.CombinationNumber}. Combination will be reset to ${ValidationDefaultCombinationNumber}`,
+				`Invalid combination number: ${property.CombinationNumber}. Combination will be reset to ${ValidationDefaultCombinationNumber}`
 			);
 			property.CombinationNumber = ValidationDefaultCombinationNumber;
 			changed = true;
@@ -634,7 +641,7 @@ function ValidationSanitizeLock(C, item) {
 		if (!ValidationPasswordRegex.test(property.Password)) {
 			// If the password is invalid, reset to "UNLOCK"
 			console.warn(
-				`Invalid password: ${property.Password}. Combination will be reset to ${ValidationDefaultPassword}`,
+				`Invalid password: ${property.Password}. Combination will be reset to ${ValidationDefaultPassword}`
 			);
 			property.Password = ValidationDefaultPassword;
 			changed = true;
