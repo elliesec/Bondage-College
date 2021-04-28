@@ -712,7 +712,7 @@ function DialogMenuButtonBuild(C) {
 				if ((Item != null) && !IsItemLocked && InventoryItemHasEffect(Item, "Mounted", true) && Player.CanInteract() && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked) DialogMenuButton.push("Dismount");
 				if ((Item != null) && !IsItemLocked && InventoryItemHasEffect(Item, "Enclose", true) && Player.CanInteract() && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked) DialogMenuButton.push("Escape");
 				if (DialogCanUseRemote(C, Item)) DialogMenuButton.push("Remote");
-				if ((Item != null) && Item.Asset.Extended && ((Player.CanInteract()) || DialogAlwaysAllowRestraint() || Item.Asset.AlwaysInteract) && (!IsGroupBlocked || Item.Asset.AlwaysExtend) && (!Item.Asset.OwnerOnly || (C.IsOwnedByPlayer())) && (!Item.Asset.LoverOnly || (C.IsLoverOfPlayer()))) DialogMenuButton.push("Use");
+				if ((Item != null) && Item.Asset.Extended && ((Player.CanInteract()) || DialogAlwaysAllowRestraint() || Item.Asset.AlwaysInteract) && (!IsGroupBlocked || Item.Asset.AlwaysExtend) && (!Item.Asset.OwnerOnly || (C.IsOwnedByPlayer())) && (!Item.Asset.LoverOnly || (C.IsLoverOfPlayer())) && !InventoryBlockedOrLimited(C, Item)) DialogMenuButton.push("Use");
 				if (DialogCanColor(C, Item)) DialogMenuButton.push("ColorPick");
 
 				// Make sure the target player zone is allowed for an activity
@@ -1477,6 +1477,8 @@ function DialogSetText(NewText) {
  * @returns {void} - Nothing
  */
 function DialogExtendItem(Item, SourceItem) {
+	const C = CharacterGetCurrent();
+	if (InventoryBlockedOrLimited(C, Item)) return;
 	StruggleProgress = -1;
 	StruggleLockPickOrder = null
 	DialogLockMenu = false

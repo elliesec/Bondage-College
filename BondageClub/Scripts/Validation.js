@@ -157,11 +157,12 @@ function ValidationResolveModifyDiff(previousItem, newItem, params) {
 	const group = asset.Group;
 	const previousProperty = previousItem.Property || {};
 	const newProperty = newItem.Property = newItem.Property || {};
-	const newTypeBlocked = ValidationIsItemBlockedOrLimited(C, sourceMemberNumber, group.Name, asset.Name, newProperty.Type);
+	const itemBlocked = ValidationIsItemBlockedOrLimited(C, sourceMemberNumber, group.Name, asset.Name) ||
+	                    ValidationIsItemBlockedOrLimited(
+		                    C, sourceMemberNumber, group.Name, asset.Name, newProperty.Type);
 
 	// If the type has changed and the new type is blocked/limited for the target character, prevent modifications
-	if (newProperty.Type !== previousProperty.Type && newTypeBlocked) {
-		console.warn(`Invalid type modification of ${ValidationItemWarningMessage(newItem, params)}`);
+	if (newProperty.Type !== previousProperty.Type && itemBlocked) {
 		return { item: previousItem, valid: false };
 	}
 
