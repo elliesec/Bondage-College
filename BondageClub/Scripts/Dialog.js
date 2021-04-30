@@ -1588,7 +1588,7 @@ function DialogGetMenuButtonColor(ButtonName) {
 		return DialogColorSelect || "#fff"
 	} else {
 		return "#fff";
-	};
+	}
 }
 
 /**

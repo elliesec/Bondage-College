@@ -178,8 +178,8 @@ function ValidationResolveModifyDiff(previousItem, newItem, params) {
 	);
 
 	const lockChangeInvalid = (lockRemoved && !ValidationIsLockChangePermitted(previousLock, params)) ||
-	                          (lockAdded && !ValidationIsLockChangePermitted(newLock, params)) ||
-	                          ((lockAdded || lockModified || lockSwapped) && (newLockBlocked || itemBlocked));
+		(lockAdded && !ValidationIsLockChangePermitted(newLock, params)) ||
+		((lockAdded || lockModified || lockSwapped) && (newLockBlocked || itemBlocked));
 
 	if (lockChangeInvalid) {
 		if (previousLock) {
