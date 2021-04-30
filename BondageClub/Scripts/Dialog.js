@@ -673,15 +673,22 @@ function DialogMenuButtonBuild(C) {
 		const IsGroupBlocked = InventoryGroupIsBlocked(C);
 		const CanAccessLockpicks = Player.CanInteract() || Player.CanWalk() // If the character can access her tools. Maybe in the future you will be able to hide a lockpick in your panties :>
 
-
 		if (DialogLockMenu) {
 			DialogMenuButton.push("LockCancel");
-			
-			if (IsItemLocked && !Player.IsBlind() && DialogCanUnlock(C, Item) && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked && ((C.ID != 0) || Player.CanInteract())
-				|| ((Item != null) && (C.ID == 0) && !Player.CanInteract() && InventoryItemHasEffect(Item, "Block", true) && IsItemLocked && DialogCanUnlock(C, Item) && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked))
+
+			// If the item isn't locked, there are no more buttons to add
+			const Lock = InventoryGetLock(Item);
+			if (!IsItemLocked || !Lock) return;
+
+			const ItemBlockedOrLimited = InventoryBlockedOrLimited(C, Item);
+			const LockBlockedOrLimited = InventoryBlockedOrLimited(C, Lock) || ItemBlockedOrLimited;
+
+			if (!Player.IsBlind() && DialogCanUnlock(C, Item) && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked && ((C.ID != 0) || Player.CanInteract())
+				|| ((Item != null) && (C.ID == 0) && !Player.CanInteract() && InventoryItemHasEffect(Item, "Block", true) && DialogCanUnlock(C, Item) && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked)) {
 				DialogMenuButton.push("Unlock");
-			if (IsItemLocked && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked && !InventoryGroupIsBlocked(Player, "ItemHands") && InventoryItemIsPickable(Item) && (C.ID == 0 || (C.OnlineSharedSettings && !C.OnlineSharedSettings.DisablePickingLocksOnSelf))) {
-				if (DialogLentLockpicks) 
+			}
+			if (InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked && !InventoryGroupIsBlocked(Player, "ItemHands") && InventoryItemIsPickable(Item) && (C.ID == 0 || (C.OnlineSharedSettings && !C.OnlineSharedSettings.DisablePickingLocksOnSelf))) {
+				if (DialogLentLockpicks)
 					DialogMenuButton.push("PickLock");
 				else if (CanAccessLockpicks)
 					for (let I = 0; I < Player.Inventory.length; I++)
@@ -690,9 +697,10 @@ function DialogMenuButtonBuild(C) {
 							break;
 						}
 			}
-			if (IsItemLocked && Item.Property && Item.Property.LockedBy && (!Player.IsBlind() || DialogCanInspectLockWhileBlind(Item.Property.LockedBy)))
-				DialogMenuButton.push("InspectLock");
-			
+			if (Lock && (!Player.IsBlind() || DialogCanInspectLockWhileBlind(Lock.Asset.Name))) {
+				DialogMenuButton.push(LockBlockedOrLimited ? "InspectLockDisabled" : "InspectLock");
+			}
+
 		} else {
 			if ((DialogInventory != null) && (DialogInventory.length > 12) && ((Player.CanInteract() && !IsGroupBlocked) || DialogItemPermissionMode)) DialogMenuButton.push("Next");
 				if (C.FocusGroup.Name == "ItemMouth" || C.FocusGroup.Name == "ItemMouth2" || C.FocusGroup.Name == "ItemMouth3") DialogMenuButton.push("ChangeLayersMouth");
@@ -1551,6 +1559,35 @@ function DialogDrawActivityMenu(C) {
 
 }
 
+/**
+ * Returns the background color of a dialog menu button based on the button name.
+ * @param {string} ButtonName - The menu button name
+ * @returns {string} - The background color that the menu button should use
+ */
+function DialogGetMenuButtonColor(ButtonName) {
+	switch (ButtonName) {
+		case "ColorPick":
+			return DialogColorSelect || "#fff";
+		case "InspectLockDisabled":
+			return "#808080";
+		default:
+			return "#fff";
+	}
+}
+
+/**
+ * Determines whether or not a given dialog menu button should be disabled based on the button name.
+ * @param {string} ButtonName - The menu button name
+ * @returns {boolean} - TRUE if the menu button should be disabled, FALSE otherwise
+ */
+function DialogIsMenuButtonDisabled(ButtonName) {
+	switch (ButtonName) {
+		case "InspectLockDisabled":
+			return true;
+		default:
+			return false;
+	}
+}
 
 /**
  * Draw the item menu dialog
@@ -1573,10 +1610,11 @@ function DialogDrawItemMenu(C) {
 	if (DialogMenuButton == null) DialogMenuButtonBuild(CharacterGetCurrent());
 	if ((DialogColor == null) && Player.CanInteract() && (StruggleProgress < 0 && !StruggleLockPickOrder) && !InventoryGroupIsBlocked(C) && DialogMenuButton.length < 8) DrawTextWrap((!DialogItemPermissionMode) ? DialogText : DialogFind(Player, "DialogPermissionMode"), 1000, 0, 975 - DialogMenuButton.length * 110, 125, "White", null, 3);
 	for (let I = DialogMenuButton.length - 1; I >= 0; I--) {
-		let ButtonColor = (DialogMenuButton[I] == "ColorPick") && (DialogColorSelect != null) ? DialogColorSelect : "White";
-		let ButtonImage = DialogMenuButton[I] == "ColorPick" && !ItemColorIsSimple(FocusItem) ? "MultiColorPick" : DialogMenuButton[I];
-		let ButtonHoverText = (DialogColor == null) ? DialogFindPlayer(DialogMenuButton[I]) : null;
-		DrawButton(1885 - I * 110, 15, 90, 90, "", ButtonColor, "Icons/" + ButtonImage + ".png", ButtonHoverText);
+		const ButtonColor = DialogGetMenuButtonColor(DialogMenuButton[I]);
+		const ButtonImage = DialogMenuButton[I] == "ColorPick" && !ItemColorIsSimple(FocusItem) ? "MultiColorPick" : DialogMenuButton[I];
+		const ButtonHoverText = (DialogColor == null) ? DialogFindPlayer(DialogMenuButton[I]) : null;
+		const ButtonDisabled = DialogIsMenuButtonDisabled(DialogMenuButton[I]);
+		DrawButton(1885 - I * 110, 15, 90, 90, "", ButtonColor, "Icons/" + ButtonImage + ".png", ButtonHoverText, ButtonDisabled);
 	}
 	
 	// Draws the color picker
