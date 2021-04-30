@@ -275,7 +275,10 @@ function AssetMapLayer(Layer, AssetDefinition, A, I) {
 		LockLayer: typeof Layer.LockLayer === "boolean" ? Layer.LockLayer : false,
 		MirrorExpression: Layer.MirrorExpression,
 		AllowModuleTypes: Layer.AllowModuleTypes,
-	}, AssetParsePoseProperties(Layer));
+	}, AssetParsePoseProperties(
+		Layer,
+		Array.isArray(AssetDefinition.AllowPose) ? [...AssetDefinition.AllowPose] : null)
+	);
 	if (L.MinOpacity > L.Opacity) L.MinOpacity = L.Opacity;
 	if (L.MaxOpacity < L.Opacity) L.MaxOpacity = L.Opacity;
 	return L;
