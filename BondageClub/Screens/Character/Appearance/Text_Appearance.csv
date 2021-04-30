@@ -20,3 +20,5 @@ UseDisabled,Unable to use due to player permissions
 Reset,Reset character
 ColorPick,Select a colour
 MultiColorPick,Select colours
+ColorPickDisabled,Unable to change color due to player permissions,,
+MultiColorPickDisabled,Unable to change color due to player permissions,,
