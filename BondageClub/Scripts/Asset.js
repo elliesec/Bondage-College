@@ -19,7 +19,7 @@ var Pose = [];
  * the URL when fetching the layer's image
  * @property {string | null} [ParentGroupName] - The name of the parent group for this layer. If null, the layer has no parent group. If
  * undefined, the layer inherits its parent group from it's asset/group.
- * @property {string[] | null} OverrideAllowPose - An array of poses that this layer permits. If set, it will override the poses permitted
+ * @property {string[] | null} AllowPose - An array of poses that this layer permits. If set, it will override the poses permitted
  * by the parent asset/group.
  * @property {number} Priority - The drawing priority of this layer. Inherited from the parent asset/group if not specified in the layer
  * definition.
@@ -109,7 +109,6 @@ function AssetAdd(NewAsset, ExtendedConfig) {
 		SetPose: (NewAsset.SetPose == null) ? AssetCurrentGroup.SetPose : NewAsset.SetPose,
 		AllowPose: Array.isArray(NewAsset.AllowPose) ? NewAsset.AllowPose : AssetCurrentGroup.AllowPose,
 		HideForPose: Array.isArray(NewAsset.HideForPose) ? NewAsset.HideForPose : [],
-		OverrideAllowPose: NewAsset.OverrideAllowPose,
 		AllowActivePose: (NewAsset.AllowActivePose == null) ? AssetCurrentGroup.AllowActivePose : NewAsset.AllowActivePose,
 		WhitelistActivePose: (NewAsset.WhitelistActivePose == null) ? AssetCurrentGroup.WhitelistActivePose : NewAsset.WhitelistActivePose,
 		Value: (NewAsset.Value == null) ? 0 : NewAsset.Value,
@@ -256,7 +255,7 @@ function AssetMapLayer(Layer, AssetDefinition, A, I) {
 		AllowTypes: Array.isArray(Layer.AllowTypes) ? Layer.AllowTypes : null,
 		HasType: typeof Layer.HasType === "boolean" ? Layer.HasType : A.HasType,
 		ParentGroupName: Layer.ParentGroup,
-		OverrideAllowPose: Array.isArray(Layer.OverrideAllowPose) ? Layer.OverrideAllowPose : null,
+		AllowPose: Array.isArray(Layer.AllowPose) ? Layer.AllowPose : null,
 		Priority: Layer.Priority || AssetDefinition.Priority || AssetCurrentGroup.DrawingPriority,
 		InheritColor: Layer.InheritColor,
 		Alpha: AssetLayerAlpha(Layer, AssetDefinition, I),
