@@ -655,7 +655,9 @@ function DialogMenuButtonBuild(C) {
 	// The "Exit" button is always available
 	DialogMenuButton = ["Exit"];
 
-	var Item = InventoryGet(C, C.FocusGroup.Name);
+	const Item = InventoryGet(C, C.FocusGroup.Name);
+	const ItemBlockedOrLimited = !!Item && InventoryBlockedOrLimited(C, Item);
+
 	// In color picker mode
 	if (DialogColor != null && Item == null) {
 		DialogMenuButton.push("ColorCancel");
@@ -680,7 +682,6 @@ function DialogMenuButtonBuild(C) {
 			const Lock = InventoryGetLock(Item);
 			if (!IsItemLocked || !Lock) return;
 
-			const ItemBlockedOrLimited = InventoryBlockedOrLimited(C, Item);
 			const LockBlockedOrLimited = InventoryBlockedOrLimited(C, Lock) || ItemBlockedOrLimited;
 
 			if (!Player.IsBlind() && DialogCanUnlock(C, Item) && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked && ((C.ID != 0) || Player.CanInteract())
@@ -712,16 +713,16 @@ function DialogMenuButtonBuild(C) {
 				if ((Item != null) && !IsItemLocked && Player.CanInteract() && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked) {
 					if (Item.Asset.AllowLock && (!Item.Property || (Item.Property && Item.Property.AllowLock !== false))) {
 						if (!Item.Asset.AllowLockType || Item.Asset.AllowLockType.includes(Item.Property.Type)) {
-							DialogMenuButton.push("Lock");
+							DialogMenuButton.push(ItemBlockedOrLimited ? "LockDisabled" : "Lock");
 						}
 					}
 				}
 				if ((Item != null) && !IsItemLocked && !InventoryItemHasEffect(Item, "Mounted", true) && !InventoryItemHasEffect(Item, "Enclose", true) && Player.CanInteract() && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked) DialogMenuButton.push("Remove");
 				if ((Item != null) && !IsItemLocked && InventoryItemHasEffect(Item, "Mounted", true) && Player.CanInteract() && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked) DialogMenuButton.push("Dismount");
 				if ((Item != null) && !IsItemLocked && InventoryItemHasEffect(Item, "Enclose", true) && Player.CanInteract() && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked) DialogMenuButton.push("Escape");
-				if (DialogCanUseRemote(C, Item)) DialogMenuButton.push("Remote");
-				if ((Item != null) && Item.Asset.Extended && ((Player.CanInteract()) || DialogAlwaysAllowRestraint() || Item.Asset.AlwaysInteract) && (!IsGroupBlocked || Item.Asset.AlwaysExtend) && (!Item.Asset.OwnerOnly || (C.IsOwnedByPlayer())) && (!Item.Asset.LoverOnly || (C.IsLoverOfPlayer())) && !InventoryBlockedOrLimited(C, Item)) DialogMenuButton.push("Use");
-				if (DialogCanColor(C, Item)) DialogMenuButton.push("ColorPick");
+				if (DialogCanUseRemote(C, Item)) DialogMenuButton.push(ItemBlockedOrLimited ? "RemoteDisabled" : "Remote");
+				if ((Item != null) && Item.Asset.Extended && ((Player.CanInteract()) || DialogAlwaysAllowRestraint() || Item.Asset.AlwaysInteract) && (!IsGroupBlocked || Item.Asset.AlwaysExtend) && (!Item.Asset.OwnerOnly || (C.IsOwnedByPlayer())) && (!Item.Asset.LoverOnly || (C.IsLoverOfPlayer()))) DialogMenuButton.push(ItemBlockedOrLimited ? "UseDisabled" : "Use");
+				if (DialogCanColor(C, Item)) DialogMenuButton.push(ItemBlockedOrLimited ? "ColorPickDisabled" : "ColorPick");
 
 				// Make sure the target player zone is allowed for an activity
 				if ((C.FocusGroup.Activity != null) && ((!C.IsEnclose() && !Player.IsEnclose()) || C.ID == 0) && ActivityAllowed() && (C.ArousalSettings != null) && (C.ArousalSettings.Zone != null) && (C.ArousalSettings.Active != null) && (C.ArousalSettings.Active != "Inactive"))
@@ -1560,19 +1561,34 @@ function DialogDrawActivityMenu(C) {
 }
 
 /**
+ * Returns the button image name for a dialog menu button based on the button name.
+ * @param {string} ButtonName - The menu button name
+ * @param {Item} FocusItem - The focused item
+ * @returns {string} - The button image name
+ */
+function DialogGetMenuButtonImage(ButtonName, FocusItem) {
+	if (ButtonName === "ColorPick" || ButtonName === "ColorPickDisabled") {
+		return ItemColorIsSimple(FocusItem) ? "ColorPick" : "MultiColorPick";
+	} else if (ButtonName.endsWith("Disabled")) {
+		return ButtonName.replace(/Disabled$/, "");
+	} else {
+		return ButtonName;
+	}
+}
+
+/**
  * Returns the background color of a dialog menu button based on the button name.
  * @param {string} ButtonName - The menu button name
  * @returns {string} - The background color that the menu button should use
  */
 function DialogGetMenuButtonColor(ButtonName) {
-	switch (ButtonName) {
-		case "ColorPick":
-			return DialogColorSelect || "#fff";
-		case "InspectLockDisabled":
-			return "#808080";
-		default:
-			return "#fff";
-	}
+	if (ButtonName.endsWith("Disabled")) {
+		return "#808080";
+	}	else if (ButtonName === "ColorPick") {
+		return DialogColorSelect || "#fff"
+	} else {
+		return "#fff";
+	};
 }
 
 /**
@@ -1581,12 +1597,7 @@ function DialogGetMenuButtonColor(ButtonName) {
  * @returns {boolean} - TRUE if the menu button should be disabled, FALSE otherwise
  */
 function DialogIsMenuButtonDisabled(ButtonName) {
-	switch (ButtonName) {
-		case "InspectLockDisabled":
-			return true;
-		default:
-			return false;
-	}
+	return ButtonName.endsWith("Disabled");
 }
 
 /**
@@ -1611,7 +1622,7 @@ function DialogDrawItemMenu(C) {
 	if ((DialogColor == null) && Player.CanInteract() && (StruggleProgress < 0 && !StruggleLockPickOrder) && !InventoryGroupIsBlocked(C) && DialogMenuButton.length < 8) DrawTextWrap((!DialogItemPermissionMode) ? DialogText : DialogFind(Player, "DialogPermissionMode"), 1000, 0, 975 - DialogMenuButton.length * 110, 125, "White", null, 3);
 	for (let I = DialogMenuButton.length - 1; I >= 0; I--) {
 		const ButtonColor = DialogGetMenuButtonColor(DialogMenuButton[I]);
-		const ButtonImage = DialogMenuButton[I] == "ColorPick" && !ItemColorIsSimple(FocusItem) ? "MultiColorPick" : DialogMenuButton[I];
+		const ButtonImage = DialogGetMenuButtonImage(DialogMenuButton[I], FocusItem);
 		const ButtonHoverText = (DialogColor == null) ? DialogFindPlayer(DialogMenuButton[I]) : null;
 		const ButtonDisabled = DialogIsMenuButtonDisabled(DialogMenuButton[I]);
 		DrawButton(1885 - I * 110, 15, 90, 90, "", ButtonColor, "Icons/" + ButtonImage + ".png", ButtonHoverText, ButtonDisabled);

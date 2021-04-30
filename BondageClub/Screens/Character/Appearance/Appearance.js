@@ -566,7 +566,7 @@ function AppearanceMenuBuild(C) {
 		case "Cloth":
 			if (!DialogItemPermissionMode) {
 				let Item = InventoryGet(C, C.FocusGroup.Name);
-				if (Item && Item.Asset.Extended && !InventoryBlockedOrLimited(C, Item)) AppearanceMenu.push("Use");
+				if (Item && Item.Asset.Extended) AppearanceMenu.push(InventoryBlockedOrLimited(C, Item) ? "UseDisabled" : "Use");
 				if (C.ID === 0) AppearanceMenu.push("WearRandom");
 				if (C.ID === 0 && Player.GetDifficulty() < 3) AppearanceMenu.push("DialogPermissionMode");
 				if (C.FocusGroup.AllowNone) AppearanceMenu.push("Naked");
@@ -729,7 +729,9 @@ function AppearanceMenuDraw() {
 	const X = 2000 - AppearanceMenu.length * 117;
 	for (let B = 0; B < AppearanceMenu.length; B++) {
 		const ButtonSuffix = AppearanceMenu[B] === "Character" && !AppearanceUseCharacterInPreviews ? "Off" : "";
-		DrawButton(X + 117 * B, 25, 90, 90, "", "White", "Icons/" + AppearanceMenu[B] + ButtonSuffix + ".png", TextGet(AppearanceMenu[B]));
+		const ButtonColor = DialogGetMenuButtonColor(AppearanceMenu[B]);
+		const ButtonDisabled = DialogIsMenuButtonDisabled(AppearanceMenu[B]);
+		DrawButton(X + 117 * B, 25, 90, 90, "", ButtonColor, "Icons/" + AppearanceMenu[B] + ButtonSuffix + ".png", TextGet(AppearanceMenu[B]), ButtonDisabled);
 	}
 }
 
