@@ -500,6 +500,30 @@ var AssetFemale3DCGExtended = {
 				},
 			},
 		}, // DildoPlugGag
+		MilkBottle: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Rest",
+						Property: { Type: null },
+					},
+					{
+						Name: "Raised",
+						Property: { Type: "Raised" },
+					},
+					{
+						Name: "Chug",
+						Property: { Type: "Chug" },
+					},
+				],
+				Dialog: {
+					Load: "SelectMilkBottleState",
+					TypePrefix: "MilkBottle",
+					ChatPrefix: "MilkBottleSet",
+				},
+			},
+		}, // MilkBottle
 	}, // ItemMouth
 	ItemMouth2: {
 		ClothGag: {
