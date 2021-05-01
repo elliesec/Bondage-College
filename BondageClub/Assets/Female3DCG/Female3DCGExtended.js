@@ -364,6 +364,31 @@ var AssetFemale3DCGExtended = {
 				},
 			},
 		}, // DuctTape
+		CupholderGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "NoCup",
+						Property: { Type: null },
+					},
+					{
+						Name: "Tip",
+						Property: { Type: null },
+					},
+					{
+						Name: "Cup",
+						Property: { Type: "Cup" },
+					},
+				],
+				Dialog: {
+					Load: "CupholderGagOptions",
+					TypePrefix: "CupholderGagOptions",
+					ChatPrefix: "CupholderGagSet",
+				},
+				DrawImages: false,
+			},
+		}, // CupholderGag
 	}, // ItemMouth
 	ItemMouth2: {
 		ClothGag: {
@@ -386,6 +411,10 @@ var AssetFemale3DCGExtended = {
 			Archetype: ExtendedArchetype.TYPED,
 			CopyConfig: { GroupName: "ItemMouth", AssetName: "DuctTape" },
 		},
+		CupholderGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			CopyConfig: { GroupName: "ItemMouth", AssetName: "CupholderGag" },
+		},
 	}, // ItemMouth2
 	ItemMouth3: {
 		ClothGag: {
@@ -407,6 +436,10 @@ var AssetFemale3DCGExtended = {
 		DuctTape: {
 			Archetype: ExtendedArchetype.TYPED,
 			CopyConfig: { GroupName: "ItemMouth", AssetName: "DuctTape" },
+		},
+		CupholderGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			CopyConfig: { GroupName: "ItemMouth", AssetName: "CupholderGag" },
 		},
 	}, // ItemMouth3
 };
