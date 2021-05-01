@@ -2831,7 +2831,7 @@ var AssetFemale3DCG = [
 			},
 			{
 				Name: "HarnessBallGag", Fetish: ["Leather"], Value: 60, Difficulty: 6, Time: 20, AllowLock: true, BuyGroup: "HarnessBallGag", Prerequisite: "GagUnique", Hide: ["Mouth"], Effect: ["BlockMouth", "GagMedium"], AllowEffect: ["BlockMouth", "GagMedium"], ExpressionTrigger: [{ Name: "DroolSides", Group: "Fluids", Timer: 30 }],
-				DefaultColor: ["#FF6060", "Default"], Extended: true, AllowType: ["", "Shiny", "Tight"],
+				DefaultColor: ["#FF6060", "Default"], Extended: true,
 				Layer: [
 					{ Name: "Ball" },
 					{ Name: "Harness", HasType: false},
@@ -3173,7 +3173,7 @@ var AssetFemale3DCG = [
 			{
 				Name: "HarnessBallGag", Fetish: ["Leather"], Value: -1, Difficulty: 6, Time: 20, Random: false, AllowLock: true, BuyGroup: "HarnessBallGag", Prerequisite: "GagUnique", Hide: ["Mouth"], Effect: ["BlockMouth", "GagMedium"], AllowEffect: ["BlockMouth", "GagMedium"], ExpressionTrigger: [{ Name: "DroolSides", Group: "Fluids", Timer: 30 }],
 				DefaultColor: ["#FF6060", "Default"],
-				Extended: true, AllowType: ["", "Shiny", "Tight"],
+				Extended: true, DynamicGroupName: "ItemMouth",
 				Layer: [
 					{ Name: "Ball" },
 					{ Name: "Harness", HasType: false},
@@ -3390,7 +3390,7 @@ var AssetFemale3DCG = [
 			},
 			{
 				Name: "HarnessBallGag", Fetish: ["Leather"], Value: -1, Difficulty: 6, Time: 20, Random: false, AllowLock: true, BuyGroup: "HarnessBallGag", Prerequisite: "GagUnique", Hide: ["Mouth"], Effect: ["BlockMouth", "GagMedium"], AllowEffect: ["BlockMouth", "GagMedium"], ExpressionTrigger: [{ Name: "DroolSides", Group: "Fluids", Timer: 30 }],
-				DefaultColor: ["#FF6060", "Default"],Extended: true, AllowType: ["", "Shiny", "Tight"],
+				DefaultColor: ["#FF6060", "Default"], Extended: true, DynamicGroupName: "ItemMouth",
 				Layer: [
 					{ Name: "Ball" },
 					{ Name: "Harness", HasType: false},

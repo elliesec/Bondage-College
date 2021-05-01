@@ -313,6 +313,10 @@ var AssetFemale3DCGExtended = {
 				},
 			},
 		}, // BallGag
+		HarnessBallGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			CopyConfig: { AssetName: "BallGag" },
+		},
 	}, // ItemMouth
 	ItemMouth2: {
 		ClothGag: {
@@ -327,6 +331,10 @@ var AssetFemale3DCGExtended = {
 			Archetype: ExtendedArchetype.TYPED,
 			CopyConfig: { GroupName: "ItemMouth", AssetName: "BallGag" },
 		},
+		HarnessBallGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			CopyConfig: { GroupName: "ItemMouth", AssetName: "BallGag" },
+		},
 	}, // ItemMouth2
 	ItemMouth3: {
 		ClothGag: {
@@ -338,6 +346,10 @@ var AssetFemale3DCGExtended = {
 			CopyConfig: { GroupName: "ItemMouth", AssetName: "WiffleGag" },
 		},
 		BallGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			CopyConfig: { GroupName: "ItemMouth", AssetName: "BallGag" },
+		},
+		HarnessBallGag: {
 			Archetype: ExtendedArchetype.TYPED,
 			CopyConfig: { GroupName: "ItemMouth", AssetName: "BallGag" },
 		},
