@@ -211,8 +211,62 @@ var AssetFemale3DCGExtended = {
 		ElfEars: {
 			Archetype: ExtendedArchetype.TYPED,
 			CopyConfig: { GroupName: "HairAccessory1", AssetName: "ElfEars" },
-		}
-	} // HairAccessory2
+		},
+	}, // HairAccessory2
+	ItemMouth: {
+		ClothGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Small",
+						Property: {
+							Type: null,
+							Effect: ["BlockMouth", "GagVeryLight"],
+						},
+					},
+					{
+						Name: "Cleave",
+						Property: {
+							Type: "Cleave",
+							Effect: ["BlockMouth", "GagLight"],
+						},
+					},
+					{
+						Name: "OTM",
+						Property: {
+							Type: "OTM",
+							Effect: ["BlockMouth", "GagEasy"],
+						},
+					},
+					{
+						Name: "OTN",
+						Property: {
+							Type: "OTN",
+							Effect: ["BlockMouth", "GagEasy"],
+						},
+					},
+				],
+				Dialog: {
+					Load: "SelectGagType",
+					TypePrefix: "ClothGagType",
+					ChatPrefix: "ClothGagSet",
+				},
+			},
+		},
+	}, // ItemMouth
+	ItemMouth2: {
+		ClothGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			CopyConfig: { GroupName: "ItemMouth", AssetName: "ClothGag" },
+		},
+	}, // ItemMouth2
+	ItemMouth3: {
+		ClothGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			CopyConfig: { GroupName: "ItemMouth", AssetName: "ClothGag" },
+		},
+	}, // ItemMouth3
 };
 
 /**
