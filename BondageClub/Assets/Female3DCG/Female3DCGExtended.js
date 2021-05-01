@@ -448,6 +448,32 @@ var AssetFemale3DCGExtended = {
 				DrawImages: false,
 			},
 		}, // PumpGag
+		PlugGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Open",
+						Property: {
+							Type: null,
+							Effect: ["GagMedium", "OpenMouth"],
+						},
+					},
+					{
+						Name: "Plug",
+						Property: {
+							Type: "Plug",
+							Effect: ["BlockMouth", "GagTotal"],
+						},
+					},
+				],
+				Dialog: {
+					Load: "SelectGagType",
+					TypePrefix: "PlugGagMouthType",
+					ChatPrefix: "PlugGagMouthSet",
+				},
+			},
+		}, // PlugGag
 	}, // ItemMouth
 	ItemMouth2: {
 		ClothGag: {
