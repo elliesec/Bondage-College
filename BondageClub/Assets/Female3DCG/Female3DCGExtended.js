@@ -389,6 +389,65 @@ var AssetFemale3DCGExtended = {
 				DrawImages: false,
 			},
 		}, // CupholderGag
+		PumpGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Empty",
+						Property: {
+							Type: null,
+							InflateLevel: 0,
+							Difficulty: 0,
+							Effect: ["BlockMouth"],
+						},
+					},
+					{
+						Name: "Light",
+						Property: {
+							Type: "Light",
+							InflateLevel: 1,
+							Difficulty: 2,
+							Effect: ["BlockMouth", "GagLight"],
+						},
+					},
+					{
+						Name: "Inflated",
+						Property: {
+							Type: "Inflated",
+							InflateLevel: 2,
+							Difficulty: 4,
+							Effect: ["BlockMouth", "GagEasy"],
+						},
+					},
+					{
+						Name: "Bloated",
+						Property: {
+							Type: "Bloated",
+							InflateLevel: 3,
+							Difficulty: 6,
+							Effect: ["BlockMouth", "GagMedium"],
+						},
+					},
+					{
+						Name: "Maximum",
+						Property: {
+							Type: "Maximum",
+							InflateLevel: 4,
+							Difficulty: 8,
+							Effect: ["BlockMouth", "GagVeryHeavy"],
+						},
+					},
+				],
+				Dialog: {
+					Load: "SelectInflateLevel",
+					TypePrefix: "InflateLevel",
+					ChatPrefix: ({ previousIndex, newIndex }) =>
+						`PumpGag${newIndex > previousIndex ? "pumps" : "deflates"}To`,
+				},
+				DrawImages: false,
+			},
+		}, // PumpGag
 	}, // ItemMouth
 	ItemMouth2: {
 		ClothGag: {
