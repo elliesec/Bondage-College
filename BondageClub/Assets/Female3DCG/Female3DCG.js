@@ -2823,7 +2823,7 @@ var AssetFemale3DCG = [
 			{
 				Name: "WiffleGag", Fetish: ["Leather"], Value: 30, Difficulty: 1, Time: 10, AllowLock: true, BuyGroup: "WiffleGag", Prerequisite: "GagUnique", Hide: ["Mouth"], AllowEffect: ["BlockMouth", "GagNormal"], ExpressionTrigger: [{ Name: "DroolSides", Group: "Fluids", Timer: 30 }],
 				DefaultColor: ["Default", "#FF6060"],
-				Extended: true, AllowType: ["Tight"],
+				Extended: true,
 				Layer: [
 					{ Name: "Strap" , HasType: false},
 					{ Name: "Ball" },
@@ -3163,7 +3163,8 @@ var AssetFemale3DCG = [
 			{
 				Name: "WiffleGag", Fetish: ["Leather"], Value: -1, Difficulty: 1, Time: 10, Random: false, AllowLock: true, BuyGroup: "WiffleGag", Prerequisite: "GagUnique", Hide: ["Mouth"], AllowEffect: ["BlockMouth", "GagNormal"], ExpressionTrigger: [{ Name: "DroolSides", Group: "Fluids", Timer: 30 }],
 				DefaultColor: ["Default", "#FF6060"],
-				Extended: true, AllowType: ["Tight"],
+				Extended: true,
+				DynamicGroupName: "ItemMouth",
 				Layer: [
 					{ Name: "Strap" , HasType: false},
 					{ Name: "Ball" },
@@ -3380,7 +3381,8 @@ var AssetFemale3DCG = [
 			{
 				Name: "WiffleGag", Fetish: ["Leather"], Value: -1, Difficulty: 1, Time: 10, Random: false, AllowLock: true, BuyGroup: "WiffleGag", Prerequisite: "GagUnique", Hide: ["Mouth"], AllowEffect: ["BlockMouth", "GagNormal"], ExpressionTrigger: [{ Name: "DroolSides", Group: "Fluids", Timer: 30 }],
 				DefaultColor: ["Default", "#FF6060"],
-				Extended: true, AllowType: ["Tight"],
+				Extended: true,
+				DynamicGroupName: "ItemMouth",
 				Layer: [
 					{ Name: "Strap" , HasType: false},
 					{ Name: "Ball" },
