@@ -524,6 +524,32 @@ var AssetFemale3DCGExtended = {
 				},
 			},
 		}, // MilkBottle
+		FunnelGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "None",
+						Property: {
+							Type: null,
+							Effect: ["GagMedium", "OpenMouth"],
+						},
+					},
+					{
+						Name: "Funnel",
+						Property: {
+							Type: "Funnel",
+							Effect: ["BlockMouth", "GagMedium"],
+						},
+					},
+				],
+				Dialog: {
+					Load: "SelectGagType",
+					TypePrefix: "FunnelGagMouthType",
+					ChatPrefix: "FunnelGagMouthSet",
+				},
+			},
+		}, // FunnelGag
 	}, // ItemMouth
 	ItemMouth2: {
 		ClothGag: {
