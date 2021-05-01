@@ -42,10 +42,10 @@ function DrawHexToRGB(color) {
 		g: parseInt(result[2], 16),
 		b: parseInt(result[3], 16)
 	} : {
-			r: 0,
-			g: 0,
-			b: 0
-		};
+		r: 0,
+		g: 0,
+		b: 0
+	};
 }
 
 /**
@@ -792,14 +792,14 @@ function DrawTextFit(Text, X, Y, Width, Color, BackColor) {
 	}
 
 	// Cuts the text if it would go over the box
-    if (S <= 10) {
-        while (Text.length > 0) {
-            Text = Text.substr(1);
-            const metrics = MainCanvas.measureText(Text);
-            if (metrics.width <= Width)
-                break;
-        }
-    }
+	if (S <= 10) {
+		while (Text.length > 0) {
+			Text = Text.substr(1);
+			const metrics = MainCanvas.measureText(Text);
+			if (metrics.width <= Width)
+				break;
+		}
+	}
 
 	// Draw a back color relief text if needed
 	if ((BackColor != null) && (BackColor != "")) {
@@ -1079,14 +1079,21 @@ function DrawRect(Left, Top, Width, Height, Color) {
  * @param {number} Radius - Radius of the circle to draw
  * @param {number} LineWidth - Width of the line
  * @param {string} LineColor - Color of the circle's line
+ * @param {string} FillColor - Color of the space inside the circle
+ * @param {HTMLCanvasElement} Canvas - The canvas element to draw onto, defaults to MainCanvas
  * @returns {void} - Nothing
  */
-function DrawCircle(CenterX, CenterY, Radius, LineWidth, LineColor) {
-	MainCanvas.beginPath();
-	MainCanvas.arc(CenterX, CenterY, Radius, 0, 2 * Math.PI, false);
-	MainCanvas.lineWidth = LineWidth;
-	MainCanvas.strokeStyle = LineColor;
-	MainCanvas.stroke();
+function DrawCircle(CenterX, CenterY, Radius, LineWidth, LineColor, FillColor, Canvas) {
+	if (!Canvas) Canvas = MainCanvas;
+	Canvas.beginPath();
+	Canvas.arc(CenterX, CenterY, Radius, 0, 2 * Math.PI, false);
+	if (FillColor) {
+		Canvas.fillStyle = FillColor;
+		Canvas.fill();
+	}
+	Canvas.lineWidth = LineWidth;
+	Canvas.strokeStyle = LineColor;
+	Canvas.stroke();
 }
 
 /**
