@@ -474,6 +474,32 @@ var AssetFemale3DCGExtended = {
 				},
 			},
 		}, // PlugGag
+		DildoPlugGag: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Open",
+						Property: {
+							Type: null,
+							Effect: ["GagEasy", "OpenMouth"],
+						},
+					},
+					{
+						Name: "Plug",
+						Property: {
+							Type: "Plug",
+							Effect: ["BlockMouth", "GagTotal2"],
+						},
+					},
+				],
+				Dialog: {
+					Load: "SelectGagType",
+					TypePrefix: "PlugGagMouthType",
+					ChatPrefix: "DildoPlugGagMouthSet",
+				},
+			},
+		}, // DildoPlugGag
 	}, // ItemMouth
 	ItemMouth2: {
 		ClothGag: {
