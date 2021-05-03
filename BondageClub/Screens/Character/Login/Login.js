@@ -4,11 +4,12 @@ var LoginMessage = "";
 var LoginCredits = null;
 var LoginCreditsPosition = 0;
 var LoginThankYou = "";
-var LoginThankYouList = ["Abby", "Anna", "Aylea", "BlueEyedCat", "BlueWinter", "Brian", "Bryce", "Christian", "Dini", "EliseBlackthorn",
-						 "Epona", "Escurse", "FanRunner", "Fotari", "Greendragon", "KamiKaze", "KBgamer", "Kimuriel", "Longwave", "Michal", 
-						 "Michel", "Mike", "Mindtie", "Misa", "Mzklopyu", "Nick", "Nightcore", "Overlord", "Rashiash", "Ray", 
-						 "Rika", "Robin", "Rutherford", "Ryner", "Samuel", "SeraDenoir", "Shadow", "Somononon", "Stephanie", "Tam", 
-						 "TopHat", "Trent", "Troubadix", "William", "Xepherio", "Yurei", "Znarf"];
+var LoginThankYouList = [
+	"Anna", "Aylea", "BlueEyedCat", "BlueWinter", "Brian", "Bryce", "Christian", "Dini", "Elise", "Epona",
+	"Escurse", "FanRunner", "Flux", "Greendragon", "KamiKaze", "KBgamer", "Kimuriel", "Longwave", "Michal", "Michel",
+	"Mike", "Mindtie", "Misa", "MrUniver", "Mzklopyu", "Nick", "Nightcore", "Overlord", "Rashiash", "Ray",
+	"Rika", "Robin", "Rutherford", "Ryner", "Samuel", "SeraDenoir", "Shadow", "Somononon", "Stephanie", "Tam",
+	"TopHat", "Trent", "Troubadix", "William", "Xepherio", "Yurei", "Znarf"];
 var LoginThankYouNext = 0;
 var LoginSubmitted = false;
 var LoginIsRelog = false;
@@ -148,8 +149,8 @@ function LoginRun() {
  * @returns {void} Nothing
  */
 function LoginValidCollar() {
- 	if ((InventoryGet(Player, "ItemNeck") != null) && (InventoryGet(Player, "ItemNeck").Asset.Name == "SlaveCollar") && (Player.Owner == "" || LogQuery("ReleasedCollar", "OwnerRule"))) {
- 		InventoryRemove(Player, "ItemNeck");
+	if ((InventoryGet(Player, "ItemNeck") != null) && (InventoryGet(Player, "ItemNeck").Asset.Name == "SlaveCollar") && (Player.Owner == "" || LogQuery("ReleasedCollar", "OwnerRule"))) {
+		InventoryRemove(Player, "ItemNeck");
 		if (CurrentScreen == "ChatRoom") {
 			ChatRoomCharacterItemUpdate(Player, "ItemNeck");
 			ChatRoomCharacterItemUpdate(Player, "ItemNeckAccessories");
@@ -217,7 +218,7 @@ function LoginStableItems() {
 		InventoryDelete(Player, "HarnessPonyBits", "ItemMouth3", false);
 		InventoryDelete(Player, "PonyBoots", "Shoes", false);
 		InventoryDelete(Player, "PonyBoots", "ItemBoots", false);
-		InventoryDelete(Player, "PonyHood", "ItemHood", false)
+		InventoryDelete(Player, "PonyHood", "ItemHood", false);
 		InventoryDelete(Player, "HoofMittens", "ItemHands", false);
 	}
 }
@@ -339,6 +340,15 @@ function LoginExtremeItemSettings() {
 	Player.HiddenItems = [];
 }
 
+/**
+ * Handles server response, when login has been queued
+ * @param {number} Pos The position in queue
+ */
+function LoginQueue(Pos) {
+	if (typeof Pos !== "number") return;
+
+	LoginMessage = TextGet("LoginQueueWait").replace("QUEUE_POS", Pos);
+}
 
 /**
  * Handles player login response data
@@ -447,18 +457,27 @@ function LoginResponse(C) {
 			Player.OnlineSharedSettings = C.OnlineSharedSettings;
 			Player.GraphicsSettings = C.GraphicsSettings;
 			Player.NotificationSettings = C.NotificationSettings;
+			Player.SavedExpressions = C.SavedExpressions;
+			if (!Array.isArray(Player.SavedExpressions)) {
+				Player.SavedExpressions = [];
+			}
+			if (Player.SavedExpressions.length < 5) {
+				for (let x = Player.SavedExpressions.length; x < 5; x++) {
+					Player.SavedExpressions.push(null);
+				}
+			}
 			Player.WhiteList = ((C.WhiteList == null) || !Array.isArray(C.WhiteList)) ? [] : C.WhiteList;
 			Player.BlackList = ((C.BlackList == null) || !Array.isArray(C.BlackList)) ? [] : C.BlackList;
 			Player.FriendList = ((C.FriendList == null) || !Array.isArray(C.FriendList)) ? [] : C.FriendList;
 			// Attempt to parse friend names
-			if (typeof C.FriendNames === "string") { 
+			if (typeof C.FriendNames === "string") {
 				try {
 					Player.FriendNames = new Map(JSON.parse(LZString.decompressFromUTF16(C.FriendNames)));
 				} catch(err) {
 					console.warn("An error occured while parsing friendnames, entries have been reset.");
 				}
 			}
-			if (Player.FriendNames == null) { 
+			if (Player.FriendNames == null) {
 				Player.FriendNames = new Map();
 			}
 			Player.SubmissivesList = typeof C.SubmissivesList === "string" ? new Set(JSON.parse(LZString.decompressFromUTF16(C.SubmissivesList))) : new Set();
@@ -467,7 +486,7 @@ function LoginResponse(C) {
 			LoginDifficulty();
 
 			// Loads the player character model and data
-			Player.Appearance = ServerAppearanceLoadFromBundle(Player, C.AssetFamily, C.Appearance, C.MemberNumber).appearance;
+			ServerAppearanceLoadFromBundle(Player, C.AssetFamily, C.Appearance, C.MemberNumber);
 			InventoryLoad(Player, C.Inventory);
 			LogLoad(C.Log);
 			ReputationLoad(C.Reputation);
@@ -617,7 +636,7 @@ function LoginDoLogin() {
 		var Password = ElementValue("InputPassword");
 		var letters = /^[a-zA-Z0-9]+$/;
 		if (Name.match(letters) && Password.match(letters) && (Name.length > 0) && (Name.length <= 20) && (Password.length > 0) && (Password.length <= 20)) {
-		    LoginSetSubmitted();
+			LoginSetSubmitted();
 			ServerSend("AccountLogin", { AccountName: Name, Password: Password });
 		} else LoginStatusReset("InvalidNamePassword");
 	}

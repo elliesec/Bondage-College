@@ -16,13 +16,35 @@ var GameVersion = "R0";
 const GameVersionFormat = /^R([0-9]+)(?:(Alpha|Beta)([0-9]+)?)?$/;
 var CommonVersionUpdated = false;
 
+/**
+ * An enum encapsulating possible chatroom message substitution tags. Character name substitution tags are interpreted
+ * in chatrooms as follows (assuming the character name is Ben987):
+ * SOURCE_CHAR: "Ben987"
+ * DEST_CHAR: "Ben987's" (if character is not self), "her" (if character is self)
+ * DEST_CHAR_NAME: "Ben987's"
+ * TARGET_CHAR: "Ben987" (if character is not self), "herself" (if character is self)
+ * TARGET_CHAR_NAME: "Ben987"
+ * Additionally, sending the following tags will ensure that asset names in messages are correctly translated by
+ * recipients:
+ * ASSET_NAME: (substituted with the localized name of the asset, if available)
+ * @enum {string}
+ */
+const CommonChatTags = {
+	SOURCE_CHAR: "SourceCharacter",
+	DEST_CHAR: "DestinationCharacter",
+	DEST_CHAR_NAME: "DestinationCharacterName",
+	TARGET_CHAR: "TargetCharacter",
+	TARGET_CHAR_NAME: "TargetCharacterName",
+	ASSET_NAME: "AssetName",
+};
+
 String.prototype.replaceAt=function(index, character) {
-      return this.substr(0, index) + character + this.substr(index+character.length);
-    }
+	return this.substr(0, index) + character + this.substr(index+character.length);
+};
 
 /**
- * A map of keys to common font stack definitions. Each stack definition is a	
- * two-item array whose first item is an ordered list of fonts, and whose	
+ * A map of keys to common font stack definitions. Each stack definition is a
+ * two-item array whose first item is an ordered list of fonts, and whose
  * second item is the generic fallback font family (e.g. sans-serif, serif,
  * etc.)
  * @constant
@@ -317,7 +339,7 @@ function CommonDynamicFunctionParams(FunctionName) {
 	var closedParenthesisIndex = FunctionName.indexOf(")", openParenthesisIndex);
 	var Params = FunctionName.substring(openParenthesisIndex + 1, closedParenthesisIndex).split(",");
 	for (let P = 0; P < Params.length; P++)
-		Params[P] = Params[P].trim().replace('"', '').replace('"', '')
+		Params[P] = Params[P].trim().replace('"', '').replace('"', '');
 	FunctionName = FunctionName.substring(0, openParenthesisIndex);
 	if ((FunctionName.indexOf("Dialog") != 0) && (FunctionName.indexOf("Inventory") != 0) && (FunctionName.indexOf(CurrentScreen) != 0)) FunctionName = CurrentScreen + FunctionName;
 
@@ -384,7 +406,7 @@ function CommonCallFunctionByNameWarn(FunctionName/*, ...args */) {
  * @returns {void} - Nothing
  */
 function CommonSetScreen(NewModule, NewScreen) {
-	var prevScreen = CurrentScreen
+	var prevScreen = CurrentScreen;
 	CurrentModule = NewModule;
 	CurrentScreen = NewScreen;
 	CurrentDarkFactor = 1.0;
@@ -394,7 +416,7 @@ function CommonSetScreen(NewModule, NewScreen) {
 	if (typeof window[CurrentScreen + "Load"] === "function")
 		CommonDynamicFunction(CurrentScreen + "Load()");
 	if (prevScreen == "ChatSearch" || prevScreen == "ChatCreate")
-		ChatRoomStimulationMessage("Walk")
+		ChatRoomStimulationMessage("Walk");
 	if (ControllerActive == true) {
 		ClearButtons();
 	}
@@ -538,7 +560,7 @@ function CommonDebounce(func, wait) {
 	};
 }
 /**
- * Creates a simple memoizer. 
+ * Creates a simple memoizer.
  * The memoized function does calculate its result exactly once and from that point on, uses
  * the result stored in a local cache to speed up things.
  * @param {function} func - The function to memoize
@@ -565,7 +587,7 @@ function CommonMemoize(func) {
 	// add a clear cache method
 	memoized.clearCache = function () {
 		memo = {};
-	}
+	};
 	return memoized;
 } // CommonMemoize
 
@@ -740,4 +762,16 @@ function CommonDeepEqual(obj1, obj2) {
 	}
 
 	return false;
+}
+
+/**
+ * Adds all items from the source array to the destination array if they aren't already included
+ * @param {*[]} dest - The destination array
+ * @param {*[]} src - The source array
+ * @returns {void} - Nothing
+ */
+function CommonArrayConcatDedupe(dest, src) {
+	src.forEach(item => {
+		if (!dest.includes(item)) dest.push(item);
+	});
 }

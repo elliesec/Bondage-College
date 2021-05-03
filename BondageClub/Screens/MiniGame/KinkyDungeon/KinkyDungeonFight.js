@@ -1,3 +1,4 @@
+"use strict";
 var KinkyDungeonKilledEnemy = null
 
 var KinkyDungeonMissChancePerBlind = 0.3 // Max 3
@@ -24,8 +25,9 @@ function KinkyDungeonDamageEnemy(Enemy, Damage, Ranged, NoMsg, Spell) {
 	var effect = false
 
 	if (Damage) {
-		Enemy.hp -= dmg
-		if (Damage.type == "stun") {
+		if (Damage.type != "inert")
+			Enemy.hp -= dmg
+		if (Damage.type == "stun" || Damage.type == "electric") {
 			effect = true
 			if (!Enemy.stun) Enemy.stun = 0
 			Enemy.stun = Math.max(Enemy.stun, Damage.time)
@@ -38,12 +40,8 @@ function KinkyDungeonDamageEnemy(Enemy, Damage, Ranged, NoMsg, Spell) {
 		KinkyDungeonKilledEnemy = Enemy
 	}
 	
-	if (!NoMsg && 3 >= KinkyDungeonActionMessagePriority) {
-		KinkyDungeonActionMessageTime = 2
-		KinkyDungeonActionMessage = (Damage) ? TextGet((Ranged) ? "PlayerRanged" : "PlayerAttack").replace("TargetEnemy", TextGet("Name" + Enemy.Enemy.name)).replace("AttackName", atkname).replace("DamageDealt", dmg) : TextGet("PlayerMiss").replace("TargetEnemy", TextGet("Name" + Enemy.Enemy.name))
-		KinkyDungeonActionMessageColor = (Damage && (dmg > 0 || effect)) ? "orange" : "red"
-		KinkyDungeonActionMessagePriority = 3
-	}
+	if (!NoMsg) KinkyDungeonSendActionMessage(3, (Damage) ? TextGet((Ranged) ? "PlayerRanged" : "PlayerAttack").replace("TargetEnemy", TextGet("Name" + Enemy.Enemy.name)).replace("AttackName", atkname).replace("DamageDealt", dmg) : TextGet("PlayerMiss").replace("TargetEnemy", TextGet("Name" + Enemy.Enemy.name)),
+			(Damage && (dmg > 0 || effect)) ? "orange" : "red", 2);
 	
 	return dmg
 }
@@ -112,8 +110,15 @@ function KinkyDungeonBulletHit(b, born) {
 		KinkyDungeonBullets.push({born: born, time:b.bullet.spell.lifetime, x:b.x, y:b.y, vx:0, vy:0, xx:b.x, yy:b.y, spriteID:b.bullet.name+"Hit" + CommonTime(),
 			bullet:{spell:b.bullet.spell, damage: {damage:b.bullet.spell.power, type:b.bullet.spell.damage, time:b.bullet.spell.time}, aoe: b.bullet.spell.aoe, lifetime: b.bullet.spell.lifetime, passthrough:true, name:b.bullet.name+"Hit", width:b.bullet.width, height:b.bullet.height}})
 	} else if (b.bullet.hit == "lingering") {
-		KinkyDungeonBullets.push({born: born, time:b.bullet.spell.lifetime, x:b.x, y:b.y, vx:0, vy:0, xx:b.x, yy:b.y, spriteID:b.bullet.name+"Hit" + CommonTime(),
-			bullet:{spell:b.bullet.spell, damage: {damage:b.bullet.spell.power, type:b.bullet.spell.damage, time:b.bullet.spell.time}, lifetime: b.bullet.spell.lifetime, name:b.bullet.name+"Hit", width:b.bullet.width, height:b.bullet.height}})
+		var rad = (b.bullet.spell.aoe) ? b.bullet.spell.aoe : 0
+		for (let X = -Math.ceil(rad); X <= Math.ceil(rad); X++)
+			for (let Y = -Math.ceil(rad); Y <= Math.ceil(rad); Y++) {
+				if (Math.sqrt(X*X+Y*Y) <= rad) {
+					KinkyDungeonBullets.push({born: born, time:b.bullet.spell.lifetime, x:b.x+X, y:b.y+Y, vx:0, vy:0, xx:b.x+X, yy:b.y+Y, spriteID:b.bullet.name+"Hit" + CommonTime(),
+						bullet:{spell:b.bullet.spell, damage: {damage:b.bullet.spell.power, type:b.bullet.spell.damage, time:b.bullet.spell.time}, lifetime: b.bullet.spell.lifetime, name:b.bullet.name+"Hit", width:1, height:1}})
+				}
+			}
+		
 	}
 }
 
@@ -129,7 +134,7 @@ function KinkyDungeonBulletsCheckCollision(bullet, AoE) {
 				}
 				var nomsg = false
 				for (let L = 0; L < KinkyDungeonEntities.length; L++) {
-					var enemy = KinkyDungeonEntities[L]
+					let enemy = KinkyDungeonEntities[L]
 					if (bullet.bullet.aoe >= Math.sqrt((enemy.x - bullet.x) * (enemy.x - bullet.x) + (enemy.y - bullet.y) * (enemy.y - bullet.y))) {
 						KinkyDungeonDamageEnemy(enemy, bullet.bullet.damage, true, nomsg, bullet.bullet.spell)
 						nomsg = true
@@ -142,7 +147,7 @@ function KinkyDungeonBulletsCheckCollision(bullet, AoE) {
 				return false
 			}
 			for (let L = 0; L < KinkyDungeonEntities.length; L++) {
-				var enemy = KinkyDungeonEntities[L]
+				let enemy = KinkyDungeonEntities[L]
 				if (enemy.x == bullet.x && enemy.y == bullet.y) {
 					KinkyDungeonDamageEnemy(enemy, bullet.bullet.damage, true, bullet.bullet.NoMsg, bullet.bullet.spell)
 					
@@ -176,12 +181,12 @@ function KinkyDungeonDrawFight(canvasOffsetX, canvasOffsetY, CamX, CamY) {
 			
 		}
 		
-		var Img = DrawGetImage("Screens/Minigame/KinkyDungeon/Bullets/" + sprite + ".png", 0, 0)
+		var Img = DrawGetImage(KinkyDungeonRootDirectory + "Bullets/" + sprite + ".png", 0, 0)
 		
 		var spriteContext = spriteCanvas.getContext("2d")
 		var direction = Math.atan2(KinkyDungeonBullets[E].vy, KinkyDungeonBullets[E].vx)
 		
-		// Rotate the canvas
+		// Rotate the canvas m,  
 		spriteContext.translate(spriteCanvas.width/2, spriteCanvas.height/2);
 		spriteContext.rotate(direction);
 		spriteContext.translate(-spriteCanvas.width/2, -spriteCanvas.height/2);

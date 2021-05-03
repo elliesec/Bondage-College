@@ -1,3 +1,4 @@
+"use strict";
 const AssetGroupType = {
 	Asset: "[Object | String]",
 	Group: "String",
@@ -33,6 +34,7 @@ const AssetGroupType = {
 	InheritColor: "Maybe String",
 	FreezeActivePose: "Maybe [String]",
 	PreviewZone: "Maybe (Number, Number, Number, Number)",
+	DynamicGroupName: "Maybe String",
 };
 
 const AssetType = {
@@ -48,7 +50,7 @@ const AssetType = {
 	BuyGroup: "String",
 	PrerequisiteBuyGroups: "[String]",
 	Effect: "[String]",
-	Bonus: "[{ Factor: Number, Type: String }]",
+	Bonus: "String",
 	Block: "[String]",
 	Expose: "[String]",
 	Hide: "[String]",
@@ -58,7 +60,6 @@ const AssetType = {
 	SetPose: "[String]",
 	AllowPose: "[String]",
 	HideForPose: "[String]",
-	OverrideAllowPose: "[String]",
 	AllowActivePose: "[String]",
 	WhitelistActivePose: "[String]",
 	Value: "Number",
@@ -128,8 +129,8 @@ const AssetType = {
 	AllowExpression: "[String]",
 	MirrorExpression: "String",
 	FixedPosition: "Boolean",
-	Layer: "[Object]",
 	CustomBlindBackground: "Object",
+	Layer: "[Object]"
 };
 
 const AssetLayerType = {
@@ -141,7 +142,7 @@ const AssetLayerType = {
 	AllowTypes: "[String]",
 	HasType: "Boolean",
 	ParentGroup: "Maybe String",
-	OverrideAllowPose: "[String]",
+	AllowPose: "[String]",
 	Priority: "Number",
 	InheritColor: "String",
 	Alpha: "[{ Group: Maybe [String], Pose: Maybe [String], Masks: [(Number, Number, Number, Number)] }]",
@@ -158,4 +159,19 @@ const AssetLayerType = {
 	AllowModuleTypes: "[String]",
 };
 
-module.exports = { AssetGroupType, AssetType, AssetLayerType };
+const AssetExtendedArchetypeType = {
+	Archetype: "String",
+	Config: "Maybe Object",
+	CopyConfig: "Maybe {GroupName: Maybe String, AssetName: String}",
+};
+
+const AssetExtendedConfigType = {
+	Modules: "Maybe [{Name: String, Key: String, Options: [Object]}]", // Modular items
+	Options: "Maybe [{Name: String, Property: Object}]", // Typed items
+	ChatSetting: "Maybe String",
+	Dialog: "Maybe Object",
+	ChatTags: "Maybe [String]",
+	DrawImages: "Maybe Boolean",
+};
+
+module.exports = { AssetGroupType, AssetType, AssetLayerType, AssetExtendedArchetypeType, AssetExtendedConfigType };

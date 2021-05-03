@@ -8,55 +8,62 @@ var KinkyDungeonKeybindings = null;
 var KinkyDungeonKeybindingsTemp = null;
 var KinkyDungeonKeybindingCurrentKey = 0;
 
-//var KinkyDungeonKeyLower = [87+32, 65+32, 83+32, 68+32, 81+32, 45+32, 90+32, 43+32]; // WASD
-var KinkyDungeonKey = [87, 65, 83, 68, 81, 45, 90, 43]; // WASD
-//var KinkyDungeonKeyNumpad = [56, 52, 50, 54, 55, 57, 49, 51]; // Numpad
-var KinkyDungeonKeySpell = [33, 64, 35]; // ! @ #
-var KinkyDungeonKeyWait = [32]; // Space and 5 (53)
+var KinkyDungeonGameRunning = false
 
-function KinkyDungeonDressPlayer() {
-	CharacterNaked(KinkyDungeonPlayer)
-	
-	InventoryWear(KinkyDungeonPlayer, "WitchHat1", "Hat")
-	InventoryWear(KinkyDungeonPlayer, "SteampunkCorsetTop1", "Cloth")
-	InventoryWear(KinkyDungeonPlayer, "LatexSkirt1", "ClothLower")
-	InventoryWear(KinkyDungeonPlayer, "Socks4", "Socks")
-	InventoryWear(KinkyDungeonPlayer, "Heels3", "Shoes")
-	
-	
-	CharacterAppearanceSetColorForGroup(KinkyDungeonPlayer, "#444444", "Socks");
-	CharacterAppearanceSetColorForGroup(KinkyDungeonPlayer, "#222222", "Shoes");
-}
+//var KinkyDungeonKeyLower = [87+32, 65+32, 83+32, 68+32, 81+32, 45+32, 90+32, 43+32]; // WASD
+var KinkyDungeonKey = [119, 97, 115, 100, 113, 101, 122, 99]; // WASD
+//var KinkyDungeonKeyNumpad = [56, 52, 50, 54, 55, 57, 49, 51]; // Numpad
+var KinkyDungeonKeySpell = [49, 50, 51]; // 1 2 3
+var KinkyDungeonKeyWait = [120]; // x
+
+var KinkyDungeonRootDirectory = "Screens/MiniGame/KinkyDungeon/"
 
 /**
  * Loads the kinky dungeon game
  * @returns {void} - Nothing
  */
 function KinkyDungeonLoad() {
-	//KinkyDungeonCreateMap(MiniGameDifficulty);
-	var appearance = CharacterAppearanceStringify(Player)
-	CharacterAppearanceRestore(KinkyDungeonPlayer, appearance)
-	CharacterReleaseTotal(KinkyDungeonPlayer)
-	CharacterNaked(KinkyDungeonPlayer)
-	KinkyDungeonDressPlayer()
-	
-	KinkyDungeonKeybindings = Player.KinkyDungeonKeybindings
-	
-	KinkyDungeonState = "Menu"
-	
-	for (let G = 0; G < KinkyDungeonStruggleGroupsBase.length; G++) {
-		var group = KinkyDungeonStruggleGroupsBase[G]
-		if (group == "ItemM") {
-			if (InventoryGet(Player, "ItemMouth"))
-				KinkyDungeonRestraintsLocked.push("ItemMouth")
-			if (InventoryGet(Player, "ItemMouth2"))
-				KinkyDungeonRestraintsLocked.push("ItemMouth2")
-			if (InventoryGet(Player, "ItemMouth3"))
-				KinkyDungeonRestraintsLocked.push("ItemMouth3")
+
+	if (!KinkyDungeonGameRunning) {
+		if (!KinkyDungeonPlayer)
+      KinkyDungeonPlayer = CharacterLoadNPC("NPC_Avatar");
+
+    //KinkyDungeonCreateMap(MiniGameDifficulty);
+    var appearance = CharacterAppearanceStringify(Player)
+    CharacterAppearanceRestore(KinkyDungeonPlayer, appearance)
+    CharacterReleaseTotal(KinkyDungeonPlayer)
+    CharacterNaked(KinkyDungeonPlayer)
+    KinkyDungeonInitializeDresses()
+    KinkyDungeonDressPlayer()
+    KinkyDungeonShrineInit()
+
+    KinkyDungeonKeybindings = Player.KinkyDungeonKeybindings
+		
+		KinkyDungeonState = "Menu"
+		
+		for (let G = 0; G < KinkyDungeonStruggleGroupsBase.length; G++) {
+			let group = KinkyDungeonStruggleGroupsBase[G];
+			if (group == "ItemM") {
+				if (InventoryGet(Player, "ItemMouth"))
+					KinkyDungeonRestraintsLocked.push("ItemMouth")
+				if (InventoryGet(Player, "ItemMouth2"))
+					KinkyDungeonRestraintsLocked.push("ItemMouth2")
+				if (InventoryGet(Player, "ItemMouth3"))
+					KinkyDungeonRestraintsLocked.push("ItemMouth3")
+			}
+			if (InventoryGet(Player, group))
+				KinkyDungeonRestraintsLocked.push(group)
+
 		}
-		if (InventoryGet(Player, group))
-			KinkyDungeonRestraintsLocked.push(group)
 	}
+}
+
+/**
+ * Restricts Devious Dungeon Challenge to only occur when inside the arcade
+ * @returns {bool} - If the player is in the arcade
+ */
+function KinkyDungeonDeviousDungeonAvailable() {
+	return DialogGamingPreviousRoom == "Arcade" || MiniGameReturnFunction == "ArcadeKinkyDungeonEnd"
 }
 
 /**
@@ -69,8 +76,8 @@ function KinkyDungeonRun() {
 	DrawCharacter(KinkyDungeonPlayer, 0, 0, 1);
 
 
-	
-	DrawButton(1885, 25, 90, 90, "", "White", "Icons/Exit.png");
+	if (KinkyDungeonDrawState == "Game" || KinkyDungeonState != "Game")
+		DrawButton(1885, 25, 90, 90, "", "White", "Icons/Exit.png");
 	
 	if (KinkyDungeonState == "Menu") {
 		// Draw temp start screen
@@ -78,7 +85,7 @@ function KinkyDungeonRun() {
 		DrawText(TextGet("Intro2"), 1250, 500, "white", "silver");
 		DrawText(TextGet("Intro3"), 1250, 600, "white", "silver");
 		
-		if (ArcadeDeviousChallenge) 
+		if (ArcadeDeviousChallenge && KinkyDungeonDeviousDungeonAvailable()) 
 			DrawText(TextGet("DeviousChallenge"), 1250, 925, "white", "silver");
 		
 		DrawButton(875, 750, 350, 64, TextGet("GameStart"), "White", "");
@@ -91,8 +98,10 @@ function KinkyDungeonRun() {
 		DrawButton(875, 750, 350, 64, TextGet("GameStart"), "White", "");
 		DrawButton(1275, 750, 350, 64, TextGet("GameConfigKeys"), "White", "");
 	} else if (KinkyDungeonState == "Game") {
+		KinkyDungeonGameRunning = true
 		KinkyDungeonDrawGame();
 	} else if (KinkyDungeonState == "End") {
+		KinkyDungeonGameRunning = false
 		// Draw temp start screen
 		DrawText(TextGet("EndWin"), 1250, 400, "white", "silver");
 		DrawText(TextGet("EndWin2"), 1250, 500, "white", "silver");
@@ -131,7 +140,7 @@ function KinkyDungeonRun() {
  * @returns {void} - Nothing
  */
 function KinkyDungeonClick() {
-	if (MouseIn(1885, 25, 90, 90)) {
+	if (MouseIn(1885, 25, 90, 90) && (KinkyDungeonDrawState == "Game" || KinkyDungeonState != "Game")) {
 		KinkyDungeonExit()
 	}
 	if (KinkyDungeonState == "Menu" || KinkyDungeonState == "Lose") {
@@ -150,7 +159,7 @@ function KinkyDungeonClick() {
 			KinkyDungeonState = "Keybindings"
 			
 			KinkyDungeonKeybindingsTemp = {
-				Down: 120,
+				Down: 115,
 				DownLeft: 122,
 				DownRight: 99,
 				Left: 97,
@@ -161,7 +170,7 @@ function KinkyDungeonClick() {
 				Up: 119,
 				UpLeft: 113,
 				UpRight: 101,
-				Wait: 115,
+				Wait: 120,
 			}
 		}
 	} else if (KinkyDungeonState == "Game") {
@@ -218,8 +227,22 @@ function KinkyDungeonClick() {
  * Handles exit during the kinky dungeon game
  * @returns {void} - Nothing
  */
-function KinkyDungeonExit() {
+function KinkyDungeonExit() {	
 	CommonDynamicFunction(MiniGameReturnFunction + "()");
+	
+	if (CurrentScreen == "ChatRoom" && KinkyDungeonState != "Menu" && (MiniGameKinkyDungeonLevel > 1 || KinkyDungeonState == "Lose")) {
+		let Message = "KinkyDungeonExit"
+		
+		if (KinkyDungeonState == "Lose") {
+			Message = "KinkyDungeonLose"
+		}
+		
+		let Dictionary = [
+			{ Tag: "SourceCharacter", Text: Player.Name, MemberNumber: Player.MemberNumber },
+			{ Tag: "KinkyDungeonLevel", Text: String(MiniGameKinkyDungeonLevel)},
+		];
+		ChatRoomPublishCustomAction(Message, false, Dictionary);
+	}
 }
 
 /**
