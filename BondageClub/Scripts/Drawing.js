@@ -1183,7 +1183,7 @@ function DrawProcess() {
 
 		let customBG = DrawGetCustomBackground();
 
-		if (customBG != "" && (CurrentModule != "Character" && CurrentModule != "MiniGame") && (B != "Sheet")) {
+		if (customBG != "" && (CurrentModule != "Character") && (B != "Sheet")) {
 			B = customBG;
 			if (DarkFactor == 0)
 				DarkFactor = CharacterGetDarkFactor(Player, true);
