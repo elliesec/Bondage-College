@@ -425,10 +425,10 @@ function ModularItemMergeModuleValues({ asset, modules }, moduleValues) {
 	}, {
 		Type: ModularItemConstructType(modules, moduleValues),
 		Difficulty: asset.Difficulty,
-		Block: asset.Block || [],
-		Effect: asset.Effect || [],
-		Hide: asset.Hide || [],
-		HideItem: asset.HideItem || [],
+		Block: Array.isArray(asset.Block) ? asset.Block.slice() : [],
+		Effect: Array.isArray(asset.Effect) ? asset.Effect.slice() : [],
+		Hide: Array.isArray(asset.Hide) ? asset.Hide.slice() : [],
+		HideItem: Array.isArray(asset.HideItem) ? asset.HideItem.slice() : [],
 	});
 }
 
