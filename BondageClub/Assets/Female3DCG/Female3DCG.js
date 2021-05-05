@@ -3150,6 +3150,14 @@ var AssetFemale3DCG = [
 					{ Name: "Funnel", Priority: 55, AllowColorize: false, AllowTypes: ["Funnel"] }
 				]
 			},
+			{ Name: "FuturisticMuzzle", Category: ["SciFi"], Fetish: ["Metal"], Value: -1, Difficulty: 8, Time: 30, BuyGroup: "FuturisticPanelGag", Random: false, AllowLock: true, Audio: "FuturisticApply", Effect: ["BlockMouth", "GagLight"], Prerequisite: "GagFlat", Hide: ["Mouth", "ItemNoseNoseRing"], Block: ["ItemMouth2", "ItemMouth3"] },
+			{
+				Name: "CageMuzzle", Fetish: ["Pet", "Metal"], Value: 30, Difficulty: 4, Time: 20, BuyGroup: "CageMuzzle", Random: false, AllowLock: true, Effect: ["BlockMouth"], Block: ["ItemMouth2", "ItemMouth3"],
+				Layer: [
+					{ Name: "Strap" },
+					{ Name: "Muzzle" },
+				]
+			},
 			AssetSpankingToys
 		],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"]
@@ -3369,6 +3377,14 @@ var AssetFemale3DCG = [
 					{ Name: "Strap" },
 				]
 			},
+			{ Name: "FuturisticMuzzle", Category: ["SciFi"], Fetish: ["Metal"], Value: -1, Difficulty: 8, Time: 30, BuyGroup: "FuturisticPanelGag", Random: false, AllowLock: true, Audio: "FuturisticApply", Effect: ["BlockMouth", "GagLight"], Prerequisite: "GagFlat", Hide: ["Mouth", "ItemNoseNoseRing"], Block: ["ItemMouth", "ItemMouth3"] },
+			{
+				Name: "CageMuzzle", Fetish: ["Pet", "Metal"], Value: 30, Difficulty: 4, Time: 20, BuyGroup: "CageMuzzle", Random: false, AllowLock: true, Effect: ["BlockMouth"], Block: ["ItemMouth", "ItemMouth3"],
+				Layer: [
+					{ Name: "Strap" },
+					{ Name: "Muzzle" },
+				]
+			},
 		],
 		Color: ["Default", "#202020", "#808080", "#bbbbbb", "#aa8080", "#80aa80", "#8080aa", "#aaaa80", "#80aaaa", "#aa80aa", "#cc3333", "#33cc33", "#3333cc", "#cccc33", "#33cccc", "#cc33cc"]
 	},
@@ -3553,7 +3569,6 @@ var AssetFemale3DCG = [
 				]
 			},
 			{ Name: "SteelMuzzleGag", Fetish: ["Metal"], Value: -1, Difficulty: 8, Time: 30, AllowLock: true, Audio: "CuffsMetal", BuyGroup: "SteelMuzzleGag", Prerequisite: "GagFlat", Hide: ["Mouth"] },
-			{ Name: "FuturisticMuzzle", Category: ["SciFi"], Fetish: ["Metal"], Value: -1, Difficulty: 8, Time: 30, BuyGroup: "FuturisticPanelGag", Random: false, AllowLock: true, Audio: "FuturisticApply", Effect: ["BlockMouth", "GagLight"], Prerequisite: "GagFlat", Hide: ["Mouth", "ItemNoseNoseRing"], DynamicGroupName: "ItemMouth3" },
 			{ Name: "StitchedMuzzleGag", Fetish: ["Leather"], Value: -1, Difficulty: 5, Time: 15, AllowLock: true, BuyGroup: "StitchedMuzzleGag", Prerequisite: "GagFlat", Hide: ["Mouth"], Effect: ["BlockMouth", "GagEasy"] },
 			{ Name: "LatexBallMuzzleGag", Fetish: ["Latex"], Value: -1, Difficulty: 6, Time: 15, AllowLock: true, BuyGroup: "LatexBallMuzzleGag", Prerequisite: "GagFlat", Hide: ["Mouth"], Effect: ["BlockMouth", "GagMedium"] },
 			{ Name: "GasMaskGag", Fetish: ["Leather"], Priority: 53, Value: -1, Difficulty: 4, Time: 20, Random: false, AllowLock: true, BuyGroup: "GasMaskGag", Hide: ["Mouth"], HideItem: ["ItemNoseNoseRing"], Effect: ["BlockMouth"], Prerequisite: "GagFlat", Block: ["ItemMouth", "ItemMouth2"],
@@ -3586,8 +3601,9 @@ var AssetFemale3DCG = [
 					{ Name: "Strap" },
 				]
 			},
+			{ Name: "FuturisticMuzzle", Category: ["SciFi"], Fetish: ["Metal"], Value: -1, Difficulty: 8, Time: 30, BuyGroup: "FuturisticPanelGag", Random: false, AllowLock: true, Audio: "FuturisticApply", Effect: ["BlockMouth", "GagLight"], Prerequisite: "GagFlat", Hide: ["Mouth", "ItemNoseNoseRing"] },
 			{
-				Name: "CageMuzzle", Fetish: ["Pet", "Metal"], Value: 30, Difficulty: 4, Time: 20, Random: false, AllowLock: true, Effect: ["BlockMouth"], DynamicGroupName: "ItemMouth3",
+				Name: "CageMuzzle", Fetish: ["Pet", "Metal"], Value: 30, Difficulty: 4, Time: 20, BuyGroup: "CageMuzzle", Random: false, AllowLock: true, Effect: ["BlockMouth"],
 				Layer: [
 					{ Name: "Strap" },
 					{ Name: "Muzzle" },
