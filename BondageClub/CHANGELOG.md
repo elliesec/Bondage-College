@@ -11,9 +11,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-05-03
+Changelog last updated: 2021-05-05
 
-Last recorded PR: [#2399](https://github.com/Ben987/Bondage-College/pull/2399)
+Last recorded PR: [#2404](https://github.com/Ben987/Bondage-College/pull/2404)
 
 ## [R68]
 
@@ -26,7 +26,7 @@ Last recorded PR: [#2399](https://github.com/Ben987/Bondage-College/pull/2399)
 * Aeren - Added an earless variation of the Bunny Mask Filigrane item ([#2325](https://github.com/Ben987/Bondage-College/pull/2325))
 * Nina - Added a new "behind hair" option to the Elf Ears ([#2349](https://github.com/Ben987/Bondage-College/pull/2349))
 * Leila - Added a shock trigger to the Futuristic Vibrator ([#2354](https://github.com/Ben987/Bondage-College/pull/2354))
-* Ada - Kinky Dungeon update - see the [Kinky Dungeon changelog](Screens/MiniGame/KinkyDungeon/Changelog.txt) ([#2356](https://github.com/Ben987/Bondage-College/pull/2356), [#2390](https://github.com/Ben987/Bondage-College/pull/2390))
+* Ada - Kinky Dungeon update - see the [Kinky Dungeon changelog](Screens/MiniGame/KinkyDungeon/Changelog.txt) ([#2356](https://github.com/Ben987/Bondage-College/pull/2356), [#2390](https://github.com/Ben987/Bondage-College/pull/2390), [#2404](https://github.com/Ben987/Bondage-College/pull/2404))
 * Manilla - Added three new items ([#2360](https://github.com/Ben987/Bondage-College/pull/2360))
     * Clit Ring
     * Locking Vibrating Butt Plug
@@ -49,6 +49,7 @@ Last recorded PR: [#2399](https://github.com/Ben987/Bondage-College/pull/2399)
 * Ada - Changed the Kinky Dungeon minigame to be persistent, so you can leave the game and return to it without resetting progress ([#2331](https://github.com/Ben987/Bondage-College/pull/2331))
 * Manilla - Modified most blindfolds to allow nose slot access when worn ([#2314](https://github.com/Ben987/Bondage-College/pull/2314))
 * Nina - Hitting the escape key inside a preference subscreen now takes players back to the preference menu ([#2380](https://github.com/Ben987/Bondage-College/pull/2380))
+* Ada - Changed the "Hide others' messages" immersion preference so that it now also applies to the "Hide names" sensory deprivation level ([#2403](https://github.com/Ben987/Bondage-College/pull/2403))
 
 ### [Fixed]
 
@@ -66,13 +67,14 @@ Last recorded PR: [#2399](https://github.com/Ben987/Bondage-College/pull/2399)
 * Jomshir - Added a lint check to the code using ESLint - pull requests will now be checked against ESLint and linting errors will be highlighted ([#2286](https://github.com/Ben987/Bondage-College/pull/2286))
 * fleisch11 - Added a check to prevent players from accidentally adding invalid skills/reputations via the console ([#2382](https://github.com/Ben987/Bondage-College/pull/2382), [#2386](https://github.com/Ben987/Bondage-College/pull/2386))
 * Technical changes, fixes and improvements:
-    * Ellie - [#2337](https://github.com/Ben987/Bondage-College/pull/2337), [#2333](https://github.com/Ben987/Bondage-College/pull/2333), [#2323](https://github.com/Ben987/Bondage-College/pull/2323), [#2383](https://github.com/Ben987/Bondage-College/pull/2383), [#2351](https://github.com/Ben987/Bondage-College/pull/2351), [#2388](https://github.com/Ben987/Bondage-College/pull/2388)
+    * Ellie - [#2337](https://github.com/Ben987/Bondage-College/pull/2337), [#2333](https://github.com/Ben987/Bondage-College/pull/2333), [#2323](https://github.com/Ben987/Bondage-College/pull/2323), [#2383](https://github.com/Ben987/Bondage-College/pull/2383), [#2351](https://github.com/Ben987/Bondage-College/pull/2351), [#2388](https://github.com/Ben987/Bondage-College/pull/2388), [#2402](https://github.com/Ben987/Bondage-College/pull/2402)
     * Nina - [#2308](https://github.com/Ben987/Bondage-College/pull/2308)
     * Ada - [#2365](https://github.com/Ben987/Bondage-College/pull/2365)
     * Jomshir - [#2361](https://github.com/Ben987/Bondage-College/pull/2361), [Server #88](https://github.com/Ben987/Bondage-Club-Server/pull/88), [#2374](https://github.com/Ben987/Bondage-College/pull/2374), [#2373](https://github.com/Ben987/Bondage-College/pull/2373), [#2372](https://github.com/Ben987/Bondage-College/pull/2372), [#2371](https://github.com/Ben987/Bondage-College/pull/2371), [#2370](https://github.com/Ben987/Bondage-College/pull/2370), [#2369](https://github.com/Ben987/Bondage-College/pull/2369), [#2368](https://github.com/Ben987/Bondage-College/pull/2368), [#2367](https://github.com/Ben987/Bondage-College/pull/2367), [#2366](https://github.com/Ben987/Bondage-College/pull/2366), [#2378](https://github.com/Ben987/Bondage-College/pull/2378), [#2392](https://github.com/Ben987/Bondage-College/pull/2392), [#2393](https://github.com/Ben987/Bondage-College/pull/2393)
-    * TessaTech - [Server #89](https://github.com/Ben987/Bondage-Club-Server/pull/89), [Server #86](https://github.com/Ben987/Bondage-Club-Server/pull/86), [Server #85](https://github.com/Ben987/Bondage-Club-Server/pull/85), [Server #84](https://github.com/Ben987/Bondage-Club-Server/pull/84), [#2279](https://github.com/Ben987/Bondage-College/pull/2279), [#2278](https://github.com/Ben987/Bondage-College/pull/2278), [#2277](https://github.com/Ben987/Bondage-College/pull/2277)
+    * TessaTech - [Server #89](https://github.com/Ben987/Bondage-Club-Server/pull/89), [Server #86](https://github.com/Ben987/Bondage-Club-Server/pull/86), [Server #85](https://github.com/Ben987/Bondage-Club-Server/pull/85), [Server #84](https://github.com/Ben987/Bondage-Club-Server/pull/84), [#2279](https://github.com/Ben987/Bondage-College/pull/2279), [#2278](https://github.com/Ben987/Bondage-College/pull/2278), [#2277](https://github.com/Ben987/Bondage-College/pull/2277), [#2273](https://github.com/Ben987/Bondage-College/pull/2273), [#2276](https://github.com/Ben987/Bondage-College/pull/2276), [Server #80](https://github.com/Ben987/Bondage-Club-Server/pull/80), [Server #83](https://github.com/Ben987/Bondage-Club-Server/pull/83)
     * Sekkmer/Jomshir - [#1476](https://github.com/Ben987/Bondage-College/pull/1476)
-    * Sandrine - [#2391](https://github.com/Ben987/Bondage-College/pull/2391)
+    * Sandrine - [#2391](https://github.com/Ben987/Bondage-College/pull/2391), [#2401](https://github.com/Ben987/Bondage-College/pull/2401)
+    * Sekkmer - [Server #90](https://github.com/Ben987/Bondage-Club-Server/pull/90)
 
 ### [Beta Fixes]
 
