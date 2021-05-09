@@ -11,7 +11,7 @@ function KinkyDungeonCheckPath(x1, y1, x2, y2) {
 	for (let F = 0; F <= length; F++) {
 		let xx = x1 + (x2-x1)*F/length;
 		let yy = y1 + (y2-y1)*F/length;
-		
+
 		if (!KinkyDungeonTransparentObjects.includes(KinkyDungeonMapGet(Math.round(xx), Math.round(yy)))) return false;
 	}
 
@@ -19,6 +19,7 @@ function KinkyDungeonCheckPath(x1, y1, x2, y2) {
 }
 
 function KinkyDungeonMakeLightMap(width, height, Lights) {
+	KinkyDungeonBlindLevelBase = 0; // Set to 0 when consumed. We only redraw lightmap once so this is safe.
 	//let now = performance.now()
 	KinkyDungeonLightGrid = "";
 	// Generate the grid
