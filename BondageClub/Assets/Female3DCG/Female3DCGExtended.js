@@ -672,6 +672,17 @@ var AssetFemale3DCGExtended = {
 			}
 		} // BunnyMask1
 	}, // Mask
+	ItemMisc: {
+		DrinksTray: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{ Name: "Empty", Property: { Type: null } },
+					{ Name: "Full", Property: { Type: "Full" } },
+				],
+			},
+		}, // WoodenMaidTray
+	}, // ItemMisc
 };
 
 /**
