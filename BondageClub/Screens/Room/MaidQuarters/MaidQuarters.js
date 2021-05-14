@@ -350,7 +350,7 @@ function MaidQuartersBecomMaid() {
 	ItemsToEarn.push({Name: "MaidHairband1", Group: "Cloth"});
 	ItemsToEarn.push({Name: "MaidApron1", Group: "Cloth"});
 	ItemsToEarn.push({Name: "MaidHairband1", Group: "Hat"});
-	ItemsToEarn.push({Name: "DrinksTray", Group: "ItemMisc"});
+	ItemsToEarn.push({Name: "ServingTray", Group: "ItemMisc"});
 	InventoryAddMany(Player, ItemsToEarn);
 
 	InventoryWear(Player, "MaidOutfit1", "Cloth", "Default");

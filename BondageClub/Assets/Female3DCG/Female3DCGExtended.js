@@ -673,7 +673,7 @@ var AssetFemale3DCGExtended = {
 		} // BunnyMask1
 	}, // Mask
 	ItemMisc: {
-		DrinksTray: {
+		ServingTray: {
 			Archetype: ExtendedArchetype.TYPED,
 			Config: {
 				Options: [

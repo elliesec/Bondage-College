@@ -3910,7 +3910,7 @@ var AssetFemale3DCG = [
 					{ Name: "Text" },
 				]
 			},
-			{ Name: "DrinksTray", Value: -1, Time: 5, Extended: true },
+			{ Name: "ServingTray", Value: -1, Time: 5, Extended: true },
 		],
 		Color: ["Default"]
 	},
