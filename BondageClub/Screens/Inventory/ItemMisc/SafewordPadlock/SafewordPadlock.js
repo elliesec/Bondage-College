@@ -2,12 +2,11 @@
 
 // Loads the item extension properties
 function InventoryItemMiscSafewordPadlockLoad() {
-	const C = CharacterGetCurrent();
+	if (!DialogFocusItem || !DialogFocusSourceItem) return InventoryItemMiscSafewordPadlockExit();
 
-	if (DialogFocusSourceItem == null) return;
-
-	if (DialogFocusSourceItem.Property == null) DialogFocusSourceItem.Property = {};
+	if (!DialogFocusSourceItem.Property) DialogFocusSourceItem.Property = {};
 	const Property = DialogFocusSourceItem.Property;
+	const C = CharacterGetCurrent();
 
 	if (Property.Password == null) Property.Password = "PLEASE";
 	if (Property.Hint == null) Property.Hint = "Say the magic word...";
@@ -18,7 +17,8 @@ function InventoryItemMiscSafewordPadlockLoad() {
 		ElementCreateInput("Password", "text", "", "8");
 		// the current code is shown for owners, lovers and the member whose number is on the padlock
 		// It is also shown for the person who is bound by it
-		if (C.ID == 0 ||
+		if (
+			C.ID === 0 ||
 			Player.MemberNumber === Property.LockMemberNumber ||
 			C.IsOwnedByPlayer() ||
 			C.IsLoverOfPlayer()
@@ -38,7 +38,7 @@ function InventoryItemMiscSafewordPadlockLoad() {
 // Draw the extension screen
 function InventoryItemMiscSafewordPadlockDraw() {
 	if (!DialogFocusSourceItem) return;
-	const { Property } = DialogFocusSourceItem;
+	const Property = DialogFocusSourceItem.Property;
 
 	DrawAssetPreview(1387, 225, DialogFocusItem.Asset);
 
