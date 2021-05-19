@@ -157,8 +157,6 @@ function InventoryItemMiscTimerPasswordPadlockClick() {
 		InventoryItemMiscPasswordPadlockHandleFirstSet(InventoryItemMiscTimerPasswordPadlockExit);
 	}
 
-	// Copied from mistress timer padlock
-
 	if (!Player.CanInteract()) return;
 
 	if (Player.MemberNumber === Property.LockMemberNumber) {
