@@ -358,7 +358,7 @@ function ChatRoomCanBeLeashedBy(sourceMemberNumber, C) {
 			}
 
 		if (canLeash && !isTrapped) {
-			if (!neckLock || (!neckLock.Asset.OwnerOnly && !neckLock.Asset.LoverOnly) ||
+			if (sourceMemberNumber == 0 || !neckLock || (!neckLock.Asset.OwnerOnly && !neckLock.Asset.LoverOnly) ||
 				(neckLock.Asset.OwnerOnly && C.IsOwnedByMemberNumber(sourceMemberNumber)) ||
 				(neckLock.Asset.LoverOnly && C.IsLoverOfMemberNumber(sourceMemberNumber))) {
 				return true;
@@ -940,7 +940,7 @@ function ChatRoomStimulationMessage(Context) {
 			if ((C.Appearance[A].Asset != null) && (C.Appearance[A].Asset.Group.Family == C.AssetFamily)) {
 				var trigChance = 0;
 				var trigMsgTemp = "";
-				var Intensity = InventoryGetItemProperty(C.Appearance[A], "Intensity", true);
+				var Intensity = InventoryItemHasEffect(C.Appearance[A], "Vibrating", true) ? InventoryGetItemProperty(C.Appearance[A], "Intensity", true) : 0;
 				if (InventoryItemHasEffect(C.Appearance[A], "CrotchRope", true)) {
 					if (trigChance == 0) trigChance = modBase;
 					trigMsgTemp = "CrotchRope";
@@ -1330,7 +1330,7 @@ function ChatRoomAttemptStandMinigameEnd() {
  */
 function ChatRoomCanLeave() {
 	if (ChatRoomLeashPlayer != null) {
-		if (ChatRoomCanBeLeashed(Player)) {
+		if (ChatRoomCanBeLeashedBy(0, Player)) {
 			return false;
 		} else ChatRoomLeashPlayer = null;		
 	}
@@ -1835,7 +1835,7 @@ function ChatRoomMessage(data) {
 
 					const chatMsg = ChatRoomHTMLEntities(data.Type === "Whisper" ? data.Content : SpeechGarble(SenderCharacter, data.Content));
 					msg += chatMsg;
-					ChatRoomChatLog.push({ Chat: data.Content, Garbled: chatMsg, SenderName: senderName, Time: CommonTime() });
+					ChatRoomChatLog.push({ Chat: SpeechGarble(SenderCharacter, data.Content, true), Garbled: chatMsg, SenderName: senderName, Time: CommonTime() });
 
 					if (ChatRoomChatLog.length > 6) { // Keep it short
 						ChatRoomChatLog.splice(0, 1);
@@ -2438,25 +2438,26 @@ function ChatRoomSyncItem(data) {
 			ChatRoomAllowCharacterUpdate = false;
 			if (item) {
 				CharacterAppearanceSetItem(
-					ChatRoomCharacter[C], data.Item.Group, item.Asset, item.Color, item.Difficulty);
+					ChatRoomCharacter[C], data.Item.Group, item.Asset, item.Color, item.Difficulty, null, false);
 				InventoryGet(ChatRoomCharacter[C], data.Item.Group).Property = item.Property;
 			} else {
 				InventoryRemove(ChatRoomCharacter[C], data.Item.Group);
 			}
-			CharacterRefresh(ChatRoomCharacter[C], false);
-
-
-			// Keeps the change in the chat room data and allows the character to be updated again
-			for (let R = 0; R < ChatRoomData.Character.length; R++)
-				if (ChatRoomData.Character[R].MemberNumber == data.Item.Target)
-					ChatRoomData.Character[R].Appearance = ChatRoomCharacter[C].Appearance;
-			ChatRoomAllowCharacterUpdate = true;
 
 			// If the update was invalid, send a correction update
 			if (ChatRoomCharacter[C].ID === 0 && !valid) {
 				console.warn(`Invalid appearance update to group ${data.Item.Group}. Updating with sanitized appearance.`);
 				ChatRoomCharacterUpdate(ChatRoomCharacter[C]);
+			} else {
+				CharacterRefresh(ChatRoomCharacter[C]);
 			}
+
+			// Keeps the change in the chat room data and allows the character to be updated again
+			for (let R = 0; R < ChatRoomData.Character.length; R++) {
+				if (ChatRoomData.Character[R].MemberNumber == data.Item.Target)
+					ChatRoomData.Character[R].Appearance = ChatRoomCharacter[C].Appearance;
+			}
+			ChatRoomAllowCharacterUpdate = true;
 
 			return;
 		}

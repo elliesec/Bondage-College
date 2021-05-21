@@ -76,6 +76,8 @@ var KinkyDungeonDoorCloseTimer = 0;
 var KinkyDungeonLastMoveDirection = null;
 var KinkyDungeonTargetingSpell = null;
 
+var KinkyDungeonMaxLevel = 10; // Game stops when you reach this level
+
 function KinkyDungeonSetCheckPoint() {
 	MiniGameKinkyDungeonCheckpoint = Math.floor(MiniGameKinkyDungeonLevel / 10);
 }
@@ -699,17 +701,22 @@ function KinkyDungeonClickGame(Level) {
 	}
 	// beep
 
+
 	// If no buttons are clicked then we handle move
-	else if (KinkyDungeonTargetingSpell) {
-		if (MouseIn(canvasOffsetX, canvasOffsetY, KinkyDungeonCanvas.width, KinkyDungeonCanvas.height)) {
-			if (KinkyDungeonSpellValid) {
-				KinkyDungeonCastSpell(KinkyDungeonTargetX, KinkyDungeonTargetY, KinkyDungeonTargetingSpell);
-				KinkyDungeonAdvanceTime(1);
-				KinkyDungeonTargetingSpell = null;
-			}
-		} else KinkyDungeonTargetingSpell = null;
-	} else if (MouseIn(canvasOffsetX, canvasOffsetY, KinkyDungeonCanvas.width, KinkyDungeonCanvas.height)) {
-		KinkyDungeonMove(KinkyDungeonMoveDirection, 1);
+	else {
+		KinkyDungeonSetMoveDirection();
+		
+		if (KinkyDungeonTargetingSpell) {
+			if (MouseIn(canvasOffsetX, canvasOffsetY, KinkyDungeonCanvas.width, KinkyDungeonCanvas.height)) {
+				if (KinkyDungeonSpellValid) {
+					KinkyDungeonCastSpell(KinkyDungeonTargetX, KinkyDungeonTargetY, KinkyDungeonTargetingSpell);
+					KinkyDungeonAdvanceTime(1);
+					KinkyDungeonTargetingSpell = null;
+				}
+			} else KinkyDungeonTargetingSpell = null;
+		} else if (MouseIn(canvasOffsetX, canvasOffsetY, KinkyDungeonCanvas.width, KinkyDungeonCanvas.height)) {
+			KinkyDungeonMove(KinkyDungeonMoveDirection, 1);
+		}
 	}
 }
 
@@ -892,7 +899,7 @@ function KinkyDungeonAdvanceTime(delta) {
 
 		KinkyDungeonSendActionMessage(10, TextGet("ClimbDown"), "#ffffff", 1);
 
-		if (MiniGameKinkyDungeonCheckpoint >= 1) {
+		if (MiniGameKinkyDungeonLevel >= KinkyDungeonMaxLevel) {
 			KinkyDungeonState = "End";
 			MiniGameVictory = true;
 		} else

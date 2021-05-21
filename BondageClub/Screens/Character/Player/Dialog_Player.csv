@@ -2043,3 +2043,4 @@ ItemMiscServingTrayEmpty,,,Empty
 ItemMiscServingTrayFull,,,Full
 ItemMiscServingTraySetEmpty,,,SourceCharacter removes the drinks from DestinationCharacter tray.,,
 ItemMiscServingTraySetFull,,,SourceCharacter fills DestinationCharacter tray with drinks.,,
+Page,,,Page,,

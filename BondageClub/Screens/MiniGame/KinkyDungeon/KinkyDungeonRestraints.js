@@ -64,7 +64,8 @@ function KinkyDungeonLock(item, lock) {
 	item.lock = lock;
 	if (item.restraint && InventoryGet(KinkyDungeonPlayer, item.restraint.Group) && lock != "") {
 		InventoryLock(KinkyDungeonPlayer, InventoryGet(KinkyDungeonPlayer, item.restraint.Group), "IntricatePadlock", Player.MemberNumber, true)
-		InventoryLock(Player, InventoryGet(Player, item.restraint.Group), "IntricatePadlock", Player.MemberNumber, true)
+		if (!KinkyDungeonRestraintsLocked.includes(item.restraint.Group))
+			InventoryLock(Player, InventoryGet(Player, item.restraint.Group), "IntricatePadlock", null, true)
 	} else {
 		InventoryUnlock(KinkyDungeonPlayer, item.restraint.Group);
 		if (!KinkyDungeonRestraintsLocked.includes(item.restraint.Group))
@@ -247,7 +248,6 @@ function KinkyDungeonStruggle(struggleGroup, StruggleType) {
 							}
 						}
 					} else {
-						KinkyDungeonRemoveKeys(restraint.lock);
 						KinkyDungeonLock(restraint, "");
 					}
 				} else {
