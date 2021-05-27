@@ -343,3 +343,9 @@ interface Character {
     DrawAppearance?: Item[];
     AppearanceLayers?: AssetLayer[];
 }
+
+type TwoTuple = [number, number];
+
+interface TarjanGraphVertex {
+    vertex: number;
+}
