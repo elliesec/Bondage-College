@@ -230,6 +230,7 @@ var AssetFemale3DCGExtended = {
 						], // Opacity
 					},
 				],
+				ChangeWhenLocked: false,
 			},
 		}, // KirugumiMask
 	}, // ItemHood
