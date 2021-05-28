@@ -78,6 +78,7 @@ var AssetFemale3DCGExtended = {
 						],
 					},
 				],
+				ChangeWhenLocked: false,
 			},
 		}, // HighSecurityStraitJacket
 		LatexButterflyLeotard: {
@@ -699,7 +700,7 @@ var AssetFemale3DCGExtended = {
 				]
 			},
 		}, // DentalGag
-    Ribbons: {
+		Ribbons: {
 			Archetype: ExtendedArchetype.TYPED,
 			Config: {
 				Options: [
