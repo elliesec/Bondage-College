@@ -237,7 +237,7 @@ function ModularItemCreateDrawBaseFunction(data) {
  * @returns {ModularItemButtonDefinition} - A button definition array representing the provided option
  */
 function ModularItemMapOptionToButtonDefinition(option, optionIndex, module,
-                                                { asset, dialogOptionPrefix, changeWhenLocked }, currentOptionIndex) {
+	{ asset, dialogOptionPrefix, changeWhenLocked }, currentOptionIndex) {
 	const C = CharacterGetCurrent();
 	const optionName = `${module.Key}${optionIndex}`;
 	let color = "#fff";
