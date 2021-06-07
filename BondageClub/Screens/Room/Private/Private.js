@@ -1,6 +1,7 @@
 "use strict";
 var PrivateBackground = "Private";
 var PrivateVendor = null;
+/** @type {Character[]} */
 var PrivateCharacter = [];
 var PrivateCharacterOffset = 0;
 var PrivateCharacterTypeList = ["NPC_Private_VisitorShy", "NPC_Private_VisitorHorny", "NPC_Private_VisitorTough"];
@@ -607,7 +608,7 @@ function PrivateClick() {
 		if (index < 0) index = 0;
 		BackgroundSelectionMake(backgrounds, index, Name => {
 			Player.VisualSettings.MainHallBackground = Name;
-			ServerSend("AccountUpdate", { VisualSettings: Player.VisualSettings });
+			ServerAccountUpdate.QueueData({ VisualSettings: Player.VisualSettings });
 		});
 	}
 	if (MouseIn(1885, 865, 90, 90) && LogQuery("RentRoom", "PrivateRoom")) {
@@ -618,7 +619,7 @@ function PrivateClick() {
 		BackgroundSelectionMake(backgrounds, index, Name => {
 			Player.VisualSettings.PrivateRoomBackground = Name;
 			PrivateBackground = Name;
-			ServerSend("AccountUpdate", { VisualSettings: Player.VisualSettings });
+			ServerAccountUpdate.QueueData({ VisualSettings: Player.VisualSettings });
 		});
 
 	}
@@ -678,7 +679,7 @@ function PrivateGetSecondExpansion() {
 /**
  * Loads a given private room character.
  * @param {number} C - Index of the private character to load.
- * @returns {void} - Nothing.
+ * @returns {boolean} - Update required.
  */
 function PrivateLoadCharacter(C) {
 	let updateRequired = false;

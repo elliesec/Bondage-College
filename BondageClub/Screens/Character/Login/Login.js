@@ -52,6 +52,7 @@ function LoginDrawCredits() {
 
 	// For each credits in the list
 	LoginCreditsPosition += (TimerRunInterval * 60) / 1000;
+	if (LoginCreditsPosition > LoginCredits.length * 25 || LoginCreditsPosition < 0) LoginCreditsPosition = 0;
 	MainCanvas.font = "30px Arial";
 	for (let C = 0; C < LoginCredits.length; C++) {
 
@@ -223,6 +224,28 @@ function LoginStableItems() {
 }
 
 /**
+ * Adds or confiscates maid items from the player. Only players that have joined the Maid Sorority can have these items.
+ * @returns {void} - Nothing
+ */
+function LoginMaidItems() {
+	if (LogQuery("JoinedSorority", "Maid")) {
+		InventoryAdd(Player, "MaidOutfit1", "Cloth", false);
+		InventoryAdd(Player, "MaidOutfit2", "Cloth", false);
+		InventoryAdd(Player, "MaidHairband1", "Cloth", false);
+		InventoryAdd(Player, "MaidApron1", "Cloth", false);
+		InventoryAdd(Player, "MaidHairband1", "Hat", false);
+		InventoryAdd(Player, "ServingTray", "ItemMisc", false);
+	} else {
+		InventoryDelete(Player, "MaidOutfit1", "Cloth", false);
+		InventoryDelete(Player, "MaidOutfit2", "Cloth", false);
+		InventoryDelete(Player, "MaidHairband1", "Cloth", false);
+		InventoryDelete(Player, "MaidApron1", "Cloth", false);
+		InventoryDelete(Player, "MaidHairband1", "Hat", false);
+		InventoryDelete(Player, "ServingTray", "ItemMisc", false);
+	}
+}
+
+/**
  * Ensures lover-exclusive items are removed if the player has no lovers.
  * @returns {void} Nothing
  */
@@ -351,7 +374,7 @@ function LoginQueue(Pos) {
 
 /**
  * Handles player login response data
- * @param {Character | string} C - The Login response data - this will either be the player's character data if the
+ * @param {object | string} C - The Login response data - this will either be the player's character data if the
  * login was successful, or a string error message if the login failed.
  * @returns {void} Nothing
  */
@@ -526,6 +549,7 @@ function LoginResponse(C) {
 			LoginValidCollar();
 			LoginMistressItems();
 			LoginStableItems();
+			LoginMaidItems();
 			LoginLoversItems();
 			LoginAsylumItems();
 			LoginCheatItems();

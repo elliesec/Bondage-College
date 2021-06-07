@@ -321,9 +321,11 @@ function MainHallWalk(RoomName) {
 		var MeetKidnapper = ((ReputationGet("Kidnap") > 0) && (CheatFactor("BlockRandomKidnap", 0) == 1)) ? Math.random() : 0;
 		var MeetClubSlave = Math.random();
 		var MeetPolice = (LogQuery("Joined", "BadGirl")) ? (Math.random() * PrisonWantedPlayer()) : 0;
+		var PandoraRevenge = (SkillGetLevel(Player, "Infiltration") >= 4) ? Math.random() * (SkillGetLevel(Player, "Infiltration") / 7) : 0;
 
 		// Starts the event with the highest value (picked at random)
-		if ((MeetPolice > PlayerClubSlave) && (MeetPolice > PlayerEscapedAsylum) && (MeetPolice > MeetEscapedPatient) && (MeetPolice > MeetKidnapper) && (MeetPolice > MeetClubSlave)) PrisonMeetPoliceIntro("MainHall");
+		if ((PandoraRevenge > MeetPolice) && (PandoraRevenge > PlayerClubSlave) && (PandoraRevenge > PlayerEscapedAsylum) && (PandoraRevenge > MeetEscapedPatient) && (PandoraRevenge > MeetKidnapper) && (PandoraRevenge > MeetClubSlave)) InfiltrationStartKidnapping();
+		else if ((MeetPolice > PlayerClubSlave) && (MeetPolice > PlayerEscapedAsylum) && (MeetPolice > MeetEscapedPatient) && (MeetPolice > MeetKidnapper) && (MeetPolice > MeetClubSlave)) PrisonMeetPoliceIntro("MainHall");
 		else if ((PlayerClubSlave > PlayerEscapedAsylum) && (PlayerClubSlave > MeetEscapedPatient) && (PlayerClubSlave > MeetKidnapper) && (PlayerClubSlave > MeetClubSlave)) ManagementClubSlaveRandomIntro();
 		else if ((PlayerEscapedAsylum > MeetEscapedPatient) && (PlayerEscapedAsylum > MeetKidnapper) && (PlayerEscapedAsylum > MeetClubSlave)) AsylumEntranceNurseCatchEscapedPlayer();
 		else if ((MeetEscapedPatient > MeetKidnapper) && (MeetEscapedPatient > MeetClubSlave)) AsylumEntranceEscapedPatientMeet();
@@ -354,6 +356,7 @@ function MainHallClick() {
 	if ((MouseX >= 1765) && (MouseX < 1855) && (MouseY >= 25) && (MouseY < 115) && Player.CanChange()) CharacterAppearanceLoadCharacter(Player);
 	if ((MouseX >= 1885) && (MouseX < 1975) && (MouseY >= 25) && (MouseY < 115)) {
 		if (window.confirm(TextGet("ExitConfirm"))) {
+			ServerAccountUpdate.SyncToServer();
 			// eslint-disable-next-line no-self-assign
 			window.location = window.location;
 		}

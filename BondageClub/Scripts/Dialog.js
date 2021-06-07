@@ -9,6 +9,7 @@ var DialogColorSelect = null;
 var DialogPreviousCharacterData = {};
 var DialogInventory = [];
 var DialogInventoryOffset = 0;
+/** @type {Item|null} */
 var DialogFocusItem = null;
 var DialogFocusSourceItem = null;
 var DialogFocusItemColorizationRedrawTimer = null;
@@ -314,7 +315,7 @@ function DialogPrerequisite(D) {
 	else if (CurrentCharacter.Dialog[D].Prerequisite.indexOf("(") >= 0)
 		return CommonDynamicFunctionParams(CurrentCharacter.Dialog[D].Prerequisite);
 	else if (CurrentCharacter.Dialog[D].Prerequisite.substring(0, 1) != "!")
-		return window[CurrentScreen + CurrentCharacter.Dialog[D].Prerequisite.trim()];
+		return !!window[CurrentScreen + CurrentCharacter.Dialog[D].Prerequisite.trim()];
 	else
 		return !window[CurrentScreen + CurrentCharacter.Dialog[D].Prerequisite.substr(1, 250).trim()];
 }
@@ -325,9 +326,22 @@ function DialogPrerequisite(D) {
  * @returns {boolean} - Whether or not the player is wearing a VR headset with Gaming type
  */
 function DialogHasGamingHeadset() {
-	var head = InventoryGet(Player, "ItemHead");
+	let head = InventoryGet(Player, "ItemHead");
 	if (head && head.Property && head.Property.Type == "Gaming") return true;
 
+	return false;
+}
+/**
+ * Checks if the player can watch VR games
+ * @returns {boolean} - Whether or not the player is wearing a VR headset with Gaming type
+ */
+function DialogCanWatchKinkyDungeon() {
+	if (CurrentCharacter) {
+		let head = InventoryGet(CurrentCharacter, "ItemHead");
+		if (!(head && head.Property && head.Property.Type == "Gaming")) return false;
+
+		if (Player.Effect.includes("VR")) return true;
+	}
 	return false;
 }
 
@@ -337,10 +351,18 @@ function DialogHasGamingHeadset() {
  * @returns {void}
  */
 function DialogStartKinkyDungeon() {
+	if (CurrentCharacter) {
+		KinkyDungeonPlayerCharacter = CurrentCharacter;
+		if (KinkyDungeonPlayerCharacter != Player && CurrentCharacter.MemberNumber) {
+			KinkyDungeonGameData = null;
+			ServerSend("ChatRoomChat", { Content: "RequestFullKinkyDungeonData", Type: "Hidden", Target: CurrentCharacter.MemberNumber });
+		}
+	}
 	DialogGamingPreviousRoom = CurrentScreen;
 	DialogGamingPreviousModule = CurrentModule;
 	MiniGameStart("KinkyDungeon", 0, "DialogEndKinkyDungeon");
 }
+
 
 /**
  * Return to previous room
@@ -873,7 +895,7 @@ function DialogFacialExpressionsSave(Slot) {
 	for (let x = 0; x < DialogFacialExpressions.length; x++) {
 		Player.SavedExpressions[Slot].push({ Group: DialogFacialExpressions[x].Group, CurrentExpression: DialogFacialExpressions[x].CurrentExpression });
 	}
-	ServerSend("AccountUpdate", { SavedExpressions: Player.SavedExpressions });
+	ServerAccountUpdate.QueueData({ SavedExpressions: Player.SavedExpressions });
 }
 /**
  * loads expressions from a slot
@@ -1218,7 +1240,6 @@ function DialogItemClick(ClickItem) {
 					} else {
 
 						// The vibrating egg remote can open the vibrating egg's extended dialog
-						var Item = InventoryGet(C, C.FocusGroup.Name);
 						if ((ClickItem.Asset.Name === "VibratorRemote" || ClickItem.Asset.Name === "LoversVibratorRemote") && DialogCanUseRemote(C, CurrentItem)) {
 							DialogExtendItem(InventoryGet(C, C.FocusGroup.Name));
 						}
@@ -1285,7 +1306,7 @@ function DialogClick() {
 	// If the user clicked anywhere outside the current character item zones, ensure the position is corrected
 	if (CharacterAppearanceForceUpCharacter == CurrentCharacter.MemberNumber && ((MouseX < 500) || (MouseX > 1000) || (CurrentCharacter.FocusGroup == null))) {
 		CharacterAppearanceForceUpCharacter = -1;
-		CharacterRefresh(CurrentCharacter, false);
+		CharacterRefresh(CurrentCharacter, false, false);
 	}
 
 	// In activity mode, we check if the user clicked on an activity box
@@ -1474,7 +1495,7 @@ function DialogSetText(NewText) {
  * Shows the extended item menue for a given item, if possible.
  * Therefore a dynamic function name is created and then called.
  * @param {Item} Item - The item the extended menu should be shown for
- * @param {Item} SourceItem - The source of the extended menu
+ * @param {Item} [SourceItem] - The source of the extended menu
  * @returns {void} - Nothing
  */
 function DialogExtendItem(Item, SourceItem) {
@@ -1577,7 +1598,7 @@ function DialogGetMenuButtonColor(ButtonName) {
 	if (ButtonName.endsWith("Disabled")) {
 		return "#808080";
 	}	else if (ButtonName === "ColorPick") {
-		return DialogColorSelect || "#fff"
+		return DialogColorSelect || "#fff";
 	} else {
 		return "#fff";
 	}
@@ -2024,7 +2045,7 @@ function DialogDrawOwnerRulesMenu() {
  * Sets the skill ratio for the player, will be a % of effectiveness applied to the skill when using it.
  * This way a player can use only a part of her bondage or evasion skill.
  * @param {string} SkillType - The name of the skill to influence
- * @param {strign} NewRatio - The ration of this skill that should be used
+ * @param {string} NewRatio - The ration of this skill that should be used
  * @returns {void} - Nothing
  */
 function DialogSetSkillRatio(SkillType, NewRatio) {

@@ -6,12 +6,14 @@ var PandoraPrisonGuard = null;
 var PandoraPrisonCharacter = null;
 var PandoraPrisonCharacterTimer = 0;
 var PandoraPrisonEscaped = false;
+var PandoraPrisonBribeEnabled = true;
 
 /**
  * Loads the Pandora's Box prison screen
  * @returns {void} - Nothing
  */
 function PandoraPrisonLoad() {
+	PandoraParty = [];
 	if (!PandoraPrisonEscaped) PandoraPrisonCharacter = null;
 	if (PandoraPrisonMaid == null) {
 		PandoraPrisonMaid = CharacterLoadNPC("NPC_PandoraPrison_Maid");
@@ -51,6 +53,7 @@ function PandoraPrisonRun() {
 	
 	// When the character timer ticks, the guard can come in or leave
 	if ((Player.Infiltration.Punishment.Timer >= CurrentTime) && (PandoraPrisonCharacterTimer < CommonTime()) && (CurrentCharacter == null) && !PandoraPrisonEscaped) {
+		PandoraPrisonBribeEnabled = true;
 		PandoraPrisonCharacter = (PandoraPrisonCharacter == null) ? PandoraPrisonGuard : null;
 		PandoraPrisonCharacterTimer = CommonTime() + 30000 + Math.floor(Math.random() * 30000);
 	}
@@ -74,16 +77,21 @@ function PandoraPrisonRun() {
 }
 
 /**
- * Handles clicks in the prison screen
+ * Handles clicks in the prison screen, the guard will pick a random activity to do on the player
  * @returns {void} - Nothing
  */
 function PandoraPrisonClick() {
 	if (MouseIn(1885, 25, 90, 90) && Player.CanKneel()) CharacterSetActivePose(Player, (Player.ActivePose == null) ? "Kneel" : null, true);
 	if ((PandoraPrisonCharacter == null) && MouseIn(750, 0, 500, 1000)) CharacterSetCurrent(Player);
 	if ((PandoraPrisonCharacter != null) && MouseIn(1000, 0, 500, 1000)) {
-		if (PandoraPrisonGuard.Stage == "RANDOM") PandoraPrisonGuard.Stage = "ChangeBondage";  // TO-DO: must pick a random activity
-		if (PandoraPrisonCharacter.TriggerIntro) PandoraPrisonCharacter.CurrentDialog = DialogFind(PandoraPrisonCharacter, "Intro" + (Player.CanInteract() ? "" : "Restrained") + PandoraPrisonCharacter.Stage);
+		if (PandoraPrisonGuard.Stage == "RANDOM") {
+			if ((Math.random() > 0.5) && (PandoraWillpower * 2 >= PandoraMaxWillpower)) PandoraPrisonGuard.Stage = "Beat";
+			else if ((Math.random() > 0.5) && !CharacterIsNaked(Player)) PandoraPrisonGuard.Stage = "Strip";
+			else if ((Math.random() > 0.5) && CharacterIsNaked(Player) && !Player.IsChaste()) PandoraPrisonGuard.Stage = "Chastity";
+			else PandoraPrisonGuard.Stage = "ChangeBondage";
+		}
 		CharacterSetCurrent(PandoraPrisonCharacter);
+		if (PandoraPrisonCharacter.TriggerIntro) PandoraPrisonCharacter.CurrentDialog = DialogFind(PandoraPrisonCharacter, "Intro" + (Player.CanInteract() ? "" : "Restrained") + PandoraPrisonCharacter.Stage);
 	}
 	if (MouseIn(1885, 145, 90, 90)) InformationSheetLoadCharacter(Player);
 }
@@ -103,6 +111,7 @@ function PandoraPrisonReleasePlayer() {
  * @returns {void} - Nothing
  */
 function PandoraPrisonExitPrison() {
+	CharacterRelease(Player);
 	CharacterRelease(PandoraPrisonGuard);
 	PandoraDress(PandoraPrisonGuard, "Guard");	
 	PandoraPrisonGuard.AllowItem = false;
@@ -145,10 +154,35 @@ function PandoraPrisonPlayerRestrain(Level) {
 }
 
 /**
+ * When the player gets stripped and restrained by an NPC, call the regular restrain function
+ * @returns {void} - Nothing
+ */
+function PandoraPrisonPlayerStrip(Level) {
+	CharacterNaked(Player);
+	PandoraPrisonPlayerRestrain(Level);
+}
+
+/**
+ * When the player gets locked in a chastity device by the guard
+ * @returns {void} - Nothing
+ */
+function PandoraPrisonPlayerChastity(LockType) {
+	if (InventoryGet(Player, "ItemPelvis") == null) {
+		InventoryWear(Player, CommonRandomItemFromList("", ["MetalChastityBelt", "LeatherChastityBelt", "SleekLeatherChastityBelt", "StuddedChastityBelt", "PolishedChastityBelt", "SteelChastityPanties"]), "ItemPelvis");
+		InventoryLock(Player, "ItemPelvis", LockType);
+	}
+	if (InventoryGet(Player, "ItemBreast") == null) {
+		InventoryWear(Player, CommonRandomItemFromList("", ["MetalChastityBra", "PolishedChastityBra", "LeatherBreastBinder"]), "ItemBreast");
+		InventoryLock(Player, "ItemBreast", LockType);
+	}
+}
+
+/**
  * When the NPC leaves the prison
  * @returns {void} - Nothing
  */
 function PandoraPrisonCharacterRemove() {
+	InventoryRemove(CurrentCharacter, "ItemHands");
 	PandoraPrisonCharacter = null;
 	PandoraPrisonCharacterTimer = CommonTime() + 30000 + Math.floor(Math.random() * 30000);
 	PandoraPrisonGuard.Stage = "RANDOM";
@@ -160,7 +194,7 @@ function PandoraPrisonCharacterRemove() {
  * @returns {boolean} - TRUE if the player can start a fight
  */
 function PandoraPrisonCanStartFight() {
-	return (!Player.IsRestrained() && (PandoraWillpower >= 1));
+	return (!Player.IsRestrained() && (PandoraWillpower >= 1) && Player.CanTalk());
 }
 
 /**
@@ -219,4 +253,71 @@ function PandoraPrisonEscape() {
 	CharacterSetActivePose(Player, null);
 	PandoraInfiltrationChange(75);
 	PandoraPrisonExitPrison();
+}
+
+/**
+ * When the player starts bribing the guard
+ * @returns {void} - Nothing
+ */
+function PandoraPrisonBribeStart() {
+	PandoraPrisonBribeEnabled = false;
+}
+
+/**
+ * A guard can only bribed once on every round
+ * @returns {boolean} - TRUE if bribing the guard is allowed
+ */
+function PandoraPrisonBribeAllowed() {
+	return (PandoraPrisonBribeEnabled && (Player.Infiltration.Punishment.Timer > CurrentTime + 60000) && (Player.Money >= 10) && Player.CanTalk());
+}
+
+/**
+ * Checks if the perk specified is currently selected
+ * @param {string} Type - The perk type
+ * @returns {boolean} - Returns TRUE if it's selected
+ */
+function PandoraPrisonHasPerk(Type) {
+	return InfiltrationPerksActive(Type);
+}
+
+/**
+ * When the player bribes the guard to lower her sentence
+ * @param {string} Money - The amount of money spent
+ * @param {string} Minutes - The number of minutes to remove from the sentence
+ * @returns {void} - Nothing
+ */
+function PandoraPrisonBribeProcess(Money, Minutes) {
+	Money = parseInt(Money);
+	Minutes = parseInt(Minutes);
+	if (Money != 0) CharacterChangeMoney(Player, Money * -1);
+	if (Minutes != 0) {
+		Player.Infiltration.Punishment.Timer = Player.Infiltration.Punishment.Timer - (Minutes * 60000);
+		if (Player.Infiltration.Punishment.Timer < CurrentTime + 60000) Player.Infiltration.Punishment.Timer = CurrentTime + 60000;
+		ServerSend("AccountUpdate", { Infiltration: Player.Infiltration });
+	}
+}
+
+/**
+ * When the current NPC picks a random weapon to beat up the player
+ * @returns {void} - Nothing
+ */
+function PandoraPrisonPickWeapon() {
+	InventoryWear(PandoraPrisonGuard, "SpankingToys", "ItemHands");
+	InventoryGet(PandoraPrisonGuard, "ItemHands").Property = { Type: CommonRandomItemFromList("", ["Flogger", "Cane", "Paddle", "WhipPaddle", "Whip", "CattleProd", "Belt"]) };
+	CharacterRefresh(PandoraPrisonGuard);
+}
+
+/**
+ * When the guard beats up the player, she loses some strength for fights
+ * @returns {void} - Nothing
+ */
+function PandoraPrisonPlayerBeat(Damage, Blush) {
+	Damage = parseInt(Damage);
+	Damage = Math.round(Damage * PandoraMaxWillpower / 100);
+	PandoraWillpower = PandoraWillpower - Damage;
+	if (PandoraWillpower < 0) PandoraWillpower = 0;
+	PandoraWillpowerTimer = PandoraWillpowerTimer + ((InfiltrationPerksActive("Recovery")) ? 20000 : 30000);
+	CharacterSetFacialExpression(Player, "Blush", Blush, 10);
+	CharacterSetFacialExpression(Player, "Eyes", "Closed", 10);
+	CharacterSetFacialExpression(Player, "Eyes2", "Closed", 10);
 }

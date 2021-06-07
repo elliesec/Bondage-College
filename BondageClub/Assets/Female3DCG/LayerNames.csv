@@ -17,6 +17,9 @@ ClothCollegeOutfit1Skirt,Skirt
 ClothBodice1Base,Main
 ClothBodice1Trim,Trim
 ClothBodice1Pattern,Pattern
+ClothAdmiralTopJacket,Jacket
+ClothAdmiralTopTrim,Trim
+ClothAdmiralTopShirt,Shirt
 ClothAccessoryBouquetBase,Holder
 ClothAccessoryBouquetFlowers,Flowers
 ClothAccessoryCapeFront,Front
@@ -41,12 +44,20 @@ ClothLowerLeggings1Cloth,Cloth
 ClothLowerLeggings1Stripe,Stripe
 ClothLowerLeggings2Cloth,Cloth
 ClothLowerLeggings2Stripe,Stripe
+ClothLowerTennisSkirt1Stripe,Trim
+ClothLowerTennisSkirt1Color,Cloth
+ClothLowerPajama1Cloth, Pants
+ClothLowerPajama1Stripe, Trim
+ClothLowerAdmiralSkirtCloth,Skirt
+ClothLowerAdmiralSkirtStripe,Trim
 SuitLowerCatsuitBase,Suit
 SuitLowerCatsuitZip,Zip
 SuitLowerSeethroughSuitZipBase,Suit
 SuitLowerSeethroughSuitZipZip,Zip
 PantiesDiapers2Diaper,Diaper
 PantiesDiapers2Cover,Plastic Cover
+PantiesFlowerPantiesPanties,Panties
+PantiesFlowerPantiesFlowers,Flowers
 SocksSocks6Sock,Sock
 SocksSocks6Frill,Trim
 SocksSocksFurFabric,Sock
@@ -259,11 +270,19 @@ ItemNeckFuturisticCollarDisplay,Display
 ItemNeckFuturisticCollarLock,Lock
 ItemNeckOrnateCollarCollar,Collar
 ItemNeckOrnateCollarGem,Gems
+ItemNeckShinySteelCollarCollar,Collar
+ItemNeckShinySteelCollarRing,Ring
 ItemNeckAccessoriesCustomCollarTagTag,Tag
 ItemNeckAccessoriesCustomCollarTagText,Text
 ItemNeckAccessoriesElectronicTagTag,Tag
 ItemNeckAccessoriesElectronicTagDisplay,Display
 ItemNeckAccessoriesElectronicTagText,Text
+ItemNeckRestraintsCollarRopeShortRope,Rope
+ItemNeckRestraintsCollarRopeShortPlate,Plate
+ItemNeckRestraintsCollarRopeMediumRope,Rope
+ItemNeckRestraintsCollarRopeMediumPlate,Plate
+ItemNeckRestraintsCollarRopeLongRope,Rope
+ItemNeckRestraintsCollarRopeLongPlate,Plate
 ItemMiscWoodenSignSign,Sign
 ItemMiscWoodenSignRope,Rope
 ItemMiscWoodenSignText,Text

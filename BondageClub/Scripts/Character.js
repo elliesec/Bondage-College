@@ -4,13 +4,14 @@ var CharacterNextId = 1;
 
 /**
  * Loads a character into the buffer, creates it if it does not exist
- * @param {number|string} CharacterID - ID of the character
+ * @param {number} CharacterID - ID of the character
  * @param {string} CharacterAssetFamily - Name of the asset family of the character
  * @returns {void} - Nothing
  */
 function CharacterReset(CharacterID, CharacterAssetFamily) {
 
 	// Prepares the character sheet
+	/** @type {Character} */
 	var NewCharacter = {
 		ID: CharacterID,
 		Hooks: null,
@@ -693,7 +694,7 @@ function CharacterCanChangeToPose(C, poseName) {
 	const pose = PoseFemale3DCG.find(P => P.Name === poseName);
 	if (!pose) return false;
 	const poseCategory = pose.Category;
-	if (!CharacterItemsHavePoseAvailable(C, poseCategory, pose)) return false;
+	if (!CharacterItemsHavePoseAvailable(C, poseCategory, pose.Name)) return false;
 	return !C.Appearance.some(item => InventoryGetItemProperty(item, "FreezeActivePose").includes(poseCategory));
 }
 
@@ -812,7 +813,7 @@ function CharacterLoadPose(C) {
 /**
  * Adds an effect to a character's effect list, does not add it if it's already there
  * @param {Character} C - Character for which to add an effect to its list
- * @param {string} NewEffect - The name of the effect to add
+ * @param {string[]} NewEffect - The name of the effect to add
  * @returns {void} - Nothing
  */
 function CharacterAddEffect(C, NewEffect) {
@@ -848,7 +849,7 @@ function CharacterLoadCanvas(C) {
 
 	// We add a temporary appearance and pose here so that it can be modified by hooks.  We copy the arrays so no hooks can alter the reference accidentally
 	C.DrawAppearance = AppearanceItemParse( CharacterAppearanceStringify(C));
-	C.DrawPose = [...C.Pose]; // Deep copy of pose array
+	C.DrawPose = C.Pose.slice(); // Deep copy of pose array
 
 
 	// Run BeforeSortLayers hook
@@ -914,9 +915,10 @@ function CharacterChangeMoney(C, Value) {
  * Refreshes the character parameters (Effects, poses, canvas, settings, etc.)
  * @param {Character} C - Character to refresh
  * @param {boolean} [Push=true] - Pushes the data to the server if true or null
+ * @param {boolean} [RefreshDialog=true] - Refreshes the character dialog
  * @returns {void} - Nothing
  */
-function CharacterRefresh(C, Push) {
+function CharacterRefresh(C, Push, RefreshDialog = true) {
 	AnimationPurge(C, false);
 	CharacterLoadEffect(C);
 	CharacterLoadPose(C);
@@ -931,48 +933,56 @@ function CharacterRefresh(C, Push) {
 	}
 	// Also refresh the current dialog menu if the refreshed character is the current character.
 	var Current = CharacterGetCurrent();
-	if (Current && C.ID == Current.ID) {
-		if (DialogFocusItem && DialogFocusItem.Asset) {
-			if (!DialogFocusItem.Asset.IsLock) {
-				let DFI = C.Appearance.find(Item =>
-					Item.Asset.Name == DialogFocusItem.Asset.Name && Item.Asset.Group.Name == DialogFocusItem.Asset.Group.Name
-				);
-				if (!DFI) DialogLeaveFocusItem();
-				else {
-					DialogFocusItem = DFI;
-					if (DialogFocusItem && DialogFocusItem.Asset.Extended && typeof window["Inventory" + DialogFocusItem.Asset.Group.Name + DialogFocusItem.Asset.Name + "Load"] === "function") window["Inventory" + DialogFocusItem.Asset.Group.Name + DialogFocusItem.Asset.Name + "Load"]();
-				}
-			} else {
-				var DFSI = DialogFocusSourceItem && DialogFocusSourceItem.Asset && C.Appearance.find(Item =>
-					Item.Asset.Name == DialogFocusSourceItem.Asset.Name && Item.Asset.Group.Name == DialogFocusSourceItem.Asset.Group.Name
-				);
-				var Lock = DFSI && InventoryGetLock(DFSI);
-				if (!DFSI || !Lock) DialogLeaveFocusItem();
-				else DialogExtendItem(Lock, DFSI);
+	if (Current && C.ID == Current.ID && RefreshDialog) {
+		CharacterRefreshDialog(C);
+	}
+}
+
+/**
+ * @param {Character} C - Character to refresh
+ * @returns {void} - Nothing
+ */
+function CharacterRefreshDialog(C) {
+	if (DialogFocusItem && DialogFocusItem.Asset) {
+		if (!DialogFocusItem.Asset.IsLock) {
+			let DFI = C.Appearance.find(Item =>
+				Item.Asset.Name == DialogFocusItem.Asset.Name && Item.Asset.Group.Name == DialogFocusItem.Asset.Group.Name
+			);
+			if (!DFI) DialogLeaveFocusItem();
+			else {
+				DialogFocusItem = DFI;
+				if (DialogFocusItem && DialogFocusItem.Asset.Extended && typeof window["Inventory" + DialogFocusItem.Asset.Group.Name + DialogFocusItem.Asset.Name + "Load"] === "function") window["Inventory" + DialogFocusItem.Asset.Group.Name + DialogFocusItem.Asset.Name + "Load"]();
 			}
-		} else if (DialogFocusItem) DialogLeaveFocusItem();
-		if (!DialogFocusItem) {
-			var IsLockMode = DialogItemToLock && C.Appearance.find(Item => Item.Asset.Name == DialogItemToLock.Asset.Name && DialogItemToLock.Asset.Group.Name == Item.Asset.Group.Name );
-			if (IsLockMode) {
-				DialogInventory = [];
-				for (let A = 0; A < Player.Inventory.length; A++)
-					if ((Player.Inventory[A].Asset != null) && Player.Inventory[A].Asset.IsLock)
-						DialogInventoryAdd(C, Player.Inventory[A], false, DialogSortOrderUsable);
-				DialogInventorySort();
-				DialogMenuButtonBuild(C);
-			} else {
-				DialogInventoryBuild(C, DialogInventoryOffset);
-			}
-			ActivityDialogBuild(C);
+		} else {
+			var DFSI = DialogFocusSourceItem && DialogFocusSourceItem.Asset && C.Appearance.find(Item =>
+				Item.Asset.Name == DialogFocusSourceItem.Asset.Name && Item.Asset.Group.Name == DialogFocusSourceItem.Asset.Group.Name
+			);
+			var Lock = DFSI && InventoryGetLock(DFSI);
+			if (!DFSI || !Lock) DialogLeaveFocusItem();
+			else DialogExtendItem(Lock, DFSI);
 		}
-		if (DialogColor != null) {
-			const FocusItem = C && C.FocusGroup ? InventoryGet(C, C.FocusGroup.Name) : null;
-			if ((ItemColorItem && !FocusItem) || (!ItemColorItem && FocusItem) || InventoryGetItemProperty(ItemColorItem, "Name") !== InventoryGetItemProperty(FocusItem, "Name")) {
-				ItemColorCancelAndExit();
-				DialogColor = null;
-				DialogColorSelect = null;
-				DialogMenuButtonBuild(C);
-			}
+	} else if (DialogFocusItem) DialogLeaveFocusItem();
+	if (!DialogFocusItem) {
+		var IsLockMode = DialogItemToLock && C.Appearance.find(Item => Item.Asset.Name == DialogItemToLock.Asset.Name && DialogItemToLock.Asset.Group.Name == Item.Asset.Group.Name);
+		if (IsLockMode) {
+			DialogInventory = [];
+			for (let A = 0; A < Player.Inventory.length; A++)
+				if ((Player.Inventory[A].Asset != null) && Player.Inventory[A].Asset.IsLock)
+					DialogInventoryAdd(C, Player.Inventory[A], false, DialogSortOrderUsable);
+			DialogInventorySort();
+			DialogMenuButtonBuild(C);
+		} else {
+			DialogInventoryBuild(C, DialogInventoryOffset);
+		}
+		ActivityDialogBuild(C);
+	}
+	if (DialogColor != null) {
+		const FocusItem = C && C.FocusGroup ? InventoryGet(C, C.FocusGroup.Name) : null;
+		if ((ItemColorItem && !FocusItem) || (!ItemColorItem && FocusItem) || InventoryGetItemProperty(ItemColorItem, "Name") !== InventoryGetItemProperty(FocusItem, "Name")) {
+			ItemColorCancelAndExit();
+			DialogColor = null;
+			DialogColorSelect = null;
+			DialogMenuButtonBuild(C);
 		}
 	}
 }
@@ -1196,10 +1206,10 @@ function CharacterFullRandomRestrain(C, Ratio, Refresh) {
  * Sets a new pose for the character
  * @param {Character} C - Character for which to set the pose
  * @param {string} NewPose - Name of the pose to set as active
- * @param {boolean} ForceChange - TRUE if the set pose(s) should overwrite current active pose(s)
+ * @param {boolean} [ForceChange=false] - TRUE if the set pose(s) should overwrite current active pose(s)
  * @returns {void} - Nothing
  */
-function CharacterSetActivePose(C, NewPose, ForceChange) {
+function CharacterSetActivePose(C, NewPose, ForceChange=false) {
 	if (NewPose == null || ForceChange || C.ActivePose == null) {
 		C.ActivePose = NewPose;
 		CharacterRefresh(C, false);
@@ -1230,9 +1240,10 @@ function CharacterSetActivePose(C, NewPose, ForceChange) {
  * Sets a specific facial expression for the character's specified AssetGroup, if there's a timer, the expression will expire after it, a
  * timed expression cannot override another one.
  * @param {Character} C - Character for which to set the expression of
- * @param {group} AssetGroup - Asset group for the expression
+ * @param {string} AssetGroup - Asset group for the expression
  * @param {string} Expression - Name of the expression to use
  * @param {number} [Timer] - Optional: time the expression will last
+ * @param {string|string[]} [Color] - Optional: color of the expression to set
  * @returns {void} - Nothing
  */
 function CharacterSetFacialExpression(C, AssetGroup, Expression, Timer, Color) {

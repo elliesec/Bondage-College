@@ -74,6 +74,45 @@ var ChatRoomHideIconState = 0;
 var ChatRoomMenuButtons = [];
 
 /**
+ * Chat room resize manager object: Handles resize events for the chat log.
+ * @constant
+ * @type {object} - The chat room resize manager object. Contains the functions and properties required to handle resize events.
+ */
+ let ChatRoomResizeManager = {
+	atStart : true, // Is this the first event in a chain of resize events?
+	timer : null, // Timer that triggers the end function after no resize events have been received recently.
+	timeOut : 200, // The amount of milliseconds that has to pass before the chain of resize events is considered over and the timer is called.
+	ChatRoomScrollPercentage : 0, // Height of the chat log scroll bar before the first resize event occurs, as a percentage.
+	ChatLogScrolledToEnd : false, // Is the chat log scrolled all the way to the end before the first resize event occurs?
+
+	// Triggered by resize event
+	ChatRoomResizeEvent : function() {
+		if(ChatRoomResizeManager.atStart) { // Run code for the first resize event in a chain of resize events.
+			ChatRoomResizeManager.ChatRoomScrollPercentage = ElementGetScrollPercentage("TextAreaChatLog");
+			ChatRoomResizeManager.ChatLogScrolledToEnd = ElementIsScrolledToEnd("TextAreaChatLog");
+			ChatRoomResizeManager.atStart = false;
+		}
+
+		// Reset timer if an event was received recently.
+		if (ChatRoomResizeManager.timer) clearTimeout(ChatRoomResizeManager.timer);
+		ChatRoomResizeManager.timer = setTimeout(ChatRoomResizeManager.ChatRoomResizeEventsEnd, ChatRoomResizeManager.timeOut);
+	},
+
+	// Triggered by ChatRoomResizeManager.timer at the end of a chain of resize events
+	ChatRoomResizeEventsEnd : function(){
+		var TextAreaChatLog = document.getElementById("TextAreaChatLog");
+
+		if (TextAreaChatLog != null) {
+			// Scrolls to the position held before the resize events.
+			if (ChatRoomResizeManager.ChatLogScrolledToEnd) ElementScrollToEnd("TextAreaChatLog"); // Prevents drift away from the end of the chat log.
+			else TextAreaChatLog.scrollTop = (ChatRoomResizeManager.ChatRoomScrollPercentage * TextAreaChatLog.scrollHeight) - TextAreaChatLog.clientHeight;
+		}
+		ChatRoomResizeManager.atStart = true;
+	},
+};
+
+
+/**
  * Checks if the player can add the current character to her whitelist.
  * @returns {boolean} - TRUE if the current character is not in the player's whitelist nor blacklist.
  */
@@ -419,6 +458,9 @@ function ChatRoomCreateElement() {
 			RelogChatLog = null;
 		} else ElementContent("TextAreaChatLog", "");
 
+		// Creates listener for resize events.
+		window.addEventListener("resize", ChatRoomResizeManager.ChatRoomResizeEvent);
+
 	} else if (document.getElementById("TextAreaChatLog").style.display == "none") {
 		setTimeout(() => ElementScrollToEnd("TextAreaChatLog"), 100);
 		ChatRoomRefreshChatSettings();
@@ -479,6 +521,9 @@ function ChatRoomClearAllElements() {
 	// Wardrobe
 	ElementRemove("InputWardrobeName");
 	CharacterAppearanceMode = "";
+
+	// Listeners
+	window.removeEventListener("resize", ChatRoomResizeManager.ChatRoomResizeEvent);
 }
 
 /**
@@ -794,7 +839,7 @@ function ChatRoomClickCharacter(C, CharX, CharY, Zoom, ClickX, ClickY, Pos) {
 	document.getElementById("InputChat").style.display = "none";
 	document.getElementById("TextAreaChatLog").style.display = "none";
 	ChatRoomBackground = ChatRoomData.Background;
-	C.AllowItem = (C.ID === 0);
+	C.AllowItem = C.ID === 0 || ServerChatRoomGetAllowItem(Player, C);
 	ChatRoomOwnershipOption = "";
 	ChatRoomLovershipOption = "";
 	if (C.ID !== 0) ServerSend("ChatRoomAllowItem", { MemberNumber: C.MemberNumber });
@@ -906,7 +951,7 @@ function ChatRoomSetLastChatRoom(room) {
 		LastChatRoomAdmin: Player.LastChatRoomAdmin.toString(),
 
 	};
-	ServerSend("AccountUpdate", P);
+	ServerAccountUpdate.QueueData(P);
 }
 
 /**
@@ -1515,8 +1560,8 @@ function ChatRoomSendChat() {
 /**
  * Publishes common player actions (add, remove, swap) to the chat.
  * @param {Character} C - Character on which the action is done.
- * @param {Asset} StruggleProgressPrevItem - The item that has been removed.
- * @param {Asset} StruggleProgressNextItem - The item that has been added.
+ * @param {Item} StruggleProgressPrevItem - The item that has been removed.
+ * @param {Item} StruggleProgressNextItem - The item that has been added.
  * @param {boolean} LeaveDialog - Whether to leave the current dialog after publishing the action.
  * @param {string} [Action] - Action modifier
  * @returns {void} - Nothing.
@@ -1563,7 +1608,7 @@ function ChatRoomPublishAction(C, StruggleProgressPrevItem, StruggleProgressNext
 /**
  * Updates an item on character for everyone in a chat room - replaces ChatRoomCharacterUpdate to cut on the lag.
  * @param {Character} C - Character to update.
- * @param {string} Group - Item group to update.
+ * @param {string} [Group] - Item group to update.
  * @returns {void} - Nothing.
  */
 function ChatRoomCharacterItemUpdate(C, Group) {
@@ -1700,6 +1745,11 @@ function ChatRoomMessage(data) {
 					}
 				}
 				else if (msg == "GiveLockpicks") DialogLentLockpicks = true;
+				else if (msg == "RequestFullKinkyDungeonData") {
+					KinkyDungeonStreamingPlayers.push(SenderCharacter.MemberNumber);
+					if (CurrentScreen == "KinkyDungeon")
+						KinkyDungeonSendData(KinkyDungeonPackData(true, true, true, true), SenderCharacter.MemberNumber)
+				}
 
 				// If the message is still hidden after any modifications, stop processing
 				if (data.Type == "Hidden") return;
@@ -2443,20 +2493,21 @@ function ChatRoomSyncItem(data) {
 			} else {
 				InventoryRemove(ChatRoomCharacter[C], data.Item.Group);
 			}
-			CharacterRefresh(ChatRoomCharacter[C], false);
-
-
-			// Keeps the change in the chat room data and allows the character to be updated again
-			for (let R = 0; R < ChatRoomData.Character.length; R++)
-				if (ChatRoomData.Character[R].MemberNumber == data.Item.Target)
-					ChatRoomData.Character[R].Appearance = ChatRoomCharacter[C].Appearance;
-			ChatRoomAllowCharacterUpdate = true;
 
 			// If the update was invalid, send a correction update
 			if (ChatRoomCharacter[C].ID === 0 && !valid) {
 				console.warn(`Invalid appearance update to group ${data.Item.Group}. Updating with sanitized appearance.`);
 				ChatRoomCharacterUpdate(ChatRoomCharacter[C]);
+			} else {
+				CharacterRefresh(ChatRoomCharacter[C]);
 			}
+
+			// Keeps the change in the chat room data and allows the character to be updated again
+			for (let R = 0; R < ChatRoomData.Character.length; R++) {
+				if (ChatRoomData.Character[R].MemberNumber == data.Item.Target)
+					ChatRoomData.Character[R].Appearance = ChatRoomCharacter[C].Appearance;
+			}
+			ChatRoomAllowCharacterUpdate = true;
 
 			return;
 		}
@@ -2711,7 +2762,8 @@ function ChatRoomListManipulation(Add, Remove, Message) {
  */
 function ChatRoomAllowItem(data) {
 	if ((data != null) && (typeof data === "object") && (data.MemberNumber != null) && (typeof data.MemberNumber === "number") && (data.AllowItem != null) && (typeof data.AllowItem === "boolean"))
-		if ((CurrentCharacter != null) && (CurrentCharacter.MemberNumber == data.MemberNumber)) {
+		if (CurrentCharacter != null && CurrentCharacter.MemberNumber == data.MemberNumber && data.AllowItem !== CurrentCharacter.AllowItem) {
+			console.warn(`ChatRoomGetAllowItem mismatch trying to access ${CurrentCharacter.Name} (${CurrentCharacter.MemberNumber})`);
 			CurrentCharacter.AllowItem = data.AllowItem;
 			CharacterSetCurrent(CurrentCharacter);
 		}
@@ -2947,7 +2999,9 @@ function ChatRoomPayQuest(data) {
  * @returns {void} - Nothing
  */
 function ChatRoomGameResponse(data) {
-	if (ChatRoomGame == "LARP") GameLARPProcess(data);
+	if (data.Data.KinkyDungeon) 
+        KinkyDungeonHandleData(data.Data.KinkyDungeon, data.Sender);
+    else if (ChatRoomGame == "LARP") GameLARPProcess(data);
 }
 
 /**
@@ -2978,7 +3032,7 @@ function ChatRoomSafewordRevert() {
 		ServerSend("ChatRoomChat", { Content: "ActionActivateSafewordRevert", Type: "Action", Dictionary: [{ Tag: "SourceCharacter", Text: Player.Name }] });
 		if (Player.ItemPermission < 3) {
 			Player.ItemPermission = 3;
-			ServerSend("AccountUpdate", { ItemPermission: Player.ItemPermission });
+			ServerAccountUpdate.QueueData({ ItemPermission: Player.ItemPermission }, true);
 			setTimeout(() => ChatRoomCharacterUpdate(Player), 5000);
 		}
 	}

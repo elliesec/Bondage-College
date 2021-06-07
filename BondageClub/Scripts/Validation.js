@@ -260,7 +260,7 @@ function ValidationItemWarningMessage(item, { C, sourceMemberNumber }) {
  * parameters.
  * @param {Item} lock - The lock object that is being checked, as returned by {@link InventoryGetLock}
  * @param {AppearanceUpdateParameters} params - The appearance update parameters that apply to the diff
- * @param {boolean} remove - Whether the lock change is a removal
+ * @param {boolean} [remove] - Whether the lock change is a removal
  * @returns {boolean} - TRUE if the lock can be modified, FALSE otherwise
  */
 function ValidationIsLockChangePermitted(lock, { C, fromOwner, fromLover }, remove) {
@@ -364,7 +364,7 @@ function ValidationCanAddItem(newItem, params) {
  * @param sourceMemberNumber - The member number of the source character
  * @param {string} groupName - The name of the asset group for the intended item
  * @param {string} assetName - The asset name of the intended item
- * @param {string|null} type - The type of the intended item
+ * @param {string|null} [type] - The type of the intended item
  * @returns {boolean} - TRUE if the character with the provided source member number is _not_ allowed to equip the
  * described asset on the target character, FALSE otherwise.
  */
@@ -477,6 +477,7 @@ function ValidationSanitizeProperties(C, item) {
 	// Sanitize various properties
 	let changed = ValidationSanitizeEffects(C, item);
 	changed = ValidationSanitizeBlocks(C, item) || changed;
+	changed = ValidationSanitizeSetPose(C, item) || changed;
 	changed = ValidationSanitizeStringArray(property, "Hide") || changed;
 
 	const asset = item.Asset;
@@ -700,6 +701,32 @@ function ValidationSanitizeBlocks(C, item) {
 	property.Block = property.Block.filter((block) => {
 		if (!assetBlock.includes(block) && !allowBlock.includes(block)) {
 			console.warn(`Filtering out invalid Block entry on ${item.Asset.Name}:`, block);
+			changed = true;
+			return false;
+		} else return true;
+	});
+	return changed;
+}
+
+/**
+ * Sanitizes the `SetPose` array on an item's Property object, if present. This ensures that it is a valid array of
+ * strings, and that each item in the array is present in the list of poses available in the game.
+ * @param {Character} C - The character on whom the item is equipped
+ * @param {Item} item - The item whose `SetPose` property should be sanitized
+ * @returns {boolean} - TRUE if the item's `SetPose` property was modified as part of the sanitization process
+ * (indicating it was not a valid string array, or that invalid entries were present), FALSE otherwise
+ */
+function ValidationSanitizeSetPose(C, item) {
+	const property = item.Property;
+	let changed = ValidationSanitizeStringArray(property, "SetPose");
+
+	// If there is no SetPose array, no further sanitization is needed
+	if (!Array.isArray(property.SetPose)) return changed;
+
+	// The SetPose array must contain a list of valid pose names
+	property.SetPose = property.SetPose.filter((pose) => {
+		if (!PoseFemale3DCGNames.includes(pose)) {
+			console.warn(`Filtering out invalid SetPose entry on ${item.Asset.Name}:`, pose);
 			changed = true;
 			return false;
 		} else return true;
