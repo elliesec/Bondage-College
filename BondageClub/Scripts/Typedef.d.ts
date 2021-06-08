@@ -847,9 +847,3 @@ type TypedItemValidateCallback = (C: Character, Option: ExtendedItemOption) => s
 
 
 //#endregion
-
-type TwoTuple = [number, number];
-
-interface TarjanGraphVertex {
-    vertex: number;
-}

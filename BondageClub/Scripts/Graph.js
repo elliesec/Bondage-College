@@ -1,7 +1,7 @@
 class DirectedGraph {
 	/**
-	 * @param {number[]} vertices
-	 * @param {TwoTuple[]} edges
+	 * @param {string[]} vertices
+	 * @param {[[string, string]]} edges
 	 */
 	constructor(vertices, edges) {
 		this.vertices = vertices;
@@ -12,7 +12,7 @@ class DirectedGraph {
 
 	/**
 	 * Constructs and sets the adjacency list for this graph based on its edge definitions
-	 * @returns {Record<number, number[]>} - The adjacency list for the graph
+	 * @returns {Record<string, string[]>} - The adjacency list for the graph
 	 */
 	buildAdjacencyList() {
 		const adjacencyList = {};
@@ -29,7 +29,7 @@ class DirectedGraph {
 
 	/**
 	 * Creates a new subgraph of this graph by removing a given vertex, along with all edges attached to that vertex
-	 * @param {number} vertex - The vertex to remove
+	 * @param {string} vertex - The vertex to remove
 	 * @returns {DirectedGraph} - The subgraph of this graph obtained by removing the given vertex and all attached
 	 * edges
 	 */
@@ -42,7 +42,7 @@ class DirectedGraph {
 
 	/**
 	 * Creates a new subgraph of this graph by keeping only the given vertices and any edges between them
-	 * @param {number[]} vertices - The vertices to keep
+	 * @param {string[]} vertices - The vertices to keep
 	 * @returns {DirectedGraph} - The subgraph of this graph obtained by only keeping the given vertices and any edges
 	 * between them
 	 */
@@ -56,7 +56,7 @@ class DirectedGraph {
 	/**
 	 * Calculates the strongly connected components of the graph using Tarjan's strongly connected components algorithm.
 	 * See https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm
-	 * @returns {number[][]} - An array containing the strongly connected components of this graph, each represented as
+	 * @returns {string[][]} - An array containing the strongly connected components of this graph, each represented as
 	 * an array of vertex numbers
 	 */
 	getStronglyConnectedComponents() {
@@ -112,7 +112,7 @@ class DirectedGraph {
 
 	/**
 	 * Finds all simple cycles in this graph using Johnson's algorithm (see https://epubs.siam.org/doi/10.1137/0204007)
-	 * @returns {number[][]}
+	 * @returns {string[][]}
 	 */
 	findCycles() {
 		const stack = [];
@@ -180,17 +180,17 @@ class DirectedGraph {
 
 function GraphTest() {
 	let graph = new DirectedGraph(
-		[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+		["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"],
 		[
-			[1, 2], [1, 3], [2, 4], [2, 5], [3, 2], [4, 5], [5, 3], [6, 3], [6, 1], [6, 7], [7, 8], [7, 9], [8, 10],
-			[9, 10], [10, 6], [10, 11], [11, 11],
+			["1", "2"], ["1", "3"], ["2", "4"], ["2", "5"], ["3", "2"], ["4", "5"], ["5", "3"], ["6", "3"], ["6", "1"],
+			["6", "7"], ["7", "8"], ["7", "9"], ["8", "10"], ["9", "10"], ["10", "6"], ["10", "11"], ["11", "11"],
 		],
 	);
 	console.log(JSON.stringify([
-		[3, 5, 4, 2],
-		[1],
-		[11],
-		[9, 10, 8, 7, 6],
+		["3", "5", "4", "2"],
+		["1"],
+		["11"],
+		["9", "10", "8", "7", "6"],
 	]));
 	console.log(JSON.stringify(graph.getStronglyConnectedComponents()));
 	console.log(JSON.stringify(graph.adjacencyList));
