@@ -11,9 +11,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-05-12
+Changelog last updated: 2021-06-10
 
-Last recorded PR: [#2546](https://github.com/Ben987/Bondage-College/pull/2546)
+Last recorded PR: [#2555](https://github.com/Ben987/Bondage-College/pull/2555)
 
 ## [R69]
 
@@ -45,6 +45,9 @@ Last recorded PR: [#2546](https://github.com/Ben987/Bondage-College/pull/2546)
 * Manilla - Added a "rest head" activity for resting heads in laps ([#2534](https://github.com/Ben987/Bondage-College/pull/2534))
 * Ayesha - Added new Thin Leather Straps arm and torso items ([#2535](https://github.com/Ben987/Bondage-College/pull/2535), [#2540](https://github.com/Ben987/Bondage-College/pull/2540))
 * Epona/Elda - Added a new Wet Floor Sign item ([#2543](https://github.com/Ben987/Bondage-College/pull/2543))
+* Natsuki - Added a new Clear Vacbed item ([#2552](https://github.com/Ben987/Bondage-College/pull/2552))
+* Ada - Made the Futuristic Heels also available as a clothing item in the shoes slot ([#2553](https://github.com/Ben987/Bondage-College/pull/2553))
+* TessaTech - Added a new Vacuum Bed Deluxe item ([#2551](https://github.com/Ben987/Bondage-College/pull/2551), [#2555](https://github.com/Ben987/Bondage-College/pull/2555))
 
 ### [Removed]
 
@@ -73,18 +76,20 @@ Last recorded PR: [#2546](https://github.com/Ben987/Bondage-College/pull/2546)
 * Natsuki - Fixed an alignment issue between the upper and lower bodies in the "over the head" pose (the X-Cross pose) ([#2514](https://github.com/Ben987/Bondage-College/pull/2514))
 * Sandrine - Fixed an issue where the Short Pencil Skirt would incorrectly hide several leg items ([#2530](https://github.com/Ben987/Bondage-College/pull/2530))
 * Sekkmer - Fixed an issue that would sometimes make the login page credits disappear ([#2533](https://github.com/Ben987/Bondage-College/pull/2533), [#2539](https://github.com/Ben987/Bondage-College/pull/2539))
+* Ellie - Fixed a bug where calling the maids for help in a chatroom wouldn't work under certain circumstances ([#2549](https://github.com/Ben987/Bondage-College/pull/2549))
 
 ### [Technical]
 
 * Jomshir - Made some major optimizations to character drawing for suspended characters, and when blindfolded ([#2528](https://github.com/Ben987/Bondage-College/pull/2528))
 * Sekkmer - Optimized character account updates to reduce server traffic ([#2297](https://github.com/Ben987/Bondage-College/pull/2297), [#2531](https://github.com/Ben987/Bondage-College/pull/2531))
+* Ada - Added a new `/bot` chatroom command which sends a hidden chat message to players in a chatroom ([#2554](https://github.com/Ben987/Bondage-College/pull/2554))
 * Technical changes, fixed & improvements:
     * Nina - [#2472](https://github.com/Ben987/Bondage-College/pull/2472)
     * Ellie - [#2477](https://github.com/Ben987/Bondage-College/pull/2477), [#2510](https://github.com/Ben987/Bondage-College/pull/2510)
     * Leila - [#2498](https://github.com/Ben987/Bondage-College/pull/2498)
     * Verity - [#2501](https://github.com/Ben987/Bondage-College/pull/2501)
     * Jomshir - [#2504](https://github.com/Ben987/Bondage-College/pull/2504), [#2519](https://github.com/Ben987/Bondage-College/pull/2519), [#2526](https://github.com/Ben987/Bondage-College/pull/2526)
-    * Sandrine - [#2503](https://github.com/Ben987/Bondage-College/pull/2503), [#2517](https://github.com/Ben987/Bondage-College/pull/2517), [#2520](https://github.com/Ben987/Bondage-College/pull/2520), [#2524](https://github.com/Ben987/Bondage-College/pull/2524), [#2536](https://github.com/Ben987/Bondage-College/pull/2536), [#2538](https://github.com/Ben987/Bondage-College/pull/2538), [#2542](https://github.com/Ben987/Bondage-College/pull/2542)
+    * Sandrine - [#2503](https://github.com/Ben987/Bondage-College/pull/2503), [#2517](https://github.com/Ben987/Bondage-College/pull/2517), [#2520](https://github.com/Ben987/Bondage-College/pull/2520), [#2524](https://github.com/Ben987/Bondage-College/pull/2524), [#2536](https://github.com/Ben987/Bondage-College/pull/2536), [#2538](https://github.com/Ben987/Bondage-College/pull/2538), [#2542](https://github.com/Ben987/Bondage-College/pull/2542), [#2548](https://github.com/Ben987/Bondage-College/pull/2548)
 
 ### [Beta Fixes]
 
