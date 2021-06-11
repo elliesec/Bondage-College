@@ -11,9 +11,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-06-10
+Changelog last updated: 2021-06-11
 
-Last recorded PR: [#2555](https://github.com/Ben987/Bondage-College/pull/2555)
+Last recorded PR: [#2558](https://github.com/Ben987/Bondage-College/pull/2558)
 
 ## [R69]
 
@@ -93,7 +93,8 @@ Last recorded PR: [#2555](https://github.com/Ben987/Bondage-College/pull/2555)
 
 ### [Beta Fixes]
 
-* Nothing... yet
+* Ellie - Fixed a bug where players could use the Thin Leather Straps torso item through clothing ([#2557](https://github.com/Ben987/Bondage-College/pull/2557))
+* Ada - Fixed some issues with the Kinky Dungeon spectator mode ([#2558](https://github.com/Ben987/Bondage-College/pull/2558))
 
 ## [R68]
 
