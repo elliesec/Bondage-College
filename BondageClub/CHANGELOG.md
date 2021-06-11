@@ -13,7 +13,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 Changelog last updated: 2021-06-11
 
-Last recorded PR: [#2558](https://github.com/Ben987/Bondage-College/pull/2558)
+Last recorded PR: [#2564](https://github.com/Ben987/Bondage-College/pull/2564)
 
 ## [R69]
 
@@ -48,6 +48,7 @@ Last recorded PR: [#2558](https://github.com/Ben987/Bondage-College/pull/2558)
 * Natsuki - Added a new Clear Vacbed item ([#2552](https://github.com/Ben987/Bondage-College/pull/2552))
 * Ada - Made the Futuristic Heels also available as a clothing item in the shoes slot ([#2553](https://github.com/Ben987/Bondage-College/pull/2553))
 * TessaTech - Added a new Vacuum Bed Deluxe item ([#2551](https://github.com/Ben987/Bondage-College/pull/2551), [#2555](https://github.com/Ben987/Bondage-College/pull/2555))
+* Ada - Added some additional keywords that will trigger Futuristic item automatic shocks when used in emotes ([#2563](https://github.com/Ben987/Bondage-College/pull/2563))
 
 ### [Removed]
 
@@ -95,6 +96,12 @@ Last recorded PR: [#2558](https://github.com/Ben987/Bondage-College/pull/2558)
 
 * Ellie - Fixed a bug where players could use the Thin Leather Straps torso item through clothing ([#2557](https://github.com/Ben987/Bondage-College/pull/2557))
 * Ada - Fixed some issues with the Kinky Dungeon spectator mode ([#2558](https://github.com/Ben987/Bondage-College/pull/2558))
+* Ellie - Fixed a bug where inspecting the Bondage Bench on someone could cause errors ([#2556](https://github.com/Ben987/Bondage-College/pull/2556))
+* Ellie - Fixed an issue with the Web arms item where its extended menu wouldn't work ([#2559](https://github.com/Ben987/Bondage-College/pull/2559))
+* Ellie - Fixed an issue where certain items would not be hidden when combined with items that should hide them ([#2560](https://github.com/Ben987/Bondage-College/pull/2560))
+* TessaTech - Fixed several issues with the Vacuum Bed Deluxe ([#2561](https://github.com/Ben987/Bondage-College/pull/2561))
+* Ellie - Fixed an issue with the Sturdy Leather Belts arms item where its extended menu wouldn't work ([#2562](https://github.com/Ben987/Bondage-College/pull/2562))
+* Nina - Fixed an issue where some skirts would appear to cause a seam between the player's hands and arms ([#2564](https://github.com/Ben987/Bondage-College/pull/2564))
 
 ## [R68]
 
