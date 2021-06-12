@@ -118,7 +118,7 @@ class DirectedGraph {
 		const stack = [];
 		const blocked = [];
 		const blockMap = [];
-		const circuits = [];
+		const cycles = [];
 		let subgraph = this;
 		let startVertex;
 		let currentComponent;
@@ -135,16 +135,16 @@ class DirectedGraph {
 			}
 		};
 
-		const circuit = (v) => {
+		const cycle = (v) => {
 			let f = false;
 			stack.push(v);
 			blocked[v] = true;
 			for (const w of componentGraph.adjacencyList[v]) {
 				if (w === startVertex) {
-					circuits.push(stack.concat(startVertex));
+					cycles.push(stack.concat(startVertex));
 					f = true;
 				} else if (!blocked[w]) {
-					if (circuit(w)) {
+					if (cycle(w)) {
 						f = true;
 					}
 				}
@@ -170,11 +170,11 @@ class DirectedGraph {
 				blocked[vertex] = false;
 				blockMap[vertex] = [];
 			}
-			circuit(startVertex);
+			cycle(startVertex);
 			subgraph = subgraph.removeVertex(startVertex);
 		}
 
-		return circuits;
+		return cycles;
 	}
 }
 
