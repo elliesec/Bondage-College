@@ -353,6 +353,7 @@ function DialogCanWatchKinkyDungeon() {
 function DialogStartKinkyDungeon() {
 	if (CurrentCharacter) {
 		KinkyDungeonPlayerCharacter = CurrentCharacter;
+		KinkyDungeonGameRunning = false; // Reset the game to prevent carrying over spectator data
 		if (KinkyDungeonPlayerCharacter != Player && CurrentCharacter.MemberNumber) {
 			KinkyDungeonGameData = null;
 			ServerSend("ChatRoomChat", { Content: "RequestFullKinkyDungeonData", Type: "Hidden", Target: CurrentCharacter.MemberNumber });
@@ -730,7 +731,7 @@ function DialogMenuButtonBuild(C) {
 			if ((Item != null) && (C.ID == 0) && (!Player.CanInteract() || (IsItemLocked && !DialogCanUnlock(C, Item))) && (DialogMenuButton.indexOf("Unlock") < 0) && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked) DialogMenuButton.push("Struggle");
 			if ((Item != null) && !IsItemLocked && Player.CanInteract() && InventoryAllow(C, Item.Asset.Prerequisite) && !IsGroupBlocked) {
 				if (Item.Asset.AllowLock && (!Item.Property || (Item.Property && Item.Property.AllowLock !== false))) {
-					if (!Item.Asset.AllowLockType || Item.Asset.AllowLockType.includes(Item.Property.Type)) {
+					if (!Item.Asset.AllowLockType || (Item.Property && Item.Asset.AllowLockType.includes(Item.Property.Type))) {
 						DialogMenuButton.push(ItemBlockedOrLimited ? "LockDisabled" : "Lock");
 					}
 				}

@@ -594,6 +594,169 @@ var AssetFemale3DCGExtended = {
 				]
 			}
 		}, //ThinLeatherStraps
+		MermaidSuit: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Zipped",
+						Property: {
+							Type: null,
+							Difficulty: 0,
+							Block: ["ItemBreast", "ItemNipples", "ItemNipplesPiercings", "ItemVulva", "ItemVulvaPiercings", "ItemButt"],
+						},
+					},
+					{
+						Name: "UnZip",
+						Property: {
+							Type: "UnZip",
+							Block: [],
+						},
+					},
+				],
+			},
+		}, // MermaidSuit
+		TightJacket: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Basic",
+						Property: {
+							Type: null,
+							Difficulty: 1,
+						},
+					},
+					{
+						Name: "PulledStraps",
+						Property: {
+							Type: "PulledStraps",
+							Difficulty: 1,
+						},
+					},
+					{
+						Name: "LiningStraps",
+						Property: {
+							Type: "LiningStraps",
+							Difficulty: 2,
+						},
+					},
+					{
+						Name: "ExtraPadding",
+						Property: {
+							Type: "ExtraPadding",
+							Difficulty: 2,
+						},
+					},
+					{
+						Name: "PulledLining",
+						Property: {
+							Type: "PulledLining",
+							Difficulty: 3,
+						},
+					},
+					{
+						Name: "PulledPadding",
+						Property: {
+							Type: "PulledPadding",
+							Difficulty: 3,
+						},
+					},
+					{
+						Name: "PaddedLining",
+						Property: {
+							Type: "PaddedLining",
+							Difficulty: 3,
+						},
+					},
+					{
+						Name: "FullJacket",
+						Property: {
+							Type: "FullJacket",
+							Difficulty: 4,
+						},
+					},
+				],
+				Dialog: {
+					Load: "ItemArmsTightJacketSelect",
+					TypePrefix: "ItemArmsTightJacket",
+					ChatPrefix: "ItemArmsTightJacketSet",
+				},
+			},
+		}, // TightJacket
+		TightJacketCrotch: {
+			Archetype: ExtendedArchetype.TYPED,
+			CopyConfig: { AssetName: "TightJacket" },
+		}, // TightJacketCrotch
+		WrappedBlanket: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				ChatTags: [CommonChatTags.SOURCE_CHAR, CommonChatTags.TARGET_CHAR],
+				Options: [
+					{
+						Name: "NormalWrapped",
+						Property: { Type: null, },
+					},
+					{
+						Name: "ShouldersWrapped",
+						Property: { Type: "ShouldersWrapped", },
+					},
+					{
+						Name: "FeetWrapped",
+						Property: { Type: "FeetWrapped", },
+					},
+					{
+						Name: "FullWrapped",
+						Property: { Type: "FullWrapped", },
+					},
+				],
+			},
+		}, // WrappedBlanket
+		Ribbons: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Cross",
+						Property: { Type: null, Difficulty: 1 },
+					},
+					{
+						Name: "Heavy",
+						SelfBondageLevel: 4,
+						Property: { Type: "Heavy", Difficulty: 2 }
+					},
+				],
+				Dialog: {
+					Load: "SelectRibbonType",
+				},
+			},
+		}, // Ribbons
+		SturdyLeatherBelts: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				ChatTags: [CommonChatTags.SOURCE_CHAR, CommonChatTags.TARGET_CHAR],
+				ChangeWhenLocked: false,
+				Dialog: {
+					Load: "SturdyLeatherBeltsSelectTightness",
+					TypePrefix: "SturdyLeatherBeltsPose",
+					ChatPrefix: "SturdyLeatherBeltsRestrain",
+				},
+				Options: [
+					{
+						Name: "One",
+						Property: { Type: null, },
+					},
+					{
+						Name: "Two",
+						Property: { Type: "Two", Difficulty: 2, },
+					},
+					{
+						Name: "Three",
+						Property: { Type: "Three", Difficulty: 4, },
+					},
+				],
+			}
+		}, // SturdyLeatherBelts
 	}, // ItemArms
 	ItemNeck: {
 		ShinySteelCollar: {
@@ -722,6 +885,17 @@ var AssetFemale3DCGExtended = {
 				]				
 			},
 		}, // ThinLeatherStraps
+	}, // ItemTorso
+	Shoes: {
+		FuturisticHeels2: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{ Name: "Shiny", Property: { Type: null } },
+					{ Name: "Matte", Property: { Type: "Matte" } },
+				]				
+			},
+		}, // Shoes
 	}, // ItemTorso
 	HairAccessory1: {
 		ElfEars: {
