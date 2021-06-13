@@ -11,9 +11,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-06-11
+Changelog last updated: 2021-06-13
 
-Last recorded PR: [#2564](https://github.com/Ben987/Bondage-College/pull/2564)
+Last recorded PR: [#2566](https://github.com/Ben987/Bondage-College/pull/2566)
 
 ## [R69]
 
@@ -78,6 +78,8 @@ Last recorded PR: [#2564](https://github.com/Ben987/Bondage-College/pull/2564)
 * Sandrine - Fixed an issue where the Short Pencil Skirt would incorrectly hide several leg items ([#2530](https://github.com/Ben987/Bondage-College/pull/2530))
 * Sekkmer - Fixed an issue that would sometimes make the login page credits disappear ([#2533](https://github.com/Ben987/Bondage-College/pull/2533), [#2539](https://github.com/Ben987/Bondage-College/pull/2539))
 * Ellie - Fixed a bug where calling the maids for help in a chatroom wouldn't work under certain circumstances ([#2549](https://github.com/Ben987/Bondage-College/pull/2549))
+* Ellie - Fixed a bug where item difficulty could increase indefinitely when switching between item variants ([#2567](https://github.com/Ben987/Bondage-College/pull/2567))
+* Nina - Fixed a bug where players on extreme difficulty could use permissions mode for extended item variants ([#2570](https://github.com/Ben987/Bondage-College/pull/2570))
 
 ### [Technical]
 
@@ -102,6 +104,7 @@ Last recorded PR: [#2564](https://github.com/Ben987/Bondage-College/pull/2564)
 * TessaTech - Fixed several issues with the Vacuum Bed Deluxe ([#2561](https://github.com/Ben987/Bondage-College/pull/2561))
 * Ellie - Fixed an issue with the Sturdy Leather Belts arms item where its extended menu wouldn't work ([#2562](https://github.com/Ben987/Bondage-College/pull/2562))
 * Nina - Fixed an issue where some skirts would appear to cause a seam between the player's hands and arms ([#2564](https://github.com/Ben987/Bondage-College/pull/2564))
+* Ada - Fixed a bug with Kinky Dungeon persistence ([#2566](https://github.com/Ben987/Bondage-College/pull/2566))
 
 ## [R68]
 
