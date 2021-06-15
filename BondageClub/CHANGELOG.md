@@ -11,9 +11,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-06-13
+Changelog last updated: 2021-06-15
 
-Last recorded PR: [#2566](https://github.com/Ben987/Bondage-College/pull/2566)
+Last recorded PR: [#2577](https://github.com/Ben987/Bondage-College/pull/2577)
 
 ## [R69]
 
@@ -105,6 +105,8 @@ Last recorded PR: [#2566](https://github.com/Ben987/Bondage-College/pull/2566)
 * Ellie - Fixed an issue with the Sturdy Leather Belts arms item where its extended menu wouldn't work ([#2562](https://github.com/Ben987/Bondage-College/pull/2562))
 * Nina - Fixed an issue where some skirts would appear to cause a seam between the player's hands and arms ([#2564](https://github.com/Ben987/Bondage-College/pull/2564))
 * Ada - Fixed a bug with Kinky Dungeon persistence ([#2566](https://github.com/Ben987/Bondage-College/pull/2566))
+* Jomshirt - Fixed an issue where the Vacuum Bed Deluxe could be changed to the legs spread pose when a character's legs couldn't open ([#2568](https://github.com/Ben987/Bondage-College/pull/2568))
+* gatetrek - Tweaked the Ankle Strap Shoes so that they render above jeans & fixed a typo in the extended menu for the Silk Straps torso item ([#2577](https://github.com/Ben987/Bondage-College/pull/2577))
 
 ## [R68]
 
