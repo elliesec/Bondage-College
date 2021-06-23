@@ -1,3 +1,7 @@
+/**
+ * A class representing a directed graph. The graph consists of string nodes, and edges defined by string to/from
+ * 2-tuples
+ */
 class DirectedGraph {
 	/**
 	 * @param {string[]} vertices
@@ -176,24 +180,4 @@ class DirectedGraph {
 
 		return cycles;
 	}
-}
-
-function GraphTest() {
-	let graph = new DirectedGraph(
-		["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"],
-		[
-			["1", "2"], ["1", "3"], ["2", "4"], ["2", "5"], ["3", "2"], ["4", "5"], ["5", "3"], ["6", "3"], ["6", "1"],
-			["6", "7"], ["7", "8"], ["7", "9"], ["8", "10"], ["9", "10"], ["10", "6"], ["10", "11"], ["11", "11"],
-		],
-	);
-	console.log(JSON.stringify([
-		["3", "5", "4", "2"],
-		["1"],
-		["11"],
-		["9", "10", "8", "7", "6"],
-	]));
-	console.log(JSON.stringify(graph.getStronglyConnectedComponents()));
-	console.log(JSON.stringify(graph.adjacencyList));
-
-	console.log(JSON.stringify(graph.findCycles()));
 }
