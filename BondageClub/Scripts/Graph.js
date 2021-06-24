@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * A class representing a directed graph. The graph consists of string nodes, and edges defined by string to/from
  * 2-tuples
