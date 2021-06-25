@@ -1624,9 +1624,11 @@ function ChatRoomCharacterItemUpdate(C, Group) {
 	if ((Group == null) && (C.FocusGroup != null)) Group = C.FocusGroup.Name;
 	if ((CurrentScreen == "ChatRoom") && (Group != null)) {
 		// Single item updates aren't sent back to the source member, so update the ChatRoomData accordingly
-		const characterIndex = ChatRoomData.Character.findIndex((char) => char.MemberNumber === C.MemberNumber);
-		if (characterIndex !== -1) {
-			ChatRoomData.Character[characterIndex] = C;
+		if (ChatRoomData && ChatRoomData.Character) {
+			const characterIndex = ChatRoomData.Character.findIndex((char) => char.MemberNumber === C.MemberNumber);
+			if (characterIndex !== -1) {
+				ChatRoomData.Character[characterIndex] = C;
+			}
 		}
 
 		const Item = InventoryGet(C, Group);
