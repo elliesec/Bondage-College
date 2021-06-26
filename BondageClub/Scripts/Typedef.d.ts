@@ -425,6 +425,10 @@ interface Character {
 
 interface PlayerCharacter extends Character {
 	ChatSettings?: {
+	    ColorTheme: string;
+	    EnterLeave: string;
+	    MemberNumbers: string;
+	    FontSize: string;
 		DisplayTimestamps: boolean;
 		ColorNames: boolean;
 		ColorActions: boolean;
