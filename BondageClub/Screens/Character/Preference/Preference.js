@@ -2,7 +2,6 @@
 var PreferenceBackground = "Sheet";
 var PreferenceMessage = "";
 var PreferenceSafewordConfirm = false;
-var PreferenceMaidsButton = true;
 var PreferenceColorPick = "";
 var PreferenceSubscreen = "";
 var PreferenceSubscreenList = ["General", "Difficulty", "Restriction", "Chat", "Audio", "Arousal", "Security", "Online", "Visibility", "Immersion", "Graphics", "Controller", "Notifications"];
@@ -25,7 +24,6 @@ var PreferenceSettingsDeadZoneList = [0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.0
 var PreferenceSettingsVolumeIndex = 0;
 var PreferenceSettingsSensitivityIndex = 13;
 var PreferenceSettingsDeadZoneIndex = 1;
-var PreferenceEmailStatusReceived = false;
 var PreferenceArousalActiveList = ["Inactive", "NoMeter", "Manual", "Hybrid", "Automatic"];
 var PreferenceArousalActiveIndex = 0;
 var PreferenceArousalVisibleList = ["All", "Access", "Self"];

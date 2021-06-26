@@ -392,6 +392,7 @@ interface Character {
 		OrgasmTimer?: number;
 		OrgasmStage?: number;
 		OrgasmCount?: number;
+        DisableAdvancedVibes: boolean;
 	};
 	AppearanceFull?: Item[];
 	Trait?: any[];
@@ -418,6 +419,7 @@ interface Character {
 	Love?: number;
 	Difficulty?: {
 		Level: number;
+		LastChange?: number;
 	};
 	ArousalZoom?: boolean;
 	FixedImage?: string;
@@ -512,6 +514,7 @@ interface PlayerCharacter extends Character {
 		StimulationFlashes: boolean;
 		DoBlindFlash: boolean;
 		AnimationQuality: number;
+		StimulationFlash: boolean;
 	}
 	NotificationSettings?: {
 		/** @deprecated */
