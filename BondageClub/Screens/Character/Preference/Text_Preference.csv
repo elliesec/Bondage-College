@@ -89,6 +89,10 @@ DisplayMemberNumbers,Display member numbers:
 Always,Always
 Never,Never
 OnMouseover,On Mouseover
+FontSize,Font size
+Small,Small
+Medium,Medium
+Large,Large
 DisplayTimestamps,Display timestamps
 ColorNames,Color names
 ColorActions,Color actions
@@ -96,6 +100,7 @@ ColorEmotes,Color emotes
 ColorActivities,Color Activities
 ShrinkNonDialogue,Shrink all messages except dialogue
 ShowActivities,Show sexual activities & orgasms
+MuStylePoses,Use : as alias for /me and *
 AutoBanBlackList,Ban blacklist when creating a room
 AutoBanGhostList,Ban ghostlist when creating a room
 SearchShowsFullRooms,Display full chatrooms

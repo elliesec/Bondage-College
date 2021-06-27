@@ -392,6 +392,7 @@ interface Character {
 		OrgasmTimer?: number;
 		OrgasmStage?: number;
 		OrgasmCount?: number;
+        DisableAdvancedVibes: boolean;
 	};
 	AppearanceFull?: Item[];
 	Trait?: any[];
@@ -418,6 +419,7 @@ interface Character {
 	Love?: number;
 	Difficulty?: {
 		Level: number;
+		LastChange?: number;
 	};
 	ArousalZoom?: boolean;
 	FixedImage?: string;
@@ -425,6 +427,10 @@ interface Character {
 
 interface PlayerCharacter extends Character {
 	ChatSettings?: {
+	    ColorTheme: string;
+	    EnterLeave: string;
+	    MemberNumbers: string;
+	    FontSize: string;
 		DisplayTimestamps: boolean;
 		ColorNames: boolean;
 		ColorActions: boolean;
@@ -434,9 +440,11 @@ interface PlayerCharacter extends Character {
 		WhiteSpace: string;
 		ColorActivities: boolean;
 		ShrinkNonDialogue: boolean;
+		MuStylePoses: boolean;
 	};
 	VisualSettings?: {
 		ForceFullHeight: boolean;
+		UseCharacterInPreviews: boolean;
 	};
 	AudioSettings?: {
 		Volume: number;
@@ -506,6 +514,7 @@ interface PlayerCharacter extends Character {
 		StimulationFlashes: boolean;
 		DoBlindFlash: boolean;
 		AnimationQuality: number;
+		StimulationFlash: boolean;
 	}
 	NotificationSettings?: {
 		/** @deprecated */
@@ -538,6 +547,7 @@ interface PlayerCharacter extends Character {
 	Wardrobe?: any[][];
 	WardrobeCharacterNames?: string[];
 	SavedExpressions?: any[];
+	SavedColors?: HSVColor[];
 	FriendList?: number[];
 	FriendNames?: Map<number, string>;
 	SubmissivesList?: Set<number>
