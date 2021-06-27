@@ -189,8 +189,8 @@ function ChatSearchNormalDraw() {
 /**
  *
  * Garbles based on immersion settings
- * @ Text (string) - The text to garble
- * @returns {void} - Nothing
+ * @param {string} Text - The text to garble
+ * @returns {string} - Garbled text
  */
 function ChatSearchMuffle(Text) {
 	let ret = Text;
@@ -464,12 +464,14 @@ function ChatSearchResultResponse(data) {
  */
 function ChatSearchQuery() {
 	var Query = ElementValue("InputSearch").toUpperCase().trim();
+	let FullRooms = (Player.OnlineSettings && Player.OnlineSettings.SearchShowsFullRooms);
 
 	if (ChatRoomJoinLeash != null && ChatRoomJoinLeash != "") {
 		Query = ChatRoomJoinLeash.toUpperCase().trim();
 	} else if (Player.ImmersionSettings && Player.LastChatRoom && Player.LastChatRoom != "") {
 		if (Player.ImmersionSettings.ReturnToChatRoom) {
 			Query = Player.LastChatRoom.toUpperCase().trim();
+			FullRooms = true;
 		} else {
 			ChatRoomSetLastChatRoom("");
 		}
@@ -481,7 +483,7 @@ function ChatSearchQuery() {
 		ChatSearchLastQuerySearchTime = CommonTime();
 		ChatSearchLastQuerySearchHiddenRooms = ChatSearchIgnoredRooms.length;
 		ChatSearchResult = [];
-		ServerSend("ChatRoomSearch", { Query: Query, Space: ChatRoomSpace, Game: ChatRoomGame, FullRooms: (Player.OnlineSettings && Player.OnlineSettings.SearchShowsFullRooms), Ignore: ChatSearchIgnoredRooms });
+		ServerSend("ChatRoomSearch", { Query: Query, Space: ChatRoomSpace, Game: ChatRoomGame, FullRooms: FullRooms, Ignore: ChatSearchIgnoredRooms });
 	}
 
 	ChatSearchMessage = "EnterName";

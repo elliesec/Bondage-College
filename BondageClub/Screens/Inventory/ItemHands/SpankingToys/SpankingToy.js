@@ -160,9 +160,13 @@ const InventoryItemHandsSpankingToysOptions = [
 		Name: "TapeRoll",
 		Property: { Type: "TapeRoll" },
 		ExpressionTrigger: [{ Group: "Blush", Name: "Low", Timer: 10 }, { Group: "Eyebrows", Name: "Soft", Timer: 10 }, { Group: "Mouth", Name: "Frown", Timer: 10 }]
-	},{
+	}, {
 		Name: "Spatula",
 		Property: { Type: "Spatula" },
+		ExpressionTrigger: [{ Group: "Blush", Name: "Low", Timer: 5 }, { Group: "Eyebrows", Name: "Harsh", Timer: 5 }]
+	}, {
+		Name: "Broom",
+		Property: { Type: "Broom" },
 		ExpressionTrigger: [{ Group: "Blush", Name: "Low", Timer: 5 }, { Group: "Eyebrows", Name: "Harsh", Timer: 5 }]
 	},
 ];
@@ -208,7 +212,11 @@ function InventorySpankingToysAvailableToys(C) {
 	return InventoryItemHandsSpankingToysOptions.filter(x => AvailableToys.includes("SpankingToys" + x.Name));
 }
 
-// Get the type of spanking toy that the character is holding
+/**
+ * Get the type of spanking toy that the character is holding
+ * @param {Character} C
+ * @returns {string}
+ */
 function InventorySpankingToysGetType(C) {
 	var Toy = InventoryGet(C, "ItemHands");
 	if (Toy && Toy.Property && Toy.Property.Type) return Toy.Property.Type;
@@ -246,7 +254,11 @@ function InventorySpankingToysActivityAllowed(C) {
 	return false;
 }
 
-// Returns the audio sound to be played
+/**
+ * Returns the audio sound to be played
+ * @param {Character} C
+ * @returns {string}
+ */
 function InventorySpankingToysGetAudio(C) {
 	switch (InventorySpankingToysGetType(C)) {
 		case "Crop":

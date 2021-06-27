@@ -39,7 +39,6 @@ function MovieStudioCanGetLongDuster() { return (!InventoryAvailable(Player, "Sp
 
 /**
  * When the player fails the movie, we jump back to the director
- * @param {number} Factor - The number to add or substract from the meter
  * @returns {void} - Nothing
  */
 function MovieStudioFail() {
@@ -649,7 +648,7 @@ function MovieStudioDoActivity(Activity) {
 		MovieStudioActor1.Stage = "2350";
 		MovieStudioActor2.Stage = "2350";
 		CharacterSetFacialExpression(Player, "Eyes", "Angry", 8);
-		CharacterSetFacialExpression(Player, "Eyes", "Angry", 8);
+		CharacterSetFacialExpression(Player, "Eyes2", "Angry", 8);
 	}
 	if (Activity == "InterviewMistressTurnTablesSentenceMaid") {
 		InventoryWear(Player, "DusterGag", "ItemMouth");
