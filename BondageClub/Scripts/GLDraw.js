@@ -11,6 +11,8 @@ var GLVersion;
 
 var GLDrawCanvas;
 
+let GLDrawContextLostTimeout;
+
 var GLDrawAlphaThreshold = 0.01;
 var GLDrawHalfAlphaLow = 0.8 / 256.0;
 var GLDrawHalfAlphaHigh = 1.2 / 256.0;
@@ -35,16 +37,41 @@ function GLDrawLoad() {
 	CharacterAppearanceBuildCanvas = GLDrawAppearanceBuild;
 
 	// Attach context listeners
-	GLDrawCanvas.addEventListener("webglcontextlost", function (event) {
-		event.preventDefault();
-		console.log("WebGL Drawing disabled: Context Lost. If the context does not restore itself, refresh your page.");
-	}, false);
-	GLDrawCanvas.addEventListener("webglcontextrestored", function () {
-		GLDrawLoad();
-		console.log("WebGL: Context restored.");
-	}, false);
+	GLDrawCanvas.addEventListener("webglcontextlost", GLDrawOnContextLost, false);
+	GLDrawCanvas.addEventListener("webglcontextrestored", GLDrawOnContextRestored, false);
+}
 
-	//console.log("WebGL Drawing enabled: '" + GLVersion + "'");
+function GLDrawOnContextLost(event) {
+	event.preventDefault();
+	console.log("WebGL Drawing disabled: Context Lost. If the context does not restore itself, refresh your page.");
+	GLDrawContextLostTimeout = setTimeout(() => {
+		// If the context has not been automatically restored after
+		console.log("Context not restored after 10 seconds... resetting canvas.");
+		GLDrawResetCanvas();
+	}, 10000);
+}
+
+function GLDrawOnContextRestored() {
+	console.log("WebGL: Context restored.");
+	clearTimeout(GLDrawContextLostTimeout);
+	GLDrawLoad();
+	// Ensure all the characters currently on screen are refreshed
+	for (const C of DrawLastCharacters) {
+		CharacterAppearanceBuildCanvas(C);
+	}
+}
+
+/**
+ * Removes the current GLDraw canvas, clears the image cache, and reloads a fresh canvas.
+ * @returns {void} - Nothing
+ */
+function GLDrawResetCanvas() {
+	GLDrawCanvas.remove();
+	GLDrawImageCache.clear();
+	GLDrawLoad();
+	for (const C of DrawLastCharacters) {
+		CharacterAppearanceBuildCanvas(C);
+	}
 }
 
 /**
