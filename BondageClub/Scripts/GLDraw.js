@@ -41,6 +41,11 @@ function GLDrawLoad() {
 	GLDrawCanvas.addEventListener("webglcontextrestored", GLDrawOnContextRestored, false);
 }
 
+/**
+ * Handler for WebGL context lost events
+ * @param {WebGLContextEvent} event
+ * @returns {void} - Nothing
+ */
 function GLDrawOnContextLost(event) {
 	event.preventDefault();
 	console.log("WebGL Drawing disabled: Context Lost. If the context does not restore itself, refresh your page.");
@@ -51,6 +56,10 @@ function GLDrawOnContextLost(event) {
 	}, 10000);
 }
 
+/**
+ * Handler for WebGL context restored events
+ * @returns {void} - Nothing
+ */
 function GLDrawOnContextRestored() {
 	console.log("WebGL: Context restored.");
 	clearTimeout(GLDrawContextLostTimeout);
