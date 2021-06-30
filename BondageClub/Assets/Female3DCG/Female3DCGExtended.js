@@ -1628,4 +1628,38 @@ var AssetFemale3DCGExtended = {
 			},
 		}, // SilkStraps
 	}, // Panties
+	ItemHead: {
+		DuctTape: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Double",
+						Property: {
+							Type: null,
+							Block: ["ItemNose"],
+							Effect: ["BlindNormal", "Prone"],
+						},
+					},
+					{
+						Name: "Wrap",
+						Property: {
+							Type: "Wrap",
+							Block: ["ItemNose"],
+							Effect: ["BlindNormal", "Prone"],
+						},
+					},
+					{
+						Name: "Mummy",
+						Property: {
+							Type: "Mummy",
+							Hide: ["ItemMouth", "ItemMouth2", "ItemMouth3", "HairFront", "HairBack"],
+							Block: ["ItemMouth", "ItemMouth2", "ItemMouth3", "ItemEars", "ItemHood", "ItemNose"],
+							Effect: ["GagNormal", "BlindNormal", "Prone", "BlockMouth"],
+						},
+					}
+				]
+			}
+		}, // DuctTape
+	}, // ItemHead
 };
