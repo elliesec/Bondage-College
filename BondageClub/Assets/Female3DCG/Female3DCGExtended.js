@@ -1684,6 +1684,35 @@ var AssetFemale3DCGExtended = {
 					Load: "SelectRibbonType",
 				},
 			},
-		},
+		}, // Ribbons
+		WebBlindfold: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Blindfold",
+						Property: {
+							Type: null,
+							Difficulty: 0,
+							Block: ["ItemNose"],
+						},
+					},
+					{
+						Name: "Cocoon",
+						Property: {
+							Type: "Cocoon",
+							Difficulty: 30,
+							Hide: ["HairFront", "HairBack", "Glasses", "Hat", "ItemMouth", "ItemMouth2", "ItemMouth3"],
+							Block: ["ItemMouth", "ItemMouth2", "ItemMouth3", "ItemEars", "ItemHood", "ItemNose"],
+							Effect: ["BlindHeavy", "Prone", "GagNormal", "BlockMouth"],
+						},
+					},
+				],
+				ChatTags: [CommonChatTags.SOURCE_CHAR, CommonChatTags.TARGET_CHAR],
+				Dialog: {
+					Load: "WebBondageSelect",
+				},
+			},
+		}, // WebBlindfold
 	}, // ItemHead
 };
