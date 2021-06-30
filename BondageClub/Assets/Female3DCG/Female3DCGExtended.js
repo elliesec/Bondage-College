@@ -1661,5 +1661,29 @@ var AssetFemale3DCGExtended = {
 				]
 			}
 		}, // DuctTape
+		Ribbons: {
+			Archetype: ExtendedArchetype.TYPED,
+			Config: {
+				Options: [
+					{
+						Name: "Basic",
+						Property: {
+							Type: null,
+							Effect: ["BlindLight", "Prone"],
+						},
+					},
+					{
+						Name: "Wrap",
+						Property: {
+							Type: "Wrap",
+							Effect: ["BlindNormal", "Prone"],
+						},
+					},
+				],
+				Dialog: {
+					Load: "SelectRibbonType",
+				},
+			},
+		},
 	}, // ItemHead
 };
