@@ -13,7 +13,7 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 Changelog last updated: 2021-06-16
 
-Last recorded PR: [#2689](https://github.com/Ben987/Bondage-College/pull/2689)
+Last recorded PR: [#2696](https://github.com/Ben987/Bondage-College/pull/2696)
 
 ## [R70]
 
@@ -60,6 +60,8 @@ Last recorded PR: [#2689](https://github.com/Ben987/Bondage-College/pull/2689)
 * Ace/Myna - Added two new office-themed backgrounds ([#2679](https://github.com/Ben987/Bondage-College/pull/2679))
 * Nina - Improved the item icon system, and added icons for lover-only/owner-only items ([#2680](https://github.com/Ben987/Bondage-College/pull/2680))
 * Manilla - Added a new Key collar accessory ([#2687](https://github.com/Ben987/Bondage-College/pull/2687))
+* Emily R - Added 2 new chatroom backgrounds ([#2691](https://github.com/Ben987/Bondage-College/pull/2691))
+* Natsuki - Added a new Bracelet clothing slot and 3 new bracelets ([#2690](https://github.com/Ben987/Bondage-College/pull/2690))
 
 ### [Removed]
 
@@ -78,6 +80,8 @@ Last recorded PR: [#2689](https://github.com/Ben987/Bondage-College/pull/2689)
 * Ada - Added a new immersion preference which allows players to only see other adjacent players in chatrooms when partially blind ([#2576](https://github.com/Ben987/Bondage-College/pull/2576))
 * Ellie - Changed NPCs to allow them to select item variations when using items ([#2649](https://github.com/Ben987/Bondage-College/pull/2649))
 * Lara - Improved the responsiveness of the Futuristic Vibrator ([#2683](https://github.com/Ben987/Bondage-College/pull/2683))
+* Ada - Improved the responsiveness of several futuristic items ([#2694](https://github.com/Ben987/Bondage-College/pull/2694))
+* Ada - Increased the number of times players can attempt locks with a lent lockpick ([#2696](https://github.com/Ben987/Bondage-College/pull/2696))
 
 ### [Fixed]
 
@@ -104,6 +108,7 @@ Last recorded PR: [#2689](https://github.com/Ben987/Bondage-College/pull/2689)
 * Ellie - Added a mitigation for WebGL context lost errors (users should no longer need to refresh after receiving these errors) ([#2650](https://github.com/Ben987/Bondage-College/pull/2650))
 * Ellie/Nina - Fixed a bug where NPCs would not be use several gag types ([#2653](https://github.com/Ben987/Bondage-College/pull/2653), [#2661](https://github.com/Ben987/Bondage-College/pull/2661))
 * Ace - Fixed some 404 errors for missing catsuit zips ([#2673](https://github.com/Ben987/Bondage-College/pull/2673))
+* Ada - Fixed a couple of issues with chatroom recreation ([#2693](https://github.com/Ben987/Bondage-College/pull/2693))
 
 ### [Technical]
 
