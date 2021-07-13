@@ -11,9 +11,9 @@ This changelog follows the format outlined in [keepachangelog.com](https://keepa
 
 **Note to contributors:** To avoid merge conflicts, please don't update this file yourself in your PRs - one of the developers will update the changelog with your change before your PR is merged.
 
-Changelog last updated: 2021-07-12
+Changelog last updated: 2021-07-13
 
-Last recorded PR: [#2726](https://github.com/Ben987/Bondage-College/pull/2726)
+Last recorded PR: [#2729](https://github.com/Ben987/Bondage-College/pull/2729)
 
 ## [R70]
 
@@ -148,6 +148,7 @@ Last recorded PR: [#2726](https://github.com/Ben987/Bondage-College/pull/2726)
 * Ada - Fixed an issue where the Futuristic Crate would muffle players more than intended ([#2724](https://github.com/Ben987/Bondage-College/pull/2724))
 * Nina - Fixed an issue where players would sometimes not be able to sell bracelets or garters back to the shop ([#2725](https://github.com/Ben987/Bondage-College/pull/2725))
 * Natsuki - Fixed a bug where players would not be able to modify bracelets on other players ([#2726](https://github.com/Ben987/Bondage-College/pull/2726))
+* Natsuki - Fixed some missing bracelet assets in the over-the-head pose ([#2729](https://github.com/Ben987/Bondage-College/pull/2729))
 
 ## [R69]
 
